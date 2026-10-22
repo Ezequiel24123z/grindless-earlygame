@@ -19,7 +19,8 @@
     "no_implicit_public_release_main_merge_or_paid_generation": true
   },
   "baseline_family_control_gap": {
-    "status": "PhaseB_active_exact_parent_cb2d30b_and_VerifyRecipes_writelease_released",
+    "status": "sourceccfe_complete_normalcomposition_thischeckpoint_actual_combined_proof_pending",
+    "final_source_checkpoint": "ccfe2f382d10633a0cd795686ba8283e09a7239b",
     "phaseA_checkpoint": "ab3bd4da7c3eb0b765969d65f555b4faf6b00b10",
     "policy": "ADR-0186",
     "owner_session": "58fac55d-8eed-4b47-96ab-e96561f3c961",
@@ -36,6 +37,7 @@
     "owner_session": "0752df7b-209e-4fd5-afe5-b3cf7c376471",
     "source_base": "3c00af09e26718671308fa4537a5ac483279c967",
     "source_checkpoint": "43838b8fdc17db468a45f80f91b766009f98e089",
+    "actual_CI_blocker": "cb2d_run39791306862_artifact12430349463_build0_TOOLjavac1_beforeSuites_VerifyMachineUi277_writeUtf_on_ByteBuf_owner0752_sourcefix_pending_NO_PC",
     "VerifyRecipes_released_by_selector": true,
     "data_owner_requires_parent_integrated_baseline": true,
     "coupled_registry_scope": "only_work_wrapper_workCycle_fullnormalized_profile_plus_negatives_after_F1source_finished_no_defaultF1_profile_or_G8source_change",

@@ -530,16 +530,44 @@ public final class VerifyRecipes {
                         IngredientSpec.item(FabricationLogic.COPPER_COIL, 2),
                         IngredientSpec.tag("forge:plates/iron", 4),
                         IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1))));
-        eq("only the five selected machine operands and the existing Wire Mill opt into minimum control", 6L,
+        eq("exactly the six retained and nine baseline process constructors opt into minimum control", 15L,
                 recipes.stream()
                 .flatMap(row -> java.util.stream.Stream.concat(row.inputs().stream(), row.catalysts().stream()))
                 .filter(IngredientSpec::isMinimumControl).count());
-        yes("minimum control stays limited to the six named recipe identities",
+        yes("minimum control stays limited to the exact fifteen named recipe identities in generation order",
                 List.of("assemble/pulverizer", "assemble/arc_furnace", "assemble/press", "assemble/assembler",
-                        "assemble/thermal_generator", "assemble/wire_mill")
+                        "assemble/thermal_generator", "assemble/wire_mill", "assemble/chemical_reactor",
+                        "assemble/chemical_washer", "assemble/electrolysis_cell", "assemble/atmospheric_intake",
+                        "assemble/induction_furnace", "assemble/caster", "assemble/flotation_cell",
+                        "assemble/boiler", "assemble/condenser")
                         .equals(recipes.stream()
                                 .filter(row -> row.inputs().stream().anyMatch(IngredientSpec::isMinimumControl))
                                 .map(ProcessRecipe::id).toList()));
+        for (String machine : List.of("chemical_reactor", "chemical_washer", "electrolysis_cell",
+                "atmospheric_intake", "induction_furnace", "caster", "flotation_cell", "boiler", "condenser")) {
+            String id = "assemble/" + machine;
+            ProcessRecipe controlled = recipe(recipes, id);
+            eq(id + " is constructed by the existing Assembler", MachineFamily.ASSEMBLER, controlled.family());
+            yes(id + " retains its exact old three-group prefix and one minimum-F1 fourth group",
+                    controlled.inputs().equals(List.of(
+                            IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                            IngredientSpec.item(FabricationLogic.MOTOR, 2),
+                            IngredientSpec.tag("forge:plates/iron", 4),
+                            IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1))));
+            eq(id + " has exactly four grouped item inputs", 4, controlled.itemInputs().size());
+            eq(id + " fits the unchanged Assembler input layout", MachineMenuKind.ASSEMBLER.inputs(),
+                    controlled.itemInputs().size());
+            eq(id + " consumes eight physical units", 8,
+                    controlled.itemInputs().stream().mapToInt(IngredientSpec::count).sum());
+            yes(id + " preserves its one ordinary baseline machine output",
+                    controlled.outputs().equals(List.of(OutputSpec.item("grindless:" + machine, 1))));
+            eq(id + " preserves its twenty-second cycle", 400, controlled.durationTicks());
+            eq(id + " preserves its F1 draw", 32L, controlled.fuPerTick());
+            eq(id + " preserves its informational milestone", "industrial", controlled.milestone());
+            yes(id + " consumes every group without a retained controller", controlled.catalysts().isEmpty());
+            no(id + " adds no operating condition", controlled.namesTemperature() || controlled.namesPressure()
+                    || controlled.namesAtmosphere() || controlled.namesAgitation());
+        }
         eq("the minimum role preserves the canonical baseline Matrix ID", "item:grindless:relay_matrix",
                 mill.itemInputs().get(3).qualified());
         JsonObject serialized = new com.google.gson.Gson().toJsonTree(mill.itemInputs().get(3)).getAsJsonObject();

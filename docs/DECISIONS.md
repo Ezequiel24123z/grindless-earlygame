@@ -197,7 +197,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0183](#adr-0183--version-known-native-catalogue-lineage-without-weakening-provenance) | Version known native catalogue lineage without weakening provenance | G7 actual ABI/backend/ready51/package/managed51/custody and original CI evidence verified |
 | [0184](#adr-0184--project-authored-default-matrices-through-their-real-physical-rating) | Project authored default Matrices through their real physical rating | G8 actual31/41/changed contracts/normal A8/239 custody verified; not rendered or finite-T1 proof |
 | [0185](#adr-0185--choose-assembler-recipes-explicitly-without-repricing-or-losing-work) | Choose Assembler recipes explicitly without repricing or losing work | Sourcea89/30e/438 reviewed/normally composed with F1/A8; Java/native/UI proof pending |
-| [0186](#adr-0186--supply-physical-baseline-control-to-nine-existing-process-families) | Supply physical baseline control to nine existing process families | Accepted bounded data correction; implementation/qualification pending |
+| [0186](#adr-0186--supply-physical-baseline-control-to-nine-existing-process-families) | Supply physical baseline control to nine existing process families | Sourceab3/304/ccfe normally composed; exactdata/15-role review clear, execution pending |
 
 ---
 
@@ -8908,8 +8908,10 @@ registration/default rule or retarget G8's immutable4ee source.
 ## ADR-0186 — Supply physical baseline control to nine existing process families
 
 **Status.** Accepted bounded construction-data follow-up under ADR-0107/0174/
-0176/0178, 2026-10-22. Implementation/normal outputs and affected proof remain
-pending. This does not change frozen G8 or make any family a ready tier.
+0176/0178, 2026-10-22. Sourceab3/304/ccfe is normally composed after serialized
+file release and direct bounded data/check review. Normal outputs and actual
+combined Java/native proof remain pending. This does not retarget G8 or make
+any family a ready tier.
 
 **Context.** Nine functional F1 ProcessMachineKind families have existing
 Assembler constructors with casing1/motor2/plates4 and no physical controller:

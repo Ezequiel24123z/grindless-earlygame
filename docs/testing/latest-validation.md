@@ -805,6 +805,41 @@ rollback unverified.
 The shared recipe verifier is released to a later parent-integrated data phase,
 not permission for competing writers or G8 retarget.
 
+**Exact integrated-selector CI is a real tool compile red:** sourcecb2d,
+run39791306862/artifact12430349463/foundation-validation confirms
+environment0/build0/behavior1. Main Gradle build completes18 tasks; the check
+runner's javac stops before any suite at VerifyMachineUi277 because chained
+writeInt/writeLong return Netty ByteBuf and writeUtf is unavailable there.
+This is not stale canonical output or an executed test failure. Windows
+tooling passes; native smoke is skipped. Owner0752 repairs only the negative
+packet fixture with separate writes, preserving257 and decoder rejection;
+new source/actual compilation confirmation are pending, no PC grant/replay.
+
+| Original cb2d CI file | Bytes | SHA-256 |
+| --- | ---: | --- |
+| source.txt | 80 | `b99d0a459c6285826c49af358d857cff30b896a17b04d5d3a0364f48e3de833a` |
+| environment.log | 443 | `0f6bc3201f9139e629c60adcf771ac6292d50a5215917eb24dddd3205ccbc094` |
+| build.log | 271780 | `a1af67911310c3e35b2f6b05729f7c186df5076743d1c7bd4fc783b262ef855d` |
+| behavior.log | 376 | `5ac9aff606fe0a8101a696ac938474da3bb379a643ceb5870ccefab4deaecbbb` |
+| status.tsv | 243 | `d7d8752f5cf04d7dcefd14331197d02ef154349e7b43552f1e1dd6ee14ac63a8` |
+
+Parent's first read-only hash observer fails at PowerShell foreach-pipeline
+syntax before hashing. Array capture repairs that observer, not production;
+the original files and CI are never rerun or rewritten.
+
+**Completed controller source, not a new pass:** data58 normalab3/exact045
+is composed with the single authorizedcb2d baseline as3045778 (parentsab3/
+cb2d), then normalccfe2f382d10633a0cd795686ba8283e09a7239b completes the
+released recipe check. Parent directly reviews bounded PhaseA/B diffs and
+preserves all four data/check blobs plus all selector assertions. Exact
+fifteen roles, nine unchanged material prefixes/costs/outputs/slots and
+Motor/passive/seed/F2 contracts are authored; static28/18 and37/7 plus the
+private patch negatives do not execute Java. No A8 payload is hand-edited.
+Private final handoffSHA8de8416a704682ac6b73d7d956cab12937bdf39571129922cfe32cda349b8387
+retains original observer failures and source chain. Normal composition must
+receive a new exact-source contract/writer/native proof after the separate
+selector compile repair; neither source nor G8 is acquisition evidence.
+
 **Normal selector composition, not execution:** parent combines immutable438
 with normally integrated F1/A8 after source review91de reports no significant
 issue. All sixteen non-registry application/check/locale blobs remain exactly

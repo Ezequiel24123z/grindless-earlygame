@@ -324,9 +324,18 @@ in `recipe/ProcessGraph`. Preserve their first three groups, all IDs/outputs/
 FU/time, the four-slot layout, Motor/passive bills, first-five seed and exact
 F2 evidence. Do not blanket-change generic machineCraft. Existing Atlas/T1
 contracts and the exact minimum-role set must name all nine additions without
-turning data into a new matching engine or tier acceptance. Serialize
-VerifyRecipes after the active selector owner releases it; G8 remains frozen.
-Normal outputs and representative combined mechanism proof remain pending.
+turning data into a new matching engine or tier acceptance. VerifyRecipes was
+released at selector438 and composed only through the parent's exact published
+cb2d30b baseline; G8 source/proofs remain bound to their unchanged old bills.
+ProcessGraph now explicitly opts in the nine constructors; generic machineCraft
+defaults still preserve unrelated bills. Atlas checks each real F1+ fourth role,
+old prefix/output/time/FU and four-slot fit; T1 separates the controller-free
+Motor from the controlled Washer without changing the six wet routes or seed.
+After that serialized release, VerifyRecipes checks exactly the old six plus
+nine identities in generation order, all nine full four-group bills, unchanged
+costs/outputs/milestones and slot fit. All selector assertions and unrelated
+recipe guards remain intact. These are source/static changes, not Java,
+normal-output, acquisition or representative combined mechanism passes.
 
 The same existing ControlMatrixInputChecks.registered probe now checks the new
 core's actual Item class/registry ID, without another case or marker. This

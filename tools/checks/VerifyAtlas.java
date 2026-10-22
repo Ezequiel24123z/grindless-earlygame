@@ -281,6 +281,7 @@ public final class VerifyAtlas {
         eq("the component motor retains its Matrix-free displayed bill",
                 "machine_casing + 2x copper_coil + rods/iron",
                 AtlasLogic.describe(route(allRows, "assemble/motor").inputs()));
+        baselineProcessControls(recipes, allRows);
         for (String item : List.of("wire_mill", "motor")) {
             no(item + " has no handcraft route in either catalogue", allRows.stream().anyMatch(row ->
                     row.station().equals("CRAFTING_TABLE") && row.outputs().contains("item:grindless:" + item)));
@@ -498,6 +499,38 @@ public final class VerifyAtlas {
                 ? "ALL ATLAS CHECKS PASSED"
                 : failures + " ATLAS CHECK(S) FAILED");
         System.exit(failures == 0 ? 0 : 1);
+    }
+
+    private static void baselineProcessControls(List<ProcessRecipe> recipes, List<AtlasLogic.Entry> rows) {
+        for (String machine : List.of("chemical_reactor", "chemical_washer", "electrolysis_cell",
+                "atmospheric_intake", "induction_furnace", "caster", "flotation_cell", "boiler", "condenser")) {
+            String id = "assemble/" + machine;
+            AtlasLogic.Entry row = route(rows, id);
+            ProcessRecipe process = recipes.stream().filter(recipe -> recipe.id().equals(id))
+                    .findFirst().orElseThrow();
+            yes(id + " retains the old three groups and exactly one real minimum-F1 fourth operand",
+                    process.inputs().equals(List.of(
+                            IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                            IngredientSpec.item(FabricationLogic.MOTOR, 2),
+                            IngredientSpec.tag("forge:plates/iron", 4),
+                            IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1))));
+            eq(id + " uses exactly the existing four grouped slots", 4, process.itemInputs().size());
+            eq(id + " names the existing Assembler", "ASSEMBLER", row.station());
+            eq(id + " displays all eight consumed units", 8, row.inputs().size());
+            eq(id + " displays the actual controller role without a fabricated item ID",
+                    "machine_casing + 2x motor + 4x plates/iron + relay_matrix [F1+]",
+                    AtlasLogic.describe(row.inputs()));
+            yes(id + " displays only the actual fourth-role controller",
+                    row.inputs().stream().filter(input -> input.endsWith(" [F1+]")).toList()
+                            .equals(List.of("item:grindless:relay_matrix [F1+]")));
+            yes(id + " retains its one ordinary baseline machine output",
+                    row.outputs().equals(List.of("item:grindless:" + machine)));
+            eq(id + " retains its twenty-second cycle", 400, row.durationTicks());
+            eq(id + " retains its F1 draw", 32L, row.fuPerTick());
+            yes(id + " consumes the controller rather than exposing a retained catalyst", row.catalysts().isEmpty());
+            yes(id + " is discoverable for legitimate stronger control without upgrading its output",
+                    ids(AtlasLogic.consuming(recipes, "grindless:relay_matrix [F2]")).contains(id));
+        }
     }
 
     private static void jeiProjection() throws IOException {

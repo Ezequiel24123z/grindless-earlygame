@@ -4,6 +4,23 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**Actual selector CI compile red, no new PC grant:** exactcb2d/run39791306862/
+artifact12430349463 has environment0/build0 but tool-javac fails before every
+suite at VerifyMachineUi277: chained inherited writes return ByteBuf, which
+has no writeUtf. Original behaviorSHA5ac9aff6 is preserved, Windows tooling
+succeeds and native smoke is skipped. Owner0752 receives the precise
+fixture-only split-writes repair, with no casts/negative-test weakening or
+VerifyRecipes edit. Parent's initial hash observer has a PowerShell pipeline
+syntax error, then recovers exact five raw hashes through array capture;
+no production/CI replay or Git/auth configuration change occurs.
+
+**Nine-controller source complete:** data58 normally composesab3 +exactcb2d
+as3045778, thenccfe2f3 finishes the precise fifteen-role check. Parent reviews
+both bounded diffs; four code/check blobs remain exactly the source. Only
+changelog conflicts and preserves both histories; selector assertions stay
+intact. This normal source integration is not actual Java/suite/acquisition
+proof, and canonical A8 remains the prior-bill result until normal writers.
+
 **PhaseB is unblocked on the actual published baselinecb2d30b.** Parent
 normally integrated reviewed selector438 with F1 and A8; exact immutable
 blobs/ancestry/trailers and the mechanical registry union are checked.
@@ -106,8 +123,8 @@ identity repairs invocation without altering Git configuration.
 | Category | Current integration boundary |
 | --- | --- |
 | COMPLETED | Verified G7/A7; source57d/4ee plus G8 actual31/41/model/display-fixture/239-file closure and normal A8 integration; selector438 and controller PhaseA source preserved |
-| BLOCKED | Whole-T1 Assembler acquisition shadowing, finite establishment and genuine upgrades remain; selector source is active |
-| NOT EXECUTED | Selector native/UI and nine-controller final-source proof; player deployment, target launch, main/release and whole-tier acceptance |
+| BLOCKED | Actual selector tool-javac fixture failure needs source repair; combined selection/controller runtime, finite establishment and genuine upgrades remain |
+| NOT EXECUTED | Selector suites/native/UI and nine-controller final-source proof; player deployment, target launch, main/release and whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
 | NEEDS MY DECISION | None |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |

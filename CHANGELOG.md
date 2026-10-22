@@ -15,11 +15,30 @@ entries below reference those records by id.
 
 ### Added
 
+- **Compose the completed nine-controller data without hiding the selector CI red.**
+  Preserve normalab3/304/ccfe, all four reviewed data/check blobs and every
+  selector test. Only changelog conflicts, retaining both histories.
+  Exactcb2d CI39791306862 has environment/build0 but tool-javac fails before
+  suites at VerifyMachineUi277: Netty's chained writeInt/writeLong returns
+  ByteBuf, which has no writeUtf. Owner0752 repairs only that negative packet
+  fixture in a normal follow-up; no test weakening, CI replay or G9 grant.
 - **Release the shared controller check on a real integrated selector baseline.**
   Publishedcb2d30b contains normally preserved438, F1 and A8. Data58 receives
   that exact revision and sole VerifyRecipes write permission to finish
   PhaseB, preserving all selector tests and normal source ancestry. No WIP
   absorption, competing writer, source retarget or executed proof is implied.
+- **Implement the nine bounded baseline-controller construction bills.**
+  ADR-0186 adds exactly one real minimum-F1 fourth operand to the nine explicit
+  process constructors, retaining their casing1/motor2/plates4 prefix,
+  ordinary outputs,400ticks/32FU, milestones and all unrelated recipes.
+  Atlas covers each live role/bill and T1 keeps Motor controller-free while
+  checking Washer's actual fourth-role supply. Phase A preserves the leased
+  recipe verifier; after explicit release and normal cb2d30b composition,
+  Phase B checks exactly the old6+new9 identities/order and all nine complete
+  grouped bills, slots, costs and ordinary outputs. Preserve every selector
+  assertion and previous recipe guard outside that superseded role set.
+  Combined Java, normal writers, acquisition proof and deployment are not run;
+  neither stronger substitution nor this data correction is a chassis upgrade.
 - **Normally compose the reviewed Assembler selector with F1 and A8.**
   Preserve the three source commits and all sixteen non-registry code/test/
   locale blobs exactly. The registry auto-merge retains both the F1 declaration
