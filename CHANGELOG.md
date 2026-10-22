@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Close actual G8 model evidence and normally integrate its four payloads.**
+  Independent QA verifies239 safe files, complete original CI5, actual31/41
+  source/images, normal write/independent CheckOnly/resource refresh/canonical
+  passes, frozen inputs and fresh13:25:45Z guard/Java/lock return. Parent
+  verifies all four Git blobs equal actual writer bytes before normal A8dee
+  integration. Preserve original three CI reds, the unsupplied pre-PC display
+  error caveat and two corrected read-only audit observers; no production
+  replay or rendered/native/selector/nine-controller/whole-tier claim follows.
 - **Preserve the nine-controller PhaseA source while its shared check waits.**
   Normalab3bd4d has exact0451122 parent/five owned files/both trailers.
   Parent reviews nine precise fourth operands and unchanged old groups,

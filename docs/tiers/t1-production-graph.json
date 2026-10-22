@@ -1,5 +1,5 @@
 {
-  "authority_snapshot_sha256": "7843fb64d4051b8b98a08e8602461c4e542394cbd171472de8f5e9256a09b74e",
+  "authority_snapshot_sha256": "3255a2d8d07e2b948bc6ebda7087b4ee0915e9c06ba1e9357a7a51ef4dc2b069",
   "entry_route": "craft/relay_matrix",
   "exit_route": "assemble/relay_matrix_f2",
   "global_optimum_claimed": false,
@@ -21,7 +21,7 @@
           "fu_per_tick": 0,
           "id": "craft/thermal_generator",
           "inputs": {
-            "item:grindless:relay_matrix": 1,
+            "item:grindless:relay_matrix [F1]": 1,
             "item:minecraft:furnace": 1,
             "tag:forge:ingots/iron": 1,
             "tag:grindless:carbon": 1,
@@ -106,7 +106,7 @@
           "fu_per_tick": 0,
           "id": "craft/pulverizer",
           "inputs": {
-            "item:grindless:relay_matrix": 1,
+            "item:grindless:relay_matrix [F1]": 1,
             "item:minecraft:flint": 1,
             "tag:forge:ingots/iron": 1,
             "tag:minecraft:stone_crafting_materials": 6
@@ -185,7 +185,7 @@
           "fu_per_tick": 0,
           "id": "craft/arc_furnace",
           "inputs": {
-            "item:grindless:relay_matrix": 1,
+            "item:grindless:relay_matrix [F1]": 1,
             "item:minecraft:redstone": 1,
             "tag:forge:ingots/iron": 4,
             "tag:minecraft:stone_crafting_materials": 3
@@ -335,7 +335,7 @@
           "fu_per_tick": 0,
           "id": "craft/press",
           "inputs": {
-            "item:grindless:relay_matrix": 1,
+            "item:grindless:relay_matrix [F1]": 1,
             "tag:forge:ingots/iron": 2,
             "tag:minecraft:stone_crafting_materials": 6
           },
@@ -589,7 +589,7 @@
           "inputs": {
             "item:grindless:copper_coil": 1,
             "item:grindless:machine_casing": 2,
-            "item:grindless:relay_matrix": 1,
+            "item:grindless:relay_matrix [F1]": 1,
             "tag:forge:gears/iron": 2
           },
           "machine_family": "CRAFTING_TABLE",
@@ -645,7 +645,7 @@
           "nominal_fu_per_batch": 12800,
           "one_shot": false,
           "outputs": {
-            "item:grindless:relay_matrix": 5
+            "item:grindless:relay_matrix [F1]": 5
           },
           "source": "ProcessGraph.generate"
         }
@@ -1301,7 +1301,7 @@
           "fu_per_tick": 0,
           "id": "craft/terrestrial_extractor",
           "inputs": {
-            "item:grindless:relay_matrix": 1,
+            "item:grindless:relay_matrix [F1]": 1,
             "item:minecraft:redstone": 1,
             "tag:forge:ingots/iron": 4,
             "tag:minecraft:stone_crafting_materials": 3
@@ -1600,7 +1600,7 @@
           "fu_per_tick": 0,
           "id": "craft/kiln",
           "inputs": {
-            "item:grindless:relay_matrix": 1,
+            "item:grindless:relay_matrix [F1]": 1,
             "tag:forge:ingots/iron": 1,
             "tag:grindless:carbon": 1,
             "tag:minecraft:stone_crafting_materials": 6
@@ -1745,7 +1745,7 @@
           "fu_per_tick": 0,
           "id": "craft/factory_portal",
           "inputs": {
-            "item:grindless:relay_matrix": 1,
+            "item:grindless:relay_matrix [F1]": 1,
             "item:minecraft:glass": 4,
             "item:minecraft:redstone": 2,
             "tag:forge:ingots/copper": 2
@@ -1907,11 +1907,12 @@
       "amount": 1,
       "catalyst_retained": false,
       "producers": [
+        "craft/relay_matrix",
         "assemble/relay_matrix"
       ],
       "resource": "item:grindless:relay_matrix [F1]",
       "route": "assemble/relay_matrix_f2",
-      "status": "PHYSICAL_DEFAULT_F1_BINDING_NOT_NORMALIZED_BY_AUDITOR"
+      "status": "PHYSICAL_T0_SEED_OR_T1_REPRODUCTION_NOT_T0_RENEWABLE"
     },
     {
       "amount": 4,
@@ -2030,7 +2031,7 @@
         "craft/relay_matrix",
         "assemble/relay_matrix"
       ],
-      "resource": "item:grindless:relay_matrix",
+      "resource": "item:grindless:relay_matrix [F1]",
       "route": "craft/arc_furnace",
       "status": "PHYSICAL_T0_SEED_OR_T1_REPRODUCTION_NOT_T0_RENEWABLE"
     },
@@ -2091,7 +2092,7 @@
         "craft/relay_matrix",
         "assemble/relay_matrix"
       ],
-      "resource": "item:grindless:relay_matrix",
+      "resource": "item:grindless:relay_matrix [F1]",
       "route": "craft/assembler",
       "status": "PHYSICAL_T0_SEED_OR_T1_REPRODUCTION_NOT_T0_RENEWABLE"
     },
@@ -2262,7 +2263,7 @@
         "craft/relay_matrix",
         "assemble/relay_matrix"
       ],
-      "resource": "item:grindless:relay_matrix",
+      "resource": "item:grindless:relay_matrix [F1]",
       "route": "craft/press",
       "status": "PHYSICAL_T0_SEED_OR_T1_REPRODUCTION_NOT_T0_RENEWABLE"
     },
@@ -2293,7 +2294,7 @@
         "craft/relay_matrix",
         "assemble/relay_matrix"
       ],
-      "resource": "item:grindless:relay_matrix",
+      "resource": "item:grindless:relay_matrix [F1]",
       "route": "craft/pulverizer",
       "status": "PHYSICAL_T0_SEED_OR_T1_REPRODUCTION_NOT_T0_RENEWABLE"
     },
@@ -2354,7 +2355,7 @@
         "craft/relay_matrix",
         "assemble/relay_matrix"
       ],
-      "resource": "item:grindless:relay_matrix",
+      "resource": "item:grindless:relay_matrix [F1]",
       "route": "craft/thermal_generator",
       "status": "PHYSICAL_T0_SEED_OR_T1_REPRODUCTION_NOT_T0_RENEWABLE"
     },
@@ -2598,7 +2599,7 @@
       "resource": {
         "kind": "ITEM",
         "id": "grindless:relay_matrix",
-        "rating": 0,
+        "rating": 1,
         "registry": "items"
       },
       "route": "craft/relay_matrix",
@@ -2744,10 +2745,9 @@
   "t1_finite_establishment_replayed": false,
   "t1_renewable_closure_proven": false,
   "unproved": [
-    "The existing auditor does not normalize untagged default-F1 outputs into the explicit F1 input identity.",
     "Prior-tier finite custody has not been carried through a complete T1 ConstructionReserve replay.",
     "Automatic casing and Flux Cell recipes require the established Assembler; complete recurrent input, power and routing closure is not proved.",
-    "Continuous factory power, nighttime recovery, routing throughput and captured-gas handling need separate evidence.",
+    "Continuous factory power, nighttime/restart recovery, routing throughput and captured-gas handling need separate evidence.",
     "Native client, Survival play, actual crafting and longitudinal save compatibility are not proved by this export."
   ]
 }

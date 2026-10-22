@@ -5,8 +5,9 @@ Current G7 engineering is closed with339 custody plus recovered original CI5,
 actual writer41df/data26e/29-38 provenance and managed51 file idempotence.
 The fictitious26e/51 target stays stopped; Assembler target shadowing remains
 a separate real acquisition gap under ADR-0185. Reviewed default-F1/display
-source57d is normally integrated but requires Java/normal projection proof; authored
-31/41 is not emitted provenance. All old source/lease snapshots below retain
+source57d is normally integrated and G8 verifies actual31/41/new contracts/
+normal A8 through239-file custody. This is not rendered or finite-T1 proof.
+All old source/lease snapshots below retain
 their historical scope, not live permission or whole-T1 readiness.
 
 The owner explicitly opens this work while testing the unchanged T0 dev build
@@ -165,8 +166,8 @@ five-controller seed and exact F2 evidence intact. Serialize VerifyRecipes
 ownership after the active selector source; do not patch frozen G8 or turn
 this inventory into a manufacturing/runtime pass.
 
-1. Complete the exact G8 default-F1 model/normal-output proof and the separate
-   selector source/new native mechanism. G4/G5/G7 are already closed within
+1. Integrate reviewed selector source and complete its new native mechanism
+   with the nine-controller follow-up. G4/G5/G7/G8 are already closed within
    scope; do not replay them to repair documentation. Preserve player state.
 2. Broaden real baseline families and interdependent processing beyond the first
    factory. Existing Motor/Wire Mill/chemistry code is prior art, not work to

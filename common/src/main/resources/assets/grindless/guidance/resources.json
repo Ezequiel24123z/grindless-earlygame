@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "content_sha256": "1c7ac7b2199b562a7811558b0a45b963c8554baa9d802fa6bef69b433133667b",
+  "content_sha256": "9a3bcb5a460a83e9a9d76720375f4782a24cc3b524a4009b2b7bf789853c875a",
   "resources": [
     {
       "resource": {
@@ -7831,7 +7831,7 @@
       "resource": {
         "kind": "item",
         "id": "grindless:relay_matrix",
-        "rating": 0,
+        "rating": 1,
         "registry": "items"
       },
       "resource_class": "bootstrap",
@@ -7848,7 +7848,7 @@
         {
           "route": "assemble/relay_matrix",
           "source": "ProcessGraph.generate",
-          "via": "item:grindless:relay_matrix",
+          "via": "item:grindless:relay_matrix [F1]",
           "kind": "output",
           "certainty": "exact_resource",
           "unconditional": true,
@@ -7859,7 +7859,7 @@
         {
           "route": "craft/relay_matrix",
           "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/relay_matrix.json",
-          "via": "item:grindless:relay_matrix",
+          "via": "item:grindless:relay_matrix [F1]",
           "kind": "output",
           "certainty": "exact_resource",
           "unconditional": true,
@@ -7870,9 +7870,86 @@
       ],
       "consumers": [
         {
+          "route": "assemble/arc_furnace",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/assembler",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/press",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/pulverizer",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/relay_matrix_f2",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/thermal_generator",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 1,
+          "optional": true,
+          "discharged": false
+        },
+        {
+          "route": "assemble/wire_mill",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "craft/arc_furnace",
           "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/arc_furnace.json",
-          "via": "item:grindless:relay_matrix",
+          "via": "item:grindless:relay_matrix [F1]",
           "kind": "consumed_input",
           "certainty": "exact_resource",
           "unconditional": true,
@@ -7883,7 +7960,7 @@
         {
           "route": "craft/assembler",
           "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/assembler.json",
-          "via": "item:grindless:relay_matrix",
+          "via": "item:grindless:relay_matrix [F1]",
           "kind": "consumed_input",
           "certainty": "exact_resource",
           "unconditional": true,
@@ -7894,7 +7971,7 @@
         {
           "route": "craft/factory_portal",
           "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/factory_portal.json",
-          "via": "item:grindless:relay_matrix",
+          "via": "item:grindless:relay_matrix [F1]",
           "kind": "consumed_input",
           "certainty": "exact_resource",
           "unconditional": true,
@@ -7905,7 +7982,7 @@
         {
           "route": "craft/kiln",
           "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/kiln.json",
-          "via": "item:grindless:relay_matrix",
+          "via": "item:grindless:relay_matrix [F1]",
           "kind": "consumed_input",
           "certainty": "exact_resource",
           "unconditional": true,
@@ -7916,7 +7993,7 @@
         {
           "route": "craft/press",
           "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/press.json",
-          "via": "item:grindless:relay_matrix",
+          "via": "item:grindless:relay_matrix [F1]",
           "kind": "consumed_input",
           "certainty": "exact_resource",
           "unconditional": true,
@@ -7927,7 +8004,7 @@
         {
           "route": "craft/pulverizer",
           "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/pulverizer.json",
-          "via": "item:grindless:relay_matrix",
+          "via": "item:grindless:relay_matrix [F1]",
           "kind": "consumed_input",
           "certainty": "exact_resource",
           "unconditional": true,
@@ -7938,7 +8015,7 @@
         {
           "route": "craft/terrestrial_extractor",
           "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/terrestrial_extractor.json",
-          "via": "item:grindless:relay_matrix",
+          "via": "item:grindless:relay_matrix [F1]",
           "kind": "consumed_input",
           "certainty": "exact_resource",
           "unconditional": true,
@@ -7949,7 +8026,7 @@
         {
           "route": "craft/thermal_generator",
           "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/thermal_generator.json",
-          "via": "item:grindless:relay_matrix",
+          "via": "item:grindless:relay_matrix [F1]",
           "kind": "consumed_input",
           "certainty": "exact_resource",
           "unconditional": true,

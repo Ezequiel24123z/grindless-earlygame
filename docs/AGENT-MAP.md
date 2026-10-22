@@ -274,13 +274,15 @@ registry, T0/T1 and guidance checks preserve exact F2/F3, minimum-vs-exact roles
 five-controller custody, bills and rewards; unsupported axes/IDs cannot default.
 `T1Export` and existing source/image guards pin the decoder/architecture without
 synthetic routes or fictitious items. Finite T1 custody/renewability/autonomy
-remain unproved. Source is implemented, not Java/writer-qualified; a later exact
-model window remains pending. Frozen G7/code41df605 and PC/player surfaces stay
-outside this lane; canonical payloads await normal writers. The authorized
+remain unproved. Source57/4ee and G8 actual31/41, changed Java/DTO contracts,
+normal writers/CheckOnly/canonical checks and239 custody are verified; A8
+preserves actual output bytes. G7/code41df605 remains older proof and
+PC/player/runtime acceptance stays outside this model lane. The authorized
 authored-display follow-up uses no auditor, builders, I/O or live registry and
 keeps `ResourceGuidanceClient` presentation/physical validation unchanged.
 Existing F1-only DTO/real-operand regressions and direct helper source/image
-guards are authored, not an executed Java or integrated-display pass.
+guards are executed in G8's bound contracts, not a rendered-client or
+longitudinal gameplay pass.
 
 ### Explicit Assembler recipe choice
 

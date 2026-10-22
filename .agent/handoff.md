@@ -17,21 +17,29 @@ parent-published combined baseline. No all-suite/native/acquisition claim.
 a89baba/30e2822/43838b8 chain, nineteen files and clean treef3c5fb19. Work/
 menu/network/persistence/visible picker and the strict workCycle profile are
 authored; static1013/independent-model804/lexical34 are not Java/AST/native/
-transport/graphical evidence. Immutable review91de0be2 checks the full source.
+transport/graphical evidence. Immutable review91de0be2 finds no significant
+issue in the full source, not a compile/AST/server/packet/GUI/save proof.
 VerifyRecipes is explicitly released at438, but data58 still needs the
 parent's exact published combined baseline before PhaseB. The native fixtures
 derive real equal Washer/Reactor inputs, not a permanent three-group count.
 No changed recipe, F1/generation proof or tier acceptance is inferred.
 
-**G8 explicitly returned13:25:45.6175163Z; parent custody review pending.**
+**G8 bounded model outcome closed; explicit return13:25:45.6175163Z verified.**
 Source4ee common/tool compilation, changed exact-source CI reuse, actual
 31/41 write/check image receipts and all normal/canonical stages report0.
 Normal A8 is REALdee1a2ae4f90a95b4c941570358571e4597e3c37, exact parent4ee,
 only four normal payloads. Parent verifies/imports bundle9543ae63/2583bytes,
-ancestry/trailers and the bounded data diff, but has not merged it. New
-read-only QAa3e7323c checks239 custody files including all original CI5,
+ancestry/trailers, all four Git blob lengths/SHA/bytes against actual writer
+payloads and normally merges A8 in this checkpoint. Independent read-only
+QAa3e7323c verifies239/239 custody files including all original CI5,
 source/class hashes, independent CheckOnly invariance and guard/Java/lock
-closure. All PC grants are now returned; no target/runtime action occurred.
+closure. CI behavior1/three old equalities stay historical reds; actual
+1357/368/2083/25728 unaffected passes are authenticated. Pre-PC hash-display
+raw error is not supplied in the capsule, explicitly disclosed; two read-only
+QA observer errors are corrected without production replay. No required-chain
+mismatch blocks this outcome. All PC grants are returned; no target/runtime
+action occurred, and rendered/finite-T1/selector/controller-data proof is not
+inferred.
 
 **Historical G8 GO:** sole604/exact4ee24057642d2e4b2bc2cbcd28e8eb250283194b
 on a new common-only root/inventory, after the verified G7 return. The
@@ -85,9 +93,9 @@ identity repairs invocation without altering Git configuration.
 
 | Category | Current integration boundary |
 | --- | --- |
-| COMPLETED | Verified G7/A7 integration; reviewed57d/4ee source integration; G8 actual31/41/A8 report and exact Git bundle received, independent239-file review pending |
+| COMPLETED | Verified G7/A7; source57d/4ee plus G8 actual31/41/model/display-fixture/239-file closure and normal A8 integration; selector438 and controller PhaseA source preserved |
 | BLOCKED | Whole-T1 Assembler acquisition shadowing, finite establishment and genuine upgrades remain; selector source is active |
-| NOT EXECUTED | Parent A8 integration; selector native/UI and nine-controller final-source proof; player deployment, target launch, main/release and whole-tier acceptance |
+| NOT EXECUTED | Selector native/UI and nine-controller final-source proof; player deployment, target launch, main/release and whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
 | NEEDS MY DECISION | None |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |

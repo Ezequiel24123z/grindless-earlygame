@@ -29,7 +29,7 @@
     "next": "noncompeting_data_source_now_shared_VerifyRecipes_only_after_selector_explicitrelease_no_G8retarget"
   },
   "assembler_recipe_choice": {
-    "status": "source438_final19files_review91de_pending_no_JVM_native",
+    "status": "source438_final19files_review91de_clear_integration_JVM_native_pending",
     "policy": "ADR-0185",
     "owner_session": "0752df7b-209e-4fd5-afe5-b3cf7c376471",
     "source_base": "3c00af09e26718671308fa4537a5ac483279c967",
@@ -80,10 +80,10 @@
     "qualification_package_fictitious_target_plan_authorized": false,
     "real_PrismRoot_player_world_writes_authorized": false,
     "allowed_data_derivation": "onlyNORMAL_A8subset4outputs_exact_parent4ee_actualpasses_nonoutputinvariance_JVM0locks0_bothtrailers_normal_localcommit_bundle_no_push_or_runtime_stage",
-    "result": "EXECUTOR_CLOSED_G8_31_41_A8dee_239custody_normal_and_canonical0_parentQAandGitmerge_pending",
+    "result": "CLOSED_parentQA239_originalCI5_31_41_models_postcanon_guardclosure_ALL4Gitpayloads_exact_A8normalmerge_thischeckpoint_NO_RenderNativeWholeT1",
     "returned": true,
     "returned_utc": "2026-10-22T13:25:45.6175163Z",
-    "return_state": "executor_cleanA8dee_Java0locksfalse_guard22e26bcd_removed_absent_parentQA_pending",
+    "return_state": "parentQA_verified_cleanA8dee_Java0locksfalse_guard22e26bcd_removed_absent",
     "normal_data_checkpoint": "dee1a2ae4f90a95b4c941570358571e4597e3c37",
     "previous_85e_attempt": "CI39733641733_main_toolcompile0_actual_regressions_Sync_only_noPCJVM_safe_return06_35_57Z_closure8363ad93",
     "previous_423a_attempt": "Sync0_real_CI_compile_red_no_PC_JVM_safe_return05_53_20Z_closure8d96179a_raw00348af1_preserved",
