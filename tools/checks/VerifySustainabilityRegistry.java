@@ -327,10 +327,7 @@ public final class VerifySustainabilityRegistry {
                         + "-getLevel().getSkyDarken()>=9;returnkind.site().evaluate(terrestrial,rock,sky,daylight);}",
                 normalized(method(process, "checkSite", 0).getBody()));
         eq("site and formation failures stop the actual work path before recipe execution", true,
-                normalized(method(process, "work", 2).getBody()).startsWith(
-                        "{if(lastWorkTick==tick){return;}lastWorkTick=tick;structureFault=checkStructure();siteFault=checkSite();"
-                                + "if(structureFault!=WorkshopStructure.Fault.NONE||siteFault!=SourceSite.Fault.NONE){"
-                                + "publishStatus(cached,false,false,false,false,ConditionReport.OPTIMAL);syncData();return;}"));
+                processWorkGates(process));
 
         eq("the pump tests a real adjacent or below water source without consuming it",
                 "{if(level==null){returnfalse;}returnisSource(worldPosition.relative(facing()))"
@@ -2748,6 +2745,21 @@ public final class VerifySustainabilityRegistry {
                     + "if(accepted>0){DevTelemetry.manualWork(getLevel(),"
                     + "BuiltInRegistries.BLOCK.getKey(getBlockState().getBlock()).toString(),accepted);}}";
 
+    private static final String PROCESS_WORK_BODY =
+            "{if(lastWorkTick==tick||processing||settling||loadingInventory){return;}"
+                    + "lastWorkTick=tick;processing=true;try{workCycle(sources);}"
+                    + "finally{processing=false;if(kind==ProcessMachineKind.ASSEMBLER){updateSubscriptions();syncData();}}}";
+    private static final String PROCESS_WORK_CYCLE_PREFIX =
+            "{structureFault=checkStructure();siteFault=checkSite();"
+                    + "if(structureFault!=WorkshopStructure.Fault.NONE||siteFault!=SourceSite.Fault.NONE){"
+                    + "publishStatus(cached,false,false,false,false,ConditionReport.OPTIMAL);syncData();return;}"
+                    + "ProcessReciperecipe=recipe(sources);";
+
+    private static boolean processWorkGates(ClassTree process) throws IOException {
+        return PROCESS_WORK_BODY.equals(normalized(method(process, "work", 2).getBody()))
+                && normalized(method(process, "workCycle", 1).getBody()).startsWith(PROCESS_WORK_CYCLE_PREFIX);
+    }
+
     private static void physicalSourceCounterexamples(Path root) throws IOException {
         String name = "HandCrankDynamoBlockEntity";
         String source = Files.readString(root.resolve(JAVA.resolve(Path.of("machine", name + ".java"))));
@@ -2788,6 +2800,47 @@ public final class VerifySustainabilityRegistry {
             eq("manual-work counterexample actually changes source: " + mutation[0], false, original.equals(changed));
             eq("manual-work source binding rejects " + mutation[0], false,
                     PROCESS_CRANK_BODY.equals(normalized(method(parse(process, changed), "crankByHand", 0).getBody())));
+        }
+        processWorkCounterexamples(process, original.replace("\r\n", "\n"));
+    }
+
+    private static void processWorkCounterexamples(String process, String original) throws IOException {
+        eq("the actual process wrapper and cycle satisfy the complete guarded-entry profile", true,
+                processWorkGates(parse(process, original)));
+        String guard = "lastWorkTick == tick || processing || settling || loadingInventory";
+        String cycle = "private void workCycle(List<FluidInsert.Source> sources) {";
+        for (String[] mutation : List.of(
+                new String[]{"same-tick deduplication bypass", guard, "processing || settling || loadingInventory"},
+                new String[]{"processing reentry bypass", guard, "lastWorkTick == tick || settling || loadingInventory"},
+                new String[]{"settlement reentry bypass", guard, "lastWorkTick == tick || processing || loadingInventory"},
+                new String[]{"load reentry bypass", guard, "lastWorkTick == tick || processing || settling"},
+                new String[]{"missing tick ownership", "lastWorkTick = tick;", ""},
+                new String[]{"missing entry lock", "processing = true;", ""},
+                new String[]{"premature unlock", "workCycle(sources);", "processing = false; workCycle(sources);"},
+                new String[]{"missing cycle invocation", "workCycle(sources);", ""},
+                new String[]{"duplicated cycle invocation", "workCycle(sources);", "workCycle(sources); workCycle(sources);"},
+                new String[]{"missing finally unlock", "processing = false;", ""},
+                new String[]{"exception-only rather than guaranteed unlock",
+                        "} finally {\n            processing = false;",
+                        "} catch (RuntimeException lostFinally) {\n            processing = false;"},
+                new String[]{"missing post-cycle subscription refresh",
+                        "if (kind == ProcessMachineKind.ASSEMBLER) {\n                updateSubscriptions();\n                syncData();",
+                        "if (false) {\n                updateSubscriptions();\n                syncData();"},
+                new String[]{"recipe lookup before physical diagnosis", cycle, cycle + " recipe(sources);"},
+                new String[]{"power draw before physical diagnosis", cycle, cycle + " drawPower(kind.tier().nominal());"},
+                new String[]{"missing site diagnosis", "siteFault = checkSite();", "siteFault = SourceSite.Fault.NONE;"},
+                new String[]{"site-and-structure rather than either physical failure",
+                        "structureFault != WorkshopStructure.Fault.NONE || siteFault != SourceSite.Fault.NONE",
+                        "structureFault != WorkshopStructure.Fault.NONE && siteFault != SourceSite.Fault.NONE"},
+                new String[]{"physical failure without return",
+                        "publishStatus(cached, false, false, false, false, ConditionReport.OPTIMAL);\n"
+                                + "            syncData();\n            return;",
+                        "publishStatus(cached, false, false, false, false, ConditionReport.OPTIMAL);\n"
+                                + "            syncData();"})) {
+            String changed = original.replace(mutation[1], mutation[2]);
+            eq("work-entry counterexample actually changes source: " + mutation[0], false, original.equals(changed));
+            eq("the complete guarded-entry profile rejects " + mutation[0], false,
+                    processWorkGates(parse(process, changed)));
         }
     }
 

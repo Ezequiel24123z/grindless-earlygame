@@ -71,6 +71,23 @@ public final class ProcessLookup {
         return GRAPH.recipes;
     }
 
+    public static List<ProcessRecipe> recipes(MachineFamily family) {
+        return GRAPH.byFamily.getOrDefault(family, List.of());
+    }
+
+    /** Resolves a stable identity in the current publication, never in a retired cache. */
+    public static Optional<ProcessRecipe> byId(MachineFamily family, String id) {
+        ProcessRecipe recipe = GRAPH.byId.get(id);
+        return recipe != null && recipe.family() == family ? Optional.of(recipe) : Optional.empty();
+    }
+
+    /** An explicit choice has no AUTO fallback, including when its physical supplies are missing. */
+    public static Optional<ProcessRecipe> findSelected(MachineFamily family, String id, ItemStack[] inputs,
+                                                       FluidState fluid, List<FluidState> neighbours) {
+        return byId(family, id).filter(recipe -> matches(recipe, inputs)
+                && matchesFluid(recipe, fluid, neighbours));
+    }
+
     /** Transient identity only; never persisted or constructed outside a complete graph. */
     public static final class Generation {
         private Generation() {
@@ -358,17 +375,22 @@ public final class ProcessLookup {
             Generation generation,
             List<ProcessRecipe> recipes,
             Map<MachineFamily, List<ProcessRecipe>> byFamily,
+            Map<String, ProcessRecipe> byId,
             Map<String, List<IndexedRecipe>> byTag,
             Map<MachineFamily, List<IndexedRecipe>> minimumPrimary) {
 
-        static final Graph EMPTY = new Graph(new Generation(), List.of(), Map.of(), Map.of(), Map.of());
+        static final Graph EMPTY = new Graph(new Generation(), List.of(), Map.of(), Map.of(), Map.of(), Map.of());
 
         static Graph index(List<ProcessRecipe> recipes) {
             Map<MachineFamily, List<ProcessRecipe>> byFamily = new EnumMap<>(MachineFamily.class);
+            Map<String, ProcessRecipe> byId = new HashMap<>();
             Map<String, List<IndexedRecipe>> byTag = new HashMap<>();
             Map<MachineFamily, List<IndexedRecipe>> minimumPrimary = new EnumMap<>(MachineFamily.class);
             for (int order = 0; order < recipes.size(); order++) {
                 ProcessRecipe recipe = recipes.get(order);
+                if (byId.putIfAbsent(recipe.id(), recipe) != null) {
+                    throw new IllegalArgumentException("Duplicate process recipe ID: " + recipe.id());
+                }
                 IndexedRecipe indexed = new IndexedRecipe(order, recipe);
                 byFamily.computeIfAbsent(recipe.family(), ignored -> new ArrayList<>()).add(recipe);
                 if (!recipe.itemInputs().isEmpty()) {
@@ -389,7 +411,7 @@ public final class ProcessLookup {
             Map<MachineFamily, List<IndexedRecipe>> frozenMinimum = new EnumMap<>(MachineFamily.class);
             minimumPrimary.forEach((family, list) -> frozenMinimum.put(family, List.copyOf(list)));
             return new Graph(new Generation(), List.copyOf(recipes), Map.copyOf(frozenFamily),
-                    Map.copyOf(frozenTags), Map.copyOf(frozenMinimum));
+                    Map.copyOf(byId), Map.copyOf(frozenTags), Map.copyOf(frozenMinimum));
         }
 
         /** Graph order owns priority; a row reached through several keys is still one candidate. */

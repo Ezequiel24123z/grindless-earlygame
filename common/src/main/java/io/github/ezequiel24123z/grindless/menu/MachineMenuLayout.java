@@ -13,6 +13,15 @@ public final class MachineMenuLayout {
     public static final int INVENTORY_LABEL_Y = 110;
     public static final int INVENTORY_Y = 122;
     public static final int HOTBAR_Y = 180;
+    public static final int ASSEMBLER_PICKER_X = WIDTH + 4;
+    public static final int ASSEMBLER_PICKER_WIDTH = 132;
+    public static final int ASSEMBLER_PICKER_ROWS = 5;
+    public static final int ASSEMBLER_PICKER_ROW_Y = 66;
+    public static final int ASSEMBLER_PICKER_ROW_HEIGHT = 18;
+
+    public static int screenWidth(MachineMenuKind kind) {
+        return kind == MachineMenuKind.ASSEMBLER ? ASSEMBLER_PICKER_X + ASSEMBLER_PICKER_WIDTH : WIDTH;
+    }
 
     private MachineMenuLayout() {
     }

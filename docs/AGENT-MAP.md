@@ -274,13 +274,15 @@ registry, T0/T1 and guidance checks preserve exact F2/F3, minimum-vs-exact roles
 five-controller custody, bills and rewards; unsupported axes/IDs cannot default.
 `T1Export` and existing source/image guards pin the decoder/architecture without
 synthetic routes or fictitious items. Finite T1 custody/renewability/autonomy
-remain unproved. Source is implemented, not Java/writer-qualified; a later exact
-model window remains pending. Frozen G7/code41df605 and PC/player surfaces stay
-outside this lane; canonical payloads await normal writers. The authorized
+remain unproved. Source57/4ee and G8 actual31/41, changed Java/DTO contracts,
+normal writers/CheckOnly/canonical checks and239 custody are verified; A8
+preserves actual output bytes. G7/code41df605 remains older proof and
+PC/player/runtime acceptance stays outside this model lane. The authorized
 authored-display follow-up uses no auditor, builders, I/O or live registry and
 keeps `ResourceGuidanceClient` presentation/physical validation unchanged.
 Existing F1-only DTO/real-operand regressions and direct helper source/image
-guards are authored, not an executed Java or integrated-display pass.
+guards are executed in G8's bound contracts, not a rendered-client or
+longitudinal gameplay pass.
 
 ### Explicit Assembler recipe choice
 
@@ -292,9 +294,27 @@ menu/host/access checks. Preserve legacy AUTO, actual selected output, stores,
 recipe-owned work including fractional carry, completion rollback and old NBT.
 Never fall back from an explicit invalid target to another output or erase
 paid work to make the selector convenient. Reuse existing UI/persistence/lookup
-and the smallest native fixture; implementation/proof are still pending.
+and the smallest native fixture; source is implemented and qualification is pending.
+The source implementation adds `machine/AssemblerWork` for optional
+`SelectedRecipe`/`SuspendedWork`, leaving active `Progress`/`WorkRecipe` and
+store identities intact. `menu/AssemblerSelectionNetwork` carries exact IDs,
+opening tokens and catalogue revisions; vanilla per-menu short data binds
+authoritative snapshots to their opening. Register C2S in ModMenus and S2C
+only in GrindlessClient. The Assembler-only searchable side panel preserves
+the 176x204 body and physical slots. Malformed work is retained fail-closed;
+packet count admission is bounded by the actual payload, not a paid-job cap
+that could strand fractional work alongside unavailable old recipe IDs.
+Existing logic/lookup/persistence/UI checks and the existing Matrix fixture
+own the changed proof. Same-bill fixtures derive group counts/quantities from
+the actual equal ProcessRecipe bills instead of assuming three groups forever;
+they do not change production data or certify a newly proposed operand.
+The coupled Registry work-entry contract checks the
+entire AST-normalized reentry/finally wrapper and physical-diagnosis prefix;
+its negative mutations must still reject bypassed guards and premature work.
+Java/native/rendered/world qualification is not a source or non-JVM-static result.
 The upstream comparison is a pattern reference, not imported code or proof.
-Recipe data, FTB/quests, default-F1 source ownership and G7 are outside this lane.
+Recipe data, FTB/quests, default-F1 semantics and G7 are outside this lane;
+only the parent-authorized work-entry Registry contract is coupled here.
 
 ### Baseline process-family physical control
 

@@ -2,6 +2,9 @@ package io.github.ezequiel24123z.grindless.menu;
 
 import io.github.ezequiel24123z.grindless.registry.ModMenus;
 import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
+import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
+import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
+import io.github.ezequiel24123z.grindless.machine.AssemblerWork;
 import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
@@ -13,7 +16,9 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.server.level.ServerPlayer;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -40,6 +45,43 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
     private final MachineMenuHost host;
     private final ContainerData data;
     private final MachineMenuKind kind;
+    private final Player owner;
+    private int openingParts;
+    private final SimpleContainerData opening = new SimpleContainerData(4) {
+        @Override
+        public void set(int index, int value) {
+            super.set(index, value);
+            openingParts |= 1 << index;
+        }
+    };
+    private final long openingToken;
+    private final SimpleContainerData selectionResult = new SimpleContainerData(1);
+    private ProcessLookup.Generation selectionGeneration;
+    private int selectionRevision;
+    private String lastTarget;
+    private List<RecipeChoice> choices = List.of();
+    private MachineMenuHost.RecipeSelection sentSelection;
+    private ProcessLookup.Generation sentGeneration;
+    private SelectionView clientSelection;
+    private boolean selectionPending;
+
+    public record RecipeChoice(String id, ItemStack output) {
+        public RecipeChoice {
+            output = output.copy();
+        }
+
+        @Override
+        public ItemStack output() {
+            return output.copy();
+        }
+    }
+
+    public record SelectionView(long token, int revision, MachineMenuHost.RecipeSelection state,
+                                List<RecipeChoice> choices) {
+        public SelectionView {
+            choices = List.copyOf(choices);
+        }
+    }
 
     public ProcessMachineMenu(int id, Inventory inventory, FriendlyByteBuf buf) {
         this(id, inventory, hostAt(inventory, buf));
@@ -50,9 +92,29 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
         this.host = host;
         this.kind = host.menuKind();
         this.data = host.menuData();
+        this.owner = inventory.player;
+        this.openingToken = owner instanceof ServerPlayer ? newOpeningToken() : 0L;
         addMachineSlots(host.menuContainer());
         addPlayerSlots(inventory);
         addDataSlots(data);
+        if (kind == MachineMenuKind.ASSEMBLER) {
+            if (owner instanceof ServerPlayer) {
+                for (int part = 0; part < opening.getCount(); part++) {
+                    opening.set(part, (int) (openingToken >>> (part * 16)) & 0xFFFF);
+                }
+            }
+            addDataSlots(opening);
+            selectionResult.set(0, MachineMenuHost.SelectionResult.UNCHANGED.ordinal());
+            addDataSlots(selectionResult);
+        }
+    }
+
+    private long newOpeningToken() {
+        long token;
+        do {
+            token = owner.getRandom().nextLong();
+        } while (token == 0L);
+        return token;
     }
 
     private static MachineMenuHost hostAt(Inventory inventory, FriendlyByteBuf buf) {
@@ -145,6 +207,134 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
         return host;
     }
 
+    /** The four ordinary signed-short data slots bind custom state to this exact opening. */
+    public long synchronizedOpeningToken() {
+        long token = 0L;
+        for (int part = 0; part < opening.getCount(); part++) {
+            token |= (opening.get(part) & 0xFFFFL) << (part * 16);
+        }
+        return token;
+    }
+
+    public Optional<SelectionView> selection() {
+        return kind == MachineMenuKind.ASSEMBLER && clientSelection != null
+                && openingParts == 15
+                && clientSelection.token() == synchronizedOpeningToken()
+                ? Optional.of(clientSelection) : Optional.empty();
+    }
+
+    public boolean selectionPending() {
+        return selectionPending;
+    }
+
+    public MachineMenuHost.SelectionResult selectionResult() {
+        int code = selectionResult.get(0);
+        var results = MachineMenuHost.SelectionResult.values();
+        return code >= 0 && code < results.length ? results[code] : MachineMenuHost.SelectionResult.MALFORMED;
+    }
+
+    void recordSelectionResult(MachineMenuHost.SelectionResult result) {
+        if (!(owner instanceof ServerPlayer)) {
+            throw new IllegalStateException("Only the server records Assembler selection results");
+        }
+        selectionResult.set(0, result.ordinal());
+        broadcastChanges();
+    }
+
+    public void requestSelection(SelectionView displayed, String recipeId) {
+        if (selection().isPresent() && !selectionPending) {
+            selectionPending = true;
+            AssemblerSelectionNetwork.request(containerId, displayed.token(), displayed.revision(), recipeId);
+        }
+    }
+
+    public void receiveSelection(long token, int revision, MachineMenuHost.RecipeSelection state,
+                                 Optional<List<RecipeChoice>> catalogue, boolean acknowledgement) {
+        if (owner instanceof ServerPlayer || kind != MachineMenuKind.ASSEMBLER
+                || openingParts == 15 && token != synchronizedOpeningToken()
+                || clientSelection != null && clientSelection.token() == token
+                && revision < clientSelection.revision()) {
+            return;
+        }
+        List<RecipeChoice> current = catalogue.orElseGet(() ->
+                clientSelection != null && clientSelection.token() == token ? clientSelection.choices() : List.of());
+        clientSelection = new SelectionView(token, revision, state, current);
+        if (acknowledgement && token == synchronizedOpeningToken()) {
+            selectionPending = false;
+        }
+    }
+
+    /** No client ordinal or locally inferred catalogue participates in this mutation. */
+    public MachineMenuHost.SelectionResult selectRecipe(Player player, int container, long token,
+                                                        int revision, String recipeId) {
+        if (!(owner instanceof ServerPlayer serverPlayer) || !serverPlayer.server.isSameThread()
+                || player != owner || player.containerMenu != this || container != containerId
+                || !stillValid(player)) {
+            return MachineMenuHost.SelectionResult.CLOSED;
+        }
+        if (kind != MachineMenuKind.ASSEMBLER || host.recipeSelection().isEmpty()) {
+            return MachineMenuHost.SelectionResult.NOT_ASSEMBLER;
+        }
+        refreshSelection();
+        if (token != openingToken || revision != selectionRevision) {
+            return MachineMenuHost.SelectionResult.STALE;
+        }
+        if (recipeId == null || recipeId.length() > AssemblerWork.MAX_ID_LENGTH
+                || !recipeId.isEmpty() && ProcessLookup.byId(MachineFamily.ASSEMBLER, recipeId).isEmpty()) {
+            return MachineMenuHost.SelectionResult.INVALID_RECIPE;
+        }
+        MachineMenuHost.SelectionResult result = host.selectRecipe(player, recipeId);
+        refreshSelection();
+        return result;
+    }
+
+    @Override
+    public boolean clickMenuButton(Player player, int button) {
+        return false;
+    }
+
+    @Override
+    public void broadcastChanges() {
+        super.broadcastChanges();
+        sendSelection(false);
+    }
+
+    public void sendSelection(boolean acknowledgement) {
+        if (!(owner instanceof ServerPlayer player) || player.containerMenu != this
+                || kind != MachineMenuKind.ASSEMBLER) {
+            return;
+        }
+        refreshSelection();
+        host.recipeSelection().ifPresent(state -> {
+            boolean catalogueChanged = sentGeneration != selectionGeneration;
+            if (acknowledgement || catalogueChanged || !state.equals(sentSelection)) {
+                AssemblerSelectionNetwork.send(player, containerId, openingToken, selectionRevision, state,
+                        catalogueChanged ? Optional.of(choices) : Optional.empty(), acknowledgement);
+                sentSelection = state;
+                sentGeneration = selectionGeneration;
+            }
+        });
+    }
+
+    private void refreshSelection() {
+        Optional<MachineMenuHost.RecipeSelection> state = host.recipeSelection();
+        if (state.isEmpty()) {
+            return;
+        }
+        ProcessLookup.Generation published = ProcessLookup.generation();
+        boolean rebuilt = published != selectionGeneration;
+        if (rebuilt) {
+            choices = ProcessLookup.recipes(MachineFamily.ASSEMBLER).stream().map(recipe ->
+                    new RecipeChoice(recipe.id(), recipe.itemOutputs().stream().findFirst()
+                            .flatMap(ProcessLookup::resolve).orElse(ItemStack.EMPTY))).toList();
+            selectionGeneration = published;
+        }
+        if (rebuilt || !state.get().selected().equals(lastTarget)) {
+            selectionRevision = Math.incrementExact(selectionRevision);
+            lastTarget = state.get().selected();
+        }
+    }
+
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
         ItemStack original = ItemStack.EMPTY;
@@ -172,7 +362,7 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return host.stillValid(player);
+        return player == owner && host.stillValid(player);
     }
 
     /** Output slots refuse shift-click inserts and player placement. */

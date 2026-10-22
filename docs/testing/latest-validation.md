@@ -725,6 +725,96 @@ Java0/locksfalse, with exact parent4ee; no runtime stage or worker push.
 Unchanged G7 FTB/ABI/native/managed-file proof is reused. No new boot, backend,
 package, target, player or actual validation result follows from the grant.
 
+**G8 actual outcome reported, independent custody pending:** source4ee needed
+common/classpath and eleven-tool javac0, no Forge/native stage. Exact
+CI39783257275/artifact12427398452 supplies Registry1357/Adapters368/
+Sustainability2083/ResourceGuidance25728 reuse. Parent API confirms
+foundation-validation/expiredfalse/head4ee; original5 files are in239 custody,
+behaviorSHAe7b1c6c6fabb8eadb1563fa28cf727181e8ab57d0c8e1146784b561c9a8b40f2.
+Its original behavior1/three old canonical equalities remain red, not
+reclassified as green. New normal Guidance74/5341, Economy416/17, T1970
+and three independent CheckOnly JVMs report0 with four payload bytes/mtimes
+unchanged. Necessary Guidance resource refresh then canonical417/2926/974
+report0. Actual31 sources/41 copied images include decoder/architecture/
+context and the real enum getClass implementations.
+
+A8dee1a2ae4f90a95b4c941570358571e4597e3c37 is a normal four-payload child of
+exact4ee with both trailers. Parent verifies2583-byte bundle
+SHA9543ae63755f7d93e833080662fbf7f6f520d908e396ef7142f98e961a603668,
+imports it and reviews the bounded normalized-F1 data diff without edits.
+QAa3e7323c verifies239 custody against
+manifestSHAcd884fb3f6dc673af224046333516e8005ae7dcee5be514d417aaeab5670991f.
+Fresh closure13:25:45.6175163Z reports cleanA8/owned-nonclient-allJava0/
+locksfalse and own guardSHA22e26bcdc8eeb5f0dc17f5ccca8ffba6c853f96d82b4aae961348dbbaf582929
+hash-removed/absent. Final parent proof/import closure is pending; no
+renderedGUI, selector/Washer operation, nine-controller data, native/target
+or finite-T1 acceptance is inferred.
+
+**Independent G8 closure verified:**239 safe unique paths/lengths/hashes
+match manifestcd884fb3. Source4ee/compiler-eleven-tool exits0, three distinct
+CheckOnly JVMs and22 receipt-bound logs, actual31/41 source/class bytes,
+Guidance refresh,2574 nonoutputs plus2578 applicable inputs and fresh
+13:25:45Z cleanA8/Java0/locksfalse/guard22e removal are verified. Normal
+seed5/construction5/remainder0 and false renewable/finite-T1 flags remain.
+The pre-PC display-parser raw error is not supplied in this capsule; QA's
+array-capture and H-alias read-only observer failures are corrected. These
+caveats are disclosed, not converted to passes or production reruns.
+The common helper has its existing Forge classpath-metadata dependency;
+this is not new Forge compilation/native/runtime qualification.
+
+The complete original CI5 remains environment0/build0/behavior1. Registry1357,
+Adapters368, Sustainability2083 and ResourceGuidance25728 are authenticated;
+exactly three old committed equalities at2358/8694/9267 fail, with summary
+at15088. Later postwrite417/2926/974 does not recolor that original CI.
+
+| Original CI file | Bytes | SHA-256 |
+| --- | ---: | --- |
+| source.txt | 80 | `31708182afa7bd8b298e30eb63fc71f4988c3fcd52f5972a92faaad2f1578f60` |
+| environment.log | 443 | `0f6bc3201f9139e629c60adcf771ac6292d50a5215917eb24dddd3205ccbc094` |
+| build.log | 270910 | `0222c01cc80f30420bf86797d634267143ca49be3b4e8a2a970b9c34faecfcdf` |
+| behavior.log | 1771354 | `e7b1c6c6fabb8eadb1563fa28cf727181e8ab57d0c8e1146784b561c9a8b40f2` |
+| status.tsv | 243 | `d3933bc5d8d06681357ac128f794223379d8c4b3ebd93b491534f6ecfb4d50d2` |
+
+Parent independently verifies exactA8/parent4ee/only4normalpayloads/bothtrailers
+and every Git blob equals the supplied normal writer bytes, then normally
+integrates without canonical edits:
+
+| A8 payload | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Guidance resources.json | 609462 | `f192bfdac8ff35512ae098a255a14531cb739daefee1bfbcaf42b86780bceb3c` |
+| t0-economy.json | 181744 | `350ac6a5430627d031ac107a80b2aa9ede3193bebf447f67c036d724a4e963a9` |
+| t1-production-graph.json | 81329 | `e6cd511b2695a0e5b390704c3fa2cdff6d627788a261305d07fdc581d94df345` |
+| t1-production-graph.md | 18137 | `299635e91d1101ef5ba8eb65b8a6dd3598d0caa83c98639d08eebe7a88304b3d` |
+
+This closes only the default-F1 authority/authored-display/model outcome,
+not rendered GUI, actual selector/Washer operation, controller-data, native,
+whole-T1 or human acceptance.
+
+**Completed selector source438 is source-reviewed, not executed.**
+Normal commits a89baba40f2b62f224d6a9d3ba8197ef34d1e83e,
+30e28227fc0acfeded93e868f3cd7cbc934fe2a1 and
+43838b8fdc17db468a45f80f91b766009f98e089 preserve the full nineteen-file
+outcome from3c00af0. Private handoffSHA7406bfaedf4d5aa59a699a5a6bacfa05a9d4395e14f669b9052acd9cfba40995
+and inventorySHAe0ab9c3ede372f679812c8ac0867822de226e443c372582f2208a3c231cbe6af
+record exact treef3c5fb19/input manifestbb1bc0cf, preserved Git identity128
+failure and source/observer corrections. Reported1013 structural,
+804 independent model and34 lexical checks do not execute AssemblerWork Java
+or prove real transport/GUI/save-world behavior. Review91de0be2 is read-only and finds no significant issue, with compilation/
+AST, server classloading, packet delivery, rendered focus and real save/
+rollback unverified.
+The shared recipe verifier is released to a later parent-integrated data phase,
+not permission for competing writers or G8 retarget.
+
+**Normal selector composition, not execution:** parent combines immutable438
+with normally integrated F1/A8 after source review91de reports no significant
+issue. All sixteen non-registry application/check/locale blobs remain exactly
+the reviewed438 bytes; the registry automatically retains F1 declarations
+and adds only the reviewed strict wrapper/cycle profile delta. Parent reviews
+that mechanical union; changelog keeps both histories and the map keeps both
+seams. Java/AST/server/packet/native/rendered/real-save proof still needs a
+new exact-source window. Data58 receives this actual published baseline for
+the now-released shared check; no code or receipt is live-retargeted.
+
 **G7 report12:21:13Z, still awaiting final custody/leaseback:** clean
 ApplicableSource26e/Java0/locksfalse; one direct plain FTB boot reports0,
 ready51/Done and natural save/stop, with tested JAR/inventory captured before

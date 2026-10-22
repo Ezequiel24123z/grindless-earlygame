@@ -1,5 +1,5 @@
 {
-  "authority_snapshot_sha256": "7843fb64d4051b8b98a08e8602461c4e542394cbd171472de8f5e9256a09b74e",
+  "authority_snapshot_sha256": "3255a2d8d07e2b948bc6ebda7087b4ee0915e9c06ba1e9357a7a51ef4dc2b069",
   "balance_ledger": [
     {
       "new": "Explicit paid recovery",
@@ -934,7 +934,7 @@
           "tag:forge:ingots/copper": 2
         },
         "grossOutputs": {
-          "item:grindless:relay_matrix": 5
+          "item:grindless:relay_matrix [F1]": 5
         },
         "route": "craft/relay_matrix",
         "serialTicks": 0,
@@ -1209,7 +1209,7 @@
       "resource": {
         "id": "grindless:relay_matrix",
         "kind": "ITEM",
-        "rating": 0,
+        "rating": 1,
         "registry": "items"
       },
       "route": "craft/relay_matrix",
@@ -1363,7 +1363,7 @@
       "item:grindless:process_atlas": 1,
       "item:grindless:quern": 2,
       "item:grindless:quest_book": 2,
-      "item:grindless:relay_matrix": 5,
+      "item:grindless:relay_matrix [F1]": 5,
       "item:grindless:research_terminal": 1,
       "item:grindless:settling_channel": 3,
       "item:grindless:settling_fluid_input": 1,

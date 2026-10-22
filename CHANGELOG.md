@@ -24,6 +24,42 @@ entries below reference those records by id.
   the shared VerifyRecipes six-role guard unchanged until selector release.
   Java, normal writers, combined acquisition proof and deployment are not run;
   neither stronger substitution nor this data correction is a chassis upgrade.
+- **Normally compose the reviewed Assembler selector with F1 and A8.**
+  Preserve the three source commits and all sixteen non-registry code/test/
+  locale blobs exactly. The registry auto-merge retains both the F1 declaration
+  work and the strict selector wrapper/cycle profile; changelog conflict keeps
+  both histories and the route map keeps both seams. Source-only review has
+  no significant issue, not a Java/AST/server/packet/GUI/save pass. Publish the
+  exact combined baseline so data58 can complete its released recipe check;
+  no PC grant, recipe repricing or runtime readiness follows.
+- **Close actual G8 model evidence and normally integrate its four payloads.**
+  Independent QA verifies239 safe files, complete original CI5, actual31/41
+  source/images, normal write/independent CheckOnly/resource refresh/canonical
+  passes, frozen inputs and fresh13:25:45Z guard/Java/lock return. Parent
+  verifies all four Git blobs equal actual writer bytes before normal A8dee
+  integration. Preserve original three CI reds, the unsupplied pre-PC display
+  error caveat and two corrected read-only audit observers; no production
+  replay or rendered/native/selector/nine-controller/whole-tier claim follows.
+- **Preserve the nine-controller PhaseA source while its shared check waits.**
+  Normalab3bd4d has exact0451122 parent/five owned files/both trailers.
+  Parent reviews nine precise fourth operands and unchanged old groups,
+  outputs/FU/time plus Atlas/T1 contracts; static28/18 mutations are not Java.
+  The still-old six-role verifier is intentionally untouched until the exact
+  integrated selector baseline; this is not a full-suite or acquisition pass.
+- **Receive the complete selector source and serialize its shared-check release.**
+  Normal a89/30e/438 supplies nineteen clean files, persisted recipe-owned work,
+  authoritative target/menu and strict wrapper/workCycle profile. Independent
+  source review91de is active; reported static/model/lexical checks are not
+  Java/native/GUI evidence. VerifyRecipes is released at438, while data58
+  still waits for the exact integrated parent baseline before editing it.
+- **Receive the actual default-F1 model outcome and safe G8 return.**
+  Executor reports real31/41 write/check images, changed exact4ee CI passes,
+  normal Guidance/Economy/T1/independent checks and postwrite canonical passes.
+  Normal A8dee1 has exact parent4ee and four payloads; parent verifies its
+  bundle/ancestry/trailers/bounded diff while independent QA checks239 custody
+  files including all original CI5. Fresh13:25:45Z cleanA8/Java0/locksfalse/
+  own-guard-absent return is reported, not yet parent-audited. No native,
+  renderer, instance, nine-controller or whole-tier result is inferred.
 - **Select the bounded physical-controller follow-up for existing F1 families.**
   ADR-0186 appends one existing minimum-F1 Matrix fourth group to nine explicit
   active process constructors, preserving their old material groups, IDs,
@@ -31,6 +67,8 @@ entries below reference those records by id.
   Source/normal-output qualification is pending, not a silent price update or
   chassis upgrade. A separate data owner can work on noncompeting files while
   VerifyRecipes stays leased to the selector until explicit release.
+  Isolated Sol6.1Max owner58fac55d begins PhaseA from0451122; the shared-check
+  phase waits for the parent's exact integrated selector baseline/file release.
 - **Keep the remaining basic-family control gap visible during implementation.**
   Source tracing confirms nine existing functional F1 process constructors
   share casing/motor/plate bills without a physical Matrix, including the
@@ -76,6 +114,16 @@ entries below reference those records by id.
   display source with authored31/41 pins; review/Java/writers are pending.
   Selector owner0752 continues separately; neither source nor ready51 closes
   Washer acquisition or whole-tier/human readiness.
+- **Implement lossless explicit Assembler targets on the existing executor.**
+  ADR-0185 adds current-graph stable-ID matching, recipe-keyed suspended
+  double base-work, fail-closed retained malformed state and server-owned
+  menu/opening/catalogue validation. A native searchable output picker
+  extends only the Assembler; AUTO, other layouts, stores and rollback stay
+  intact. Existing contract/native-fixture cases are authored, including the
+  strictly coupled work-entry AST profile and refusal mutations. Collider
+  fixtures derive the actual equal bills rather than fixing their group count; local
+  non-JVM evidence cannot qualify Java, native behavior, appearance, the
+  player's world or whole T1. No recipes, bills, dependencies or outputs change.
 - **Choose explicit Assembler targets instead of repricing colliding recipes.**
   ADR-0185 selects a stable-ID, server-authoritative menu choice on the existing
   executor and transaction. Reuse bounded GT/Mekanism configuration/validation

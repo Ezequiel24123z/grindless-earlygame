@@ -4,7 +4,47 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
-**NEW G8 GO, results pending:** sole604/exact4ee24057642d2e4b2bc2cbcd28e8eb250283194b
+**Nine-controller data PhaseA is source-complete, not qualified:** normal
+ab3bd4d/exact0451122 parent/tree4ce1efad changes only ProcessGraph, Atlas/T1
+checks and the two owned documentation entries. Parent reviews the bounded
+diff: nine explicit fourth groups, old three groups/time/FU/output retained,
+generic/passive/Motor unaffected. Reported28 static/18 rejected mutations are
+not Java. VerifyRecipes is unchanged and still expects six roles on this
+partial branch; PhaseB must preserve438's selector checks on the exact
+parent-published combined baseline. No all-suite/native/acquisition claim.
+
+**Selector source normally integrated, no runtime pass:** owner0752 delivers the normal
+a89baba/30e2822/43838b8 chain, nineteen files and clean treef3c5fb19. Work/
+menu/network/persistence/visible picker and the strict workCycle profile are
+authored; static1013/independent-model804/lexical34 are not Java/AST/native/
+transport/graphical evidence. Immutable review91de0be2 finds no significant
+issue in the full source, not a compile/AST/server/packet/GUI/save proof.
+The normal parent merge combines F1/A8 and438, preserving sixteen non-registry
+code/test/locale blobs exactly and reviewing only the automatic strict
+registry-profile union. Changelog conflict retains both histories. Data58
+receives the actual published merge SHA after this checkpoint, with explicit
+VerifyRecipes write permission, not a guessed/WIP source. The native fixtures
+derive real equal Washer/Reactor inputs, not a permanent three-group count.
+No changed recipe, runtime proof or tier acceptance is inferred.
+
+**G8 bounded model outcome closed; explicit return13:25:45.6175163Z verified.**
+Source4ee common/tool compilation, changed exact-source CI reuse, actual
+31/41 write/check image receipts and all normal/canonical stages report0.
+Normal A8 is REALdee1a2ae4f90a95b4c941570358571e4597e3c37, exact parent4ee,
+only four normal payloads. Parent verifies/imports bundle9543ae63/2583bytes,
+ancestry/trailers, all four Git blob lengths/SHA/bytes against actual writer
+payloads and normally merges A8 in this checkpoint. Independent read-only
+QAa3e7323c verifies239/239 custody files including all original CI5,
+source/class hashes, independent CheckOnly invariance and guard/Java/lock
+closure. CI behavior1/three old equalities stay historical reds; actual
+1357/368/2083/25728 unaffected passes are authenticated. Pre-PC hash-display
+raw error is not supplied in the capsule, explicitly disclosed; two read-only
+QA observer errors are corrected without production replay. No required-chain
+mismatch blocks this outcome. All PC grants are returned; no target/runtime
+action occurred, and rendered/finite-T1/selector/controller-data proof is not
+inferred.
+
+**Historical G8 GO:** sole604/exact4ee24057642d2e4b2bc2cbcd28e8eb250283194b
 on a new common-only root/inventory, after the verified G7 return. The
 default-F1 source57 and coupled display are reviewed and normally integrated.
 Compile needed common/tool classes; execute actual changed authority/registry/
@@ -32,7 +72,11 @@ existing minimum-F1 fourth operand to nine explicit active process
 constructors, preserve all old material groups/IDs/time/FU/output, passive/
 Motor/first-five seed and exact F2. A separate isolated data owner may start
 only noncompeting ProcessGraph/Atlas/T1 files; VerifyRecipes stays leased to
-selector0752 until explicit release. No source changes under G8, new item,
+selector0752 until explicit release. Isolated Sol6.1Max source owner
+58fac55d-8eed-4b47-96ab-e96561f3c961 now starts at0451122 on those disjoint
+files. It must checkpoint PhaseA honestly, then normally compose only the
+exact parent-supplied integrated selector baseline before shared PhaseB;
+no blind overwrite or competing VerifyRecipes edit. No source changes under G8, new item,
 generic controller tax, hand-edited canonical data or ready-tier claim.
 
 **G7 bounded engineering closed:** independent QA verifies339/339 hashes and all actual
@@ -52,9 +96,9 @@ identity repairs invocation without altering Git configuration.
 
 | Category | Current integration boundary |
 | --- | --- |
-| COMPLETED | Independent339-file plus original-CI5 G7 closure; A7 normal integration with exact ancestry/trailers/four payload bytes; source57d review finds no significant issue |
+| COMPLETED | Verified G7/A7; source57d/4ee plus G8 actual31/41/model/display-fixture/239-file closure and normal A8 integration; selector438 and controller PhaseA source preserved |
 | BLOCKED | Whole-T1 Assembler acquisition shadowing, finite establishment and genuine upgrades remain; selector source is active |
-| NOT EXECUTED | F1 Java/emitted31-41/normal writers; new selector native/UI proof; player deployment, target launch, main/release and whole-tier acceptance |
+| NOT EXECUTED | Selector native/UI and nine-controller final-source proof; player deployment, target launch, main/release and whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
 | NEEDS MY DECISION | None |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |

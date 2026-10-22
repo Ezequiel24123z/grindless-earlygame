@@ -195,8 +195,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0181](#adr-0181--compare-one-generated-platform-shim-by-exact-self-name-equivalence) | Compare one generated platform shim by exact self-name equivalence | Source555dbe9 integrated; G4 managed201/authentic publication0 custody verified |
 | [0182](#adr-0182--expose-existing-wet-beneficiation-as-an-optional-t1-baseline-line) | Expose existing wet beneficiation as an optional T1 baseline line | G7 actual models29/38/A7 verified; acquisition shadowing remains under ADR-0185 |
 | [0183](#adr-0183--version-known-native-catalogue-lineage-without-weakening-provenance) | Version known native catalogue lineage without weakening provenance | G7 actual ABI/backend/ready51/package/managed51/custody and original CI evidence verified |
-| [0184](#adr-0184--project-authored-default-matrices-through-their-real-physical-rating) | Project authored default Matrices through their real physical rating | Sourcea51/57 normally integrated/reviewed; actual31/41/Java/model proof pending |
-| [0185](#adr-0185--choose-assembler-recipes-explicitly-without-repricing-or-losing-work) | Choose Assembler recipes explicitly without repricing or losing work | Accepted bounded existing-engine correction; source/runtime proof pending |
+| [0184](#adr-0184--project-authored-default-matrices-through-their-real-physical-rating) | Project authored default Matrices through their real physical rating | G8 actual31/41/changed contracts/normal A8/239 custody verified; not rendered or finite-T1 proof |
+| [0185](#adr-0185--choose-assembler-recipes-explicitly-without-repricing-or-losing-work) | Choose Assembler recipes explicitly without repricing or losing work | Sourcea89/30e/438 reviewed/normally composed with F1/A8; Java/native/UI proof pending |
 | [0186](#adr-0186--supply-physical-baseline-control-to-nine-existing-process-families) | Supply physical baseline control to nine existing process families | Accepted bounded data correction; implementation/qualification pending |
 
 ---
@@ -8741,10 +8741,12 @@ Do not retarget the active current50 executor to this51 source.
 
 **Status.** Accepted bounded model-correctness scope under ADR-0135/0169/0178,
 2026-10-22. Sourcea51/57, including the coupled display context, is normally
-integrated after a thirteen-file review with no significant issue. Authored
-31/41 provenance and static checks are not Java/writer evidence. A new exact
-model window is required; G7/A7 is not retargeted and no finite-establishment,
-runtime predicate or human/gameplay acceptance change is inferred.
+integrated after a thirteen-file review with no significant issue. G8 later
+executes actual31/41 provenance, changed authority/display fixtures, normal
+writers/independent CheckOnly/canonical checks on exact4ee, with239-file
+verified custody and normal data A8dee. G7/A7 is not retargeted. No rendered
+GUI, finite establishment, runtime predicate, bill/seed/reward or human/
+gameplay acceptance change is inferred.
 
 **Context.** The real registered Relay Matrix decodes an absent Rating through
 ControlMatrixNbt.load(RELAY, null) as F1. Manual and automatic F1 manufacture
@@ -8817,9 +8819,11 @@ inferred from the source correction.
 ## ADR-0185 — Choose Assembler recipes explicitly without repricing or losing work
 
 **Status.** Accepted bounded correction under ADR-0020/0043/0174/0178,
-2026-10-22. Source tracing establishes the ambiguity; native reproduction,
-implementation, interface review and saved-state proof remain pending.
-G7 stays frozen and does not qualify this separate behavior.
+2026-10-22. Source tracing establishes the ambiguity; normal sourcea89/30e/438
+is composed with the reviewed F1/A8 baseline after a nineteen-file review with
+no significant issue. Compilation, actual AST/server/native/packet/interface
+and saved-state proof remain pending. G7/G8 retain their separate source-bound
+scope and do not qualify this behavior.
 
 **Context.** Chemical Reactor, Washer, Electrolysis Cell, Atmospheric Intake
 and numerous machineCraft rows share casing1/motor2/plates4. ProcessLookup.find

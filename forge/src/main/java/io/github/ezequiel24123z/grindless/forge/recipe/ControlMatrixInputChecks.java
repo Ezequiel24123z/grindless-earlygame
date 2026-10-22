@@ -1,9 +1,16 @@
 package io.github.ezequiel24123z.grindless.forge.recipe;
 
+import com.mojang.authlib.GameProfile;
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.item.ControlMatrixItem;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
+import io.github.ezequiel24123z.grindless.machine.AssemblerWork;
+import io.github.ezequiel24123z.grindless.menu.ProcessMachineMenu;
+import io.github.ezequiel24123z.grindless.menu.MachineMenuHost.SelectionResult;
+import io.github.ezequiel24123z.grindless.menu.MachineMenuHost.SelectionIssue;
+import io.github.ezequiel24123z.grindless.material.MaterialRegistry;
+import io.github.ezequiel24123z.grindless.container.FluidInsert;
 import io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt;
 import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
@@ -23,8 +30,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -38,6 +48,16 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.UUID;
+import java.util.Optional;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 
 /** Existing-harness probe over real registrations and capability admission, never a registry bootstrap. */
 @Mod.EventBusSubscriber(modid = Grindless.MOD_ID)
@@ -76,6 +96,9 @@ public final class ControlMatrixInputChecks {
         } catch (RuntimeException failure) {
             Grindless.LOG.error("GRINDLESS_MATRIX_INPUT_NATIVE_FAIL assertions={}", checks.assertions, failure);
             throw failure;
+        } catch (ReflectiveOperationException | IOException failure) {
+            Grindless.LOG.error("GRINDLESS_MATRIX_INPUT_NATIVE_FAIL assertions={}", checks.assertions, failure);
+            throw new IllegalStateException("The authored native selection fixture could not execute", failure);
         }
     }
 
@@ -216,7 +239,7 @@ public final class ControlMatrixInputChecks {
                 architectures, variants);
     }
 
-    private void capability(ServerLevel level) {
+    private void capability(ServerLevel level) throws ReflectiveOperationException, IOException {
         check(level.hasChunkAt(POSITION) && level.isInWorldBounds(POSITION)
                 && level.getWorldBorder().isWithinBounds(POSITION), "Fixture position must already be loaded and legal");
         check(level.getBlockState(POSITION).isAir() && level.getBlockEntity(POSITION) == null,
@@ -244,8 +267,326 @@ public final class ControlMatrixInputChecks {
         }
         check(machine.saveWithoutMetadata().getString("Recipe").equals("assemble/wire_mill"),
                 "Actual capability insertion selects the named machine route");
+        MenuProbe probe = explicitSelection(level, machine);
         machine.clearContent();
         check(level.removeBlock(POSITION, false), "Remove only the successful empty diagnostic fixture");
+        CompoundTag removed = machine.saveWithoutMetadata();
+        check(probe.menu().selectRecipe(probe.player(), probe.menu().containerId,
+                        probe.menu().synchronizedOpeningToken(), 0, "assemble/chemical_washer") == SelectionResult.CLOSED,
+                "A removed actual host cannot receive an old menu selection");
+        check(machine.saveWithoutMetadata().equals(removed), "A stale removed-host request preserves all retained state");
+        probe.player().containerMenu = probe.player().inventoryMenu;
+    }
+
+    private record MenuProbe(ServerPlayer player, ProcessMachineMenu menu) {
+    }
+
+    /** Harness materials and Flux prove the selector/transaction, not a no-command Survival supply route. */
+    private MenuProbe explicitSelection(ServerLevel level, ProcessMachineBlockEntity machine)
+            throws ReflectiveOperationException, IOException {
+        machine.clearContent();
+        check(machine.network() == null, "This isolated high fixture must not draw another diagnostic network");
+        ProcessRecipe washer = recipe("assemble/chemical_washer");
+        ProcessRecipe reactor = recipe("assemble/chemical_reactor");
+        check(washer.inputs().equals(reactor.inputs()), "Use two real unchanged same-bill construction rows");
+        ServerPlayer player = new ServerPlayer(level.getServer(), level,
+                new GameProfile(UUID.fromString("00000000-0000-0000-0000-000000018501"), "AssemblerProbe"));
+        player.setPos(POSITION.getX() + 0.5, POSITION.getY() + 0.5, POSITION.getZ() + 0.5);
+        ProcessMachineMenu menu = new ProcessMachineMenu(85, player.getInventory(), machine);
+        player.containerMenu = menu;
+        long token = menu.synchronizedOpeningToken();
+        check(token != 0L, "An actual server menu has its own nonzero opening token");
+        int revision = selectionRevision(menu);
+        CompoundTag unchanged = machine.saveWithoutMetadata();
+        check(menu.selectRecipe(player, menu.containerId + 1, token, revision, washer.id()) == SelectionResult.CLOSED,
+                "A wrong actual container ID refuses");
+        check(menu.selectRecipe(player, menu.containerId, token + 1, revision, washer.id()) == SelectionResult.STALE,
+                "A foreign actual opening refuses");
+        check(menu.selectRecipe(player, menu.containerId, token, revision - 1, washer.id()) == SelectionResult.STALE,
+                "A stale actual catalogue revision refuses");
+        check(menu.selectRecipe(player, menu.containerId, token, revision, "removed/request") == SelectionResult.INVALID_RECIPE,
+                "An unknown current ID cannot become a new selected configuration");
+        check(menu.selectRecipe(player, menu.containerId, token, revision, "electrolysis/water")
+                        == SelectionResult.INVALID_RECIPE,
+                "A real recipe of another family cannot become an Assembler target");
+        player.getAbilities().mayBuild = false;
+        check(menu.selectRecipe(player, menu.containerId, token, revision, washer.id()) == SelectionResult.DENIED,
+                "Actual player build permission is enforced before changing the machine");
+        player.getAbilities().mayBuild = true;
+        check(machine.saveWithoutMetadata().equals(unchanged), "All invalid/unauthorized requests preserve exact state");
+        menuSynchronization(level, machine, menu);
+        ServerPlayer other = new ServerPlayer(level.getServer(), level,
+                new GameProfile(UUID.fromString("00000000-0000-0000-0000-000000018502"), "OtherAssembler"));
+        other.setPos(player.getX(), player.getY(), player.getZ());
+        other.containerMenu = menu;
+        check(menu.selectRecipe(other, menu.containerId, token, revision, washer.id()) == SelectionResult.CLOSED,
+                "Another physical player cannot reuse the current menu");
+        other.containerMenu = other.inventoryMenu;
+
+        Object items = machine.menuContainer();
+        Object energy = machine.energy();
+        Object fluids = machine.nativeStore();
+        Object config = machine.containerConfig();
+        long tick = level.getGameTime() + 1;
+        Method work = ProcessMachineBlockEntity.class.getDeclaredMethod("work", long.class, List.class);
+        work.setAccessible(true);
+        for (ProcessRecipe selected : List.of(washer, reactor)) {
+            choose(player, menu, selected.id(), SelectionResult.SELECTED);
+            ItemStack[] physical = actualInputs(selected);
+            ProcessRecipe auto = ProcessLookup.find(MachineFamily.ASSEMBLER, physical).orElseThrow();
+            check(!auto.id().equals(selected.id()), "The actual dry-last ambiguity exists independently of selection");
+            supply(machine, physical);
+            for (int paid = 0; paid < selected.durationTicks(); paid++) {
+                machine.energy().setStored(selected.fuPerTick());
+                work.invoke(machine, tick++, List.<FluidInsert.Source>of());
+                check(machine.energy().getStored() == 0L, "One actual working tick pays the existing Flux buffer once");
+            }
+            Item expected = BuiltInRegistries.ITEM.get(new net.minecraft.resources.ResourceLocation(
+                    selected.itemOutputs().get(0).id()));
+            check(machine.getItem(4).is(expected) && machine.getItem(4).getCount() == 1,
+                    "The real BE manufactures exactly the selected registered output, not dry-last");
+            for (int slot = 0; slot < selected.itemInputs().size(); slot++) {
+                check(machine.getItem(slot).isEmpty(), "The real completion consumes declared input group " + slot);
+            }
+            check(machine.inspectionProgress() == 0.0, "An exact full cycle has no duplicated work");
+            machine.setItem(4, ItemStack.EMPTY);
+        }
+        choose(player, menu, washer.id(), SelectionResult.SELECTED);
+        supply(machine, actualInputs(washer));
+        CompoundTag saved = machine.saveWithoutMetadata();
+        saved.putDouble("Progress", washer.durationTicks() - 0.75);
+        CompoundTag speed = new CompoundTag();
+        speed.putInt("SPEED", 1);
+        saved.put("Upgrades", speed);
+        machine.load(binary(saved));
+        machine.energy().setStored(washer.fuPerTick());
+        work.invoke(machine, tick++, List.<FluidInsert.Source>of());
+        check(machine.getItem(4).is(BuiltInRegistries.ITEM.get(new net.minecraft.resources.ResourceLocation(
+                        washer.itemOutputs().get(0).id()))) && machine.inspectionProgress() == 1.25,
+                "An actual upgraded registered cycle retains fractional carry after successful settlement");
+        machine.setItem(4, ItemStack.EMPTY);
+        choose(player, menu, reactor.id(), SelectionResult.SELECTED);
+        saved = machine.saveWithoutMetadata();
+        saved.putDouble("Progress", 23.375);
+        machine.load(binary(saved));
+        for (int reopen = 0; reopen < 8; reopen++) {
+            choose(player, menu, washer.id(), SelectionResult.SELECTED);
+            check(machine.inspectionProgress() == 1.25, "Actual switching restores the exact fractional Washer carry");
+            choose(player, menu, reactor.id(), SelectionResult.SELECTED);
+            check(machine.inspectionProgress() == 23.375, "Actual switching restores the exact partial Reactor work");
+            machine.load(binary(machine.saveWithoutMetadata()));
+            check(machine.inspectionProgress() == 23.375, "Actual binary reopen preserves the active paid balance");
+            check(machine.menuContainer() == items && machine.energy() == energy
+                            && machine.nativeStore() == fluids && machine.containerConfig() == config,
+                    "Actual reopening preserves exposed inventory/Flux/fluid/config object identities");
+        }
+
+        choose(player, menu, washer.id(), SelectionResult.SELECTED);
+        supply(machine, actualInputs(washer));
+        machine.setItem(4, new ItemStack(Items.STONE, 64));
+        saved = machine.saveWithoutMetadata();
+        saved.putDouble("Progress", washer.durationTicks() + 0.25);
+        machine.load(binary(saved));
+        machine.energy().setStored(64L);
+        for (int blocked = 0; blocked < 3; blocked++) {
+            work.invoke(machine, tick++, List.<FluidInsert.Source>of());
+        }
+        check(machine.inspectionProgress() == washer.durationTicks() + 0.25 && machine.energy().getStored() == 64L,
+                "Completed native blocked work neither redraws Flux nor loses its fractional overrun");
+        check(machine.recipeSelection().orElseThrow().issue() == SelectionIssue.OUTPUT_BLOCKED,
+                "The native selected-target diagnosis reports blocked output");
+        choose(player, menu, reactor.id(), SelectionResult.SELECTED);
+        choose(player, menu, washer.id(), SelectionResult.SELECTED);
+        check(machine.inspectionProgress() == washer.durationTicks() + 0.25,
+                "Completed blocked native work remains reachable after switching");
+        machine.setItem(4, ItemStack.EMPTY);
+        work.invoke(machine, tick++, List.<FluidInsert.Source>of());
+        check(machine.energy().getStored() == 64L && machine.inspectionProgress() == 0.25
+                        && machine.getItem(4).getCount() == 1,
+                "Native unblocking settles once without charging completed work again");
+        machine.setItem(4, ItemStack.EMPTY);
+
+        supply(machine, actualInputs(washer));
+        saved = machine.saveWithoutMetadata();
+        saved.putDouble("Progress", washer.durationTicks() + 0.375);
+        machine.load(binary(saved));
+        CompoundTag beforeSettlement = machine.saveWithoutMetadata();
+        boolean[] aborted = {false};
+        ((SimpleContainer) machine.menuContainer()).addListener(container -> {
+            if (!aborted[0] && machine.getItem(0).isEmpty()) {
+                aborted[0] = true;
+                CompoundTag tentative = machine.saveWithoutMetadata();
+                check(menu.selectRecipe(player, menu.containerId, token, currentRevision(menu), reactor.id())
+                                == SelectionResult.BUSY,
+                        "The actual server menu refuses reentrant choice during tentative settlement");
+                check(machine.saveWithoutMetadata().equals(tentative),
+                        "Reentrant menu refusal does not mutate tentative transaction state");
+                throw new IllegalStateException("authored native Assembler settlement abort");
+            }
+        });
+        try {
+            work.invoke(machine, tick++, List.<FluidInsert.Source>of());
+            check(false, "The authored native settlement observer must abort");
+        } catch (InvocationTargetException expected) {
+            check(expected.getCause() instanceof IllegalStateException
+                            && expected.getCause().getMessage().equals("authored native Assembler settlement abort"),
+                    "The actual native transaction preserves its original observer exception");
+        }
+        check(machine.saveWithoutMetadata().equals(beforeSettlement),
+                "Native rollback restores full paid work, target, items, fluids, configuration and Flux");
+
+        int oldRevision = selectionRevision(menu);
+        ProcessLookup.Generation oldGeneration = ProcessLookup.generation();
+        ProcessLookup.rebuild(MaterialRegistry.snapshot());
+        check(oldGeneration != ProcessLookup.generation(), "Native reindex replaces the complete current graph");
+        CompoundTag beforeReloadRequest = machine.saveWithoutMetadata();
+        check(menu.selectRecipe(player, menu.containerId, token, oldRevision, reactor.id()) == SelectionResult.STALE,
+                "A native catalogue reload refuses the old menu revision without guessing a new output");
+        check(machine.saveWithoutMetadata().equals(beforeReloadRequest), "Reload refusal preserves all paid state");
+        choose(player, menu, reactor.id(), SelectionResult.SELECTED);
+        saved = machine.saveWithoutMetadata();
+        saved.putString(AssemblerWork.TARGET, "removed/native_saved_target");
+        saved.putString("WorkRecipe", "removed/native_paid_owner");
+        saved.putDouble("Progress", 0.125);
+        machine.load(binary(saved));
+        check(machine.recipeSelection().orElseThrow().issue() == SelectionIssue.UNAVAILABLE
+                        && machine.saveWithoutMetadata().getString(AssemblerWork.TARGET).equals("removed/native_saved_target"),
+                "A saved unknown native target stays explicitly unavailable rather than resetting to AUTO");
+        choose(player, menu, washer.id(), SelectionResult.SELECTED);
+        check(machine.recipeSelection().orElseThrow().suspended().get("removed/native_paid_owner") == 0.125,
+                "Unknown native paid work remains preserved and cannot be spent by a known target");
+        choose(player, menu, "", SelectionResult.SELECTED);
+        check(machine.saveWithoutMetadata().getString(AssemblerWork.TARGET).isEmpty(),
+                "The actual server menu can deliberately return to legacy AUTO");
+
+        player.containerMenu = player.inventoryMenu;
+        check(menu.selectRecipe(player, menu.containerId, token, currentRevision(menu), washer.id()) == SelectionResult.CLOSED,
+                "A closed actual menu cannot change the machine");
+        ProcessMachineMenu reopened = new ProcessMachineMenu(86, player.getInventory(), machine);
+        player.containerMenu = reopened;
+        check(reopened.synchronizedOpeningToken() != token, "Reopening binds a new actual menu identity");
+        check(reopened.selectRecipe(player, reopened.containerId, token, selectionRevision(reopened), washer.id())
+                        == SelectionResult.STALE,
+                "A prior opening's token cannot select through a reopened menu");
+        choose(player, reopened, washer.id(), SelectionResult.SELECTED);
+        return new MenuProbe(player, reopened);
+    }
+
+    /** Actual menu state methods over a vanilla Player carrier, not a graphical or wire-delivery pass. */
+    private void menuSynchronization(ServerLevel level, ProcessMachineBlockEntity machine, ProcessMachineMenu server)
+            throws ReflectiveOperationException {
+        Player viewer = new Player(level, POSITION, 0.0F,
+                new GameProfile(UUID.fromString("00000000-0000-0000-0000-000000018503"), "MenuStateCarrier")) {
+            @Override
+            public boolean isSpectator() {
+                return false;
+            }
+
+            @Override
+            public boolean isCreative() {
+                return false;
+            }
+        };
+        ProcessMachineMenu client = new ProcessMachineMenu(server.containerId, viewer.getInventory(), machine);
+        long token = server.synchronizedOpeningToken();
+        int revision = selectionRevision(server);
+        var state = machine.recipeSelection().orElseThrow();
+        List<ProcessMachineMenu.RecipeChoice> catalogue = ProcessLookup.recipes(MachineFamily.ASSEMBLER).stream()
+                .map(row -> new ProcessMachineMenu.RecipeChoice(row.id(),
+                        ProcessLookup.resolve(row.itemOutputs().get(0)).orElseThrow())).toList();
+        client.receiveSelection(token, revision, state, Optional.of(catalogue), false);
+        check(client.selection().isEmpty(), "State before native opening data is not an authoritative usable picker");
+        for (int part = 0; part < 3; part++) {
+            client.setData(ProcessMachineMenu.DATA_SIZE + part, (short) (token >>> (part * 16)));
+            check(client.selection().isEmpty(), "A partially delivered native opening identity remains disabled");
+        }
+        client.setData(ProcessMachineMenu.DATA_SIZE + 3, (short) (token >>> 48));
+        check(client.selection().orElseThrow().state().equals(state),
+                "All four native data shorts unlock only the matching authoritative state");
+        client.setData(ProcessMachineMenu.DATA_SIZE + 4, SelectionResult.DENIED.ordinal());
+        check(client.selectionResult() == SelectionResult.DENIED,
+                "The native menu exposes a server refusal even when chat is hidden");
+        client.setData(ProcessMachineMenu.DATA_SIZE + 4, 32767);
+        check(client.selectionResult() == SelectionResult.MALFORMED,
+                "An unknown native result value cannot display success");
+        client.setData(ProcessMachineMenu.DATA_SIZE + 4, SelectionResult.UNCHANGED.ordinal());
+        check(client.selection().orElseThrow().choices().stream().map(ProcessMachineMenu.RecipeChoice::id).toList()
+                        .equals(catalogue.stream().map(ProcessMachineMenu.RecipeChoice::id).toList()),
+                "Native menu state keeps server stable IDs without consulting another client graph");
+        client.receiveSelection(token + 1, revision + 1, state, Optional.of(List.of()), true);
+        check(client.selection().orElseThrow().choices().size() == catalogue.size(),
+                "A foreign opening snapshot cannot replace a valid native menu catalogue");
+        client.receiveSelection(token, revision + 1, state, Optional.empty(), false);
+        check(client.selection().orElseThrow().choices().size() == catalogue.size(),
+                "A configuration/work-only snapshot preserves the already authoritative catalogue");
+        List<ProcessMachineMenu.RecipeChoice> reordered = List.of(
+                catalogue.get(catalogue.size() - 1), catalogue.get(0));
+        client.receiveSelection(token, revision + 2, state, Optional.of(reordered), false);
+        check(client.selection().orElseThrow().choices().get(0).id().equals(reordered.get(0).id()),
+                "A replacement catalogue is accepted by exact IDs, never a former transient ordinal");
+        client.receiveSelection(token, revision, state, Optional.of(catalogue), false);
+        check(client.selection().orElseThrow().revision() == revision + 2
+                        && client.selection().orElseThrow().choices().size() == reordered.size(),
+                "A stale snapshot cannot undo an authoritative catalogue reload");
+        Field pending = ProcessMachineMenu.class.getDeclaredField("selectionPending");
+        pending.setAccessible(true);
+        pending.setBoolean(client, true);
+        client.receiveSelection(token, revision + 2, state, Optional.empty(), false);
+        check(client.selectionPending(), "An unrelated state update does not acknowledge a pending choice");
+        client.receiveSelection(token, revision + 2, state, Optional.empty(), true);
+        check(!client.selectionPending(), "The exact opening's acknowledgement releases the pending native control");
+        check(machine.recipeSelection().orElseThrow().equals(state),
+                "Client-side display/reload acknowledgement never mutates actual machine configuration or work");
+    }
+
+    private void choose(ServerPlayer player, ProcessMachineMenu menu, String id, SelectionResult expected)
+            throws ReflectiveOperationException {
+        SelectionResult actual = menu.selectRecipe(player, menu.containerId, menu.synchronizedOpeningToken(),
+                selectionRevision(menu), id);
+        check(actual == expected, "Actual menu selection " + id + " expected=" + expected + " actual=" + actual);
+    }
+
+    private static int currentRevision(ProcessMachineMenu menu) {
+        try {
+            return selectionRevision(menu);
+        } catch (ReflectiveOperationException failure) {
+            throw new IllegalStateException("Cannot inspect the actual native menu revision", failure);
+        }
+    }
+
+    private static int selectionRevision(ProcessMachineMenu menu) throws ReflectiveOperationException {
+        Method refresh = ProcessMachineMenu.class.getDeclaredMethod("refreshSelection");
+        refresh.setAccessible(true);
+        refresh.invoke(menu);
+        Field revision = ProcessMachineMenu.class.getDeclaredField("selectionRevision");
+        revision.setAccessible(true);
+        return revision.getInt(menu);
+    }
+
+    private ItemStack[] actualInputs(ProcessRecipe recipe) {
+        ItemStack[] inputs = new ItemStack[] {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY};
+        for (int slot = 0; slot < recipe.itemInputs().size(); slot++) {
+            IngredientSpec input = recipe.itemInputs().get(slot);
+            inputs[slot] = ProcessLookup.resolve(new OutputSpec(input.kind(), input.id(), input.count(), false)).orElseThrow();
+            check(ProcessLookup.matches(input, inputs[slot]), "Real selected fixture input " + input.qualified());
+        }
+        return inputs;
+    }
+
+    private static void supply(ProcessMachineBlockEntity machine, ItemStack[] inputs) {
+        for (int slot = 0; slot < inputs.length; slot++) {
+            machine.setItem(slot, inputs[slot].copy());
+        }
+    }
+
+    private static CompoundTag binary(CompoundTag state) throws IOException {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        try (DataOutputStream output = new DataOutputStream(bytes)) {
+            NbtIo.write(state, output);
+        }
+        try (DataInputStream input = new DataInputStream(new ByteArrayInputStream(bytes.toByteArray()))) {
+            return NbtIo.read(input);
+        }
     }
 
     private static ItemStack[] wireInputs(ItemStack matrix) {

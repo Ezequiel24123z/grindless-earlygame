@@ -1,12 +1,21 @@
 package io.github.ezequiel24123z.grindless.logic;
 
-/** Behaviour checks for the logic numbers (ADR-0083). Not part of the mod. */
+import io.github.ezequiel24123z.grindless.machine.AssemblerWork;
+import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
+import net.minecraft.nbt.CompoundTag;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+/** Behaviour checks for logic numbers and recipe-owned base-work. Not part of the mod. */
 public final class VerifyLogic {
 
     private static int failures = 0;
 
     public static void main(String[] args) {
         numbers();
+        assemblerWork();
         System.out.println(failures == 0
                 ? "ALL LOGIC CHECKS PASSED"
                 : failures + " LOGIC CHECK(S) FAILED");
@@ -27,6 +36,91 @@ public final class VerifyLogic {
         eq("no redstone writes zero", 0, SignalLogic.fromRedstone(0));
         eq("seven stays seven", 7, SignalLogic.fromRedstone(7));
         eq("redstone above fifteen is clipped", 15, SignalLogic.fromRedstone(20));
+    }
+
+    private static void assemblerWork() {
+        String washer = "assemble/chemical_washer";
+        String reactor = "assemble/chemical_reactor";
+        String cell = "assemble/electrolysis_cell";
+        AssemblerWork work = new AssemblerWork();
+        yes("a fresh machine is unselected AUTO", work.selected().isEmpty() && work.suspended().isEmpty());
+        work.select(washer);
+        double paid = 17.0 + ProcessLogic.work(13L, 32L, 0.75, 1.3);
+        double fraction = ProcessLogic.work(1L, 32L, 0.5, 0.8);
+        Map<String, Double> expected = new LinkedHashMap<>();
+        expected.put(washer, paid);
+        expected.put(reactor, 160.0);
+        expected.put(cell, fraction);
+        String active = washer;
+        for (String id : List.of(reactor, cell)) {
+            double resumed = work.activate(active, paid, id);
+            exact("a fresh target never inherits another target's paid work: " + id, 0.0, resumed);
+            active = id;
+            paid = expected.get(id);
+        }
+        for (int pass = 0; pass < 120; pass++) {
+            String next = List.of(washer, reactor, cell).get(pass % 3);
+            paid = work.activate(active, paid, next);
+            active = next;
+            work.select(next);
+            exact("switch " + pass + " restores the exact recipe-owned double", expected.get(active), paid);
+            yes("switch " + pass + " has exactly one active owner", !work.suspended().containsKey(active));
+            Map<String, Double> all = new LinkedHashMap<>(work.suspended());
+            all.put(active, paid);
+            yes("switch " + pass + " preserves all three balances without duplication", all.equals(expected));
+            CompoundTag checkpoint = new CompoundTag();
+            checkpoint.putDouble("Progress", paid);
+            checkpoint.putString("WorkRecipe", active);
+            work.save(checkpoint);
+            work = AssemblerWork.load(checkpoint, active, paid);
+            yes("switch " + pass + " reloads a valid exact target", work.valid() && work.selected().equals(active));
+        }
+        work.select("");
+        exact("selecting AUTO does not debit active work", expected.get(active), paid);
+        String previous = active;
+        String next = previous.equals(washer) ? reactor : washer;
+        paid = work.activate(previous, paid, next);
+        exact("AUTO's chosen ID also resumes only its own paid balance", expected.get(next), paid);
+
+        AssemblerWork legacy = new AssemblerWork();
+        exact("unattributed legacy work cannot pay a new recipe", 0.0, legacy.activate("", 0.125, washer));
+        exact("unattributed legacy work is retained under its empty owner", 0.125, legacy.suspended().get(""));
+        exact("a zero idle owner does not consume retained unattributed work", 0.0,
+                legacy.activate(washer, 0.0, reactor));
+        AssemblerWork unknown = new AssemblerWork();
+        exact("unknown paid work cannot pay a known ID", 0.0, unknown.activate("removed/recipe", 25.375, washer));
+        exact("the exact unknown ID can recover its own work when it returns", 25.375,
+                unknown.activate(washer, 0.0, "removed/recipe"));
+
+        AssemblerWork completed = new AssemblerWork();
+        double carry = 160.0 + fraction - 160.0;
+        exact("a successful fractional carry can be suspended without an idle-only dead end", 0.0,
+                completed.activate(washer, carry, reactor));
+        exact("fractional post-completion work returns bit-exactly", carry,
+                completed.activate(reactor, 0.0, washer));
+        exact("selecting the current recipe cannot duplicate fractional carry", carry,
+                completed.activate(washer, carry, washer));
+
+        AssemblerWork history = new AssemblerWork();
+        String historical = "removed/history/0";
+        for (int index = 1; index <= 4100; index++) {
+            String nextHistory = "removed/history/" + index;
+            history.activate(historical, 0.125, nextHistory);
+            historical = nextHistory;
+        }
+        exact("unavailable history cannot impose a paid-job cap on a new selected target", 0.0,
+                history.activate(historical, 0.125, washer));
+        exact("fractional work remains switchable even beside thousands of unavailable old IDs", 0.0,
+                history.activate(washer, 0.25, reactor));
+        exact("that fractional work remains exactly recoverable without deleting unavailable history", 0.25,
+                history.activate(reactor, 0.0, washer));
+        yes("all unavailable history remains retained", history.suspended().size() == 4101);
+    }
+
+    private static void exact(String what, double expected, double actual) {
+        if (Double.doubleToRawLongBits(expected) != Double.doubleToRawLongBits(actual)) {
+            fail(what + ": expected exact " + expected + " got " + actual);
+        }
     }
 
     private static void eq(String what, int expected, int actual) {
