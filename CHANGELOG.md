@@ -15,6 +15,16 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate the real five-output G3 data checkpoint with verified custody.**
+  NormalA3e1efe470 has exact parent7c55 and only GENERATED.md plus four
+  canonical outputs. Parent verifies all205 delivered files, bundle3a9ac835,
+  all five Git blobs against normal-writer bytes,2573 unchanged inputs and
+  four production images against both T1 receipts. Actual normal write/check
+  results are Guidance74/5323, Economy416/17 andT1794; canonical417,2908/0
+  and797 pass.1266 asset-stage entries differ only at GENERATED.md.
+  Fresh cleanA3/Java0/locksfalse closure08:34:07Z returns G3; preserve both
+  real native/legacy reds and the pre-writer tested JAR/world. No PC lease,
+  successful reference, package, player update or whole-tier pass follows.
 - **Preserve unchanged generated text through the shared asset writer.**
   Normal5aa56be adds a five-line CRLF/LF-equivalent no-op to GenerateAssets,
   retaining existing bytes/mtime and logical output count while still publishing

@@ -285,11 +285,35 @@ before/after data and corrected observation are retained, without regeneration.
 The five-output A3 checkpoint/final custody/leaseback remain pending; parent
 still has no PC access. Native1 and legacy1 remain explicit failures.
 
+**G3 CLOSED and A3 normally integrated:** checkpoint
+e1efe47064a3e10856bd403c0e2cd60fe407283d has exact parent7c55 and only the five
+normal outputs. Parent verifies all205 custody files against manifestde198742,
+bundle3a9ac835, every imported Git blob against its delivered writer bytes,
+2573 identical non-output input hashes and the four actual production images
+against both T1 receipts. All14 T1 source inputs remain unchanged in the
+coordinator, so these model proofs are reused rather than repeated. Asset-stage
+manifests independently confirm1266 entries and only GENERATED.md changed.
+The parent's initial raw-checkout equality check fails on GENERATED.md alone:
+existing core.autocrlf converts its checkout to CRLF. All five Git blobs remain
+exact normal-writer bytes; four checkout payloads are also raw-identical.
+Strict UTF8/EOL-only comparison and Git's existing clean filter prove the fifth
+maps back exactly. Preserve that failed check; do not rewrite an output or
+change Git/attributes merely to manufacture raw checkout equality.
+
+Actual write/check results: Guidance74/5323, Economy416/17 andT1794;
+canonical Economy417, Guidance/T02908/0 andT1797. The independent CheckOnly
+runs preserve every output byte. Fresh closure08:34:07.4832542Z confirms
+cleanA3/owned-all-observedJava0/locksfalse, no client command lines read;
+the executor explicitly returns G3. No PC lease is active. Native/legacy remain
+red; JARfd1 and its retained world belong to pre-writer7c55, NOT an A3 runtime.
+Never rerun that harness in its retained root without preserving the initial
+reset boundary. Corrected source needs a new exact grant.
+
 | Category | Current G3 checkpoint, not a completed wave |
 | --- | --- |
-| COMPLETED | Actual compile/javac and managed44/stale-class contract; authentic legacy compilation/custody retained; native carrier and asset no-op source repairs; executor-reported exact EOL restoration, normal writers/CheckOnly/canonical guards and1266-asset comparison |
+| COMPLETED | Actual compile/javac/managed44, normal writers/CheckOnly/canonical passes; normal A3 integration; parent-verified205-file custody/2573 inputs/4 images/5 Git blobs; exact EOL recovery and explicit safe leaseback; source957/5aa repairs |
 | BLOCKED | Corrected native/legacy properties remain unproved; comparator source repair and actual post-fix proofs are separate from the completed writer stages |
-| NOT EXECUTED | Corrected native/publisher and asset JDK fixture; final A3 checkpoint/custody/leaseback; real managed-plan consumption, new package/client/player update, whole-tier acceptance |
+| NOT EXECUTED | Corrected native/publisher and asset JDK fixture; real managed-plan consumption, new package/client/player update, whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | Existing GUI/JEI/reward/appearance and longitudinal-campaign gates remain open |
 | NEEDS MY DECISION | None from the owner; bounded technical repair is delegated |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |

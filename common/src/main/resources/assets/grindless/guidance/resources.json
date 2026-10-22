@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "content_sha256": "f92b927fed8ec6d4dcb3bc8ea9ef9e7a812c36e6cee866ad9a73dcc4b45facd1",
+  "content_sha256": "1c7ac7b2199b562a7811558b0a45b963c8554baa9d802fa6bef69b433133667b",
   "resources": [
     {
       "resource": {
@@ -101,6 +101,28 @@
         },
         {
           "route": "alloy/steel",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/arc_furnace",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/assembler",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
           "kind": "consumed_input",
@@ -540,6 +562,17 @@
           "discharged": false
         },
         {
+          "route": "assemble/coil_die",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "assemble/condenser",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -738,6 +771,17 @@
           "discharged": false
         },
         {
+          "route": "assemble/gear_die",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "assemble/induction_furnace",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -837,6 +881,17 @@
           "discharged": false
         },
         {
+          "route": "assemble/plate_die",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "assemble/plate_mould",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -848,7 +903,29 @@
           "discharged": false
         },
         {
+          "route": "assemble/press",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "assemble/pressure_pipe",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/pulverizer",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
           "kind": "consumed_input",
@@ -903,6 +980,17 @@
           "discharged": false
         },
         {
+          "route": "assemble/rod_die",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "assemble/signal_cable",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -933,6 +1021,28 @@
           "unconditional": true,
           "unlock_tier": null,
           "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/thermal_generator",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 1,
+          "optional": true,
+          "discharged": false
+        },
+        {
+          "route": "assemble/thermal_generator_core",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 1,
+          "optional": true,
           "discharged": false
         },
         {
@@ -9367,6 +9477,59 @@
     {
       "resource": {
         "kind": "item",
+        "id": "grindless:thermal_generator_core",
+        "rating": 0,
+        "registry": "items"
+      },
+      "resource_class": null,
+      "side_stream_class": null,
+      "first_use_tier": 1,
+      "first_renewable_tier": null,
+      "canonical_route": "assemble/thermal_generator_core",
+      "future_consumers": [],
+      "handling": {
+        "action": "store",
+        "discard_allowed": true,
+        "hazardous": false,
+        "containment": null,
+        "treatment_route": null
+      },
+      "recycling": null,
+      "originating_catalyst": null,
+      "uncertainty": "Assembler component consumed by assemble/thermal_generator. Automatic net supply and renewable establishment are unproved.",
+      "producers": [
+        {
+          "route": "assemble/thermal_generator_core",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:thermal_generator_core",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 1,
+          "optional": true,
+          "discharged": false
+        }
+      ],
+      "consumers": [
+        {
+          "route": "assemble/thermal_generator",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:thermal_generator_core",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 1,
+          "optional": true,
+          "discharged": false
+        }
+      ],
+      "sources": {
+        "canonical:assemble/thermal_generator_core": "ProcessGraph.generate"
+      }
+    },
+    {
+      "resource": {
+        "kind": "item",
         "id": "grindless:unfired_ceramic",
         "rating": 0,
         "registry": "items"
@@ -9968,6 +10131,17 @@
           "unconditional": true,
           "unlock_tier": null,
           "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/thermal_generator_core",
+          "source": "ProcessGraph.generate",
+          "via": "tag:grindless:carbon",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": 1,
+          "optional": true,
           "discharged": false
         },
         {
@@ -11134,6 +11308,17 @@
       ],
       "consumers": [
         {
+          "route": "assemble/arc_furnace",
+          "source": "ProcessGraph.generate",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "assemble/bootstrap/assembly_bench",
           "source": "ProcessGraph.generate",
           "via": "tag:minecraft:stone_crafting_materials",
@@ -11307,6 +11492,83 @@
           "unconditional": true,
           "unlock_tier": null,
           "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/coil_die",
+          "source": "ProcessGraph.generate",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/gear_die",
+          "source": "ProcessGraph.generate",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/plate_die",
+          "source": "ProcessGraph.generate",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/press",
+          "source": "ProcessGraph.generate",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/pulverizer",
+          "source": "ProcessGraph.generate",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/rod_die",
+          "source": "ProcessGraph.generate",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/thermal_generator",
+          "source": "ProcessGraph.generate",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": 1,
+          "optional": true,
           "discharged": false
         },
         {
@@ -12373,6 +12635,17 @@
       ],
       "consumers": [
         {
+          "route": "assemble/pulverizer",
+          "source": "ProcessGraph.generate",
+          "via": "item:minecraft:flint",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "craft/pulverizer",
           "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/pulverizer.json",
           "via": "item:minecraft:flint",
@@ -12461,6 +12734,17 @@
           "unconditional": true,
           "unlock_tier": null,
           "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/thermal_generator_core",
+          "source": "ProcessGraph.generate",
+          "via": "item:minecraft:furnace",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 1,
+          "optional": true,
           "discharged": false
         },
         {
@@ -13001,6 +13285,17 @@
           "discharged": false
         },
         {
+          "route": "assemble/arc_furnace",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "assemble/bootstrap/crude_extractor",
           "source": "ProcessGraph.generate",
           "via": "tag:forge:ingots/iron",
@@ -13023,6 +13318,17 @@
           "discharged": false
         },
         {
+          "route": "assemble/coil_die",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "assemble/flux_cell",
           "source": "ProcessGraph.generate",
           "via": "tag:forge:ingots/iron",
@@ -13031,6 +13337,72 @@
           "unconditional": true,
           "unlock_tier": null,
           "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/gear_die",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/plate_die",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/press",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/pulverizer",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/rod_die",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/thermal_generator_core",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": 1,
+          "optional": true,
           "discharged": false
         },
         {
@@ -14203,7 +14575,29 @@
       ],
       "consumers": [
         {
+          "route": "assemble/arc_furnace",
+          "source": "ProcessGraph.generate",
+          "via": "item:minecraft:redstone",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "assemble/bootstrap/data_core",
+          "source": "ProcessGraph.generate",
+          "via": "item:minecraft:redstone",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/coil_die",
           "source": "ProcessGraph.generate",
           "via": "item:minecraft:redstone",
           "kind": "consumed_input",
@@ -15481,6 +15875,17 @@
           "discharged": false
         },
         {
+          "route": "assemble/arc_furnace",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "assemble/bootstrap/crude_extractor",
           "source": "ProcessGraph.generate",
           "via": "tag:forge:ingots/iron",
@@ -15503,6 +15908,17 @@
           "discharged": false
         },
         {
+          "route": "assemble/coil_die",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "assemble/flux_cell",
           "source": "ProcessGraph.generate",
           "via": "tag:forge:ingots/iron",
@@ -15511,6 +15927,72 @@
           "unconditional": true,
           "unlock_tier": null,
           "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/gear_die",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/plate_die",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/press",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/pulverizer",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/rod_die",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/thermal_generator_core",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 1,
+          "optional": true,
           "discharged": false
         },
         {
@@ -16569,6 +17051,17 @@
           "discharged": false
         },
         {
+          "route": "assemble/thermal_generator_core",
+          "source": "ProcessGraph.generate",
+          "via": "tag:grindless:carbon",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 1,
+          "optional": true,
+          "discharged": false
+        },
+        {
           "route": "b0_r1/aluminium",
           "source": "ProcessGraph.generate",
           "via": "tag:grindless:carbon",
@@ -17517,6 +18010,17 @@
       "producers": [],
       "consumers": [
         {
+          "route": "assemble/arc_furnace",
+          "source": "ProcessGraph.generate",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "assemble/bootstrap/assembly_bench",
           "source": "ProcessGraph.generate",
           "via": "tag:minecraft:stone_crafting_materials",
@@ -17690,6 +18194,83 @@
           "unconditional": true,
           "unlock_tier": null,
           "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/coil_die",
+          "source": "ProcessGraph.generate",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/gear_die",
+          "source": "ProcessGraph.generate",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/plate_die",
+          "source": "ProcessGraph.generate",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/press",
+          "source": "ProcessGraph.generate",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/pulverizer",
+          "source": "ProcessGraph.generate",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/rod_die",
+          "source": "ProcessGraph.generate",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/thermal_generator",
+          "source": "ProcessGraph.generate",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 1,
+          "optional": true,
           "discharged": false
         },
         {

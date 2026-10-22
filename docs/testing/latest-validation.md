@@ -350,6 +350,47 @@ contract after actual byte inspection. Independent upstream source corroborates
 the input-path stamp and exact Forge class template; it is not binary build
 attestation. Implementation and corrected publisher evidence remain pending.
 
+**G3 final custody and normal A3 integration:** exact
+e1efe47064a3e10856bd403c0e2cd60fe407283d, only parent7c55, contains exactly
+the normal four canonical payloads and GENERATED.md with both trailers.
+Parent verifies all205 transferred files against custody manifest
+`de198742bd295097d08d3f57d376f5c50c384b457f52ae48f1755dbbcb80b387`,
+the3953-byte bundle
+`3a9ac8352cbbdca7d92b3e311eb05f90a01788f7519b0a1b5fd727e0b4dace6d`,
+and each imported Git blob directly against the corresponding normal-writer
+payload. Normal merge preserves ancestry; no output is manually authored.
+The first parent raw-checkout check fails only at GENERATED.md: existing
+core.autocrlf=true and unspecified text/eol attributes produce CRLF, raw SHA
+`89c4a80875440faa0eaf4221ad651112d1260f79fef7dfd3724caa21b6f7c996`.
+Four other checkout payloads remain raw-identical. Strict UTF8 CRLF-to-LF
+comparison and the existing Git clean-filter object both equal the preserved
+normal payload; all five committed blobs are byte-identical. Keep the failed
+raw check explicit. No manual output/attributes/configuration change or writer
+replay is used to close this checkout-representation boundary.
+
+| Output | SHA-256 |
+| --- | --- |
+| Guidance resources.json | 3eca1eb968bd783e768fe2382713d0f2b7ecd8ea1720a615eba83b4d7bd791a4 |
+| t0-economy.json | dae34d809c9212dd5c6579e9de19ee9d6c95638c690291224be34a61403ecfd8 |
+| t1-production-graph.json | eb9c8c2315b508751babb2af1d3936651aee58ddce341260484f64898f7838c8 |
+| t1-production-graph.md | e839c241b8ebd39899633f58979055a6afa33e8f03dc3b6236199afdc8951a07 |
+| GENERATED.md | e93f8adce477376ef82a3c43b0c605b4c700f145a527198484b95a636e602e15 |
+
+Parent independently compares2573 before/after non-output input hashes: no
+change. Both T1 receipts match the four delivered production class images;
+all14 T1 source inputs are unchanged in the composed coordinator source.
+Original1266-entry asset manifests show only GENERATED.md changed during the
+asset stage, before the later authorized Guidance write. Actual normal
+Guidance74/5323, Economy416/17 andT1794 write/check processes pass; canonical
+Economy417, Guidance/T02908/0 andT1797 pass. No green suite is replayed for custody.
+
+Fresh phase-Close08:34:07.4832542Z identifies cleanA3, owned/all-observedJava0,
+work/cache locksfalse and commandlines_read=false. Explicit leaseback closes
+G3; no parent/other worker PC action starts here. Failed native18/19 and
+legacy1 remain red. Their preserved JARfd1/world identify pre-writer7c55, not a
+tested A3 package. Corrected proofs, actual reference/plan consumption and
+the new asset JDK fixture still need the next source-bound window.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the
