@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Select the bounded physical-controller follow-up for existing F1 families.**
+  ADR-0186 appends one existing minimum-F1 Matrix fourth group to nine explicit
+  active process constructors, preserving their old material groups, IDs,
+  outputs/FU/time, four slots, passive/component bills and first-F2/seed.
+  Source/normal-output qualification is pending, not a silent price update or
+  chassis upgrade. A separate data owner can work on noncompeting files while
+  VerifyRecipes stays leased to the selector until explicit release.
 - **Keep the remaining basic-family control gap visible during implementation.**
   Source tracing confirms nine existing functional F1 process constructors
   share casing/motor/plate bills without a physical Matrix, including the

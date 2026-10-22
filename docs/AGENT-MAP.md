@@ -296,6 +296,18 @@ and the smallest native fixture; implementation/proof are still pending.
 The upstream comparison is a pattern reference, not imported code or proof.
 Recipe data, FTB/quests, default-F1 source ownership and G7 are outside this lane.
 
+### Baseline process-family physical control
+
+ADR-0186 appends one existing minimum-F1 Matrix fourth group to the nine named
+Reactor/Washer/Cell/Intake/Induction/Caster/Flotation/Boiler/Condenser constructors
+in `recipe/ProcessGraph`. Preserve their first three groups, all IDs/outputs/
+FU/time, the four-slot layout, Motor/passive bills, first-five seed and exact
+F2 evidence. Do not blanket-change generic machineCraft. Existing Atlas/T1
+contracts and the exact minimum-role set must name all nine additions without
+turning data into a new matching engine or tier acceptance. Serialize
+VerifyRecipes after the active selector owner releases it; G8 remains frozen.
+Normal outputs and representative combined mechanism proof remain pending.
+
 The same existing ControlMatrixInputChecks.registered probe now checks the new
 core's actual Item class/registry ID, without another case or marker. This
 observation is pending execution, not supplied by synthetic lookup carriers.

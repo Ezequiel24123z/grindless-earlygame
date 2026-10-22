@@ -157,10 +157,10 @@ Flotation, Boiler and Condenser have existing Assembler constructors with only
 casing1/motor2/plates4. The Motor/casing subassemblies add no physical Matrix.
 This does not fulfill the accepted active-machine control contract. ADR-0182
 deliberately preserved the Washer's old bill for its bounded content increment;
-that is not permanent approval of controller-free active machines. The
-existing minimum-control fourth operand is relevant prior art and fits four
-input groups, but a separate explicit source decision/contract update must
-precede any bill change. Keep passive infrastructure/component bills, first
+that is not permanent approval of controller-free active machines. ADR-0186
+now explicitly selects one existing minimum-F1 fourth operand for those nine,
+preserving the old three material groups and all other runtime fields. Keep
+passive infrastructure/component bills, first
 five-controller seed and exact F2 evidence intact. Serialize VerifyRecipes
 ownership after the active selector source; do not patch frozen G8 or turn
 this inventory into a manufacturing/runtime pass.

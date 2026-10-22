@@ -197,6 +197,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0183](#adr-0183--version-known-native-catalogue-lineage-without-weakening-provenance) | Version known native catalogue lineage without weakening provenance | G7 actual ABI/backend/ready51/package/managed51/custody and original CI evidence verified |
 | [0184](#adr-0184--project-authored-default-matrices-through-their-real-physical-rating) | Project authored default Matrices through their real physical rating | Sourcea51/57 normally integrated/reviewed; actual31/41/Java/model proof pending |
 | [0185](#adr-0185--choose-assembler-recipes-explicitly-without-repricing-or-losing-work) | Choose Assembler recipes explicitly without repricing or losing work | Accepted bounded existing-engine correction; source/runtime proof pending |
+| [0186](#adr-0186--supply-physical-baseline-control-to-nine-existing-process-families) | Supply physical baseline control to nine existing process families | Accepted bounded data correction; implementation/qualification pending |
 
 ---
 
@@ -8897,3 +8898,56 @@ wrapper shape, same-tick deduplication, processing/settlement/loading exclusion,
 one cycle call and finally release, plus diagnosis/return before recipe/draw.
 Do not replace the profile with broad string presence, skip it, alter the F1
 registration/default rule or retarget G8's immutable4ee source.
+
+---
+
+## ADR-0186 — Supply physical baseline control to nine existing process families
+
+**Status.** Accepted bounded construction-data follow-up under ADR-0107/0174/
+0176/0178, 2026-10-22. Implementation/normal outputs and affected proof remain
+pending. This does not change frozen G8 or make any family a ready tier.
+
+**Context.** Nine functional F1 ProcessMachineKind families have existing
+Assembler constructors with casing1/motor2/plates4 and no physical controller:
+Chemical Reactor, Chemical Washer, Electrolysis Cell, Atmospheric Intake,
+Induction Furnace, Caster, Flotation, Boiler and Condenser. Motor/casing
+subassemblies contain no Matrix either. That inherited prototype bill does not
+satisfy the accepted active-machine control contract. ADR-0182 intentionally
+preserved the Washer bill for one bounded content increment; it was not a
+permanent exception. Recipe-target choice under ADR-0185 remains a separate
+mechanism: adding a common controller operand cannot disambiguate equal bills.
+
+**Decision.** Append exactly one existing minimum-F1 physical Matrix operand
+as the fourth item group of these nine existing construction recipes. Retain
+each existing ID, first three groups and quantities, output, time, FU,
+informational milestone, machine tier/envelope and processing recipe.
+Reuse IngredientSpec.minimumControl and the already-proven matching/menu/
+viewer path. Stronger legitimate control is optional substitution, not a
+higher chassis rating or improved output machine.
+
+Select the nine calls explicitly through existing recipe data/helpers; do not
+tax every generic machineCraft result. Motors/components, passive grid/
+storage/transport, wearables, other prototypes and all unrelated bills stay
+unchanged. No new item, engine, slot, recipe, arbitrary cost/timer, F2 exact
+predecessor/output change or first-five-controller seed dependency is added.
+The existing four-slot Assembler fits these four groups without expansion.
+Existing placed machines/NBT are not rewritten or charged retroactively;
+future release/copy-compatibility gates still govern actual owner updates.
+
+**Ownership and proof.** A new isolated data owner may work on ProcessGraph,
+existing Atlas/T1 progression contracts and only the necessary map/changelog
+entry. VerifyRecipes remains owned by the active selector until its explicit
+file release; serialize that edit, then retain both selector and data guards.
+Update the existing exact minimum-role identity set from its six old entries
+to precisely those six plus the nine additions. Replace the old bounded
+Washer-no-Matrix assertion with exact fourth-role/count and unchanged-prefix
+checks, while Motor stays controller-free. Check all nine structurally,
+unchanged remaining recipes, seed/F2, viewer roles, counts and slot fit.
+
+Native proof is mechanism-level: reuse the existing minimum-control executor
+contract, then combine representative selected real colliding constructions
+with ADR-0185's new selection/persistence proof when their final sources are
+composed. No per-recipe native matrix or FTB/catalogue replay follows.
+Canonical payloads require normal writers on the final source; never hand-edit
+them or reuse G8's old bill projection as this result. No finite T1 closure,
+runtime acquisition, whole-tier or human acceptance is inferred from data.

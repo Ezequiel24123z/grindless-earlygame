@@ -27,6 +27,14 @@ work-wrapper/workCycle prefix contract and precise negatives in the existing
 registry verifier. This preserves full guard/diagnostic shape rather than
 loosening it; F1 addDeclarations/default rule and G8/4ee stay unchanged.
 
+**ADR-0186 construction follow-up is selected, not executed:** append one
+existing minimum-F1 fourth operand to nine explicit active process
+constructors, preserve all old material groups/IDs/time/FU/output, passive/
+Motor/first-five seed and exact F2. A separate isolated data owner may start
+only noncompeting ProcessGraph/Atlas/T1 files; VerifyRecipes stays leased to
+selector0752 until explicit release. No source changes under G8, new item,
+generic controller tax, hand-edited canonical data or ready-tier claim.
+
 **G7 bounded engineering closed:** independent QA verifies339/339 hashes and all actual
 historical publisher/model/class-image/backend/boot/package/plan/managed51/
 protection/fresh-closure chains. It finds one documentary gap: the original
