@@ -108,6 +108,14 @@ entries below reference those records by id.
   bill without a Matrix tax, raw Thermal seed/materials, smelting and every other
   valid vanilla basic. The Thermal core remains an allowed local process supplied
   with a manually constructed Furnace upstream, not a newly automatic renewable claim.
+  Later exact f1b9 CI39849913599 confirms environment/build/tool-javac and the
+  recipe/Atlas/adapter/registry/logic/asset contracts at that source, while Factory
+  reports one stale bare-item oracle against the typed minimum-control declaration.
+  Repair only that existing oracle: compare the complete typed retained bill and
+  real JSON decoder result, with bare/exact/wrong-threshold/wrong-quantity negatives.
+  Preserve every other Factory condition and all product/material/permission data.
+  Original CI evidence and its other red scopes remain intact; the repaired Factory
+  check is NOT RUN and no f1b9 positive is relabeled as execution of this follow-up.
   No PC lease, generated canonical edit, save/player change or qualification claim.
 - **Rebind the conserved first-factory witness to manual capital (ADR-0188, lane C).**
   Add explicit nonrenewable `MANUAL_CAPITAL` for genuine normal-machine contracts:
