@@ -92,8 +92,13 @@ public final class ControlMatrixInputChecks {
         inputs[0] = high;
         for (int slot = 1; slot < inputs.length; slot++) {
             IngredientSpec input = press.itemInputs().get(slot);
-            inputs[slot] = ProcessLookup.resolve(new OutputSpec(input.kind(), input.id(), input.count(), false))
-                    .orElseThrow();
+            inputs[slot] = IngredientSpec.TAG.equals(input.kind())
+                    && input.id().equals("minecraft:stone_crafting_materials")
+                    ? new ItemStack(Items.COBBLESTONE, input.count())
+                    : ProcessLookup.resolve(new OutputSpec(input.kind(), input.id(), input.count(), false))
+                            .orElseThrow();
+            check(ProcessLookup.matches(input, inputs[slot]),
+                    "Actual Press fixture input " + input.qualified() + " count=" + input.count());
         }
         check(!ProcessLookup.matches(predecessor.itemInputs().get(0), high),
                 "The existing exact F2 predecessor still rejects F3");
