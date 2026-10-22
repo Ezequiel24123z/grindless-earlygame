@@ -1145,6 +1145,29 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
+**Final A review and C follow-up intake:** review9219 closes with no
+significant source issue across original A7f9-to-d686 and only its finished
+d686-to652 delta. Common/Forge compilation, contracts, native registration/
+codec, full canonical/external-tag overlap, client/viewer/world remain
+unexecuted. This does not qualify a compiled composite.
+
+C's current final source isab1e8ab03f026b0a5b76193e8e52895a33f39505,
+parentda82b3d81bb7cbc3eb975d177a5c246ff33ee673,
+tree4ea5c0b8da426c89f0f0a770b9b01aee7521e464. Normal1d0/da82 resolve actual
+vanilla/minecraft:furnace and finite subassembly-versus-recurring R33; ab1e adds
+only the exact two-argument retained-work locale and its own existing bullet.
+Parent verifies separate private handoffSHAs
+dc45d07adb8e952a41499e4dfd0670cbb9d1dbbc7131931cef088f3351f4c514 and
+f6b60e92ee0d74a1c4bb41f179e2ea88347f8a95c59e3217f9c208f56ab7b5d5.
+Old e5/25e capsules stay exact. The new seven-file142 insertions8 deletions
+delta only is under same-reviewer3c54 review; authored43/98 is not actual
+class provenance or standalone compilation.
+
+Parent's first final-C metadata patch updates the two JSON files before stale
+handoff context fails. Those actual applied fields are inspected and only the
+remaining documentation is completed; no application file, producer, original
+source or snapshot is reset/replayed to recover the edit.
+
 **Final A source and a real source-level retirement blocker:** normal
 652968a229691f732d4133cc4ff5d78962e0b24c/exactd686,
 tree4b020c31d727b7e2c91439fcbd8a9e3ef9504fc4, completes the narrow Furnace

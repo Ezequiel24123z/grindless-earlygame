@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve final recipe review and finite-capital/Bench-text source.**
+  A's immutable original+delt652 review finds no significant source issue,
+  not a runtime/compiler pass. C now provides actual vanilla authority/R33
+  and exact retained-work locale in normal1d0/da82/ab1e, with separate
+  parent-verified private handoffs and old capsules preserved. Review only
+  the new C delta; B's paid-Bench guard remains a real prerequisite.
+  Recover a partial parent JSON/handoff-context edit after inspecting actual
+  state, without resetting source or replaying any producer.
 - **Hold orphaned Bench ownership before retiring automatic constructors.**
   A's finished652 source/41-file manifest and private handoff are delivered;
   G11 local-only inventory/preparation remains unbound. B's real competing
