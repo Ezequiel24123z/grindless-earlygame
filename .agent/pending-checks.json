@@ -32,7 +32,7 @@
     "selector_native_fixture_worker": "6921ada5-8c40-4102-abe3-2ddd38a6aba9",
     "selector_fixture_source": "e960c13b8f53e149e02ba67250eed4ebb13beb24",
     "selector_fixture_source_state": "SOURCEonly_private_normal041_e960_9codecarrierblobs_exact_new19expectationMeaning_Adependency_and_actualcompile_native_pending",
-    "selector_fixture_review": "582f2a82-16ad-49b5-8055-11aa875df7a6_PENDING_Bonly",
+    "selector_fixture_review": "582f2a82-16ad-49b5-8055-11aa875df7a6_NO_significant_Bsource_issue_conditional_Ainterface_NO_actualexecution",
     "selector_fixture_metadata": "original041_trailer_format_failure_preserved_normal_e960_documentation_append_no_history_rewrite",
     "selector_fixture_handoff_sha256": "46bf083791604f17bd5658e1ece3f1651570e6543b72f901df99323a0657f004",
     "selector_fixture_parent_observer": "localPS_textpipeline_UTF8sensitive_compare_false_refusal_nativeGit_trailer_format_confirms_exact_recognition_no_source_repair",

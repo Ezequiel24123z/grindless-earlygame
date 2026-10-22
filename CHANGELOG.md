@@ -20,8 +20,9 @@ entries below reference those records by id.
   manual-recipe/Ingredient/crafting probe source, with19 expectations and two
   intentionally renamed tool markers. Preserve all nine code/carrier blobs
   and the original blank-separated-coauthor failure; normal doc appende960
-  corrects attribution without rewrite. Independent B-only review and A's
-  manual-data/serializer integration remain pending; no compiler/native/
+  corrects attribution without rewrite. Independent B-only review finds no
+  significant source issue conditional on A's pending manual data/serializer;
+  no compiler/native/
   writer/player result or old-proof relabeling follows.
   Native Git trailer formatting resolves a false parent PS text-pipeline/
   Unicode-sensitive refusal without a source repair or producer replay.
