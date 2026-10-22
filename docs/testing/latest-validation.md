@@ -626,6 +626,19 @@ trailers, with identical tree7c143402 and parent30 verified. Preserve that
 historical exception; no amend/reset/commit-tree or code change repairs metadata.
 No old proof is invalidated or new executed hash is inferred by this source pin.
 
+**G7 assignment only, not a pass:** code41df605/sole604/new full wet root.
+New source-file ABI46/50, repaired common/API Java and normal29/38 projections
+are required. G6 common and unchanged host228/native mechanisms are reused.
+Only after actual normal writers/independent checks/canonical checks, a local
+data A7 with exact parent41df/only four normal payloads/unchanged other inputs/
+Java0/locks0 may become the clean ApplicableSource. No arbitrary code/ref
+switch or public push is delegated; its actual hash is recorded before use.
+One plain existing FTB smoke boot without paid commands probes the changed
+FML setup-helper linkage and ready51, not another migration/persistence matrix.
+Verified package/fresh current proof and actual managed50-to51 plan/apply/
+same-plan no-op target only the old owned fictional instance. No player/
+template/world operation or new execution result is inferred from this grant.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

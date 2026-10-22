@@ -567,6 +567,36 @@ historical subject-only metadata explicitly, no amend/reset/commit-tree or
 owner escalation. The parent integration carries both trailers. Actual Java/
 model/old-classpath source-file/native51/real-managed50-to51 proof is still next.
 
+**NEW G7 complete outcome GO:** only604/code41df605/new inventoried full wet
+root, after verified G6 return. First exercise the NEW publisher's historical
+46/50 ABI with unchanged original5f/f8 classpaths/receipts and actual old
+source roots/JARs; no pruning, mixed classpath or old compilation. Reuse G6
+Quest/Claims/Teaching/Assets and focused host228 when their inputs are identical.
+Run only newly changed/repaired source-profile/adapter and full existing FTB51
+Java contracts, then normal writers/independent checks/canonical checks and
+actual29-source/38-image provenance.
+
+For a coherent end-to-end outcome, a LOCAL derived A7 is explicitly allowed
+only after all writers/checks/JVMs/locks settle: exact parent41df605, changed
+paths subset of the four canonical outputs, non-output input hashes unchanged,
+both trailers and clean status. No arbitrary code/docs/ref change or push.
+The actual A7 SHA, if needed, becomes the explicit ApplicableSource for later
+stages; otherwise use41df605. Keep alias41df frozen and never Sync back over A7.
+Record writer invocation41df versus derived boot/package/plan coordinates
+truthfully. The coordinator still imports/publishes the normal data checkpoint.
+
+On that CLEAN ApplicableSource, one existing smoke-boot.ps1 direct plain boot
+uses SMOKE_QUEST_BACKEND=ftb, no commands/datapacks/paid-check probe and a ready51
+expectation. It resolves a new unproved boundary: FML setup now calls the
+publisher's known-lineage helper before installation. Preserve natural stop/
+save, exact tested/staged/remapped JAR/inventory and new diagnostic world;
+do not rerun matrix89 or native paid-history/seed scenarios. Then materialize
+only the genuine ApplicableSource package, canonical Prepare/Deploy to the
+same owned stopped fictitious target (no template/player), use authentic50
+reference3d839 plus real fresh CURRENT proof to plan/apply managed50-to51,
+and prove identical-plan Unchanged/protected files/backups. No real target
+launch. All fresh execution/custody remains pending; return the lease explicitly.
+
 | Category | Current qualification state: G4/G5 closed, G6 safely returned, API51 source integrated |
 | --- | --- |
 | COMPLETED | G3/A3, verified G4/G5 current50 outcomes; G6 authentic50/common independent passes/103-file custody and safe return; reviewed wet338/API99/profile07 source and actual focused host228 |

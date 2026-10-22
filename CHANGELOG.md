@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Assign the fully composed51 outcome without a paid-history replay.**
+  Sole604 receives code41df605 G7/new root for new historical46/50 source-file
+  ABI, repaired source guards/API Java and actual normal29/38 projections.
+  A strictly bounded local A7 may commit only four normal payloads after
+  passing writers/checks; its real clean SHA explicitly binds later stages.
+  One existing plain FTB boot checks the new setup-helper linkage/ready51,
+  with no commands/transient-team/paid probe. Then verify the actual package,
+  fresh plan and managed50-to51 apply/same-plan in the existing fictitious
+  target. All results remain pending; no arbitrary retarget or player delivery.
 - **Bind the changed source-claim parser without rewriting history.**
   Normal31e33dc preserves source30b151a: add only the changed outer
   VerifySustainabilityRegistry source/class to existing T1 exporter lists and
