@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Close the concrete Forge upgrade-source comparison.** Pin Mekanism10.4.16
+  at96c7362/Minecraft1.20.1/Forge47.1.76/MIT and trace real snapshot/apply code:
+  values copy into a replacement BE, with capability/network invalidation and
+  an uncompensated post-swap wrong-tile failure. Reject direct pipeline import
+  for Grindless's same-object chassis contract; retain the useful preservation/
+  failure-order evidence and bounded GT negative without claiming runtime proof.
 - **Automate existing retained tooling as the next T1 content lane.**
   Assign four ordinary Assembler die-reproduction recipes using exact manual
   material/output multisets, with an optional post-assembly line rather than

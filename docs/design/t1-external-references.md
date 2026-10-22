@@ -82,6 +82,33 @@ existing Grindless mechanisms avoids that coupling. No code or assets are copied
 any later material adaptation still needs exact licence/provenance/notices before
 import. The source sample does not choose Grindless's complete T1 family roster.
 
+### Concrete upgrade transfer comparison
+
+The follow-up inspects **Mekanism10.4.16, Minecraft1.20.1, Forge47.1.76** at
+`96c736241e308a9cf1c73f7dcfa9aa221ea559d3`, not its newer NeoForge default branch.
+That revision's [MIT licence](https://github.com/mekanism/Mekanism/blob/96c736241e308a9cf1c73f7dcfa9aa221ea559d3/LICENSE)
+permits attributed reuse; no implementation or asset is copied by this study.
+
+| Pinned implementation | Actual mechanism | Fit / limit |
+| --- | --- | --- |
+| [ItemTierInstaller58-110](https://github.com/mekanism/Mekanism/blob/96c736241e308a9cf1c73f7dcfa9aa221ea559d3/src/main/java/mekanism/common/item/ItemTierInstaller.java#L58-L110) | Snapshot old tile, replace the registered block, fetch a new tile and apply data; an open GUI refuses, but active work is not categorically refused | Same position is not same block/BE identity. The post-swap wrong-tile error has no rollback in this path |
+| [ElectricMachine122-123](https://github.com/mekanism/Mekanism/blob/96c736241e308a9cf1c73f7dcfa9aa221ea559d3/src/main/java/mekanism/common/tile/prefab/TileEntityElectricMachine.java#L122-L123) and [Factory461-483](https://github.com/mekanism/Mekanism/blob/96c736241e308a9cf1c73f7dcfa9aa221ea559d3/src/main/java/mekanism/common/tile/factory/TileEntityFactory.java#L461-L483) | Energy amount, progress array, inventory values and serialized components copy into the destination's own stores/components | DTO references are read sources, not adoption of the old energy/inventory objects. This concrete Forge code closes the earlier reference-transplant inference |
+| [CapabilityTileEntity72-81](https://github.com/mekanism/Mekanism/blob/96c736241e308a9cf1c73f7dcfa9aa221ea559d3/src/main/java/mekanism/common/tile/base/CapabilityTileEntity.java#L72-L81) and [Transmitter314-380](https://github.com/mekanism/Mekanism/blob/96c736241e308a9cf1c73f7dcfa9aa221ea559d3/src/main/java/mekanism/common/tile/transmitter/TileEntityTransmitter.java#L314-L380) | Old capabilities/network membership are invalidated after replacement; transmitter updates can partially succeed | Rebinding compensates for changed object identity, not proof of Grindless's same-object/store/connection preservation |
+
+Directly importing that pipeline would introduce block/BE replacement, contrary
+to Grindless's accepted in-place chassis requirement. Retain the existing
+ChassisMark/UpgradeSet/store ownership and explicitly handle active paid work;
+do not add a transplant framework merely because a compatible licence exists.
+The useful comparison is the concrete preservation inventory and failure order,
+not a borrowed idle-only rule or an atomicity guarantee. No native execution
+or safe retained-world upgrade is proved by these source reads.
+
+A targeted GT follow-up found no fitting in-place upgrade mechanism in the
+inspected paths, consistent with its pinned distinct-tier registration above.
+This is a bounded negative result, not exhaustive proof no narrow mechanism
+exists anywhere in GT. Newer NeoForge transactions are not promoted to this
+Forge1.20.1 evidence.
+
 ## Longitudinal virtual-deposit continuity
 
 | Immutable reference | Observed storage/resolution pattern | Limit |

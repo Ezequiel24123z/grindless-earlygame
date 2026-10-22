@@ -35,6 +35,12 @@ registered: native coverage is RelayF1-F3; cross-architecture contracts are pure
 not a reason to register fake items. Current kinds already expose their full
 baseline envelopes; silently narrowing them to manufacture a mark ladder would
 risk existing machines and is not authorized by this wave.
+The focused external follow-up is complete in
+`docs/design/t1-external-references.md`: actual Forge1.20.1 Mekanism snapshots
+and copies values into replacement block entities, with no rollback in the
+identified post-swap wrong-tile path. Its MIT licence is not the reason to
+import a structurally incompatible pipeline. Keep Grindless's same-object
+chassis/store model; the GT negative is explicitly bounded, not an absence proof.
 
 ADR-0177 preserves append-only/fail-closed startup while adding an explicit
 managed-file transition with known hash ownership, full preflight, backups and

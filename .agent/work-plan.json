@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 41,
+  "plan_revision": 42,
   "updated": "2026-10-22",
   "phase": "managed_FTB_update_and_explicit_control_capacity_development_after_closed_M_wave",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -41,6 +41,7 @@
     "tool_reproduction_base": "61fdf76a27ed7c7079f104f6b975a6262ab3e275",
     "tool_reproduction_scope": "four_existing_dies_ordinary_Assembler_exact_manual_multisets_retained_catalysts_optional_after_assembly_no_firstF2_or_forming_cycle_no_new_items",
     "external_research": "bounded_inplace_upgrade_state_preservation_source_license_comparison_no_foreign_import",
+    "external_research_result": "CLOSED_Mekanism96c7362_Forge1_20_1_MIT_concrete_ElectricMachine_Factory_value_copy_into_new_BE_not_same_object_GT_negative_bounded_no_direct_pipeline_import_existing_Grindless_chassis_reused",
     "shared_root_docs_and_publication": "coordinator_only_serial_integration",
     "PC_lease": null,
     "source_workers_PC_JVM_or_shared_cache_authorized": false,
