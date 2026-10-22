@@ -501,6 +501,14 @@ authentic46 bytes, produce the actual fresh current plan, apply it and prove
 same-plan byte/mtime/backup-preserving no-op. No real template/player, native
 reset or51 code; all G5 observations remain unexecuted/unobserved.
 
+**Subsequent G5 report10:19:14Z:** fresh absent-root admission/Sync9880 and
+the FIRST CURRENT no-ftbDefinitionRoot dry-run exits0/BUILD SUCCESSFUL.
+compileFtbQuestDefinitionSource/prepareFtbQuestUpdate remain SKIPPED, proving
+only task configuration. The phase closes clean988/Java0/locksfalse, not the
+lease. Required package/runtime materialization and unchanged16-file target
+verification follow; actual current compilation/plan/apply and final custody
+remain pending. No successful G4 mechanism is replayed.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

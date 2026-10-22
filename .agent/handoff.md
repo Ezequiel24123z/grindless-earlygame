@@ -440,6 +440,20 @@ permission. Implementation remains pending and the current50 plan window runs
 independently. The wet source owner separately closes newly relevant T1 writer
 source/executed-image provenance through the existing exporter, not new carriers.
 
+**Actual G5 configuration10:19:14Z:** new root absent/admitted and Sync9880.
+The FIRST Gradle is CURRENT prepareFtbQuestUpdate --dry-run without
+ftbDefinitionRoot: BUILD SUCCESSFUL and actions SKIPPED, closing only the
+task-container configuration property. No current compiler/receipt/plan/apply
+pass follows. The phase closes clean988/Java0/locksfalse; G5 remains exclusive
+for required artifact materialization and the existing fictitious target.
+
+Read-only paid-work research is preserved in the external-reference record:
+verified GT Modern248e1f8 Forge1.20.1 recipe trait separates origin/executable
+copy/progress/duration at cycle boundaries. Its consume-at-start behavior is
+not Grindless's completion settlement; machine-specific mutation hooks were
+not audited. No kit, balance, narrower MKI, source import or new runtime proof
+is selected by that reference. Current latent multiplier/installer gaps remain.
+
 | Category | Current qualification state: G4 verified closed, G5 assigned |
 | --- | --- |
 | COMPLETED | G3/A3 normal outputs and custody; actual G4 legacy reference/native89/19markers/managed201/JDK34/current package and fictitious deployment/seed; parent176-file custody/2578 inputs and safe leaseback; source686 configuration fix composed |

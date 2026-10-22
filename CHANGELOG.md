@@ -15,6 +15,17 @@ entries below reference those records by id.
 
 ### Added
 
+- **Observe the fixed CURRENT task configuration without claiming a plan.**
+  G5 reports fresh new-root admission/Sync9880, then FIRST Gradle CURRENT
+  prepareFtbQuestUpdate --dry-run with no historical-root option succeeds.
+  Task actions remain SKIPPED: this closes the Project.tasks configuration
+  failure, not compilation/plan/apply. Existing G4 successes are not replayed.
+- **Preserve a bounded mature paid-work reference without importing an engine.**
+  Verified GT Modern248e1f8 is Forge1.20.1/LGPL-3.0; its cycle-origin/
+  executable-copy/progress/duration pattern and stall policy are documented
+  with scope limits. Grindless keeps completion settlement and same stores.
+  No overclock numbers, kit, narrower legacy envelope, source copy or runtime
+  acceptance is selected; latent installer/multiplier gaps stay explicit.
 - **Select explicit known-catalogue51 compatibility, not a wider count loophole.**
   ADR-0183 separates46/50/51 logical/native lineage from unchanged reference2/
   receipt/plan schemas. The FTB source owner composes wet738 and updates publisher,

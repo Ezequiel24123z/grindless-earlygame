@@ -109,6 +109,50 @@ This is a bounded negative result, not exhaustive proof no narrow mechanism
 exists anywhere in GT. Newer NeoForge transactions are not promoted to this
 Forge1.20.1 evidence.
 
+### Paid-work and cycle-setting reference
+
+Separate read-only research verifies GregTechCEu/GregTech-Modern commit
+`248e1f83829d585632015ceb2686acf6f9f23db3`, version8.0.0, against its
+[Minecraft1.20.1/Forge47.4.0 version catalogue][gt-paid-versions] and
+[LGPL-3.0 licence][gt-paid-license]. Earlier lead aae6d4e is an ancestor of
+that pinned1.20.1 revision;91a79b8a is a divergent historical lead, not proof
+of the current Forge implementation. Neither head movement nor a version label
+alone certifies behavior.
+
+The [overclock helper][gt-paid-oc] compares voltage with recipe EU/t and tick
+duration, applying its own standard4x-EU/t/half-duration trade. These are GT
+numbers, not Grindless balance or a new accepted tier rule. The useful pattern
+is the [recipe trait's persisted execution identity and cycle state][gt-paid-state]:
+canonical origin, executable recipe copy, progress and duration stay distinct.
+[Setup and completion][gt-paid-cycle] sample the modified recipe at cycle
+boundaries rather than retroactively treating paid ticks as a new recipe.
+With regressWhenWaiting=false, a stall retains progress; definitions opting in
+may reset progress to1. Machine-specific tier/voltage accessors and invalidation
+hooks were not traced, so this is not a blanket safe-mid-cycle-upgrade claim.
+
+GT consumes item/fluid inputs at setup; Grindless settles them through its
+existing completion transaction and rollback snapshot. Do not transplant the GT
+engine, consume inputs twice or change that ownership model. Conceptual reuse
+of fixed-cycle settings/identity is relevant; direct source reuse would first
+need compatible licence/distribution/notices review. No code/assets were copied.
+
+The local source investigation remains a limit, not a new implementation:
+MachineBlockEntity preserves its energy object and saves marks/UpgradeSet, while
+ProcessMachineBlockEntity saves base-work progress/WorkRecipe and retains
+completion rollback. Actual player installers are absent; energyMultiplier and
+parallelCount are not wired as process consumers, and current kinds' narrow/full
+envelopes coincide. A saved mark or stronger construction ingredient is therefore
+not a qualified capability upgrade. Future work must reuse those authorities,
+wire real trades, preserve paid work/stores and add an actual reachable
+capability without narrowing legacy MKI. This research selects no kit, recipe,
+envelope number, overclock formula or native pass.
+
+[gt-paid-versions]: https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/gradle/libs.versions.toml
+[gt-paid-license]: https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/LICENSE
+[gt-paid-oc]: https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/src/main/java/com/gregtechceu/gtceu/api/recipe/OverclockingLogic.java#L26-L140
+[gt-paid-state]: https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/src/main/java/com/gregtechceu/gtceu/api/machine/trait/recipe/RecipeLogic.java#L116-L165
+[gt-paid-cycle]: https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/src/main/java/com/gregtechceu/gtceu/api/machine/trait/recipe/RecipeLogic.java#L452-L634
+
 ## Longitudinal virtual-deposit continuity
 
 | Immutable reference | Observed storage/resolution pattern | Limit |

@@ -192,7 +192,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0178](#adr-0178--continue-autonomously-and-deliver-ready-tiers-to-the-longitudinal-game) | Continue autonomously and deliver ready tiers to the longitudinal game | Accepted direct owner operating mandate |
 | [0179](#adr-0179--reproduce-four-slot-fit-first-factory-machines-without-repricing-bootstrap) | Reproduce four-slot-fit first-factory machines without repricing bootstrap | Accepted bounded acquisition scope; implementation/proof pending |
 | [0180](#adr-0180--reproduce-the-thermal-generator-through-an-honest-two-stage-subassembly) | Reproduce the Thermal Generator through an honest two-stage subassembly | Accepted bounded acquisition scope; implementation/proof pending |
-| [0181](#adr-0181--compare-one-generated-platform-shim-by-exact-self-name-equivalence) | Compare one generated platform shim by exact self-name equivalence | Source555dbe9 integrated; G4 publication0 reported, final custody/negatives pending |
+| [0181](#adr-0181--compare-one-generated-platform-shim-by-exact-self-name-equivalence) | Compare one generated platform shim by exact self-name equivalence | Source555dbe9 integrated; G4 managed201/authentic publication0 custody verified |
 | [0182](#adr-0182--expose-existing-wet-beneficiation-as-an-optional-t1-baseline-line) | Expose existing wet beneficiation as an optional T1 baseline line | Accepted bounded content scope; implementation/qualification pending |
 | [0183](#adr-0183--version-known-native-catalogue-lineage-without-weakening-provenance) | Version known native catalogue lineage without weakening provenance | Accepted compatibility scope for51; implementation/proof pending |
 
@@ -8539,9 +8539,9 @@ or adapter observations, not repeated native cycles for ordinary content.
 2026-10-22. Upstream source independently corroborates the measured class
 structure and path-dependent name; two exact declared devlibs path strings
 produce both observed stamps without PC access or path-variant guessing.
-Source555dbe9 is normally integrated; G4 reports actual direct publisher0
-using the original receipt. Final reference custody and new Java negatives
-remain pending. The original G3 publication failure stays real;
+Source555dbe9 is normally integrated; actual G4 direct publisher0 reuses the
+original receipt. Parent verifies final referenceacdf and managed201 including
+new Java negatives. The original G3 publication failure stays real;
 no player update or reference publication follows from this decision.
 
 **Context.** G3 genuinely compiles/remaps the preserved dd0 source in a fresh

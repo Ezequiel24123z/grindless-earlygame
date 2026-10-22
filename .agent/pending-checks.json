@@ -34,7 +34,7 @@
     "source_frozen_until_active_stages_and_locks_close": true,
     "qualification_package_fictitious_target_plan_authorized": true,
     "real_PrismRoot_player_world_writes_authorized": false,
-    "result": "NEW_G5_exact988_config_only_sourcefix_gameplay_unchanged_G4_proofs_reused_fresh_guards_Sync_dryrun_package_plan_apply_unobserved",
+    "result": "G5_actual_admission_newRoot_Sync9880_FIRST_CURRENT_dryrun_no_ftbDefinitionRoot_BUILD_SUCCESSFUL_actionsSKIPPED_config0_compiler_plan_apply_pending_required_package_next_no_G4replay",
     "returned": false,
     "returned_utc": null,
     "return_state": "NOT_OBSERVED_for_new_G5_window",
@@ -92,7 +92,7 @@
   "catalogue51_compatibility": {
     "policy": "ADR-0183",
     "source_owner_session": "cb273782-4065-44e2-90a3-9c0c036367ce",
-    "status": "separate_known46_50_51_ID_lineage_extension_selected_not_implemented",
+    "status": "active_separate_source_lane_parentcfc2f63_plus_wet738_known46_50_51_ID_lineage_not_qualified",
     "surfaces": "publisher_planner_runtime_integration_host_receipt_and_existing_focused_tests",
     "no_unknown_count_adoption_new_wire_schema_or_G5_retarget": true
   },
