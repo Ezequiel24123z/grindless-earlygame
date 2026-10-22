@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Synchronize the T1 map with actual G3/A3 and the frozen G4 boundary.**
+  Replace obsolete pending/manual-only follow-up descriptions with the real
+  five-machine/die source, actual model/data/registry evidence and preserved
+  native/legacy reds. Name broader baseline families and default-F1/finite
+  custody as remaining work, not repeated Motor implementation or invented
+  gameplay from fixtures. No new recipe, alias, envelope or proof is added.
 - **Assign corrected-boundary qualification on a new isolated source surface.**
   Only604195bd receives fixed271f386 G4 for the corrected Matrix interaction,
   new managed comparator Java and existing asset JDK fixture. Reconsume original

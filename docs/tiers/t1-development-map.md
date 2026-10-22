@@ -4,8 +4,14 @@ Status: **active development, not a release or completed T1 acceptance**.
 The owner explicitly opens this work while testing the unchanged T0 dev build
 (ADR-0168/0169/0170). The protected native-FTB fix is delivered atdd0/29bc/79ce;
 the owner can continue while the bounded source wave is now technically
-qualified at published M0a676fe. All PC/cache leases are returned; no new
-execution or T0 access follows from this documentation closure.
+qualified at published M0a676fe. Subsequent7c55/G3 supplies actual contracts,
+normal assets/projections and the five-output A3 checkpoint, now normally
+integrated with parent-verified custody. Its native carrier/legacy publisher
+failures remain real. G4 is separately assigned only to604195bd on frozen
+271f386 for the three source repairs and real isolated plan consumption;
+its results remain pending. Read the active handoff for PC ownership rather
+than treating historical M/G3 leaseback as current permission. No T0/player
+action or complete-T1 readiness follows.
 [The implementation plan](../../plan/feature-t1-first-factory-1.md)
 is the execution graph; [the reusable-systems handbook](../architecture/reusable-systems.md)
 is the extension guide.
@@ -49,7 +55,9 @@ execution engine, global unlock or list of invented bills.
 | `glass` | Mandatory | Existing sand/glass routes supporting assembly; source quantities from live recipes. |
 | `forming` | Mandatory | Press, non-consumed dies, plates/rods/gears/copper coils and machine casings; Wire Mill is not a hidden first-F2 prerequisite. |
 | `assembly` | Mandatory | Assembler and existing F1 Matrix reproduction; physical construction stock and power must be accounted for. |
+| `factory_reproduction` | Optional | Exact-manual-material reproduction of the first five machines after seeding, including two real Thermal operations and one ordinary core; no slot widening or cheaper bill. |
 | `wire_forming` | Optional | Source3a79a1f selects the existing Wire Mill manufacture, iron/copper wire and copper coil routes after assembly; not a first-F2 dependency or an upgraded machine. |
+| `tool_reproduction` | Optional | Reproduce four retained Press dies after manual seeding without a forming/assembly cycle or first-F2 prerequisite. |
 | `relay_f2` | Exit | Only `assemble/relay_matrix_f2`; actual physical F1/casing/glass/Flux Cell operands remain canonical. |
 | `extraction` | Optional | Scanner/finite terrestrial extraction as a compatible supplement, not the unlimited canonical source of mandatory inputs. |
 | `logistics` | Optional | Existing hoppers/belts/arms/interfaces within their implemented sides/owner semantics; no new transaction framework. |
@@ -92,17 +100,22 @@ test. Paths below are relative to the common Grindless Java package unless named
 | 3a79a1f3 | Baseline F1 Wire Mill fourth operand and optional four-route `wire_forming`; Assembler teaching selects live assembly/optional routes and one38-word body changes | Actual426 contracts/normal writers and canonical rechecks pass; no MK2, matcher/storage change or first-F2 dependency |
 | 541cf6c9 | Optional absolute process-pressure optimum/explicit half-width, shared evaluator and Atlas/audit/inspection/JEI; strict schema2/schema1 observation compatibility | [Accepted engineering ADR-0175](../DECISIONS.md#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts); contracts/models pass, no production pressure recipe or client acceptance |
 | 4550b975+d073 | Strict legacy Blueprint payload, shared read-only preflight, protected BE stock and per-target permissions | New e260 contracts and real M interaction1,182/natural stop pass; throwing callbacks remain ambiguous, no global rollback or Blueprint save/reopen proof |
-| 1ee2e73 | Explicit minimum controller input for Wire Mill, exact old contracts, honest F1+/registered alternatives and inspection schema3/strict1/2 | Normally integrated source; independent review and Java/writer/registered Relay proof pending, not a chassis upgrade |
-| 63142dd+5b359a5 | Four ordinary Assembler die recipes grouped from the unchanged manual catalogue; optional `tool_reproduction` after assembly | Source/Atlas slot-oracle correction integrated, no new items or first-F2 dependency; actual contracts and normal outputs pending |
+| 1ee2e73+a5/f046/957 | Explicit minimum control, pure candidate union, executed adapter provenance and corrected native carrier; exact predecessors/outputs remain exact | Actual7c55 Java/model/class-image proofs pass; native18/19 carrier red preserved, corrected G4 native still pending; not a chassis upgrade |
+| 63142dd+5b359a5 | Four ordinary Assembler die recipes grouped from the unchanged manual catalogue; optional `tool_reproduction` after assembly | Actual7c55 contracts and normal A3 projections pass; no per-die native replay, new item or first-F2 dependency |
+| 4f3aae3+9b/f109 | Four exact-material ordinary machine reproduction rows and relative optional-line ordering | Actual7c55 contracts/A3 models pass; manual first machines remain seeds, physical stronger control does not upgrade output |
+| 8cb82bf+5aa | Two real Thermal operations, ordinary core/model/metadata and shared text-writer no-op byte preservation | Actual7c55 registration/normal assets/models pass; new asset JDK fixture pending G4, no new PNG/provider or human acceptance |
+| 93ce975+555dbe9 | Managed native-definition update, authentic compiler/class-image binding and sealed single-shim comparison | Prior filesystem786/103 and new managed44 have actual scopes; original real publication red preserved, corrected export/actual plan apply pending G4 |
 
 The parent publishes M by normal merge e260+A85069 with exact generated bytes.
 Actual model execution remains426. Exact-M CI39681018324 succeeds in all eight
 jobs; duplicate39681008933 retains its failed DRILL-OK observation and unknown
 trigger, without manual replay. The old `first-blueprint` item-existence smoke is
 not the new interaction proof. See [the current ledger](../testing/latest-validation.md#integrated-development-source).
-The two new rows above change subsequent inputs and do not inherit M's runtime/
-model result. Canonical generation waits for final source; ordinary die content
-reuses the executor rather than adding a native smoke per recipe.
+Those later source rows do not inherit M's runtime/model result. Their actual
+new model result is7c55/G3/A3, not M or an unexecuted source summary. All14 T1
+writer inputs remain unchanged through271f386. Preserve the original native/
+legacy reds and use only G4's changed proofs; ordinary data still does not
+require a native smoke per recipe.
 
 ### Independent component increment
 
@@ -128,17 +141,18 @@ recipe is needed.
 
 ### Next bounded choices
 
-1. Before a future playable T1 delivery, implement the explicit stopped,
-   hash/backup-bound managed native46-to50 configuration update. Keep paid-world
-   data and strict preflight intact; no update is authorized by this closed wave.
-2. Consider selected automatic machine/die replacement through the same Assembler,
-   with an explicit output whitelist and real construction/energy checks.
-   Thermal has five distinct inputs, so a blanket shaped-craft projection cannot
-   fit four slots; retain its manual route until that separate decision is made.
-3. Reconcile the untagged-F1 model identity and finite custody using existing
-   audit/adapters before any global establishment claim. Sifter/wire expansion
-   beyond the now-authored baseline Wire Mill requires an actual content
-   decision, not reinterpretation of a fixture.
+1. Close G4's actual corrected native/JDK/export and canonical managed-plan
+   consumption, not another implementation of the already-composed updater.
+   Preserve the player game; the new package/target are qualification-only.
+2. Broaden real baseline families and interdependent processing beyond the first
+   factory. Existing Motor/Wire Mill/chemistry code is prior art, not work to
+   duplicate or proof of accepted revised-tier gameplay. Reuse the shared
+   engine/chassis; do not narrow legacy envelopes or silently change paid work.
+3. Reconcile default-F1 resource evidence and finite T1 custody using the actual
+   ControlMatrixNbt/default-frontier contract and existing audit/adapters.
+   Do not collapse F2/higher/cross-architecture identity or turn a model alias
+   into an unlimited-supply/complete-tier certificate. Sifter still needs real
+   content, not reinterpretation of a fixture.
 
 The [external reference record](../design/t1-external-references.md) supplies
 proven patterns and their limits, not another catalogue or automatic gameplay approval.
