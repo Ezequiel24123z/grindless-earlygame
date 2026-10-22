@@ -153,6 +153,21 @@ plus remaining cobblestone/F1+ controller. Exact composed material parity,
 two ordinary operations, no fifth slot or hidden free ingredient. The original
 four-machine selection remains history, not a permanent automation prohibition.
 No source actor has PC/Java/generation/deployment authority.
+Thermal checkpoint8cb82bf is now normally composed with the pure-index and
+relative-order fixes. The one VerifyRecipes merge conflict mechanically keeps
+a5's first-operation pre-bootstrap call/method AND Thermal's graph() throws
+Exception for its explicit vanilla-carrier lookup tests; no assertion is dropped.
+Two three-group operations preserve the full material multiset: core from
+furnace/carbon/iron, then core+cobble5+minimumF1 controller. Each costs400ticks/
+32FU; total800ticks/25600FU. Primaries furnace/core avoid generic cobble buckets.
+New normal item/creative/model uses existing owned textures, no PNG/new provider;
+normal asset generation/GENERATED.md and canonical writers still need execution.
+Expected211/86/268, six minimum rows and865 locale keys are source shapes,
+not pass counts. Metadata first-use optionalT1/source/consumer/handling is real;
+supply class/renewable tier stay null, not an establishment claim.
+Independent read-only thermal review81b2e622 closes with no new high-confidence
+finding. Actual asset/Java/registration and artistic judgment remain unproved;
+synthetic carrier lookup and old85e passes do not provide them.
 
 Next integrate coherent local checkpoints and select only their changed proofs.
 Any heavy qualification needs a new sole-owner lease on an exact published

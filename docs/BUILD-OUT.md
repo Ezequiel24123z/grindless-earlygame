@@ -69,6 +69,12 @@ Managed-FTB93ce975 is normally integrated with its P2 source-bound compiler
 repair and static review closure, not actual old export or Java qualification.
 Continue thermal reproduction source under ADR-0180; select the next fixed
 qualification only after the genuine source regressions close.
+Thermal8cb82bf is now normally composed with a5/f109: two exact-material
+operations and one real component/model, not hidden five-group compression.
+The mechanical test merge preserves pre-bootstrap checks plus the broader
+exception signature needed by carrier lookup. Wait for the bounded thermal
+review, then qualify the actual211/86/268 source/model/asset contracts and normal
+writers; do not infer native registration from carrier tests or old85e passes.
 The control review's one P2 is source-repaired inf046923: include executed
 AuthorityAdapters bytecode as well as source. Real writer receipt verification
 remains required. Parallel source work now selects four ordinary machine

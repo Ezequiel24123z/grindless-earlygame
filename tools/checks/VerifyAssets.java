@@ -58,6 +58,7 @@ public final class VerifyAssets {
         everyModelResolves();
         textureReferenceRegressionCases();
         itemsAreNamedAndModelled();
+        thermalGeneratorCore();
         physicalItemSprites();
         finish();
     }
@@ -744,6 +745,33 @@ public final class VerifyAssets {
         for (String sprite : BlockCatalogue.placeholderSprites()) {
             yes(sprite + " has a sprite", exists(ASSETS.resolve("textures/item/" + sprite + ".png")));
         }
+    }
+
+    private static void thermalGeneratorCore() throws IOException {
+        String name = BlockCatalogue.THERMAL_GENERATOR_CORE_ITEM;
+        yes("the Thermal core has exactly one ordinary item registration",
+                registered("ModItems.java").stream().filter(name::equals).count() == 1
+                        && Pattern.compile("THERMAL_GENERATOR_CORE = register\\(\"thermal_generator_core\",\\s*"
+                                + "\\(\\) -> new Item\\(new Item.Properties\\(\\)\\)\\);")
+                                .matcher(Files.readString(SOURCES.resolve("registry/ModItems.java"))).find());
+        yes("the Thermal core is discoverable in the existing creative tab",
+                Files.readString(SOURCES.resolve("registry/ModCreativeTabs.java"))
+                        .contains("lazy(ModItems.THERMAL_GENERATOR_CORE)"));
+        yes("the Thermal core is not a new block, stateful item or missing standalone sprite",
+                !registered("ModBlocks.java").contains(name) && !BlockCatalogue.placeholderSprites().contains(name));
+        JsonObject model = read(ASSETS.resolve("models/item/" + name + ".json"));
+        yes("the Thermal core uses the existing native item-model mechanism without custom loaders",
+                model != null && model.keySet().equals(Set.of("parent", "textures"))
+                        && "minecraft:block/cube_bottom_top".equals(model.get("parent").getAsString()));
+        JsonObject expectedTextures = new JsonObject();
+        expectedTextures.addProperty("top", "grindless:block/generator_top");
+        expectedTextures.addProperty("bottom", "grindless:block/casing_top");
+        expectedTextures.addProperty("side", "grindless:block/generator_front_idle");
+        yes("the core composes only the existing owned generator and casing textures",
+                model != null && expectedTextures.equals(model.getAsJsonObject("textures")));
+        yes("normal asset generation retains the core model rather than needing a bespoke asset pipeline",
+                Files.readString(Path.of("tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/GenerateAssets.java"))
+                        .contains("BlockCatalogue.THERMAL_GENERATOR_CORE_ITEM + \".json\""));
     }
 
     /** Structural sprite guards, not an artistic or in-game rendering acceptance claim. */

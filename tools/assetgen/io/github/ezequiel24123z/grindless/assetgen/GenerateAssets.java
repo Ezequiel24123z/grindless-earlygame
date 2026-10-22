@@ -581,6 +581,11 @@ public final class GenerateAssets {
                         + "    \"top\": \"grindless:block/casing_top\",\n"
                         + "    \"bottom\": \"grindless:block/casing_top\",\n"
                         + "    \"side\": \"grindless:block/casing_side\"\n  }\n}\n");
+        written += writeText(new File(assets, "models/item/" + BlockCatalogue.THERMAL_GENERATOR_CORE_ITEM + ".json"),
+                "{\n  \"parent\": \"minecraft:block/cube_bottom_top\",\n  \"textures\": {\n"
+                        + "    \"top\": \"grindless:block/generator_top\",\n"
+                        + "    \"bottom\": \"grindless:block/casing_top\",\n"
+                        + "    \"side\": \"grindless:block/generator_front_idle\"\n  }\n}\n");
         written += writeText(new File(data, "minecraft/tags/blocks/mineable/pickaxe.json"),
                 tagJson(names.toArray(new String[0])));
         written += writeText(new File(data, "minecraft/tags/blocks/mineable/axe.json"),

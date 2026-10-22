@@ -3,6 +3,7 @@ package io.github.ezequiel24123z.grindless.sustainability;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.recipe.BootstrapProcesses;
 import io.github.ezequiel24123z.grindless.recipe.BootstrapRecipes;
+import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
 import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
 import io.github.ezequiel24123z.grindless.recipe.RenewableProcesses;
 import io.github.ezequiel24123z.grindless.research.ResearchLogic;
@@ -101,6 +102,8 @@ public final class T0Sustainability {
         unlock(policies, "craft/relay_matrix", false);
         REQUIRED_QUESTS.forEach(id -> unlock(policies, "quest/" + id, false));
         OPTIONAL_QUESTS.forEach(id -> unlock(policies, "quest/" + id, true));
+        policies.put("assemble/thermal_generator_core", new RoutePolicy(1, true, Set.of()));
+        policies.put("assemble/thermal_generator", new RoutePolicy(1, true, Set.of()));
 
         Map<String, Machine> machines = new TreeMap<>(sourceFacts.machines());
         machines.put("CRAFTING_TABLE", new Machine("CRAFTING_TABLE", item("minecraft:crafting_table"), 0));
@@ -174,6 +177,10 @@ public final class T0Sustainability {
         Resource exit = item(QuestCatalogue.byId("relay").subject());
         metadata.put(exit, new ResourceMetadata(ResourceClass.BOOTSTRAP, null, 0, null,
                 "craft/relay_matrix", List.of(), null, null, null, null));
+        metadata.put(item(FabricationLogic.THERMAL_GENERATOR_CORE), new ResourceMetadata(null, null, 1, null,
+                "assemble/thermal_generator_core", List.of(), new Handling(Action.STORE, true, false, null, null),
+                null, null, "Assembler component consumed by assemble/thermal_generator. "
+                + "Automatic net supply and renewable establishment are unproved."));
         for (Terminal terminal : snapshot.terminals().values()) {
             if (terminal.kind() == TerminalKind.ENVIRONMENT && terminal.unlockTier() == 0
                     && Set.of("environment/water_source", "environment/geological_bed",

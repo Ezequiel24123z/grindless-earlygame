@@ -50,6 +50,7 @@ public final class ModCreativeTabs {
                 lazy(ModItems.CALIBRATED_DATA_CORE),
                 lazy(ModItems.ADVANCED_DATA_CORE),
                 lazy(ModItems.MACHINE_CASING),
+                lazy(ModItems.THERMAL_GENERATOR_CORE),
                 lazy(ModItems.PLATE_DIE),
                 lazy(ModItems.ROD_DIE),
                 lazy(ModItems.GEAR_DIE),

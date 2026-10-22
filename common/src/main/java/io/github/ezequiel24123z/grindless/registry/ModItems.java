@@ -95,6 +95,9 @@ public final class ModItems {
     public static final RegistrySupplier<Item> MACHINE_CASING = register("machine_casing",
             () -> new Item(new Item.Properties()));
 
+    public static final RegistrySupplier<Item> THERMAL_GENERATOR_CORE = register("thermal_generator_core",
+            () -> new Item(new Item.Properties()));
+
     /** Press catalyst. Selects plate from an ingot; not consumed. */
     public static final RegistrySupplier<Item> PLATE_DIE = register("plate_die",
             () -> new Item(new Item.Properties()));

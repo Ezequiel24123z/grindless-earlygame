@@ -194,6 +194,15 @@ an actual ordinary core plus final three-group assembly must cancel to the
 exact manual Thermal multiset. No direct five-group projection, fifth slot,
 free ingredient or reduced bill. Reuse the same item/asset/catalogue/role
 mechanisms and preserve the manual first generator and mandatory F2 path.
+Source8cb82bf now adds `FabricationLogic.THERMAL_GENERATOR_CORE`, one ordinary
+ModItems/creative/catalogue entry and a cube-bottom-top model referencing only
+owned generator/casing textures. GenerateAssets retains that same model; no
+new PNG/source generator is required. New metadata is optional first-useT1
+with real producer/consumer/STORE handling and explicitly unknown supply class/
+renewable tier. VerifyRecipes/Atlas/T1/assets cover composed material/cost/
+slot/lookup/model invariants; vanilla-carrier lookup is not native registration.
+The merged test keeps pure-index checks BEFORE bootstrap; do not drop them to
+make thermal reflection tests run.
 
 The owner's2026-10-21 instruction separately opens T1 development (ADR-0168/0169).
 Use [the first-factory plan](../plan/feature-t1-first-factory-1.md): live route
@@ -375,9 +384,9 @@ T2 and above are manufactured, never a crafting table
 - `research/ResearchLogic.java` and `machine/ResearchTerminalBlockEntity.java` — one physical
   Data Core calibration cycle. It must never write or read a global permission.
 
-`tools/checks/VerifyRecipes.java` now expects209 generated rows for its material fixture
+`tools/checks/VerifyRecipes.java` now expects211 generated rows for its material fixture
 and27 T1 shaped crafts; `VerifyBootstrap` retains its own source/catalogue guards.
-`VerifyAtlas` expects209 generated rows,84 Assembler rows and266 total handheld routes,
+`VerifyAtlas` expects211 generated rows,86 Assembler rows and268 total handheld routes,
 including both crafting catalogues, the shapeless core and physical calibration.
 These are fixture shapes, not native pass counts; runtime counts depend on installed material tags.
 Change every one of those numbers in the same commit as the graph. Recipe ids stay

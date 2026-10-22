@@ -178,6 +178,27 @@ old markers/scenarios/budgets remain intact. Required next proof is the three
 actual failing contracts plus new/affected candidate/Machine checks and the
 one already-required native interaction, not all prior green proofs.
 
+Thermal source8cb82bf now normally composes into the same future candidate.
+Its14-file source/51 non-JVM guards preserve the explicit manual material
+partition and two normal costs, ordinary output/seed, optional path and F2/claims.
+The supplied cube-bottom-top model references existing owned textures; no PNG
+was generated or copied, and normal asset generation/GENERATED.md still needs
+actual execution. Source metadata first-useT1/producer/consumer/handling is
+explicit; null supply class/renewable tier is not a renewable declaration.
+One conflict in VerifyRecipes is resolved mechanically to keep the entire a5
+pre-bootstrap method/call and Thermal graph() throws Exception; main remains
+throws Exception. No fake registry/global bootstrap replaces the pure regression.
+The authored thermal lookup uses declared vanilla carriers, not a positive
+Grindless registration/Matrix proof. Independent exact-source review81b2e622
+closes with no new high-confidence finding. Actual211/86/268 contracts, six-role
+data, asset and canonical writers remain pending. Previously observed85e passes
+are not retargeted to these new inputs.
+The first parent composition guard compares all common code to the thermal
+branch and correctly notices the independent a5 changes; the corrected guard
+checks the actual14-file thermal delta, preserving13 exact blobs plus the
+explicit two-sided VerifyRecipes merge. No source behavior or proof threshold
+is relaxed to conceal that overly broad guard failure.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

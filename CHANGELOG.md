@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate honest two-stage Thermal reproduction as source.**
+  Normal8cb82bf adds one ordinary registered core and two live Assembler rows:
+  furnace/carbon/iron -> core, then core+cobble5+minimumF1 -> unchanged generator.
+  Exact composed materials, two ordinary400tick/32FU operations and the manual
+  seed remain explicit. Preserve a5's pre-bootstrap regression and f109's
+  relative order in the mechanical test merge. Reuse owned textures in the
+  supplied model, no new PNG/provider; optionalT1 metadata keeps unknown supply/
+  renewable classification honest. Independent review and actual asset/Java/
+  writer/registration qualification remain pending; no tier/player update.
 - **Restore pure and deterministic minimum-primary indexing.**
   Normala5a89a4 removes registry enumeration from Graph.index, stores typed
   minimum-primary descriptors by family and merges them with nonempty hits in
