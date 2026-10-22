@@ -9,7 +9,9 @@ import io.github.ezequiel24123z.grindless.material.MaterialSnapshot;
 import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.netty.buffer.Unpooled;
+import net.minecraft.SharedConstants;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.Bootstrap;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
@@ -75,7 +77,6 @@ public final class VerifyMachineUi {
         loadedFluidViews();
         recipeShapes();
         assemblerGeometry();
-        assemblerWire();
 
         String menu = Files.readString(COMMON.resolve("menu/ProcessMachineMenu.java"));
         String screen = Files.readString(COMMON.resolve("client/ProcessMachineScreen.java"));
@@ -193,6 +194,7 @@ public final class VerifyMachineUi {
                 !Files.readString(COMMON.resolve("client/FluidClientPlatform.java")).contains("net.minecraftforge")
                         && !screen.contains("net.minecraftforge"));
         assemblerAuthority(menu, screen, process, lang);
+        assemblerWire();
         System.out.println(assertions + " MACHINE UI ASSERTIONS; " + failures + " FAILED");
         System.exit(failures == 0 ? 0 : 1);
     }
@@ -280,6 +282,9 @@ public final class VerifyMachineUi {
             buffer.writeUtf("x".repeat(257));
         });
 
+        // Keep pure/index contracts pre-bootstrap; only item-bearing snapshots need vanilla registries.
+        SharedConstants.tryDetectVersion();
+        Bootstrap.bootStrap();
         var state = new MachineMenuHost.RecipeSelection("removed/selected", "assemble/chemical_washer", 160.34375,
                 Map.of("assemble/chemical_reactor", 0.15625, "removed/paid", 5.375),
                 MachineMenuHost.SelectionIssue.UNAVAILABLE);

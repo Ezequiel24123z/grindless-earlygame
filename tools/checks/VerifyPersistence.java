@@ -212,9 +212,17 @@ public final class VerifyPersistence {
             } catch (IllegalStateException expected) {
                 check("malformed paid state refuses selection " + index, true);
             }
+            try {
+                refused.activate(damaged.getString("WorkRecipe"), damaged.getDouble("Progress"), washer);
+                check("malformed paid state cannot execute or transfer work", false);
+            } catch (IllegalStateException expected) {
+                check("malformed paid state refuses execution " + index, true);
+            }
+            check("malformed paid state remains unavailable after refused operations " + index, !refused.valid());
             refused.save(damaged);
+            // Vanilla SNBT retains typed values (including NaN) and sorts compound keys.
             check("malformed paid state " + index + " is retained exactly through binary reopen",
-                    roundTrip(damaged).equals(before));
+                    roundTrip(damaged).toString().equals(before.toString()));
         }
     }
 
@@ -422,13 +430,13 @@ public final class VerifyPersistence {
                     machine.saveWithoutMetadata().equals(settlementBefore));
             check("a refused/throwing settlement releases its selector guard",
                     change(machine, reactor.id()) == SelectionResult.SELECTED);
-            assemblerLegacyInventory(washer, reactor);
+            assemblerLegacyInventory(washer);
         } finally {
             graph.set(null, originalGraph);
         }
     }
 
-    private static void assemblerLegacyInventory(ProcessRecipe washer, ProcessRecipe reactor) throws Exception {
+    private static void assemblerLegacyInventory(ProcessRecipe washer) throws Exception {
         ProcessMachineBlockEntity legacy = assembler();
         supplyAssembler(legacy);
         legacy.setItem(3, ItemStack.EMPTY);
@@ -453,8 +461,24 @@ public final class VerifyPersistence {
             legacy.setItem(3, ProcessLookup.resolve(
                     new OutputSpec(required.kind(), required.id(), required.count(), false)).orElseThrow());
         }
-        check("legacy AUTO preserves last-dry selection without giving it someone else's work",
-                resolve(legacy) == reactor && legacy.inspectionProgress() == 0.0);
+        ItemStack[] actualInputs = new ItemStack[legacy.menuKind().inputs()];
+        for (int slot = 0; slot < actualInputs.length; slot++) {
+            actualInputs[slot] = legacy.getItem(slot).copy();
+        }
+        ProcessRecipe expectedAuto = ProcessLookup.find(legacy.kind().family(), actualInputs, legacy.contents())
+                .orElseThrow(() -> new IllegalStateException("Legacy AUTO fixture has no current matching target"));
+        check("legacy AUTO fixture starts with incomplete paid work",
+                legacy.inspectionProgress() < washer.durationTicks());
+        check("legacy AUTO fixture has a different current target than its paid owner: " + expectedAuto.id(),
+                !expectedAuto.id().equals(washer.id()));
+        ProcessRecipe actualAuto = resolve(legacy);
+        check("legacy AUTO preserves current lookup authority: expected=" + expectedAuto.id()
+                        + ", actual=" + (actualAuto == null ? "<none>" : actualAuto.id()),
+                actualAuto != null && actualAuto.id().equals(expectedAuto.id()));
+        exact("legacy AUTO grants zero borrowed paid work: owner="
+                        + legacy.saveWithoutMetadata().getString("WorkRecipe")
+                        + ", actual=" + Double.toString(legacy.inspectionProgress()),
+                0.0, legacy.inspectionProgress());
         change(legacy, washer.id());
         exact("the legacy partial balance remains reachable after AUTO chooses another row", 11.34375,
                 legacy.inspectionProgress());
