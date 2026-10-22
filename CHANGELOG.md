@@ -36,6 +36,8 @@ entries below reference those records by id.
   without a new recipe/Matrix/bill; a manually funded Furnace may feed a finite
   optional capital subassembly once, never unbounded automatic core supply.
   Narrow contracts retain real material-deficit and conservation failures.
+  Supply B's exact two-argument Bench retained-work message without changing
+  runtime/fault/transport code or claiming rendered-client evidence.
   No Java/model/native/writer, actual class hash or player-save result is claimed.
 - **Correct the manufacturing objective to manual final normal machines.**
   The owner explicitly rejects universal factory self-replication. ADR-0188

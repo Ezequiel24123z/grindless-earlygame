@@ -885,6 +885,7 @@
   "chat.grindless.blueprint.missing_all": "Missing materials: %s",
   "chat.grindless.blueprint.interrupted": "Stopped after %s of %s blocks. Unused materials returned; the world was not rolled back.",
   "chat.grindless.blueprint.interrupted_unknown": "Stamp interrupted. Check the world and inventory; an attempted block may remain charged even if a callback failed.",
+  "gui.grindless.bench.retained_work": "Paid work retained for unavailable recipe %s (%s base ticks). Bench held; inputs and power are unchanged.",
   "gui.grindless.assembler.title": "Assembly target",
   "gui.grindless.assembler.search": "Search outputs / IDs",
   "gui.grindless.assembler.auto": "AUTO (from inputs)",
