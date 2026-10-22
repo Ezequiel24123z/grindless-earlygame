@@ -661,6 +661,50 @@ source finding is not a native reproduction. The G7 ready51 boot cannot prove
 Washer manufacture/operation; keep that uncertainty and its later targeted
 mechanism proof separate from catalogue/file lineage and human acceptance.
 
+**Independent G7 custody review:**339/339 safe relative paths/lengths/hashes
+match manifest83edec288d7fef6840a395c45590fe4724947d28742653d0bbaa4ea4a9e06c6d.
+Actual ABI/models29-38/backend234/2788/plain-native51/package/plan67c/managed51/
+same-plan/protection and explicit12:24:42Z closure are verified from raw
+evidence, not only the handoff. ClosureSHA48748c6ee604030844b387e32c13b70e34848f7100349d0e78df97fd9cfb4938;
+own offline guardSHAce39d10ecc44be390be54103b865e8ad20b125ef0517608244d7cafdff5cb729
+matches its archive/removal/absence. No native acquisition or human pass follows.
+The sole initial evidence gap is original CI5 outside339. Parent recovers exact
+artifact12423716934/foundation-validation/run39773265433 with API-bound head41df,
+not a dispatch/rerun; a narrow follow-up verifies only those originals.
+
+Parent separately verifies exactA7/parent41df/only3normaldata/both trailers and
+all four Git blob lengths/SHA against actual writer/CheckOnly payloads:
+
+| Payload | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Guidance resources.json | 606889 | `3eca1eb968bd783e768fe2382713d0f2b7ecd8ea1720a615eba83b4d7bd791a4` |
+| t0-economy.json | 181734 | `7ebd2dcc12418de8bbe6d23c2da15dc04d70da5990cb237b7fcbcba4d6450fdc` |
+| t1-production-graph.json | 81334 | `b3d4e8dfaf1a5213dd98f47fce5f0ffba389e2a181f40e227b4fe07d444a549c` |
+| t1-production-graph.md | 18064 | `cdda0c8e84b865485f3bda8f8f349f082b64244dd44138db9d8a3266b5b67b29` |
+
+Normal A7 merge is opened without canonical edits. Initial merge invocation
+refuses absent committer identity before changing the tree; command-local
+personal identity fixes invocation, with no Git config or validation replay.
+
+**Original-CI gap closed without replay:** narrow follow-up verifies the five
+original files from artifact12423716934/run39773265433, actual head41df.
+Environment/build0 and behavior1 remain original results. Adapters323/0 is
+at behavior8687; Registry1344/0 at8692. Exactly two AssertionErrors, at2358
+Economy committed equality and9267 T1 committed equality, lead to the original
+two-suite failure at14915. No original red is relabeled green.
+
+| Original CI file | Bytes | SHA-256 |
+| --- | ---: | --- |
+| source.txt | 80 | `0b76e0499f1d70951dade3d9e91d74cfc6e47760ede3b752dd7e501dbad37534` |
+| environment.log | 442 | `7b4d9f64dbc06c34adad13c5cd78156cad37de12556faa23b2cd35c9d734249d` |
+| build.log | 270910 | `f2fb9373509f0b53f9a6de911f8fc21ddc91e9df6494aaea17d7d3747cfff517` |
+| behavior.log | 988573 | `21bc53cb59b902527f01b7617c2a2249d881951c9e399b5b6b09496b8b0917e1` |
+| status.tsv | 243 | `f248cf59b9ab61ceec639cff51c9ef10912db56946969dc140d3356fbbc06695` |
+
+A7's normal merge preserves the verified four payload bytes and three-file
+delta; no canonical output is edited to repair evidence. G7 engineering is
+closed within this scope, not ADR-0184/0185 or whole-T1/client readiness.
+
 **G7 report12:21:13Z, still awaiting final custody/leaseback:** clean
 ApplicableSource26e/Java0/locksfalse; one direct plain FTB boot reports0,
 ready51/Done and natural save/stop, with tested JAR/inventory captured before

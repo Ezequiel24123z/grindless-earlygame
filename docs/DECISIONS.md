@@ -193,8 +193,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0179](#adr-0179--reproduce-four-slot-fit-first-factory-machines-without-repricing-bootstrap) | Reproduce four-slot-fit first-factory machines without repricing bootstrap | Accepted bounded acquisition scope; implementation/proof pending |
 | [0180](#adr-0180--reproduce-the-thermal-generator-through-an-honest-two-stage-subassembly) | Reproduce the Thermal Generator through an honest two-stage subassembly | Accepted bounded acquisition scope; implementation/proof pending |
 | [0181](#adr-0181--compare-one-generated-platform-shim-by-exact-self-name-equivalence) | Compare one generated platform shim by exact self-name equivalence | Source555dbe9 integrated; G4 managed201/authentic publication0 custody verified |
-| [0182](#adr-0182--expose-existing-wet-beneficiation-as-an-optional-t1-baseline-line) | Expose existing wet beneficiation as an optional T1 baseline line | Source738/338 integrated; Java/outputs/catalogue51 compatibility pending |
-| [0183](#adr-0183--version-known-native-catalogue-lineage-without-weakening-provenance) | Version known native catalogue lineage without weakening provenance | Source99/07 integrated, focused host228 verified; Java/native/model proof pending |
+| [0182](#adr-0182--expose-existing-wet-beneficiation-as-an-optional-t1-baseline-line) | Expose existing wet beneficiation as an optional T1 baseline line | G7 actual models29/38/A7 verified; acquisition shadowing remains under ADR-0185 |
+| [0183](#adr-0183--version-known-native-catalogue-lineage-without-weakening-provenance) | Version known native catalogue lineage without weakening provenance | G7 actual ABI/backend/ready51/package/managed51/custody and original CI evidence verified |
 | [0184](#adr-0184--project-authored-default-matrices-through-their-real-physical-rating) | Project authored default Matrices through their real physical rating | Accepted bounded model correction; implementation and qualification pending |
 | [0185](#adr-0185--choose-assembler-recipes-explicitly-without-repricing-or-losing-work) | Choose Assembler recipes explicitly without repricing or losing work | Accepted bounded existing-engine correction; source/runtime proof pending |
 
@@ -8623,8 +8623,11 @@ fixture is not that real export or managed-plan consumption.
 ## ADR-0182 — Expose existing wet beneficiation as an optional T1 baseline line
 
 **Status.** Accepted bounded content selection under the owner's ADR-0174/0178
-direction, 2026-10-22. Source738/338 is normally integrated; actual Java/
-normal-output qualification and ADR-0183 compatibility remain pending.
+direction, 2026-10-22. Source738/338 is normally integrated; G7 later supplies
+actual common/backend, normal29/38 outputs and ADR-0183 file/loader proof,
+source-bound separately in the validation ledger. This does not resolve the
+subsequently detected Assembler target shadowing: ADR-0185 must establish
+actual Washer acquisition before claiming that Survival route.
 This adds a real basic processing branch beyond first-factory reproduction;
 it neither completes T1 nor deploys a partial tier.
 
@@ -8680,8 +8683,12 @@ its frozen271f386 alias; never retarget that executor or access player data.
 2026-10-22. Source738105d4 provides51 quests but cannot publish/update/start
 through the current46/50 guards. Implementation of this extension is now
 normally integrated through99/07 with verified focused host
-228/29. Actual Java/native/model qualification remains pending; the completed
-current50 plan evidence remains separately bound to988.
+228/29. G7 later supplies actual historical ABI/backend, normal models, plain
+native-ready51 linkage, package and real managed50-to51/idempotence through
+339-file verified custody. The separately recovered original CI5 is verified
+without replay; its two stale committed-equality failures remain historical.
+Current50 evidence stays bound to988; no paid-world, Washer operation or
+whole-tier/human pass follows from catalogue/file proof.
 
 **Context.** Native catalogue content evolves while reference schema2, managed
 receipt/plan formats and file transaction semantics stay unchanged. Hardcoded

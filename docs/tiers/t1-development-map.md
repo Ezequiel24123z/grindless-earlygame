@@ -1,6 +1,14 @@
 # T1 development map
 
 Status: **active development, not a release or completed T1 acceptance**.
+Current G7 engineering is closed with339 custody plus recovered original CI5,
+actual writer41df/data26e/29-38 provenance and managed51 file idempotence.
+The fictitious26e/51 target stays stopped; Assembler target shadowing remains
+a separate real acquisition gap under ADR-0185. Reviewed default-F1/display
+source57d requires its own integration/Java/normal projection proof; authored
+31/41 is not emitted provenance. All old source/lease snapshots below retain
+their historical scope, not live permission or whole-T1 readiness.
+
 The owner explicitly opens this work while testing the unchanged T0 dev build
 (ADR-0168/0169/0170). The protected native-FTB fix is delivered atdd0/29bc/79ce;
 the owner can continue while the bounded source wave is now technically

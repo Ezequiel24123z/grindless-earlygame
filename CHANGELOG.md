@@ -15,6 +15,17 @@ entries below reference those records by id.
 
 ### Added
 
+- **Verify G7 custody and recover, rather than replay, its omitted CI originals.**
+  Independent QA verifies339/339 artifacts, actual29/38 images, both authentic
+  historical references, normal payloads, native51/JAR/package/managed51/
+  idempotence/protection and fresh guard/Java/lock closure. Its sole missing
+  evidence is the original CI5 logs outside that bundle. Exact existing
+  artifact12423716934 is recovered and all five original hashes/results are
+  separately verified, preserving339 and the initial finding. Original CI
+  behavior1/two equality reds stay red; Registry1344/Adapters323 reuse is real.
+  Parent verifies all four A7 Git payload bytes and normally integrates its
+  three changed files; command-local identity repairs an initial
+  pre-change committer refusal without Git config changes or any test replay.
 - **Receive the complete G7 return and next F1 source without inventing acceptance.**
   G7 reports339 custody files and fresh12:24:42Z clean26e/Java0/locksfalse/
   own-guard-absent return. Parent verifies/imports A7's exact data-only Git

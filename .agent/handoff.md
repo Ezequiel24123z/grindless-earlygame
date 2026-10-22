@@ -4,13 +4,40 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**G7 bounded engineering closed:** independent QA verifies339/339 hashes and all actual
+historical publisher/model/class-image/backend/boot/package/plan/managed51/
+protection/fresh-closure chains. It finds one documentary gap: the original
+CI5 logs are outside the339 bundle, not inside it. Parent recovers the exact
+existing artifact12423716934 from run39773265433/head41df; executor independently
+locates its original local copy and hashes. The narrow QA follow-up verifies
+all five originals: exact41df, environment/build0, behavior1 with only the
+two old committed-equality failures and actual Registry1344/Adapters323.
+The original CI stays red; its reused unaffected passes are authentic.
+No producer or CI is rerun and339manifest stays immutable.
+Parent also verifies all four A7 Git blobs equal the actual normal payload
+lengths/SHA/bytes and normally integrates A7 in this checkpoint. An initial no-commit merge
+refuses absent committer identity before any change; command-local personal
+identity repairs invocation without altering Git configuration.
+
+| Category | Current integration boundary |
+| --- | --- |
+| COMPLETED | Independent339-file plus original-CI5 G7 closure; A7 normal integration with exact ancestry/trailers/four payload bytes; source57d review finds no significant issue |
+| BLOCKED | Whole-T1 Assembler acquisition shadowing, finite establishment and genuine upgrades remain; selector source is active |
+| NOT EXECUTED | F1 source integration/Java/emitted31-41; new selector native/UI proof; player deployment, target launch, main/release and whole-tier acceptance |
+| NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
+| NEEDS MY DECISION | None |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
+| COST / BILLING RISK | None new; no dependency/provider/generation spending |
+| DEPLOYED STATE | Only the stopped fictitious target has verified26e/51; no player update, older roots/worlds remain protected |
+
 **G7 explicitly returned at12:24:42.0730525Z.** The executor reports clean
 ApplicableSource26e/Java0/work-cache locksfalse and exact own offline-guard
 removal/absence. Parent has verified/imported the A7 Git bundle, exact41df
-parent/three normal paths/both trailers and reviewed its data diff; it has not
-merged/published A7 or closed the evidence review. Independent read-only
-QA4d5c2db9 verifies the339-file custody/native/package/plan/target/closure chain
-against manifest83edec28, without any PC/JVM/replay. All execution grants are
+parent/three normal paths/both trailers and four payload bytes; normal A7
+integration preserves those bytes. Independent read-only QA4d5c2db9 closes
+the339-file custody/native/package/plan/target/closure chain against
+manifest83edec28, plus the separately recovered original CI5, without any
+PC/JVM/replay. All execution grants are
 closed; a later exact-source window is required.
 
 **ADR-0184 source delivered, not yet integrated/Java-qualified:** normal
@@ -18,9 +45,10 @@ a51c9d3 then57d38d6, base1e642dc, thirteen owned files, including the authorized
 display context. One pure ResourceGuidanceContext.canonicalSupply rule is
 shared by physical authority and authored display. Reported static103/111 and
 31-source/41-image list shape are not emitted provenance or rendered-client
-evidence. Source review/integration and actual changed-model proof are pending.
+evidence. Independent thirteen-file review4700edfc finds no significant issue;
+normal integration and actual changed-model proof are pending.
 
-**Latest G7 report, final custody not yet verified by the coordinator:** new
+**Historical G7 progress report before final custody:** new
 publisher0cb passes both authentic historical CLI8 classpaths before Gradle.
 Exact41df CI39773265433/artifact12423716934 supplies Registry1344/0 and
 Adapters323/0; only Economy/T1 committed equalities are stale. Full existing
@@ -667,7 +695,7 @@ reference3d839 plus real fresh CURRENT proof to plan/apply managed50-to51,
 and prove identical-plan Unchanged/protected files/backups. No real target
 launch. All fresh execution/custody remains pending; return the lease explicitly.
 
-| Category | Current qualification state: G4/G5 closed, G6 safely returned, API51 source integrated |
+| Category | Historical qualification boundary: G4/G5 closed, G6 safely returned, API51 source integrated |
 | --- | --- |
 | COMPLETED | G3/A3, verified G4/G5 current50 outcomes; G6 authentic50/common independent passes/103-file custody and safe return; reviewed wet338/API99/profile07 source and actual focused host228 |
 | BLOCKED | Current50 is closed; source07 repairs the known common guard reds but new51 Java, loader and model/output qualification remain unexecuted |
