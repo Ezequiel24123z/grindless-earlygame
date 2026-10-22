@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Assign only the changed F1 model boundary while selector source continues.**
+  Sole604 receives G8/exact4ee/new common-only root after independently verified
+  G7 return. Execute affected authority/registry/guidance/T0/T1 contracts and
+  normal writers/independent checks with actual31/41 provenance. Preserve G7
+  boot/ABI/FTB/file proofs without replay; no Forge/native/package/Prism/target
+  action. A bounded local normal A8 may contain only four generated payloads
+  after real passes and frozen-input checks. No new result is inferred.
 - **Normally integrate the reviewed physical default-F1 and authored-display correction.**
   Preserve sourcea51/57 and all eleven application/check/exporter files exactly;
   independent thirteen-file review finds no significant issue. The sole
@@ -22,6 +29,12 @@ entries below reference those records by id.
   the separate Assembler lane. Canonical A7 outputs are not hand-retargeted:
   actual31/41 provenance, Java contracts and normal writers still need a new
   exact-source model window. No new PC/player permission or FTB replay follows.
+- **Keep the selector's coupled mechanics profile strict.**
+  Its work reentrancy wrapper moves the unchanged structure/site prefix into
+  workCycle. After F1 owner completion, explicitly allow only that full-shape
+  registry contract and precise negatives, preserving dedup/exclusion/single
+  cycle/finally and diagnostic-before-draw ordering. No F1 declaration change,
+  broad matcher or G8 source retarget is authorized.
 - **Verify G7 custody and recover, rather than replay, its omitted CI originals.**
   Independent QA verifies339/339 artifacts, actual29/38 images, both authentic
   historical references, normal payloads, native51/JAR/package/managed51/

@@ -717,6 +717,14 @@ No normal generated payload is edited to make source57 look qualified; a new
 exact-source affected-model/writer window is required. G7/26e/native51 remains
 its earlier source-bound result, not the new default-identity/display proof.
 
+**G8 assignment only:** exact normally integrated4ee/sole604/new common root
+for changed default-F1 authority/display contracts and normal four-payload
+projections/independent checks/actual31-41 provenance. Optional normal data
+A8 may be committed locally after actual passes/frozen other inputs and
+Java0/locksfalse, with exact parent4ee; no runtime stage or worker push.
+Unchanged G7 FTB/ABI/native/managed-file proof is reused. No new boot, backend,
+package, target, player or actual validation result follows from the grant.
+
 **G7 report12:21:13Z, still awaiting final custody/leaseback:** clean
 ApplicableSource26e/Java0/locksfalse; one direct plain FTB boot reports0,
 ready51/Done and natural save/stop, with tested JAR/inventory captured before

@@ -8887,3 +8887,13 @@ authoring or G7 ready51 is not that proof. Do not change recipes or accept
 later-tier prototypes merely because a target can now be selected. Physical
 controller completeness, whole-T1 supply/autonomy and human acceptance remain
 separate work.
+
+**Coupled mechanics-profile scope.** The selector's reentrancy wrapper moves
+the unchanged structure/site prefix from work(long,List) to workCycle(List).
+After the F1 source owner finishes57d, the coordinator explicitly assigns
+only that work/workCycle contract and its precise negatives in
+VerifySustainabilityRegistry to the selector owner. Preserve full normalized
+wrapper shape, same-tick deduplication, processing/settlement/loading exclusion,
+one cycle call and finally release, plus diagnosis/return before recipe/draw.
+Do not replace the profile with broad string presence, skip it, alter the F1
+registration/default rule or retarget G8's immutable4ee source.

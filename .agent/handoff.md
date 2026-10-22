@@ -4,6 +4,29 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**NEW G8 GO, results pending:** sole604/exact4ee24057642d2e4b2bc2cbcd28e8eb250283194b
+on a new common-only root/inventory, after the verified G7 return. The
+default-F1 source57 and coupled display are reviewed and normally integrated.
+Compile needed common/tool classes; execute actual changed authority/registry/
+guidance/T0/T1 contracts and normal Guidance/Economy/T1 writers, independent
+CheckOnly/resource refresh/canonical checks. Require observed31-source/
+41-image hashes, not authored counts. Reuse unchanged G7 FTB/ABI/native/
+managed-file proofs; no Forge backend, boot, package, plan, target/Prism or
+player action is permitted. Do not run predictable stale canonical suites
+before writers or repeat an already valid exact-source proof unnecessarily.
+
+Only four normal payloads may change. After actual passes/non-output input
+invariance/Java0/locksfalse, a normal local A8 with exact parent4ee and both
+trailers is allowed if data changes; bundle it for coordinator integration,
+no push or runtime stage. Source4ee/alias stay frozen throughout execution;
+no live hotfix or selector Sync. Return all raw/class/payload/guard custody
+and the lease explicitly. Source0752 continues its independent selector lane.
+Its reported a89baba checkpoint identifies the coupled mechanics profile.
+After F1 source57 finishes, the coordinator explicitly permits only the
+work-wrapper/workCycle prefix contract and precise negatives in the existing
+registry verifier. This preserves full guard/diagnostic shape rather than
+loosening it; F1 addDeclarations/default rule and G8/4ee stay unchanged.
+
 **G7 bounded engineering closed:** independent QA verifies339/339 hashes and all actual
 historical publisher/model/class-image/backend/boot/package/plan/managed51/
 protection/fresh-closure chains. It finds one documentary gap: the original
