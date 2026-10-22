@@ -4,11 +4,23 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
-**NEW G12 MODEL-ONLY GO, no observation yet.** Sole604/exact
+**G12 first execution boundary reported; models still pending.** Sole604 reports
+fresh absent-root admission/VerifiedDetached Synccb1e, common/classes/classpath
+and affected tooljavac0, repaired Factory0, Guidance fixture/main0 and
+audit --regressions-only0. The21:27:10.166Z clean/Java0/locksfalse snapshot is
+between stages, NOT a leaseback or current live observation. Normal writers
+and their actual gate/finite witness continue under the same exclusive lease.
+Final raw custody and independent review remain pending.
+
+One CI decision observed runs39856429605/39855893335 still in progress:
+no CI success, reuse or five originals is claimed. The uploader's inherited
+originals5 footer was corrected to actual0 without reupload/producer replay;
+the original discrepancy is retained. No native/Forge or owner-world action.
+
+**G12 MODEL-ONLY GO.** Sole604/exact
 cb1e124173a8530e3faf205d53aeef90651c7187, private inventory1b8 and separate
-local preparation975bca14. The proposed finite-continuation root has never
-been observed/admitted; fresh safety/headroom/ownership and canonical Sync
-precede needed common/classes/classpath/tool images. No parent/other worker
+local preparation975bca14. The finite-continuation root was unobserved at
+grant; the first admitted common/tool boundary is reported above. No parent/other worker
 PC/cache access is authorized under the lease. Source/aliascb1e freezes;
 grant documentation is not the executed source.
 
@@ -30,7 +42,8 @@ locksfalse/explicit return remain required.
 NO Forge/native/FTB/old CLI/compiler enclave/ABI/JDK fixtures/Blueprint/assets/
 package/Prism/target/owner-world/dependency/provider action. Only common
 metadata and source tests changed afterf1b9; reuse its verified G11 native
-and unchanged proofs without reexecution/retarget. No G12 pass exists yet.
+and unchanged proofs without reexecution/retarget. No G12 model/writer or
+finite-continuation pass is established by its first common/tool boundary.
 
 **G11 native-only is complete, independently verified and returned.**
 Fresh20:49:11Z absent-root admission/VerifiedDetached Syncf1b9 precedes one

@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Record the first actual G12 repaired-contract boundary.**
+  Executor604 reports fresh absent-root Sync on exactcb1e, common/tool
+  compilation and repaired Factory/Guidance/audit-regressions exits0.
+  Normal writers, the real finite gate, provenance and final custody remain
+  pending under the same exclusive lease. Preserve the interstage snapshot
+  and the corrected inherited CI-originals footer: actual copied originals0,
+  not5, with no CI reuse, reupload, producer replay or owner-world action.
 - **Assign only the repaired model boundary to G12.**
   Sole604/exactcb1e receives the never-admitted model root/inventory1b8:
   fresh guards/Sync, necessary common/tool classes, repaired Factory/Guidance/

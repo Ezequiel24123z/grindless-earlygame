@@ -1145,6 +1145,21 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
+**G12 first actual PC boundary reported, full custody pending.** Fresh
+absent-root guards/VerifiedDetached Synccb1e precede common/classes/classpath
+and affected tooljavac0. Executor604 reports repaired Factory0, Guidance
+fixture/main0 and audit --regressions-only0. The21:27:10.166Z clean source/
+allJava0/locksfalse snapshot is interstage, not final return. The exclusive
+lease continues into normal writers and their real gate/finite checks;
+no model, emitted43/98 or A10 result is inferred from these successes.
+
+Its single CI decision finds runs39856429605/39855893335 in progress; zero
+CI originals are copied or reused. An inherited uploader footer said
+originals5, then was corrected to actual0 without reupload or producer
+replay, preserving the original observation error. There is no CI-green
+claim or invented five-file capsule. Native G11 remains reused atf1b9;
+no Forge/native/package/Prism/owner-world operation occurs in this boundary.
+
 **G12 model-only assignment, not a result:** source
 cb1e124173a8530e3faf205d53aeef90651c7187 normally composes reviewed Factoryf863
 and C82ac, exact source tree313655674d12d457b36346219d3b188c12a0f855.
