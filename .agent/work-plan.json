@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 55,
+  "plan_revision": 56,
   "updated": "2026-10-22",
   "phase": "managed_FTB_update_and_explicit_control_capacity_development_after_closed_M_wave",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -66,6 +66,8 @@
     "thermal_asset_status": "supplied_cube_bottom_top_model_existing_owned_textures_only_no_PNG_generation_normal_asset_writer_and_GENERATED_md_count_pending",
     "thermal_registration_probe": "one_integration_assertion_in_existing_registered_Matrix_probe_genuine_Item_class_and_registry_ID_no_new_marker_or_case_actual_run_pending",
     "current_fixture_shapes": "211graph_86Assembler_268Atlas_6named_minimum_roles_865locale_keys_authored_not_executed",
+    "exact7c55_CI": "39739650564_artifact12408896544_env0_build0_behavior1_ONLY3canonical_equalities_Economy_Guidance_T1_all_other_behavior_pass_Windows_tooling_SUCCESS_smoke_SKIPPED_reuse_actual_contracts_not_new_native_or_FTB_export",
+    "exact7c55_raw_behavior_sha256": "0f3f6c0546c0a34d38f716c85485b2ce7ebb4b61a7772419306a6fe60498f171",
     "factory_reproduction_fixture_shape": "209graph_84Assembler_266allAtlas_and5named_minimum_control_rows_authored_not_executed",
     "oracle_compile_repair_owner": "a18f81ea_9b9c619e0defda703cadfc1ca2a3ec4f9659fd7c_normally_integrated_all_new_List_eq_calls_use_existing_yes_and_ordered_full_equals_no_guard_weakening_JVM_confirmation_pending",
     "thermal_reproduction": "five_distinct_groups_out_of_scope_manual_seed_retained_no_claim_all_five_automated",

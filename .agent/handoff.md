@@ -186,6 +186,15 @@ No package/fictitious-instance/plan apply/player deployment is granted here;
 real plan consumption remains a later clean-checkpoint qualification.
 Commit only the five actual generated outputs after all JVMs/locks close,
 bundle/custody and return the lease; parent integrates/publishes.
+Exact7c55 automatic CI39739650564/artifact12408896544 now has environment/
+build0 and behavior1 ONLY at the three committed Economy/Guidance/T1 equalities.
+Pure index, ordering, Recipe/Atlas/ControlMatrix/Machine/Material/Workshop/Assets
+and teaching957 really pass; Windows tooling succeeds. Smoke is SKIPPED.
+Parent preserves raw behavior0f3f6c05/build6b8b51a3/status6d8edfdb and sends
+those exact proofs to604 to avoid redundant pure checks. No managed-files-only
+task, compiler receipt/export or native marker is observed in that CI. The first
+artifact read expects a flat layout and fails before reading logs; nested raw
+custody is recovered, without a CI/PC replay.
 
 Next integrate coherent local checkpoints and select only their changed proofs.
 Any heavy qualification needs a new sole-owner lease on an exact published

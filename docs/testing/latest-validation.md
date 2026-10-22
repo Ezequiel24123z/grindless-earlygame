@@ -215,6 +215,28 @@ changing GENERATED.md only; the other four writer outputs stay distinct from
 the tested clean-source native JAR. No package/fixture target or real-plan
 consumption is included before an authorized clean generated checkpoint.
 
+**Actual exact-source CI recovered:** run39739650564/
+foundation-validation12408896544 identifies HEAD7c55, environment0/build0/
+behavior1. All behavior except committed Economy equality, generated Guidance
+equality and first-factory canonical equality passes. In particular the prior
+pure-index/relative-order failures are closed; Recipe/Atlas/ControlMatrix/
+Machine/Material/Workshop/Assets and teaching957 are actual passes. Windows
+Prism tooling succeeds and smoke is SKIPPED. New managed-files-only/publisher/
+FTB_COMPILATION_RECEIPT markers are not present in the build log, so do not
+reuse this as their execution or the new Matrix/core native observation.
+
+Parent verifies original nested artifact files with SHA-256:
+behavior `0f3f6c0546c0a34d38f716c85485b2ce7ebb4b61a7772419306a6fe60498f171`,
+build `6b8b51a3a630a28b5e2feeb825e115739006e10123b830ee711b63fd66b1f826`,
+status `6d8edfdb556f8bfb61cf665bc0203dac46c7191797029f43d77c8b556b232abb`,
+source `0ad5df6ad0ea22b0e16921510f6807aff7fa5cc5888a0c87c95920aec7abd4d4`.
+An initial flat-layout assumption fails in the local observer; reading the
+actual20261022T071917Z-2267 nested directory recovers custody without any rerun.
+The sole executor receives these same-source successful proofs and drops only
+future redundant pure checks; necessary PC classes/runtime/new boundaries and
+normal writers remain required. Duplicate39740386065 was merely in progress
+when observed, with no inferred conclusion or manual retry.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

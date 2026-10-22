@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Bind the repaired source's real CI contracts without replay.**
+  Exact7c55 run39739650564 has main/tool compile0 and only three canonical
+  equality failures; index/order and other behavior/asset contracts pass.
+  Parent recovers the full nested original artifact after a layout-observer
+  failure and supplies the exact raw/source hashes to sole604195bd for reuse.
+  Windows tooling succeeds; skipped smoke and unexecuted managed publisher
+  remain unproved, not green. Normal generation/native/legacy export still run.
 - **Assign the fully composed source's next bounded qualification.**
   Only604195bd receives G3 on fixed7c55d2a for required repaired/new contracts,
   one existing native Matrix/core-registration observation, normal asset/model
