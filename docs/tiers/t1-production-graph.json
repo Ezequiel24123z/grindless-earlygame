@@ -1,5 +1,5 @@
 {
-  "authority_snapshot_sha256": "8ce11ced6b8e4f524c6a50809d0a6816fb19452751dfd67058211b55270d2482",
+  "authority_snapshot_sha256": "6a433632343bcdc8a1e6c7a39f3c30c1f256a2ae506ef08944be1e07b6d1dfb6",
   "entry_route": "craft/relay_matrix",
   "exit_route": "assemble/relay_matrix_f2",
   "global_optimum_claimed": false,
@@ -652,6 +652,177 @@
       ]
     },
     {
+      "id": "factory_reproduction",
+      "requirement": "OPTIONAL",
+      "requires_lines": [
+        "assembly"
+      ],
+      "routes": [
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "control_supply_projection": "canonical_option_not_exhaustive_alternatives",
+            "minimum_control_input_0": "item:grindless:relay_matrix [F1]"
+          },
+          "discharged": [],
+          "duration_ticks": 400,
+          "fu_per_tick": 32,
+          "id": "assemble/pulverizer",
+          "inputs": {
+            "energy:FU": 12800,
+            "item:grindless:relay_matrix [F1]": 1,
+            "item:minecraft:flint": 1,
+            "tag:forge:ingots/iron": 1,
+            "tag:minecraft:stone_crafting_materials": 6
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 12800,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:pulverizer": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "control_supply_projection": "canonical_option_not_exhaustive_alternatives",
+            "minimum_control_input_0": "item:grindless:relay_matrix [F1]"
+          },
+          "discharged": [],
+          "duration_ticks": 400,
+          "fu_per_tick": 32,
+          "id": "assemble/arc_furnace",
+          "inputs": {
+            "energy:FU": 12800,
+            "item:grindless:relay_matrix [F1]": 1,
+            "item:minecraft:redstone": 1,
+            "tag:forge:ingots/iron": 4,
+            "tag:minecraft:stone_crafting_materials": 3
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 12800,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:arc_furnace": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "control_supply_projection": "canonical_option_not_exhaustive_alternatives",
+            "minimum_control_input_0": "item:grindless:relay_matrix [F1]"
+          },
+          "discharged": [],
+          "duration_ticks": 400,
+          "fu_per_tick": 32,
+          "id": "assemble/press",
+          "inputs": {
+            "energy:FU": 12800,
+            "item:grindless:relay_matrix [F1]": 1,
+            "tag:forge:ingots/iron": 2,
+            "tag:minecraft:stone_crafting_materials": 6
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 12800,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:press": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "control_supply_projection": "canonical_option_not_exhaustive_alternatives",
+            "minimum_control_input_0": "item:grindless:relay_matrix [F1]"
+          },
+          "discharged": [],
+          "duration_ticks": 400,
+          "fu_per_tick": 32,
+          "id": "assemble/assembler",
+          "inputs": {
+            "energy:FU": 12800,
+            "item:grindless:copper_coil": 1,
+            "item:grindless:machine_casing": 2,
+            "item:grindless:relay_matrix [F1]": 1,
+            "tag:forge:gears/iron": 2
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 12800,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:assembler": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 400,
+          "fu_per_tick": 32,
+          "id": "assemble/thermal_generator_core",
+          "inputs": {
+            "energy:FU": 12800,
+            "item:minecraft:furnace": 1,
+            "tag:forge:ingots/iron": 1,
+            "tag:grindless:carbon": 1
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 12800,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:thermal_generator_core": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "control_supply_projection": "canonical_option_not_exhaustive_alternatives",
+            "minimum_control_input_2": "item:grindless:relay_matrix [F1]"
+          },
+          "discharged": [],
+          "duration_ticks": 400,
+          "fu_per_tick": 32,
+          "id": "assemble/thermal_generator",
+          "inputs": {
+            "energy:FU": 12800,
+            "item:grindless:relay_matrix [F1]": 1,
+            "item:grindless:thermal_generator_core": 1,
+            "tag:minecraft:stone_crafting_materials": 5
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 12800,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:thermal_generator": 1
+          },
+          "source": "ProcessGraph.generate"
+        }
+      ]
+    },
+    {
       "id": "wire_forming",
       "requirement": "OPTIONAL",
       "requires_lines": [
@@ -663,7 +834,9 @@
           "automatable": true,
           "catalysts": {},
           "conditions": {
-            "informational_milestone": "industrial"
+            "control_supply_projection": "canonical_option_not_exhaustive_alternatives",
+            "informational_milestone": "industrial",
+            "minimum_control_input_3": "item:grindless:relay_matrix [F1]"
           },
           "discharged": [],
           "duration_ticks": 400,
@@ -748,6 +921,108 @@
           "one_shot": false,
           "outputs": {
             "item:grindless:copper_coil": 1
+          },
+          "source": "ProcessGraph.generate"
+        }
+      ]
+    },
+    {
+      "id": "tool_reproduction",
+      "requirement": "OPTIONAL",
+      "requires_lines": [
+        "assembly"
+      ],
+      "routes": [
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 400,
+          "fu_per_tick": 32,
+          "id": "assemble/plate_die",
+          "inputs": {
+            "energy:FU": 12800,
+            "tag:forge:ingots/iron": 1,
+            "tag:minecraft:stone_crafting_materials": 8
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 12800,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:plate_die": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 400,
+          "fu_per_tick": 32,
+          "id": "assemble/rod_die",
+          "inputs": {
+            "energy:FU": 12800,
+            "tag:forge:ingots/iron": 1,
+            "tag:minecraft:stone_crafting_materials": 4
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 12800,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:rod_die": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 400,
+          "fu_per_tick": 32,
+          "id": "assemble/gear_die",
+          "inputs": {
+            "energy:FU": 12800,
+            "tag:forge:ingots/iron": 4,
+            "tag:minecraft:stone_crafting_materials": 4
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 12800,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:gear_die": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 400,
+          "fu_per_tick": 32,
+          "id": "assemble/coil_die",
+          "inputs": {
+            "energy:FU": 12800,
+            "item:minecraft:redstone": 2,
+            "tag:forge:ingots/iron": 1,
+            "tag:minecraft:stone_crafting_materials": 6
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 12800,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:coil_die": 1
           },
           "source": "ProcessGraph.generate"
         }
