@@ -45,8 +45,8 @@ public final class VerifyT1Progression {
         var fingerprinted = java.util.regex.Pattern.compile(
                 "for \\(Class<\\?> type : List\\.of\\(([\\s\\S]*?)\\)\\) \\{").matcher(exporter);
         equal("the exporter fingerprints typed inputs, the catalogue and actual wet-proof implementations (source contract)", true,
-                fingerprinted.find() && List.of("AuthorityAdapters.class", "IngredientSpec.class",
-                        "IngredientSpec.MatrixRole.class", "ControlMatrixSpec.class",
+                fingerprinted.find() && List.of("AuthorityAdapters.class", "VerifySustainabilityRegistry.class",
+                        "IngredientSpec.class", "IngredientSpec.MatrixRole.class", "ControlMatrixSpec.class",
                         "QuestCatalogue.class", "QuestCatalogue.Task.class", "QuestCatalogue.Reward.class",
                         "QuestCatalogue.Chapter.class", "QuestCatalogue.Evidence.class", "QuestCatalogue.Type.class",
                         "ProcessLogic.class", "ProcessLookup.class", "FluxTier.class", "MachineMenuKind.class",
@@ -60,7 +60,8 @@ public final class VerifyT1Progression {
         var sources = java.util.regex.Pattern.compile(
                 "SOURCES = List\\.of\\(([\\s\\S]*?)\\);").matcher(exporter);
         equal("the exporter binds the sources of its new catalogue and wet applicability claims (source contract)", true,
-                sources.find() && List.of("quest/QuestCatalogue.java", "machine/ProcessMachineKind.java",
+                sources.find() && List.of("tools/checks/VerifySustainabilityRegistry.java",
+                        "quest/QuestCatalogue.java", "machine/ProcessMachineKind.java",
                         "recipe/ProcessLogic.java", "recipe/ProcessLookup.java", "energy/FluxTier.java",
                         "menu/MachineMenuKind.java", "process/MachineEnvelopes.java", "process/ConditionState.java",
                         "process/Agitation.java", "process/ProcessConditions.java", "process/ConditionEnvelope.java",

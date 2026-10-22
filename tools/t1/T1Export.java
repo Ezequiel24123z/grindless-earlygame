@@ -45,6 +45,7 @@ public final class T1Export {
             JAVA + "process/ConditionEnvelope.java", JAVA + "process/ConditionBand.java",
             JAVA + "process/ConditionReport.java", JAVA + "process/ConditionFault.java",
             "common/src/main/resources/data/grindless/recipes/flux_cell.json",
+            "tools/checks/VerifySustainabilityRegistry.java",
             "tools/checks/VerifyT1Progression.java", "tools/t1/T1Export.java",
             "tools/t1/export.ps1", "tools/t1/export.sh");
 
@@ -100,7 +101,7 @@ public final class T1Export {
                 ProcessConditions.class, ProcessConditions.Builder.class,
                 ConditionEnvelope.class, ConditionEnvelope.Builder.class, ConditionBand.class,
                 ConditionReport.class, ConditionFault.class,
-                VerifyT1Progression.class, T1Export.class)) {
+                VerifySustainabilityRegistry.class, VerifyT1Progression.class, T1Export.class)) {
             String resource = "/" + type.getName().replace('.', '/') + ".class";
             try (InputStream stream = type.getResourceAsStream(resource)) {
                 if (stream == null) {
