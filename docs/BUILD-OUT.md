@@ -75,6 +75,11 @@ The mechanical test merge preserves pre-bootstrap checks plus the broader
 exception signature needed by carrier lookup. Wait for the bounded thermal
 review, then qualify the actual211/86/268 source/model/asset contracts and normal
 writers; do not infer native registration from carrier tests or old85e passes.
+The fully composed7c55d2a now has a NEW sole604195bd G3 window: fresh guards/
+Sync, repaired/new contracts, the one real mechanism/registration probe,
+normal assets and models, new-only FTB Java and authentic old publication.
+All results are pending; preserve old proofs/source boundaries and leave
+package/target/real-plan application for a later explicit clean-source window.
 The control review's one P2 is source-repaired inf046923: include executed
 AuthorityAdapters bytecode as well as source. Real writer receipt verification
 remains required. Parallel source work now selects four ordinary machine

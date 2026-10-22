@@ -19,21 +19,22 @@
     "no_implicit_public_release_main_merge_or_paid_generation": true
   },
   "current_PC_execution": {
-    "assignment": "control-factory-qualification-20261022",
-    "active": false,
-    "owner_session": null,
+    "assignment": "integrated-source-qualification-20261022",
+    "active": true,
+    "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
     "last_owner_session": "604195bd-6826-4299-89af-1dcf39545263",
-    "source": "85e9078e1c03d05f32ca76fe46dad5ad13e16647",
-    "scope": "necessary_common_Forge_changed_contracts_NORMAL_writers_CheckOnly_existing_matrix_lifecycle_new_control_boundary_only_no_FTB_T0_or_deploy",
+    "source": "7c55d2ae14be90365183f7bbbec66ba6e40883fb",
+    "scope": "required_compile_repaired_and_new_contracts_one_Matrix_mechanism_core_registration_FTB_managed_only_authentic_legacy_export_normal_assets_models_checks_NO_package_fake_target_or_player_action",
     "other_workers_parent_PC_or_T0_access_authorized": false,
     "source_frozen_until_active_stages_and_locks_close": true,
-    "result": "Sync85e0_CI39733641733_env_build_javac0_behavior1_3registry_index_and_T1_adjacency_regressions_plus2stale_gates_no_PC_JVM_native_writer",
-    "returned": true,
-    "returned_utc": "2026-10-22T06:35:57.7150106Z",
-    "return_state": "clean85e_owned_allObservedJava0_locksfalse_startedPCJVM0_closure8363ad93_parent_verified",
+    "result": "NEW_G3_fixed7c55_go_all_actual_stage_results_pending_no_inherited_green_or_implicit_resume",
+    "returned": false,
+    "returned_utc": null,
+    "return_state": "NOT_OBSERVED_for_newG3_window",
+    "previous_85e_attempt": "CI39733641733_main_toolcompile0_actual_regressions_Sync_only_noPCJVM_safe_return06_35_57Z_closure8363ad93",
     "previous_423a_attempt": "Sync0_real_CI_compile_red_no_PC_JVM_safe_return05_53_20Z_closure8d96179a_raw00348af1_preserved",
     "previous_returned_lease": "integrated_blueprint_native_20261021_cleanM_Java0_locks0_2026_10_21_21_56_31Z_evidence_preserved",
-    "new_explicit_guarded_window_required": true
+    "new_explicit_guarded_window_required": false
   },
   "active_development_wave": {
     "base": "ad5b50dd509b0261818101ff08e786750826161a",
@@ -57,8 +58,8 @@
     "thermal_source": "8cb82bf_normally_integrated_2real_operations_core_and_generator_material_parity_normal_asset_writer_and_Java_contracts_pending",
     "thermal_review": "81b2e622_source_review_closed_no_new_high_confidence_finding_no_Java_native_asset_generation_or_artistic_pass",
     "qualification_preparer": "604195bd-6826-4299-89af-1dcf39545263_READY_local_preparation_ONLY_no_PC_grant",
-    "PC_owner": null,
-    "PC_source": "85e9078e1c03d05f32ca76fe46dad5ad13e16647",
+    "PC_owner": "604195bd-6826-4299-89af-1dcf39545263",
+    "PC_source": "7c55d2ae14be90365183f7bbbec66ba6e40883fb",
     "PC_source_worker_access": false,
     "T0_world_client_deploy_or_acceptance": false,
     "evidence_reuse": "keep_source426_models_e260_contracts_M_Blueprint_native_and_independent_full_CI_bound_to_their_actual_sources_no_unrelated_replay"

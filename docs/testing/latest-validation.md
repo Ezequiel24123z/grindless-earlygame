@@ -202,6 +202,19 @@ One final-integration assertion in the existing registered Matrix probe checks
 the ordinary Thermal core's real class and registry ID. It adds no new marker/
 scenario/budget and is not an observed native pass until that run completes.
 
+New sole-owner G3 assignment is fixed to
+7c55d2ae14be90365183f7bbbec66ba6e40883fb, not a retarget of either failed
+Sync-only attempt. Fresh guards/Sync and every execution result are pending.
+Authorize only required compile/changed regressions, the existing Matrix
+mechanism plus genuine core registration, normal assets/three model writers
+and independent checks, the new managed-files-only Java selector and authentic
+old dd0 publication through its normal fresh-compilation receipt. Reference/
+compiler hashes must be observed, not manufactured from the source report.
+Normal asset output is expected to retain the supplied model and all PNGs,
+changing GENERATED.md only; the other four writer outputs stay distinct from
+the tested clean-source native JAR. No package/fixture target or real-plan
+consumption is included before an authorized clean generated checkpoint.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

@@ -169,6 +169,24 @@ Independent read-only thermal review81b2e622 closes with no new high-confidence
 finding. Actual asset/Java/registration and artistic judgment remain unproved;
 synthetic carrier lookup and old85e passes do not provide them.
 
+**Latest G3 grant, not a result:** only604195bd receives
+`integrated-source-qualification-20261022` on exact published
+7c55d2ae14be90365183f7bbbec66ba6e40883fb. All known index/order/compiler
+source repairs, thermal component and guarded-FTB93 source are composed.
+Fresh admission/Sync/compiler/native/writer/publisher observations are pending.
+Use the same isolated control root, leave oldM/Prism/player data intact.
+Native clean-source Matrix mechanism/core-registration runs before output
+writers; normal assets then three model writers may change only GENERATED.md
+and the four canonical payloads. Compare every other asset/PNG unchanged.
+New-only managed FTB Java selector and authentic legacy source-file publication
+are authorized, using preserved dd0 source/JAR plus NEW ignored per-operation
+compiler output/receipt only; never historical classes or old diagnostic data.
+LegacyRuntime comes from the preserved package provenance, not a guessed alias.
+No package/fictitious-instance/plan apply/player deployment is granted here;
+real plan consumption remains a later clean-checkpoint qualification.
+Commit only the five actual generated outputs after all JVMs/locks close,
+bundle/custody and return the lease; parent integrates/publishes.
+
 Next integrate coherent local checkpoints and select only their changed proofs.
 Any heavy qualification needs a new sole-owner lease on an exact published
 source. Preserve all previous failures and successful source-bound evidence.

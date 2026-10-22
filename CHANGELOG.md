@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Assign the fully composed source's next bounded qualification.**
+  Only604195bd receives G3 on fixed7c55d2a for required repaired/new contracts,
+  one existing native Matrix/core-registration observation, normal asset/model
+  writers and independent checks, new-only managed FTB Java and authentic old
+  publication. All actual observations remain pending. Preserve five generated
+  output boundaries, old diagnostics and player state; no package/target/apply
+  or live-source retarget is granted. Real plan consumption follows separately.
 - **Observe the new ordinary component in the existing native mechanism run.**
   Add one final-integration registration assertion for the Thermal core's real
   Item class and declared registry ID inside the already-planned Matrix probe.
