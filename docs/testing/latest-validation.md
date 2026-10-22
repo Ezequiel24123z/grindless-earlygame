@@ -391,6 +391,31 @@ legacy1 remain red. Their preserved JARfd1/world identify pre-writer7c55, not a
 tested A3 package. Corrected proofs, actual reference/plan consumption and
 the new asset JDK fixture still need the next source-bound window.
 
+**Source555dbe9 composed, not Java/export-qualified:** parent directly reviews
+the publisher's exact-first/single-sealed-pair implementation and existing Java
+fixture, preserving stale-class/source binding. Actual source-file SHA-256 is
+`0befca8313bf1166ddf8a7e7c264306f4093896b85995801d364448306d1ae43`.
+Source handoff
+`ba017c86850bbcb847df0e827c28a81a3ad6cc6511bc3dfcb57591f982f10f32`,
+actual byte analysis
+`2e0c13a746015ca4298bd1bc1285c6709fa76e163de35562485890f8ad1a5766`,
+156-check non-JVM relation/mutation evidence
+`0e99a00af9e5ff51312b3ed8b1182481cc92a3f27cacb4ece36ccb701d9b1d33`,
+and exact two-path proof
+`a5c9a0a8f156daa5edcd7248380ebff2b7776543775b35a4d951744a80ca51f8`
+are parent hash-verified.139 fixed-byte mutations are rejected in that model;
+the new Java fixture is authored, not run.
+
+The exact declared devlibs paths produce e463/1f18 stamps by SHA256 of UTF8
+path strings, independently corroborating upstream generation. The initial
+missing-Python attempt and incorrect libs-path assumption abort are preserved,
+resolved without installation or path guessing. Recipe/init/build wiring stay
+unchanged. New FTB_JAR_COMPARISON evidence distinguishes exact entry equality
+from one sealed self-name alias and records selected/rebuilt/compilation hashes.
+Only the existing CLI8 on original5f911a77 may close the actual legacy export
+without repeating successful compilers. Native957, asset5aa and this source
+repair are now composed; actual corrected native/JDK/export/plan remain pending.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

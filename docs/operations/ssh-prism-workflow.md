@@ -183,7 +183,10 @@ This complements, not replaces, the qualified single-line deployment RPC.
 ADR-0177 adds source93ce975 host-side UpdateQuestDefinitions and
 RecoverQuestDefinitions. They are not exposed as a new pc-workflow action,
 an automatic startup overwrite, or permission to update the player instance.
-Their Java/compiler/real-plan qualification is still pending. Explicit InstanceId,
+Managed-files44 and authentic compilation run in G3; original publication fails
+on a path-stamped generated class. Source555dbe9 implements ADR-0181's one
+sealed self-name comparison without ignoring other payloads. Corrected Java/
+export/real-plan qualification remains pending. Explicit InstanceId,
 plan path/hash, owned stopped target and the already installed verified current
 PackZip/runtime are required. A pending journal blocks startup/Inspect/Deploy;
 recovery restores definitions, not a secretly swapped runtime or paid world data.
@@ -197,6 +200,33 @@ export must bind real old definitions to the selected preserved JAR and actual
 loaded class images. Never manually adopt historical build/classes or invent
 a46 reference by deleting four lessons from50. Old source-only schema1 reference
 publications without compilationSha256 are rejected.
+
+If authentic compilation already succeeded and only publication failed,
+preserve that real receipt/output. After source repair, the existing eight-arg
+source-file CLI can reconsume it while revalidating every source/recipe/classpath/
+image/JAR binding; do not invoke GradleBuild again merely for a comparator fix:
+
+```powershell
+$m = Get-Content -LiteralPath $CompilerReceipt -Raw | ConvertFrom-Json
+$cp = @($m.runtimeClasspath | ForEach-Object { $_.path }) -join [IO.Path]::PathSeparator
+& $Java -Xmx512m '-XX:ActiveProcessorCount=2' --class-path $cp $PublisherSource `
+  $m.sourceRoot $m.sourceRevision $LegacyRuntime $SelectedJar $SelectedSha256 `
+  $CompilerReceipt $CompilerSha256 $Output
+```
+
+Hash-verify the receipt and corrected publisher source before invocation.
+The self-name alias must retain distinct selected/rebuilt digests and explicit
+FTB_JAR_COMPARISON evidence; it is not binary equality. Require actual
+FTB_DEFINITIONS_PUBLISHED and the resulting file/hash to close publication.
+The old exit1 remains immutable. No historical class-directory adoption is added.
+
+Real qualification needs a current verified package installed by the canonical
+tool into an explicitly owned stopped fictional instance before fresh planning.
+Its named validation instances root must be separate from every repository:
+`prism-dev` rejects a target under the checkout's build/validation directory.
+Read only approved template component metadata/pinned dependencies; never copy
+the player's world/options/progress into this test. Apply the actual immutable
+plan/hash, then the same plan for a byte/mtime/backup-preserving no-op.
 
 On the separately authorized qualification surface, the new-only Java selector
 is `:forge:verifyFtbQuestBackend --args="--managed-files-only"` with the existing

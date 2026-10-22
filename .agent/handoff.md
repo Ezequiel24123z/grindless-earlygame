@@ -309,10 +309,24 @@ red; JARfd1 and its retained world belong to pre-writer7c55, NOT an A3 runtime.
 Never rerun that harness in its retained root without preserving the initial
 reset boundary. Corrected source needs a new exact grant.
 
+**All bounded source repairs are composed:** normal555dbe9 adds ADR-0181's
+sealed comparison and existing Java negatives to native957 and asset5aa.
+Parent directly reviews both changed files and verifies publisher source
+0befca83 plus handoffba017c86/byteanalysis2e0c13a7/mutants0e99a00a/
+pathsa5c9a0a8. The156 actual non-JVM checks include139 fixed-byte mutations;
+they are not Java execution. Two exact devlibs path strings independently
+produce the observed64-hex stamps; private values stay outside Git.
+Recipe/init/build wiring and all14 T1 writer inputs remain unchanged.
+No comparator Java/actual reference pass is inferred. Use existing direct
+CLI8 with the original5f911a77 receipt, not another legacy GradleBuild.
+The next sole-owner window must preserve the old G3 native world and isolate
+its new native root; a real file-plan target must be outside every checkout
+because canonical Prism rejects overlapping repository/instance paths.
+
 | Category | Current G3 checkpoint, not a completed wave |
 | --- | --- |
 | COMPLETED | Actual compile/javac/managed44, normal writers/CheckOnly/canonical passes; normal A3 integration; parent-verified205-file custody/2573 inputs/4 images/5 Git blobs; exact EOL recovery and explicit safe leaseback; source957/5aa repairs |
-| BLOCKED | Corrected native/legacy properties remain unproved; comparator source repair and actual post-fix proofs are separate from the completed writer stages |
+| BLOCKED | Corrected native/legacy properties remain unproved; all source repairs are integrated, actual post-fix proofs remain separate from completed writer stages |
 | NOT EXECUTED | Corrected native/publisher and asset JDK fixture; real managed-plan consumption, new package/client/player update, whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | Existing GUI/JEI/reward/appearance and longitudinal-campaign gates remain open |
 | NEEDS MY DECISION | None from the owner; bounded technical repair is delegated |

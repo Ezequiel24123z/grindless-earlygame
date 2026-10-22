@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 import java.util.zip.ZipFile;
 
 /**
@@ -44,6 +45,10 @@ import java.util.zip.ZipFile;
 public final class FtbQuestDefinitionPublisher {
     static final Gson JSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeNulls().create();
     static final List<String> FILENAMES = List.of("grindless_t0.snbt", "grindless_t1.snbt");
+    private static final String SHIM_PREFIX = "architectury_inject_grindless_common_";
+    private static final String SHIM_FINGERPRINT = "0a84a9c64d4531a5942f7fab6de29d225f189424344d81b42e4642cb468923d6";
+    private static final Pattern SHIM_NAME = Pattern.compile(
+            "(" + SHIM_PREFIX + "[0-9a-f]{32}_)([0-9a-f]{64})([A-Za-z0-9]+/PlatformMethods)\\.class");
 
     private FtbQuestDefinitionPublisher() {
     }
@@ -296,12 +301,97 @@ public final class FtbQuestDefinitionPublisher {
         JsonObject compiledJar = manifest.getAsJsonObject("remappedJar");
         requireKeys(compiledJar, "path", "sha256");
         Path builtJar = Path.of(text(compiledJar, "path")).toAbsolutePath().normalize();
-        // Container timestamps/compression can differ; every executable/resource entry must match.
-        if (!builtJar.startsWith(output.resolve("forge")) || !fileHash(builtJar).equals(text(compiledJar, "sha256"))
-                || !jarImage(builtJar).equals(jarImage(selectedJar))) {
+        if (!builtJar.startsWith(output.resolve("forge")) || !fileHash(builtJar).equals(text(compiledJar, "sha256"))) {
             throw new IOException("Selected runtime JAR payload differs from the actual pinned compilation/remap output");
         }
+        JarComparison comparison = compareJarPayloads(builtJar, selectedJar);
+        System.out.println("FTB_JAR_COMPARISON mode=" + comparison.mode()
+                + " selected_sha256=" + fileHash(selectedJar) + " rebuilt_sha256=" + text(compiledJar, "sha256")
+                + " compilation_sha256=" + receiptHash
+                + (comparison.mode() == JarComparisonMode.ARCHITECTURY_SELF_UTF8_ALIAS
+                ? " selected_entry=" + comparison.selectedEntry() + " rebuilt_entry=" + comparison.rebuiltEntry()
+                + " canonical_sha256=" + SHIM_FINGERPRINT : ""));
         return new CompilationProof(directories, images);
+    }
+
+    static JarComparison compareJarPayloads(Path rebuilt, Path selected) throws IOException {
+        Map<String, String> rebuiltImage = jarImage(rebuilt);
+        Map<String, String> selectedImage = jarImage(selected);
+        if (rebuiltImage.equals(selectedImage)) {
+            return new JarComparison(JarComparisonMode.EXACT_ENTRY_PAYLOADS, null, null);
+        }
+        if (rebuiltImage.size() != selectedImage.size()) { throw jarMismatch(); }
+        for (var entry : selectedImage.entrySet()) {
+            String other = rebuiltImage.get(entry.getKey());
+            if (other != null && !other.equals(entry.getValue())) { throw jarMismatch(); }
+        }
+        Set<String> selectedOnly = new HashSet<>(selectedImage.keySet());
+        selectedOnly.removeAll(rebuiltImage.keySet());
+        Set<String> rebuiltOnly = new HashSet<>(rebuiltImage.keySet());
+        rebuiltOnly.removeAll(selectedImage.keySet());
+        if (selectedOnly.size() != 1 || rebuiltOnly.size() != 1
+                || shimCount(selectedImage) != 1 || shimCount(rebuiltImage) != 1) {
+            throw jarMismatch();
+        }
+        String selectedEntry = selectedOnly.iterator().next();
+        String rebuiltEntry = rebuiltOnly.iterator().next();
+        byte[] a = jarMember(selected, selectedEntry);
+        byte[] b = jarMember(rebuilt, rebuiltEntry);
+        if (!hash(a).equals(selectedImage.get(selectedEntry)) || !hash(b).equals(rebuiltImage.get(rebuiltEntry))) {
+            throw new IOException("JAR changed during the narrow Architectury comparison");
+        }
+        ShimIdentity left = recognizedShim(selectedEntry, a);
+        ShimIdentity right = recognizedShim(rebuiltEntry, b);
+        if (left == null || right == null || !left.identity().equals(right.identity())
+                || left.jarId().equals(right.jarId())) {
+            throw jarMismatch();
+        }
+        return new JarComparison(JarComparisonMode.ARCHITECTURY_SELF_UTF8_ALIAS, selectedEntry, rebuiltEntry);
+    }
+
+    private static long shimCount(Map<String, String> image) {
+        return image.keySet().stream().filter(name -> name.startsWith(SHIM_PREFIX)
+                && name.endsWith("/PlatformMethods.class")).count();
+    }
+
+    private static byte[] jarMember(Path jar, String name) throws IOException {
+        checkPath(jar);
+        try (ZipFile zip = new ZipFile(jar.toFile())) {
+            var entry = zip.getEntry(name);
+            if (entry == null || entry.isDirectory() || entry.getSize() > 1024) { throw jarMismatch(); }
+            try (var input = zip.getInputStream(entry)) {
+                byte[] bytes = input.readNBytes(1025);
+                if (bytes.length > 1024) { throw jarMismatch(); }
+                return bytes;
+            }
+        }
+    }
+
+    static ShimIdentity recognizedShim(String entry, byte[] bytes) {
+        var name = SHIM_NAME.matcher(entry);
+        if (!name.matches() || bytes.length < 13 || bytes.length > 1024) { return null; }
+        var header = java.nio.ByteBuffer.wrap(bytes);
+        if (header.getInt(0) != 0xCAFEBABE || header.getShort(4) != 0 || header.getShort(6) != 52
+                || header.getShort(8) != 10 || bytes[10] != 1) {
+            return null;
+        }
+        int selfLength = Short.toUnsignedInt(header.getShort(11));
+        int end = 13 + selfLength;
+        if (end > bytes.length || bytes.length - end != 128 || header.getShort(end + 85) != 0x0011) { return null; }
+        String self = new String(bytes, 13, selfLength, StandardCharsets.US_ASCII);
+        if (!entry.equals(self + ".class")) { return null; }
+        // Only CP#1's this_class UTF8 length/value varies. Every other byte of this one
+        // observed getCurrentTarget()->"forge" template, including all Code bytes, is sealed.
+        byte[] shape = new byte[145];
+        System.arraycopy(bytes, 0, shape, 0, 11);
+        System.arraycopy(new byte[]{0, 4, 83, 69, 76, 70}, 0, shape, 11, 6);
+        System.arraycopy(bytes, end, shape, 17, 128);
+        if (!hash(shape).equals(SHIM_FINGERPRINT)) { return null; }
+        return new ShimIdentity(name.group(1) + name.group(3), name.group(2));
+    }
+
+    private static IOException jarMismatch() {
+        return new IOException("Selected runtime JAR payload differs from the actual pinned compilation/remap output");
     }
 
     static void requireClassOrigin(CompilationProof proof, String project, Class<?> type) throws Exception {
@@ -514,6 +604,16 @@ public final class FtbQuestDefinitionPublisher {
     }
 
     record CompilationProof(Map<String, Path> directories, Map<String, Map<String, String>> images) {
+    }
+
+    enum JarComparisonMode {
+        EXACT_ENTRY_PAYLOADS, ARCHITECTURY_SELF_UTF8_ALIAS
+    }
+
+    record JarComparison(JarComparisonMode mode, String selectedEntry, String rebuiltEntry) {
+    }
+
+    record ShimIdentity(String identity, String jarId) {
     }
 
     private static String git(Path root, String... arguments) throws IOException {

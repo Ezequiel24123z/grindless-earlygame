@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,6 +36,7 @@ public final class VerifyFtbQuestFiles {
         Files.createDirectories(Path.of("build"));
         Path fixture = Files.createTempDirectory(Path.of("build"), "ftb-managed-files-");
         staleCompilation(fixture);
+        jarPayloadContract(fixture);
         Map<String, CompoundTag> current = FtbQuestDefinitions.chapters();
         Map<String, FtbQuestFiles.Chapter> encodedCurrent = FtbQuestFiles.generated(current);
         // Synthetic old-ID input: never publish this as an authentic historical source/hash receipt.
@@ -266,6 +268,128 @@ public final class VerifyFtbQuestFiles {
         equal(sourceHash, hash(Files.readAllBytes(source)), "fixture source bytes remain unchanged throughout the counterexample");
         equal(jarHash, hash(Files.readAllBytes(selectedJar)), "the selected correct JAR never changed");
         System.out.println("SYNTHETIC_STALE_CLASS_REGRESSION: same46/root/source/JAR; receipt directory and actual class bytes both enforced.");
+    }
+
+    private static void jarPayloadContract(Path fixture) throws Exception {
+        String prefix = "architectury_inject_grindless_common_" + "1".repeat(32) + "_";
+        String suffix = "fixturedevjar/PlatformMethods.class";
+        String selectedName = prefix + "a".repeat(64) + suffix;
+        String rebuiltName = prefix + "b".repeat(64) + suffix;
+        byte[] selectedClass = shimFixture(selectedName, "forge");
+        byte[] rebuiltClass = shimFixture(rebuiltName, "forge");
+        equal(true, recognizedShim(selectedName, selectedClass) != null, "known structural fixture is recognized");
+        Path selected = fixture.resolve("selected-payload.jar");
+        Path rebuilt = fixture.resolve("rebuilt-payload.jar");
+        Map<String, byte[]> a = new LinkedHashMap<>(Map.of("other.class", new byte[]{1, 2, 3},
+                "settings.txt", new byte[]{4, 5}, selectedName, selectedClass));
+        Map<String, byte[]> b = new LinkedHashMap<>(a);
+        writeJar(selected, a);
+        writeJar(rebuilt, b);
+        equal(JarComparisonMode.EXACT_ENTRY_PAYLOADS, compareJarPayloads(rebuilt, selected).mode(), "exact path remains exact");
+        b.remove(selectedName);
+        b.put(rebuiltName, rebuiltClass);
+        writeJar(rebuilt, b);
+        JarComparison alias = compareJarPayloads(rebuilt, selected);
+        equal(JarComparisonMode.ARCHITECTURY_SELF_UTF8_ALIAS, alias.mode(), "only the opaque self hash may vary");
+        equal(selectedName, alias.selectedEntry(), "comparison preserves selected entry evidence");
+        equal(rebuiltName, alias.rebuiltEntry(), "comparison preserves rebuilt entry evidence");
+        int end = 13 + ((rebuiltClass[11] & 255) << 8) + (rebuiltClass[12] & 255);
+        int checked = 0;
+        for (int index = 0; index < rebuiltClass.length; index++) {
+            if (index >= 11 && index < end) { continue; }
+            byte[] mutant = rebuiltClass.clone();
+            mutant[index] ^= 1;
+            equal(null, recognizedShim(rebuiltName, mutant), "every non-self byte remains sealed " + index);
+            checked++;
+        }
+        equal(139, checked, "all header/CP/method/Code/attribute bytes are covered");
+        byte[] nullBody = rebuiltClass.clone();
+        nullBody[nullBody.length - 9] = 1;
+        nullBody[nullBody.length - 8] = 0;
+        b.put(rebuiltName, nullBody);
+        writeJar(rebuilt, b);
+        refuses(() -> compareJarPayloads(rebuilt, selected), "aconst_null/nop/areturn cannot borrow the exception");
+        b.put(rebuiltName, shimFixture(rebuiltName, "other"));
+        writeJar(rebuilt, b);
+        refuses(() -> compareJarPayloads(rebuilt, selected), "changed return constant is not an alias");
+        Map<String, byte[]> changedBoth = new LinkedHashMap<>(a);
+        changedBoth.put(selectedName, shimFixture(selectedName, "other"));
+        writeJar(selected, changedBoth);
+        refuses(() -> compareJarPayloads(rebuilt, selected), "even matching altered bodies are not the recognized template");
+        writeJar(selected, a);
+        b.put(rebuiltName, rebuiltClass);
+        b.put("settings.txt", new byte[]{9});
+        writeJar(rebuilt, b);
+        refuses(() -> compareJarPayloads(rebuilt, selected), "another resource must remain byte-identical");
+        b.put("settings.txt", a.get("settings.txt"));
+        b.put("other.class", new byte[]{9});
+        writeJar(rebuilt, b);
+        refuses(() -> compareJarPayloads(rebuilt, selected), "another class must remain byte-identical");
+        b.put("other.class", a.get("other.class"));
+        b.remove(rebuiltName);
+        b.put(rebuiltName.toUpperCase(java.util.Locale.ROOT), rebuiltClass);
+        writeJar(rebuilt, b);
+        refuses(() -> compareJarPayloads(rebuilt, selected), "case-only entry rename is not this_class aliasing");
+        b.remove(rebuiltName.toUpperCase(java.util.Locale.ROOT));
+        b.put(rebuiltName, selectedClass);
+        writeJar(rebuilt, b);
+        refuses(() -> compareJarPayloads(rebuilt, selected), "entry/internal name mismatch refuses");
+        b.put(rebuiltName, rebuiltClass);
+        for (String changed : List.of(prefix.replace("1".repeat(32), "2".repeat(32)) + "b".repeat(64) + suffix,
+                prefix + "b".repeat(64) + "otherdevjar/PlatformMethods.class",
+                rebuiltName.replace("grindless_common", "foreign_common"))) {
+            b.remove(rebuiltName);
+            b.put(changed, shimFixture(changed, "forge"));
+            writeJar(rebuilt, b);
+            refuses(() -> compareJarPayloads(rebuilt, selected), "module/hash32/suffix identity cannot vary");
+            b.remove(changed);
+            b.put(rebuiltName, rebuiltClass);
+        }
+        String extra = prefix + "c".repeat(64) + suffix;
+        a.put(extra, shimFixture(extra, "forge"));
+        b.put(extra, a.get(extra));
+        writeJar(selected, a);
+        writeJar(rebuilt, b);
+        refuses(() -> compareJarPayloads(rebuilt, selected), "an additional shim refuses even when its bytes match");
+        b.put("unexpected.txt", new byte[]{0});
+        writeJar(rebuilt, b);
+        refuses(() -> compareJarPayloads(rebuilt, selected), "additional entries are never ignored");
+        System.out.println("SYNTHETIC_SHIM_CONTRACT: exact path, one sealed self alias and body/header/identity/resource refusals.");
+    }
+
+    private static void writeJar(Path path, Map<String, byte[]> entries) throws IOException {
+        try (var zip = new java.util.zip.ZipOutputStream(Files.newOutputStream(path))) {
+            for (var entry : entries.entrySet()) {
+                zip.putNextEntry(new java.util.zip.ZipEntry(entry.getKey()));
+                zip.write(entry.getValue());
+                zip.closeEntry();
+            }
+        }
+    }
+
+    /** Small hand-authored classfile fixture, not imported code or a historical reference. */
+    private static byte[] shimFixture(String entry, String target) throws IOException {
+        var bytes = new java.io.ByteArrayOutputStream();
+        try (var out = new java.io.DataOutputStream(bytes)) {
+            out.writeInt(0xCAFEBABE); out.writeShort(0); out.writeShort(52); out.writeShort(10);
+            out.writeByte(1); out.writeUTF(entry.substring(0, entry.length() - 6));
+            out.writeByte(7); out.writeShort(1);
+            out.writeByte(1); out.writeUTF("java/lang/Object");
+            out.writeByte(7); out.writeShort(3);
+            out.writeByte(1); out.writeUTF("getCurrentTarget");
+            out.writeByte(1); out.writeUTF("()Ljava/lang/String;");
+            out.writeByte(1); out.writeUTF(target);
+            out.writeByte(8); out.writeShort(7);
+            out.writeByte(1); out.writeUTF("Code");
+            out.writeShort(0x0011); out.writeShort(2); out.writeShort(4);
+            out.writeShort(0); out.writeShort(0); out.writeShort(1);
+            out.writeShort(0x0009); out.writeShort(5); out.writeShort(6); out.writeShort(1);
+            out.writeShort(9); out.writeInt(15);
+            out.writeShort(1); out.writeShort(0); out.writeInt(3);
+            out.writeByte(0x12); out.writeByte(8); out.writeByte(0xB0);
+            out.writeShort(0); out.writeShort(0); out.writeShort(0);
+        }
+        return bytes.toByteArray();
     }
 
     private static Map<Path, String> snapshot(Path root) throws IOException {

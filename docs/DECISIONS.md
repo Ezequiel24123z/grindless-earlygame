@@ -192,7 +192,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0178](#adr-0178--continue-autonomously-and-deliver-ready-tiers-to-the-longitudinal-game) | Continue autonomously and deliver ready tiers to the longitudinal game | Accepted direct owner operating mandate |
 | [0179](#adr-0179--reproduce-four-slot-fit-first-factory-machines-without-repricing-bootstrap) | Reproduce four-slot-fit first-factory machines without repricing bootstrap | Accepted bounded acquisition scope; implementation/proof pending |
 | [0180](#adr-0180--reproduce-the-thermal-generator-through-an-honest-two-stage-subassembly) | Reproduce the Thermal Generator through an honest two-stage subassembly | Accepted bounded acquisition scope; implementation/proof pending |
-| [0181](#adr-0181--compare-one-generated-platform-shim-by-exact-self-name-equivalence) | Compare one generated platform shim by exact self-name equivalence | Accepted narrow source contract; upstream corroborated, execution pending |
+| [0181](#adr-0181--compare-one-generated-platform-shim-by-exact-self-name-equivalence) | Compare one generated platform shim by exact self-name equivalence | Source555dbe9 integrated; upstream/path corroborated, execution pending |
 
 ---
 
@@ -8535,8 +8535,10 @@ or adapter observations, not repeated native cycles for ordinary content.
 
 **Status.** Accepted bounded source-repair contract under ADR-0177/0178,
 2026-10-22. Upstream source independently corroborates the measured class
-structure and path-dependent name. Implementation and corrected publisher
-execution remain pending. The original G3 publication failure stays real;
+structure and path-dependent name; two exact declared devlibs path strings
+produce both observed stamps without PC access or path-variant guessing.
+Source555dbe9 is normally integrated; corrected Java/publisher execution
+remain pending. The original G3 publication failure stays real;
 no player update or reference publication follows from this decision.
 
 **Context.** G3 genuinely compiles/remaps the preserved dd0 source in a fresh
@@ -8553,8 +8555,9 @@ getCurrentTarget()Ljava/lang/String;, max_stack1/max_locals0, exactly ldc#8
 (`forge`)/areturn, with no exceptions/other attributes. Only self UTF8 differs;
 every other byte matches. The reported SELF-representation SHA-256 is
 `0a84a9c64d4531a5942f7fab6de29d225f189424344d81b42e4642cb468923d6`.
-Upstream source independently corroborates the generator below; the concrete
-input-path SHA preimages are not independently reobserved on the PC here.
+Upstream source independently corroborates the generator below. The source
+owner also confirms both actual stamps from the two declared input paths
+locally; private path values stay outside Git and no PC reexecution is inferred.
 
 **Decision.** Preserve ordinary exact comparison first. Only for one unmatched
 pair may the publisher accept this exact recognized class format/fingerprint

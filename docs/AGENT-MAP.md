@@ -133,8 +133,9 @@ compilers/remap, but publication rejects a generated309-byte PlatformMethods
 name/payload. ADR-0181's narrow source contract permits only one exact-format/
 fingerprint self-hash64 pair, preserving module/hash32/suffix and all other
 names/payloads/bytes. No prefix exclusion or general normalization. Upstream
-source corroborates the path stamp/template; implementation and real corrected
-export remain pending, with no attested artifact-to-commit build claim.
+source and exact declared path hashes corroborate the stamp/template.
+Normal555dbe9 implements this rule/logging and existing Java negatives; corrected
+Java/export execution remains pending, with no binary build-attestation claim.
 Reconsume the real original compiler receipt if its bindings are unchanged;
 do not build old classes again merely to test comparison code.
 

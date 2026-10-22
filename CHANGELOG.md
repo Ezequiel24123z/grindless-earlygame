@@ -15,6 +15,16 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate the sealed Architectury self-name comparator without compiler replay.**
+  Normal555dbe9 changes only the publisher and existing Java checks under
+  ADR-0181. Exact payload comparison remains first; a single fixed-template
+  self-hash64 pair may differ, with all other identities/code/resources exact.
+  Existing stdout distinguishes alias from binary equality and records both
+  JAR/receipt hashes. Parent reviews the source and verifies publisher0befca83
+  plus the author's156 non-JVM checks/path-stamp evidence; Java/publication
+  remain unexecuted. Preserve recipe/init and reconsume authentic5f911a77
+  through the existing eight-argument source-file CLI. No schema/flag/remapper,
+  historical-class adoption, new dependency or player change.
 - **Integrate the real five-output G3 data checkpoint with verified custody.**
   NormalA3e1efe470 has exact parent7c55 and only GENERATED.md plus four
   canonical outputs. Parent verifies all205 delivered files, bundle3a9ac835,
