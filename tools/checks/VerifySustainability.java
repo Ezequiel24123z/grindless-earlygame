@@ -110,7 +110,8 @@ public final class VerifySustainability {
                 VerifySustainability::coexistingClaimRequirements, VerifySustainability::claimsWithoutLedger,
                 VerifySustainability::executedClaimObjectiveScope, VerifySustainability::typedFindingTierScope,
                 VerifySustainability::outputOnlyFirstUseException, VerifySustainability::continuedCustody,
-                VerifySustainability::continuationRefusals, VerifySustainability::exhaustedContinuation)) {
+                VerifySustainability::continuationRefusals, VerifySustainability::exhaustedContinuation,
+                VerifySustainability::manualCapital)) {
             try {
                 fixture.run();
             } catch (Exception failure) {
@@ -118,6 +119,115 @@ public final class VerifySustainability {
                 failure.printStackTrace(System.out);
             }
         }
+    }
+
+    private static void manualCapital() {
+        group("R32 manual durable capital is finite construction, never automatic recurring feed");
+        Resource capital = new Resource(Kind.ITEM, "grindless:quern");
+        Fixture fixture = manualCapitalFixture(2);
+        var result = fixture.audit();
+        yes("a real normal machine is backed by the shared manufacturing-policy contract",
+                io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy.isManualFinalMachine(capital.id()));
+        yes("manual final assembly and automated operation establish the conditional model",
+                T0ConditionalGate.evaluate(result).pass());
+        yes("durable capital can be available without an automatic manufacturer", available(result, capital));
+        no("manual construction is not automatic net machine-item supply", renewable(result, capital));
+        yes("the installed machine's actual output can still be renewable", renewable(result, SIDE));
+        no("a capital-possession root is not a recurring feed", result.tiers().get(0).recurring().contains(capital));
+        eq("one installed machine needs exactly one real manual construction", 1L,
+                result.tiers().get(0).establishmentBatches().get("craft/manual_capital"));
+        var custody = result.tiers().get(0).witnessState();
+        yes("manual capital does not bypass completed conditional custody admission", custody != null);
+        if (custody != null) {
+            yes("the manually built machine is really installed", custody.installedMachines().contains(capital));
+            eq("installed capital is not also free material", 0L, custody.freeStock().getOrDefault(capital, 0L));
+            eq("manual assembly pays the complete finite material bill", 2L, custody.playerDeliveries().get(RAW));
+        }
+        fixture = manualCapitalFixture(1);
+        result = fixture.audit();
+        yes("qualitative availability never hides an insufficient manual capital bill",
+                hasRule(result, "entry_profile_insufficient"));
+        no("one unit cannot pay a two-unit construction bill", T0ConditionalGate.evaluate(result).pass());
+        eq("insufficient construction never issues a complete checkpoint", null, result.tiers().get(0).witnessState());
+
+        fixture = manualCapitalFixture(2);
+        fixture.meta(capital, new ResourceMetadata(ResourceClass.MANUAL_CAPITAL, null, 0, 0,
+                "craft/manual_capital", List.of(), null, null, null, null));
+        yes("manual capital cannot declare a first-renewable item tier", hasRule(fixture.audit(), "manual_capital_renewable"));
+        fixture = manualCapitalFixture(2);
+        fixture.meta(capital, metadata(ResourceClass.RENEWABLE, null, "craft/manual_capital",
+                List.of(), null, null, null, null));
+        result = fixture.audit();
+        yes("the old automatic-machine classification is explicitly rejected", hasRule(result, "manual_capital_renewable"));
+        no("a false renewable label cannot create automatic construction", renewable(result, capital));
+        no("a false renewable label cannot pass the conditional gate", T0ConditionalGate.evaluate(result).pass());
+        fixture = manualCapitalFixture(2);
+        fixture.meta(capital, metadata(ResourceClass.MANUAL_CAPITAL, null, "missing_manual_authority",
+                List.of(), null, null, null, null));
+        yes("manual capital still needs its real construction authority", hasRule(fixture.audit(), "manual_capital_invalid"));
+
+        fixture = manualCapitalFixture(2);
+        fixture.meta(RAW, metadata(ResourceClass.MANUAL_CAPITAL, null, "craft/manual_capital",
+                List.of(), null, null, null, null)).root(RAW);
+        result = fixture.audit();
+        yes("arbitrary raw feed cannot acquire the normal-machine exception", hasRule(result, "manual_capital_invalid"));
+        yes("the same raw feed remains a real finite recurring deficit", findingAt(result, "finite_dependency", RAW.key(), "T0"));
+        no("misclassification cannot waive a mandatory raw feed deficit", T0ConditionalGate.evaluate(result).pass());
+
+        fixture = manualCapitalFixture(2);
+        Resource burnt = item("burnt_capital");
+        fixture.add(route("burn_capital", Map.of(capital, 1L, SAFE, 1L), Map.of(), Map.of(burnt, 1L), null))
+                .meta(burnt, renewable("burn_capital")).root(burnt);
+        result = fixture.audit();
+        yes("a real capital input remains in recurring consumption closure", result.tiers().get(0).recurring().contains(capital));
+        yes("consuming a manual machine each cycle is an explicit finite dependency",
+                findingAt(result, "finite_dependency", capital.key(), "T0"));
+        no("capital cannot become unbounded recurring feed", renewable(result, burnt));
+        no("manual-capital possession does not waive a machine-consuming process", T0ConditionalGate.evaluate(result).pass());
+        fixture.environment("raw_supply", Map.of(RAW, 2L), null).meta(RAW, renewable("raw_supply"));
+        fixture.entryProfile = fixture.entryProfile.withBill(Map.of(), 0);
+        result = fixture.audit();
+        yes("even renewable construction feed does not automate final manual assembly",
+                findingAt(result, "finite_dependency", capital.key(), "T0"));
+        no("renewable raw feed cannot make a machine-consuming process renewable", renewable(result, burnt));
+
+        fixture = manualCapitalFixture(2);
+        fixture.add(route("retired/automatic_machine", Map.of(SAFE, 1L), Map.of(), Map.of(capital, 1L), null))
+                .policy("retired/automatic_machine", 1, true);
+        result = fixture.audit();
+        yes("an optional/noncanonical automatic final producer cannot hide behind manual capital",
+                hasRule(result, "manual_capital_automated"));
+        no("an automatic route cannot lend a normal machine a renewable label", renewable(result, capital));
+        no("retired automatic final producers block a source-bound gate", T0ConditionalGate.evaluate(result).pass());
+
+        Resource formed = new Resource(Kind.ITEM, "grindless:firing_chamber");
+        no("the actual formed-controller exception is not guessed from the word controller",
+                io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy.isManualFinalMachine(formed.id()));
+        Fixture controller = new Fixture().environment("formed_controller_supply", Map.of(formed, 1L), null)
+                .meta(formed, renewable("formed_controller_supply")).root(formed);
+        yes("an eligible real formed controller can retain automatic manufacture", renewable(controller.audit(), formed));
+        Resource component = new Resource(Kind.ITEM, "grindless:motor");
+        no("a component is not a final normal machine",
+                io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy.isManualFinalMachine(component.id()));
+        Fixture components = new Fixture().environment("component_supply", Map.of(component, 1L), null)
+                .meta(component, renewable("component_supply")).root(component);
+        yes("component automation does not require a duplicate manual method", renewable(components.audit(), component));
+    }
+
+    private static Fixture manualCapitalFixture(long raw) {
+        Resource capital = new Resource(Kind.ITEM, "grindless:quern");
+        Fixture fixture = gateFixture().terminal("manual_raw", RAW, TerminalKind.MANUAL_WORLD, false, true)
+                .meta(RAW, metadata(ResourceClass.BOOTSTRAP, null, null, List.of(), null, null, null, null));
+        fixture.add(new Route("craft/manual_capital", Authority.CRAFTING_JSON, "fixture:manual_capital", null,
+                Map.of(RAW, 2L), Map.of(), Map.of(capital, 1L), Set.of(), 0, 0, Map.of(), Set.of(),
+                false, true, false));
+        fixture.meta(capital, metadata(ResourceClass.MANUAL_CAPITAL, null, "craft/manual_capital",
+                List.of(), null, null, null, null)).root(capital);
+        fixture.machines.put("CAPITAL_OPERATION", new Machine("CAPITAL_OPERATION", capital, 0));
+        fixture.add(route("capital/operation", Map.of(SAFE, 1L), Map.of(), Map.of(SIDE, 1L), "CAPITAL_OPERATION"))
+                .meta(SIDE, renewable("capital/operation")).root(SIDE);
+        fixture.entryProfile = fixture.entryProfile.withBill(Map.of(RAW, raw), 0);
+        return fixture;
     }
 
     private static void continuedCustody() {
@@ -2135,7 +2245,7 @@ public final class VerifySustainability {
 
     private static void modelContracts() {
         group("typed model contracts");
-        eq("seven canonical resource classes", 7, ResourceClass.values().length);
+        eq("seven supply classes plus explicit manual durable capital", 8, ResourceClass.values().length);
         eq("ten canonical side-stream classes", 10, SideStreamClass.values().length);
         throwsArgument("negative authority batches are rejected", () -> route("invalid",
                 Map.of(RAW, -1L), Map.of(), Map.of(PRODUCT, 1L), null));

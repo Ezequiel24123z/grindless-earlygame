@@ -5,6 +5,7 @@ import io.github.ezequiel24123z.grindless.recipe.BootstrapProcesses;
 import io.github.ezequiel24123z.grindless.recipe.BootstrapRecipes;
 import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
 import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
+import io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy;
 import io.github.ezequiel24123z.grindless.recipe.RenewableProcesses;
 import io.github.ezequiel24123z.grindless.research.ResearchLogic;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
@@ -103,7 +104,7 @@ public final class T0Sustainability {
         REQUIRED_QUESTS.forEach(id -> unlock(policies, "quest/" + id, false));
         OPTIONAL_QUESTS.forEach(id -> unlock(policies, "quest/" + id, true));
         policies.put("assemble/thermal_generator_core", new RoutePolicy(1, true, Set.of()));
-        policies.put("assemble/thermal_generator", new RoutePolicy(1, true, Set.of()));
+        policies.put("craft/thermal_generator_from_core", new RoutePolicy(1, true, Set.of()));
 
         Map<String, Machine> machines = new TreeMap<>(sourceFacts.machines());
         machines.put("CRAFTING_TABLE", new Machine("CRAFTING_TABLE", item("minecraft:crafting_table"), 0));
@@ -146,11 +147,27 @@ public final class T0Sustainability {
         renewable.put(item("grindless:slag"), "bootstrap/reduce_copper");
         for (Route route : snapshot.routes().values()) {
             if (MachineFamily.ASSEMBLY_BENCH.name().equals(route.family())) {
-                route.retainedOutputs().keySet().forEach(resource -> renewable.putIfAbsent(resource, route.id()));
+                route.retainedOutputs().keySet().stream()
+                        .filter(resource -> !ManufacturingPolicy.isManualFinalMachine(resource.id()))
+                        .forEach(resource -> renewable.putIfAbsent(resource, route.id()));
             }
         }
         renewable.forEach((resource, route) -> metadata.put(resource, new ResourceMetadata(ResourceClass.RENEWABLE,
                 null, used.contains(resource) ? 0 : null, 0, route, List.of(), null, null, null, null)));
+        for (Machine machine : machines.values()) {
+            Resource capital = machine.construction();
+            if (ManufacturingPolicy.isManualFinalMachine(capital.id())) {
+                // Select the actual existing manual authority, never invent a construction bill.
+                String id = "craft/" + capital.id().substring(capital.id().indexOf(':') + 1);
+                Route craft = snapshot.routes().get(id);
+                String canonical = craft != null && !craft.automatable() && !craft.oneShot()
+                        && craft.retainedOutputs().containsKey(capital) ? id : null;
+                metadata.put(capital, new ResourceMetadata(ResourceClass.MANUAL_CAPITAL, null, 0, null,
+                        canonical, List.of(), new Handling(Action.STORE, true, false, null, null), null, null,
+                        "Manual final assembly establishes durable capital; its operating outputs, not the "
+                                + "machine item itself, may have automatic renewable supply."));
+            }
+        }
         Resource grog = item(BootstrapProcesses.GROG);
         metadata.put(grog, new ResourceMetadata(ResourceClass.RENEWABLE, SideStreamClass.BYPRODUCT_CURRENT,
                 0, 0, renewable.get(grog), List.of(), new Handling(Action.REUSE, true, false, null, null),
@@ -179,7 +196,7 @@ public final class T0Sustainability {
                 "craft/relay_matrix", List.of(), null, null, null, null));
         metadata.put(item(FabricationLogic.THERMAL_GENERATOR_CORE), new ResourceMetadata(null, null, 1, null,
                 "assemble/thermal_generator_core", List.of(), new Handling(Action.STORE, true, false, null, null),
-                null, null, "Assembler component consumed by assemble/thermal_generator. "
+                null, null, "Assembler component consumed by manual craft/thermal_generator_from_core. "
                 + "Automatic net supply and renewable establishment are unproved."));
         for (Terminal terminal : snapshot.terminals().values()) {
             if (terminal.kind() == TerminalKind.ENVIRONMENT && terminal.unlockTier() == 0

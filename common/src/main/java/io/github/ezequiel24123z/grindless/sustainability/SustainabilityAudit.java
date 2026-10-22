@@ -1,5 +1,7 @@
 package io.github.ezequiel24123z.grindless.sustainability;
 
+import io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -435,6 +437,22 @@ public final class SustainabilityAudit {
                     && metadata.firstRenewableTier() == null) {
                 add("renewable_tier_unknown", resource.key(), "", UNKNOWN, "First-renewable tier is not authored.");
             }
+            if (metadata != null && metadata.resourceClass() == ResourceClass.MANUAL_CAPITAL) {
+                Route construction = metadata.canonicalRoute() == null ? null
+                : snapshot.routes().get(metadata.canonicalRoute());
+                if (!manualCapital(resource) || !manualCapitalRoute(construction, resource)) {
+                    add("manual_capital_invalid", resource.key(), "", ERROR,
+                    "Manual capital needs an actual normal-machine contract and a real manual final "
+                            + "construction authority; the class cannot exempt arbitrary feed or stock.");
+                }
+                if (metadata.firstRenewableTier() != null) {
+                    add("manual_capital_renewable", resource.key(), "", ERROR,
+                    "Manual final capital has no automatic item-renewability tier.");
+                }
+            } else if (metadata != null && renewableClass(metadata.resourceClass()) && normalMachine(resource)) {
+                add("manual_capital_renewable", resource.key(), "", ERROR,
+                "A normal final machine cannot be labelled an automatic renewable item supply.");
+            }
             if (resource.kind() == Kind.TAG) {
                 TagResolution tag = snapshot.tags().get(resource);
                 if (tag == null || !tag.complete()) {
@@ -451,6 +469,11 @@ public final class SustainabilityAudit {
             }
         }
         for (Route route : snapshot.routes().values()) {
+            if (route.automatable() && route.retainedOutputs().keySet().stream().anyMatch(SustainabilityAudit::normalMachine)) {
+                add("manual_capital_automated", route.id(), "", ERROR,
+                        "Automatic final normal-machine manufacture is retired; operating/component routes "
+                                + "do not justify an automatic capital output.");
+            }
             RoutePolicy policy = annotations.routes().get(route.id());
             if (policy == null || policy.unlockTier() == null) {
                 add("route_tier_unknown", route.id(), "", UNKNOWN, "Route unlock/optional policy is not authored.");
@@ -627,7 +650,9 @@ public final class SustainabilityAudit {
         Set<Resource> construction = new TreeSet<>();
         Set<Resource> visitedRecurring = new TreeSet<>();
         for (Resource root : roots) {
-            closure(root, true, tier, mandatory, recurring, closureRoutes, construction, visitedRecurring);
+            // Possession/installation of durable capital is not recurring consumption. A capital
+            // input of an actual operating route still follows the ordinary recurring closure.
+            closure(root, !manualCapital(root), tier, mandatory, recurring, closureRoutes, construction, visitedRecurring);
         }
         if (plan.exitObjective() != null) {
             mandatory.add(plan.exitObjective());
@@ -1052,7 +1077,8 @@ public final class SustainabilityAudit {
         }
         Set<Resource> unlimited = new TreeSet<>();
         for (Resource output : outputs) {
-            if (net.getOrDefault(output, BigInteger.ZERO).signum() > 0 && resolvableOutput(output)) {
+            if (net.getOrDefault(output, BigInteger.ZERO).signum() > 0 && resolvableOutput(output)
+                    && !normalMachine(output)) {
                 Route selected = canonical(output, tier, false);
                 if (selected != null && loop.memberRoutes().contains(selected.id())) {
                     unlimited.add(output);
@@ -1445,6 +1471,7 @@ public final class SustainabilityAudit {
     boolean canRenew(Route route, int tier, Set<Resource> available, Set<Resource> renewable,
                      Set<String> availableRoutes) {
         return unlocked(route, tier) && route.automatable() && !route.oneShot() && !optional(route)
+                && route.retainedOutputs().keySet().stream().noneMatch(SustainabilityAudit::normalMachine)
                 && (route.modOwned() || route.authority() == Authority.VANILLA_TRANSFORMATION)
                 && !zeroInputUnjustified(route) && requirements(route, available, availableRoutes, tier)
                 && contains(available, route.inputs().keySet()) && contains(available, route.catalysts().keySet())
@@ -1531,13 +1558,32 @@ public final class SustainabilityAudit {
     }
 
     private boolean finiteSource(Resource resource) {
-        boolean direct = snapshot.terminals().values().stream().anyMatch(terminal -> terminal.resource().equals(resource)
+        boolean direct = manualCapital(resource)
+                || snapshot.terminals().values().stream().anyMatch(terminal -> terminal.resource().equals(resource)
                 && !terminal.renewable())
                 || snapshot.routes().values().stream().anyMatch(route -> route.oneShot() && outputAmount(route, resource) > 0);
         TagResolution tag = snapshot.tags().get(resource);
         return direct || tag != null && tag.members().stream().anyMatch(member ->
                 snapshot.terminals().values().stream().anyMatch(terminal -> terminal.resource().equals(member)
                         && !terminal.renewable()));
+    }
+
+    private boolean manualCapital(Resource resource) {
+        ResourceMetadata metadata = annotations.resources().get(resource);
+        return metadata != null && metadata.resourceClass() == ResourceClass.MANUAL_CAPITAL && normalMachine(resource);
+    }
+
+    private static boolean normalMachine(Resource resource) {
+        return resource.kind() == Kind.ITEM && resource.rating() == 0
+                && ManufacturingPolicy.isManualFinalMachine(resource.id());
+    }
+
+    private static boolean manualCapitalRoute(Route route, Resource resource) {
+        return route != null && !route.automatable() && !route.oneShot()
+                && route.durationTicks() == 0 && route.fuPerTick() == 0
+                && route.retainedOutputs().getOrDefault(resource, 0L) > 0
+                && Set.of(Authority.CRAFTING_JSON, Authority.BOOTSTRAP_RECIPES, Authority.T1_RECIPES,
+                Authority.VANILLA_TRANSFORMATION).contains(route.authority());
     }
 
     private boolean vanillaSource(Resource resource) {

@@ -23,7 +23,7 @@ public final class T1Progression {
 
     public enum Requirement { MANDATORY, OPTIONAL, EXIT }
 
-    /** Dependencies name other lines, not quest claims or runtime unlock flags. */
+    /** Dependencies name lines; routeIds include authored alternatives, not mandatory duplicate crafts. */
     public record Line(String id, Requirement requirement, List<String> routeIds, Set<String> requires) {
         public Line {
             Objects.requireNonNull(id, "line id");
@@ -64,18 +64,17 @@ public final class T1Progression {
                             "press/coil/copper", "craft/machine_casing"), Set.of("reduction")),
             new Line("assembly", Requirement.MANDATORY,
                     List.of("craft/assembler", CASING_ROUTE, REPRODUCTION_ROUTE), Set.of("forming", "glass")),
-            new Line("factory_reproduction", Requirement.OPTIONAL,
-                    List.of("assemble/pulverizer", "assemble/arc_furnace", "assemble/press", "assemble/assembler",
-                            "assemble/thermal_generator_core", "assemble/thermal_generator"),
+            new Line("component_fabrication", Requirement.OPTIONAL,
+                    List.of("assemble/thermal_generator_core", "craft/thermal_generator_from_core"),
                     Set.of("assembly")),
             new Line("wire_forming", Requirement.OPTIONAL,
-                    List.of("assemble/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper"),
+                    List.of("craft/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper"),
                     Set.of("assembly")),
             new Line("tool_reproduction", Requirement.OPTIONAL,
                     List.of("assemble/plate_die", "assemble/rod_die", "assemble/gear_die", "assemble/coil_die"),
                     Set.of("assembly")),
             new Line("wet_beneficiation", Requirement.OPTIONAL,
-                    List.of("assemble/motor", "assemble/chemical_washer", "b2/iron", "b2/copper",
+                    List.of("assemble/motor", "craft/chemical_washer", "b2/iron", "b2/copper",
                             "b2_r1/iron", "b2_r1/copper"), Set.of("assembly")),
             new Line("relay_f2", Requirement.EXIT,
                     List.of("craft/flux_cell", FLUX_CELL_ROUTE, EXIT_ROUTE), Set.of("assembly")),
@@ -97,6 +96,17 @@ public final class T1Progression {
     /** Shared by runtime teaching and source-bound exports; the order is the teaching order. */
     public static List<Line> lines() {
         return LINES;
+    }
+
+    /**
+     * One finite model witness chooses automatic Flux Cell production; the actual manual
+     * alternative remains visible to the player. This selection is not a world/quest permission.
+     * Manual casing is necessary before the first Assembler, so its seed is not an alternative
+     * to the later automatic component batch in this particular witness.
+     */
+    public static List<String> finiteRouteIds() {
+        return LINES.stream().filter(Line::mandatory).flatMap(line -> line.routeIds().stream())
+                .filter(id -> !id.equals("craft/flux_cell")).distinct().toList();
     }
 
     /** Rejects a stale teaching reference rather than silently substituting a different line. */
@@ -137,7 +147,7 @@ public final class T1Progression {
             case "copper_coil" -> List.of("craft/coil_die", "press/coil/copper");
             case "assembler" -> Stream.concat(byQuest(taskId).routeIds().stream(),
                     byId("wire_forming").routeIds().stream()).toList();
-            case "matrix_line" -> List.of("bench/data_core", "calibrate/data_core", REPRODUCTION_ROUTE);
+            case "matrix_line" -> List.of("bench/data_core", "calibrate/data_core", ENTRY_ROUTE, REPRODUCTION_ROUTE);
             case "flux_cell" -> List.of("craft/flux_cell", FLUX_CELL_ROUTE);
             case "glass" -> List.of("source/geological_aggregate", "bootstrap/dry_aggregate",
                     "bootstrap/wet_aggregate", "source/biomass", "bootstrap/biocarbon",

@@ -15,6 +15,16 @@ entries below reference those records by id.
 
 ### Added
 
+- **Rebind the conserved first-factory witness to manual capital (ADR-0188, lane C).**
+  Add explicit nonrenewable `MANUAL_CAPITAL` for genuine normal-machine contracts:
+  finite manual construction can establish installed capital while real recurring
+  feeds still require automatic renewable supply. Preserve generic custody and
+  admission; retire the factory-reproduction teaching goal, select manual Wire
+  Mill/Washer authorities and distinguish player method alternatives from the
+  finite witness's chosen batches. The shared pure `ManufacturingPolicy` API is
+  supplied by recipe lane A, not duplicated here. Capital/formatting regression
+  contracts are authored; remaining selector/provenance updates follow in this
+  source lane. No Java/model/native/writer or player-save result is claimed.
 - **Correct the manufacturing objective to manual final normal machines.**
   The owner explicitly rejects universal factory self-replication. ADR-0188
   supersedes automatic complete-normal-machine fabrication, not automated

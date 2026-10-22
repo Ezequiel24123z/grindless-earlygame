@@ -95,7 +95,7 @@ public final class QuestTeaching {
             case "conveyors" -> Set.of("craft/conveyor_belt");
             case "workshop_flow" -> Set.of("craft/crude_manipulator", "craft/conveyor_belt");
             case "assembly_bench" -> Set.of("craft/assembly_bench", "bench/data_core", "bench/crank_handle",
-                    "bench/hand_pump", "bench/biocultivator");
+                    "craft/hand_pump", "craft/biocultivator");
             case "research_terminal" -> Set.of("craft/research_terminal", "calibrate/data_core");
             case "data_core" -> Set.of("craft/data_core", "bench/data_core");
             case "calibrate", "calibrated_core" -> Set.of("craft/data_core", "calibrate/data_core");
