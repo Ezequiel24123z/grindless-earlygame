@@ -108,6 +108,40 @@ public final class VerifySustainabilityT0 {
             eq("each allowlisted construction has actual resolved recipe data: " + id, true, craft != null);
             eq("vanilla construction crafts stay manual: " + id, false, craft != null && craft.automatable());
         }
+        for (Machine machine : annotations.machines().values()) {
+            Resource capital = machine.construction();
+            if (!io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy.isManualFinalMachine(capital.id())) {
+                continue;
+            }
+            ResourceMetadata metadata = annotations.resources().get(capital);
+            eq("real normal-machine capital has its explicit nonrenewable class: " + capital.key(),
+            ResourceClass.MANUAL_CAPITAL, metadata.resourceClass());
+            eq("manual capital has no automatic item-renewability tier: " + capital.key(), null,
+            metadata.firstRenewableTier());
+            eq("manual capital uses an actual manual construction route: " + capital.key(), false,
+            snapshot.routes().get(metadata.canonicalRoute()).automatable());
+            eq("a normal machine item is not an R0 recurring supply: " + capital.key(), false,
+            tier.renewable().contains(capital));
+            eq("possession/installation is not a recurring raw-feed obligation: " + capital.key(), false,
+            tier.recurring().contains(capital));
+            eq("normal capital remains constructible and available: " + capital.key(), true,
+            tier.available().contains(capital));
+        }
+        for (Route route : snapshot.routes().values()) {
+            RoutePolicy policy = annotations.routes().get(route.id());
+            if (policy == null || !Integer.valueOf(0).equals(policy.unlockTier())) {
+                continue;
+            }
+            for (Resource output : route.retainedOutputs().keySet()) {
+                if (io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy.isManualFinalMachine(output.id())) {
+            eq("all actual T0 normal-machine outputs, not only process-family bindings, have capital metadata: "
+                            + route.id() + "/" + output.key(),
+                    ResourceClass.MANUAL_CAPITAL, annotations.resources().get(output).resourceClass());
+            eq("a T0 capital output is never a renewable item claim: " + output.key(), false,
+                    tier.renewable().contains(output));
+                }
+            }
+        }
         Resource exit = annotations.ledger().get(0).exitObjective();
         Resource relayDeclaration = new Resource(Kind.ITEM, "grindless:relay_matrix");
         eq("the T0 exit retains the exact physical F1 quest identity",

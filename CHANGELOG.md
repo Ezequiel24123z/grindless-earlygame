@@ -22,9 +22,14 @@ entries below reference those records by id.
   admission; retire the factory-reproduction teaching goal, select manual Wire
   Mill/Washer authorities and distinguish player method alternatives from the
   finite witness's chosen batches. The shared pure `ManufacturingPolicy` API is
-  supplied by recipe lane A, not duplicated here. Capital/formatting regression
-  contracts are authored; remaining selector/provenance updates follow in this
-  source lane. No Java/model/native/writer or player-save result is claimed.
+  supplied by recipe lane A, not duplicated here. Existing capital/conservation,
+  T0/T1/teaching/guidance contracts cover real manual construction, recurring-feed
+  refusal, alias/automatic-producer negatives, manual control and method choices;
+  native51 IDs/rewards and all33 deployed T0 lesson bodies remain exact.
+  Explicit exporter lists author43 sources/98 image expressions, including A's
+  policy/Kind dependency, not standalone compilation. Source/JSON/copy checks and
+  963 links pass; an incorrect observer-only adapter path is preserved/corrected.
+  No Java/model/native/writer, actual class hash or player-save result is claimed.
 - **Correct the manufacturing objective to manual final normal machines.**
   The owner explicitly rejects universal factory self-replication. ADR-0188
   supersedes automatic complete-normal-machine fabrication, not automated

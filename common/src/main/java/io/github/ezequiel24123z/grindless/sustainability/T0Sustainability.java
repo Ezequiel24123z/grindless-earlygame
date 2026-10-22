@@ -154,18 +154,26 @@ public final class T0Sustainability {
         }
         renewable.forEach((resource, route) -> metadata.put(resource, new ResourceMetadata(ResourceClass.RENEWABLE,
                 null, used.contains(resource) ? 0 : null, 0, route, List.of(), null, null, null, null)));
-        for (Machine machine : machines.values()) {
-            Resource capital = machine.construction();
-            if (ManufacturingPolicy.isManualFinalMachine(capital.id())) {
+        Set<Resource> capitals = new TreeSet<>();
+        machines.values().forEach(machine -> capitals.add(machine.construction()));
+        for (Route route : snapshot.routes().values()) {
+            RoutePolicy policy = policies.get(route.id());
+            if (policy != null && Integer.valueOf(0).equals(policy.unlockTier())) {
+                // Some durable normal blocks (for example transport/extraction equipment) are
+                // quest subjects rather than a process-family construction binding.
+                capitals.addAll(route.retainedOutputs().keySet());
+            }
+        }
+        for (Resource capital : capitals) {
+            if (capital.kind() == Kind.ITEM && capital.rating() == 0
+                    && ManufacturingPolicy.isManualFinalMachine(capital.id())) {
                 // Select the actual existing manual authority, never invent a construction bill.
                 String id = "craft/" + capital.id().substring(capital.id().indexOf(':') + 1);
                 Route craft = snapshot.routes().get(id);
                 String canonical = craft != null && !craft.automatable() && !craft.oneShot()
                         && craft.retainedOutputs().containsKey(capital) ? id : null;
                 metadata.put(capital, new ResourceMetadata(ResourceClass.MANUAL_CAPITAL, null, 0, null,
-                        canonical, List.of(), new Handling(Action.STORE, true, false, null, null), null, null,
-                        "Manual final assembly establishes durable capital; its operating outputs, not the "
-                                + "machine item itself, may have automatic renewable supply."));
+                        canonical, List.of(), new Handling(Action.STORE, true, false, null, null), null, null, null));
             }
         }
         Resource grog = item(BootstrapProcesses.GROG);

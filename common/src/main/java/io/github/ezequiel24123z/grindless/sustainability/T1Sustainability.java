@@ -64,6 +64,7 @@ public final class T1Sustainability {
         return Collections.unmodifiableMap(selected);
     }
 
+    /** Method options in required lines, not an instruction to execute every dual-method alternative. */
     public static List<Route> mandatoryRoutes(Snapshot snapshot) {
         Map<String, Route> routes = new TreeMap<>();
         Map<String, List<Route>> selected = selectedRoutes(snapshot);
@@ -73,7 +74,7 @@ public final class T1Sustainability {
     }
 
     /**
-     * Classifies each direct consumed/catalytic edge. T1 producer links are deliberately not a
+     * Classifies each method option's direct consumed/catalytic edge. T1 producer links are deliberately not a
      * claim of automatic net supply; recursive T0 supply comes only from the existing audit.
      */
     public static List<InputEvidence> inputs(SustainabilityAudit.Result t0) {
@@ -276,8 +277,8 @@ public final class T1Sustainability {
                         .append(" | `").append(route.id()).append("` | ")
                         .append(route.family() == null ? "Manual craft" : route.family())
                         .append(" | ").append(describe(route.inputs(), Set.of()))
-                        .append(route.conditions().keySet().stream().anyMatch(key -> key.startsWith("minimum_control_input_"))
-                                ? " (minimum control; higher ratings of any architecture may substitute; canonical supply shown)" : "")
+                        .append(route.conditions().keySet().stream().anyMatch(key -> key.startsWith("minimum_control_"))
+                                ? " (minimum control; valid higher-rated registered control may substitute; canonical supply shown)" : "")
                         .append(" | ").append(describe(route.catalysts(), Set.of()))
                         .append(" | ").append(describe(route.outputs(), route.discharged()))
                         .append(" | ").append(route.durationTicks()).append(" | ").append(route.fuPerTick())

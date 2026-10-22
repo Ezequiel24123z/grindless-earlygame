@@ -199,6 +199,15 @@ public final class VerifySustainability {
                 hasRule(result, "manual_capital_automated"));
         no("an automatic route cannot lend a normal machine a renewable label", renewable(result, capital));
         no("retired automatic final producers block a source-bound gate", T0ConditionalGate.evaluate(result).pass());
+        fixture = manualCapitalFixture(2);
+        Resource tag = new Resource(Kind.TAG, "fixture:normal_machines");
+        fixture.builder.tag(tag, new TagResolution(Set.of(capital), true, Set.of(), List.of("fixture:capital_alias")));
+        fixture.add(route("retired/tagged_machine", Map.of(SAFE, 1L), Map.of(), Map.of(tag, 1L), null))
+                .meta(tag, renewable("retired/tagged_machine"));
+        result = fixture.audit();
+        yes("a tag alias cannot hide an automatic normal-machine producer", hasRule(result, "manual_capital_automated"));
+        no("tag expansion cannot lend a normal machine renewable item supply", renewable(result, capital));
+        no("a tagged normal-machine supply cannot be certified either", renewable(result, tag));
 
         Resource formed = new Resource(Kind.ITEM, "grindless:firing_chamber");
         no("the actual formed-controller exception is not guessed from the word controller",
