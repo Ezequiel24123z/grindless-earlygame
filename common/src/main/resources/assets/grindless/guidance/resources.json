@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "content_sha256": "44e9078efc7360152058bf2b6f58ddfa9501f75b6682201bf438374d23d19cb5",
+  "content_sha256": "3b26561fc6152a75523091438c58ff1b1f9dd24aadda70a8ed7ae75fedd1ab7c",
   "resources": [
     {
       "resource": {
@@ -111,39 +111,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/arc_furnace",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/assembler",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/atmospheric_intake",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/blueprint_tool",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -155,51 +122,7 @@
           "discharged": false
         },
         {
-          "route": "assemble/boiler",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/assembly_bench",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/basic_tank",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/biocultivator",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/biomass_dynamo",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
           "kind": "consumed_input",
@@ -243,17 +166,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/bootstrap/clay_mixer",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/conveyor_belt",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -277,17 +189,6 @@
         },
         {
           "route": "assemble/bootstrap/crank_handle",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/crude_extractor",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
           "kind": "consumed_input",
@@ -331,50 +232,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/bootstrap/furnace",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/geological_collector",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/hand_crank_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/hand_pump",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/multitool",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -397,29 +254,7 @@
           "discharged": false
         },
         {
-          "route": "assemble/bootstrap/quern",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/quest_book",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/research_terminal",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
           "kind": "consumed_input",
@@ -529,51 +364,7 @@
           "discharged": false
         },
         {
-          "route": "assemble/caster",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/chemical_reactor",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/chemical_washer",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/coil_die",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/condenser",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
           "kind": "consumed_input",
@@ -595,40 +386,7 @@
           "discharged": false
         },
         {
-          "route": "assemble/deconstructor",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/drill_cell",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/electric_pump",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/electrolysis_cell",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
           "kind": "consumed_input",
@@ -661,29 +419,7 @@
           "discharged": false
         },
         {
-          "route": "assemble/flotation_cell",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/fluid_manipulator",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/fluid_well",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
           "kind": "consumed_input",
@@ -782,17 +518,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/induction_furnace",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/industrial_tank",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -805,17 +530,6 @@
         },
         {
           "route": "assemble/ingot_mould",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/logic_controller",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
           "kind": "consumed_input",
@@ -870,17 +584,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/pattern_scanner",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/plate_die",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -903,29 +606,7 @@
           "discharged": false
         },
         {
-          "route": "assemble/press",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/pressure_pipe",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/pulverizer",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
           "kind": "consumed_input",
@@ -1002,17 +683,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/solar_array",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/stack_manipulator",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -1024,17 +694,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/thermal_generator",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 1,
-          "optional": true,
-          "discharged": false
-        },
-        {
           "route": "assemble/thermal_generator_core",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -1043,17 +702,6 @@
           "unconditional": true,
           "unlock_tier": 1,
           "optional": true,
-          "discharged": false
-        },
-        {
-          "route": "assemble/wire_mill",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
           "discharged": false
         },
         {
@@ -2113,40 +1761,7 @@
           "discharged": false
         },
         {
-          "route": "bench/assembly_bench",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/basic_tank",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/biocultivator",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/biomass_dynamo",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
           "kind": "consumed_input",
@@ -2190,17 +1805,6 @@
           "discharged": false
         },
         {
-          "route": "bench/clay_mixer",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/conveyor_belt",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -2224,17 +1828,6 @@
         },
         {
           "route": "bench/crank_handle",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/crude_extractor",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
           "kind": "consumed_input",
@@ -2278,50 +1871,6 @@
           "discharged": false
         },
         {
-          "route": "bench/furnace",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/geological_collector",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/hand_crank_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/hand_pump",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/multitool",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -2344,29 +1893,7 @@
           "discharged": false
         },
         {
-          "route": "bench/quern",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/quest_book",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/research_terminal",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
           "kind": "consumed_input",
@@ -5151,39 +4678,23 @@
         "rating": 0,
         "registry": "items"
       },
-      "resource_class": "renewable",
+      "resource_class": "manual_capital",
       "side_stream_class": null,
       "first_use_tier": 0,
-      "first_renewable_tier": 0,
-      "canonical_route": "bench/assembly_bench",
+      "first_renewable_tier": null,
+      "canonical_route": "craft/assembly_bench",
       "future_consumers": [],
-      "handling": null,
+      "handling": {
+        "action": "store",
+        "discard_allowed": true,
+        "hazardous": false,
+        "containment": null,
+        "treatment_route": null
+      },
       "recycling": null,
       "originating_catalyst": null,
       "uncertainty": null,
       "producers": [
-        {
-          "route": "assemble/bootstrap/assembly_bench",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:assembly_bench",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "bench/assembly_bench",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:assembly_bench",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
         {
           "route": "craft/assembly_bench",
           "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/assembly_bench.json",
@@ -5198,7 +4709,7 @@
       ],
       "consumers": [],
       "sources": {
-        "canonical:bench/assembly_bench": "ProcessGraph.generate"
+        "canonical:craft/assembly_bench": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/assembly_bench.json"
       }
     },
     {
@@ -5265,39 +4776,23 @@
         "rating": 0,
         "registry": "items"
       },
-      "resource_class": "renewable",
+      "resource_class": "manual_capital",
       "side_stream_class": null,
       "first_use_tier": 0,
-      "first_renewable_tier": 0,
-      "canonical_route": "bench/biocultivator",
+      "first_renewable_tier": null,
+      "canonical_route": "craft/biocultivator",
       "future_consumers": [],
-      "handling": null,
+      "handling": {
+        "action": "store",
+        "discard_allowed": true,
+        "hazardous": false,
+        "containment": null,
+        "treatment_route": null
+      },
       "recycling": null,
       "originating_catalyst": null,
       "uncertainty": null,
       "producers": [
-        {
-          "route": "assemble/bootstrap/biocultivator",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:biocultivator",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "bench/biocultivator",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:biocultivator",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
         {
           "route": "craft/biocultivator",
           "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/biocultivator.json",
@@ -5312,7 +4807,7 @@
       ],
       "consumers": [],
       "sources": {
-        "canonical:bench/biocultivator": "ProcessGraph.generate"
+        "canonical:craft/biocultivator": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/biocultivator.json"
       }
     },
     {
@@ -5413,39 +4908,23 @@
         "rating": 0,
         "registry": "items"
       },
-      "resource_class": "renewable",
+      "resource_class": "manual_capital",
       "side_stream_class": null,
       "first_use_tier": 0,
-      "first_renewable_tier": 0,
-      "canonical_route": "bench/biomass_dynamo",
+      "first_renewable_tier": null,
+      "canonical_route": "craft/biomass_dynamo",
       "future_consumers": [],
-      "handling": null,
+      "handling": {
+        "action": "store",
+        "discard_allowed": true,
+        "hazardous": false,
+        "containment": null,
+        "treatment_route": null
+      },
       "recycling": null,
       "originating_catalyst": null,
       "uncertainty": null,
       "producers": [
-        {
-          "route": "assemble/bootstrap/biomass_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:biomass_dynamo",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "bench/biomass_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:biomass_dynamo",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
         {
           "route": "craft/biomass_dynamo",
           "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/biomass_dynamo.json",
@@ -5460,7 +4939,7 @@
       ],
       "consumers": [],
       "sources": {
-        "canonical:bench/biomass_dynamo": "ProcessGraph.generate"
+        "canonical:craft/biomass_dynamo": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/biomass_dynamo.json"
       }
     },
     {
@@ -6236,39 +5715,23 @@
         "rating": 0,
         "registry": "items"
       },
-      "resource_class": "renewable",
+      "resource_class": "manual_capital",
       "side_stream_class": null,
       "first_use_tier": 0,
-      "first_renewable_tier": 0,
-      "canonical_route": "bench/clay_mixer",
+      "first_renewable_tier": null,
+      "canonical_route": "craft/clay_mixer",
       "future_consumers": [],
-      "handling": null,
+      "handling": {
+        "action": "store",
+        "discard_allowed": true,
+        "hazardous": false,
+        "containment": null,
+        "treatment_route": null
+      },
       "recycling": null,
       "originating_catalyst": null,
       "uncertainty": null,
       "producers": [
-        {
-          "route": "assemble/bootstrap/clay_mixer",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:clay_mixer",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "bench/clay_mixer",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:clay_mixer",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
         {
           "route": "craft/clay_mixer",
           "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/clay_mixer.json",
@@ -6283,7 +5746,7 @@
       ],
       "consumers": [],
       "sources": {
-        "canonical:bench/clay_mixer": "ProcessGraph.generate"
+        "canonical:craft/clay_mixer": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/clay_mixer.json"
       }
     },
     {
@@ -6595,39 +6058,23 @@
         "rating": 0,
         "registry": "items"
       },
-      "resource_class": "renewable",
+      "resource_class": "manual_capital",
       "side_stream_class": null,
       "first_use_tier": 0,
-      "first_renewable_tier": 0,
-      "canonical_route": "bench/crude_extractor",
+      "first_renewable_tier": null,
+      "canonical_route": "craft/crude_extractor",
       "future_consumers": [],
-      "handling": null,
+      "handling": {
+        "action": "store",
+        "discard_allowed": true,
+        "hazardous": false,
+        "containment": null,
+        "treatment_route": null
+      },
       "recycling": null,
       "originating_catalyst": null,
       "uncertainty": null,
       "producers": [
-        {
-          "route": "assemble/bootstrap/crude_extractor",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:crude_extractor",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "bench/crude_extractor",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:crude_extractor",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
         {
           "route": "craft/crude_extractor",
           "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/crude_extractor.json",
@@ -6642,7 +6089,7 @@
       ],
       "consumers": [],
       "sources": {
-        "canonical:bench/crude_extractor": "ProcessGraph.generate"
+        "canonical:craft/crude_extractor": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/crude_extractor.json"
       }
     },
     {
@@ -6836,40 +6283,7 @@
       ],
       "consumers": [
         {
-          "route": "assemble/bootstrap/assembly_bench",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/biocultivator",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/chest",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/clay_mixer",
           "source": "ProcessGraph.generate",
           "via": "tag:grindless:boards",
           "kind": "consumed_input",
@@ -6913,40 +6327,7 @@
           "discharged": false
         },
         {
-          "route": "assemble/bootstrap/geological_collector",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/hand_pump",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/process_atlas",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/research_terminal",
           "source": "ProcessGraph.generate",
           "via": "tag:grindless:boards",
           "kind": "consumed_input",
@@ -6990,40 +6371,7 @@
           "discharged": false
         },
         {
-          "route": "bench/assembly_bench",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/biocultivator",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/chest",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/clay_mixer",
           "source": "ProcessGraph.generate",
           "via": "tag:grindless:boards",
           "kind": "consumed_input",
@@ -7067,40 +6415,7 @@
           "discharged": false
         },
         {
-          "route": "bench/geological_collector",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/hand_pump",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/process_atlas",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/research_terminal",
           "source": "ProcessGraph.generate",
           "via": "tag:grindless:boards",
           "kind": "consumed_input",
@@ -7298,13 +6613,19 @@
         "rating": 0,
         "registry": "items"
       },
-      "resource_class": "renewable",
+      "resource_class": "bootstrap",
       "side_stream_class": null,
       "first_use_tier": 0,
-      "first_renewable_tier": 0,
+      "first_renewable_tier": null,
       "canonical_route": "bench/firing_chamber",
       "future_consumers": [],
-      "handling": null,
+      "handling": {
+        "action": "store",
+        "discard_allowed": true,
+        "hazardous": false,
+        "containment": null,
+        "treatment_route": null
+      },
       "recycling": null,
       "originating_catalyst": null,
       "uncertainty": null,
@@ -7355,39 +6676,23 @@
         "rating": 0,
         "registry": "items"
       },
-      "resource_class": "renewable",
+      "resource_class": "manual_capital",
       "side_stream_class": null,
       "first_use_tier": 0,
-      "first_renewable_tier": 0,
-      "canonical_route": "bench/geological_collector",
+      "first_renewable_tier": null,
+      "canonical_route": "craft/geological_collector",
       "future_consumers": [],
-      "handling": null,
+      "handling": {
+        "action": "store",
+        "discard_allowed": true,
+        "hazardous": false,
+        "containment": null,
+        "treatment_route": null
+      },
       "recycling": null,
       "originating_catalyst": null,
       "uncertainty": null,
       "producers": [
-        {
-          "route": "assemble/bootstrap/geological_collector",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:geological_collector",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "bench/geological_collector",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:geological_collector",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
         {
           "route": "craft/geological_collector",
           "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/geological_collector.json",
@@ -7402,7 +6707,7 @@
       ],
       "consumers": [],
       "sources": {
-        "canonical:bench/geological_collector": "ProcessGraph.generate"
+        "canonical:craft/geological_collector": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/geological_collector.json"
       }
     },
     {
@@ -7412,39 +6717,23 @@
         "rating": 0,
         "registry": "items"
       },
-      "resource_class": "renewable",
+      "resource_class": "manual_capital",
       "side_stream_class": null,
       "first_use_tier": 0,
-      "first_renewable_tier": 0,
-      "canonical_route": "bench/hand_crank_dynamo",
+      "first_renewable_tier": null,
+      "canonical_route": "craft/hand_crank_dynamo",
       "future_consumers": [],
-      "handling": null,
+      "handling": {
+        "action": "store",
+        "discard_allowed": true,
+        "hazardous": false,
+        "containment": null,
+        "treatment_route": null
+      },
       "recycling": null,
       "originating_catalyst": null,
       "uncertainty": null,
       "producers": [
-        {
-          "route": "assemble/bootstrap/hand_crank_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:hand_crank_dynamo",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "bench/hand_crank_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:hand_crank_dynamo",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
         {
           "route": "craft/hand_crank_dynamo",
           "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/hand_crank_dynamo.json",
@@ -7459,7 +6748,7 @@
       ],
       "consumers": [],
       "sources": {
-        "canonical:bench/hand_crank_dynamo": "ProcessGraph.generate"
+        "canonical:craft/hand_crank_dynamo": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/hand_crank_dynamo.json"
       }
     },
     {
@@ -7469,39 +6758,23 @@
         "rating": 0,
         "registry": "items"
       },
-      "resource_class": "renewable",
+      "resource_class": "manual_capital",
       "side_stream_class": null,
       "first_use_tier": 0,
-      "first_renewable_tier": 0,
-      "canonical_route": "bench/hand_pump",
+      "first_renewable_tier": null,
+      "canonical_route": "craft/hand_pump",
       "future_consumers": [],
-      "handling": null,
+      "handling": {
+        "action": "store",
+        "discard_allowed": true,
+        "hazardous": false,
+        "containment": null,
+        "treatment_route": null
+      },
       "recycling": null,
       "originating_catalyst": null,
       "uncertainty": null,
       "producers": [
-        {
-          "route": "assemble/bootstrap/hand_pump",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:hand_pump",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "bench/hand_pump",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:hand_pump",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
         {
           "route": "craft/hand_pump",
           "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/hand_pump.json",
@@ -7516,7 +6789,7 @@
       ],
       "consumers": [],
       "sources": {
-        "canonical:bench/hand_pump": "ProcessGraph.generate"
+        "canonical:craft/hand_pump": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/hand_pump.json"
       }
     },
     {
@@ -7720,39 +6993,23 @@
         "rating": 0,
         "registry": "items"
       },
-      "resource_class": "renewable",
+      "resource_class": "manual_capital",
       "side_stream_class": null,
       "first_use_tier": 0,
-      "first_renewable_tier": 0,
-      "canonical_route": "bench/quern",
+      "first_renewable_tier": null,
+      "canonical_route": "craft/quern",
       "future_consumers": [],
-      "handling": null,
+      "handling": {
+        "action": "store",
+        "discard_allowed": true,
+        "hazardous": false,
+        "containment": null,
+        "treatment_route": null
+      },
       "recycling": null,
       "originating_catalyst": null,
       "uncertainty": null,
       "producers": [
-        {
-          "route": "assemble/bootstrap/quern",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:quern",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "bench/quern",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:quern",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
         {
           "route": "craft/quern",
           "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/quern.json",
@@ -7767,7 +7024,7 @@
       ],
       "consumers": [],
       "sources": {
-        "canonical:bench/quern": "ProcessGraph.generate"
+        "canonical:craft/quern": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/quern.json"
       }
     },
     {
@@ -7870,172 +7127,7 @@
       ],
       "consumers": [
         {
-          "route": "assemble/arc_furnace",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:relay_matrix [F1]",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/assembler",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:relay_matrix [F1]",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/atmospheric_intake",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:relay_matrix [F1]",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/boiler",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:relay_matrix [F1]",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/caster",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:relay_matrix [F1]",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/chemical_reactor",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:relay_matrix [F1]",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/chemical_washer",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:relay_matrix [F1]",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/condenser",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:relay_matrix [F1]",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/electrolysis_cell",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:relay_matrix [F1]",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/flotation_cell",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:relay_matrix [F1]",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/induction_furnace",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:relay_matrix [F1]",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/press",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:relay_matrix [F1]",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/pulverizer",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:relay_matrix [F1]",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/relay_matrix_f2",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:relay_matrix [F1]",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/thermal_generator",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:relay_matrix [F1]",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 1,
-          "optional": true,
-          "discharged": false
-        },
-        {
-          "route": "assemble/wire_mill",
           "source": "ProcessGraph.generate",
           "via": "item:grindless:relay_matrix [F1]",
           "kind": "consumed_input",
@@ -8068,8 +7160,107 @@
           "discharged": false
         },
         {
+          "route": "craft/atmospheric_intake",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/atmospheric_intake.json",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "craft/boiler",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/boiler.json",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "craft/caster",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/caster.json",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "craft/chemical_reactor",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/chemical_reactor.json",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "craft/chemical_washer",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/chemical_washer.json",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "craft/condenser",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/condenser.json",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "craft/electrolysis_cell",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/electrolysis_cell.json",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "craft/factory_portal",
           "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/factory_portal.json",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "craft/flotation_cell",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/flotation_cell.json",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "craft/induction_furnace",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/induction_furnace.json",
           "via": "item:grindless:relay_matrix [F1]",
           "kind": "consumed_input",
           "certainty": "exact_resource",
@@ -8132,6 +7323,28 @@
           "unlock_tier": null,
           "optional": null,
           "discharged": false
+        },
+        {
+          "route": "craft/thermal_generator_from_core",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/thermal_generator_from_core.json",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 1,
+          "optional": true,
+          "discharged": false
+        },
+        {
+          "route": "craft/wire_mill",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/wire_mill.json",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
         }
       ],
       "sources": {
@@ -8145,39 +7358,23 @@
         "rating": 0,
         "registry": "items"
       },
-      "resource_class": "renewable",
+      "resource_class": "manual_capital",
       "side_stream_class": null,
       "first_use_tier": 0,
-      "first_renewable_tier": 0,
-      "canonical_route": "bench/research_terminal",
+      "first_renewable_tier": null,
+      "canonical_route": "craft/research_terminal",
       "future_consumers": [],
-      "handling": null,
+      "handling": {
+        "action": "store",
+        "discard_allowed": true,
+        "hazardous": false,
+        "containment": null,
+        "treatment_route": null
+      },
       "recycling": null,
       "originating_catalyst": null,
       "uncertainty": null,
       "producers": [
-        {
-          "route": "assemble/bootstrap/research_terminal",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:research_terminal",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "bench/research_terminal",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:research_terminal",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
         {
           "route": "craft/research_terminal",
           "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/research_terminal.json",
@@ -8192,7 +7389,7 @@
       ],
       "consumers": [],
       "sources": {
-        "canonical:bench/research_terminal": "ProcessGraph.generate"
+        "canonical:craft/research_terminal": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/research_terminal.json"
       }
     },
     {
@@ -9672,7 +8869,7 @@
       },
       "recycling": null,
       "originating_catalyst": null,
-      "uncertainty": "Assembler component consumed by assemble/thermal_generator. Automatic net supply and renewable establishment are unproved.",
+      "uncertainty": "Assembler component consumed by manual craft/thermal_generator_from_core. Its Furnace input needs manual capital supply; an automatic core recipe is not automatic net renewable supply.",
       "producers": [
         {
           "route": "assemble/thermal_generator_core",
@@ -9688,8 +8885,8 @@
       ],
       "consumers": [
         {
-          "route": "assemble/thermal_generator",
-          "source": "ProcessGraph.generate",
+          "route": "craft/thermal_generator_from_core",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/thermal_generator_from_core.json",
           "via": "item:grindless:thermal_generator_core",
           "kind": "consumed_input",
           "certainty": "exact_resource",
@@ -11360,28 +10557,6 @@
       ],
       "consumers": [
         {
-          "route": "assemble/bootstrap/biocultivator",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:clay_ball",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "bench/biocultivator",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:clay_ball",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bootstrap/bricks",
           "source": "ProcessGraph.generate",
           "via": "item:minecraft:clay_ball",
@@ -11484,62 +10659,7 @@
       ],
       "consumers": [
         {
-          "route": "assemble/arc_furnace",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/assembly_bench",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/biocultivator",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/biomass_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/clay_conduit",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/clay_mixer",
           "source": "ProcessGraph.generate",
           "via": "tag:minecraft:stone_crafting_materials",
           "kind": "consumed_input",
@@ -11561,17 +10681,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/bootstrap/crude_extractor",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/firing_chamber",
           "source": "ProcessGraph.generate",
           "via": "tag:minecraft:stone_crafting_materials",
@@ -11583,73 +10692,7 @@
           "discharged": false
         },
         {
-          "route": "assemble/bootstrap/furnace",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/geological_collector",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/hand_crank_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/hand_pump",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/multitool",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/quern",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/research_terminal",
           "source": "ProcessGraph.generate",
           "via": "tag:minecraft:stone_crafting_materials",
           "kind": "consumed_input",
@@ -11704,28 +10747,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/press",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/pulverizer",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/rod_die",
           "source": "ProcessGraph.generate",
           "via": "tag:minecraft:stone_crafting_materials",
@@ -11737,62 +10758,7 @@
           "discharged": false
         },
         {
-          "route": "assemble/thermal_generator",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 1,
-          "optional": true,
-          "discharged": false
-        },
-        {
-          "route": "bench/assembly_bench",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/biocultivator",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/biomass_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/clay_conduit",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/clay_mixer",
           "source": "ProcessGraph.generate",
           "via": "tag:minecraft:stone_crafting_materials",
           "kind": "consumed_input",
@@ -11814,17 +10780,6 @@
           "discharged": false
         },
         {
-          "route": "bench/crude_extractor",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/firing_chamber",
           "source": "ProcessGraph.generate",
           "via": "tag:minecraft:stone_crafting_materials",
@@ -11836,73 +10791,7 @@
           "discharged": false
         },
         {
-          "route": "bench/furnace",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/geological_collector",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/hand_crank_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/hand_pump",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/multitool",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/quern",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/research_terminal",
           "source": "ProcessGraph.generate",
           "via": "tag:minecraft:stone_crafting_materials",
           "kind": "consumed_input",
@@ -12232,6 +11121,17 @@
           "discharged": false
         },
         {
+          "route": "craft/thermal_generator_from_core",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/thermal_generator_from_core.json",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": 1,
+          "optional": true,
+          "discharged": false
+        },
+        {
           "route": "craft/tunnel_belt",
           "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/tunnel_belt.json",
           "via": "tag:minecraft:stone_crafting_materials",
@@ -12401,17 +11301,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/bootstrap/biomass_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/copper",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/conveyor_belt",
           "source": "ProcessGraph.generate",
           "via": "tag:forge:ingots/copper",
@@ -12457,17 +11346,6 @@
         },
         {
           "route": "bench/basic_tank",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/copper",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/biomass_dynamo",
           "source": "ProcessGraph.generate",
           "via": "tag:forge:ingots/copper",
           "kind": "consumed_input",
@@ -12811,17 +11689,6 @@
       ],
       "consumers": [
         {
-          "route": "assemble/pulverizer",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:flint",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "craft/pulverizer",
           "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/pulverizer.json",
           "via": "item:minecraft:flint",
@@ -12844,39 +11711,23 @@
         "rating": 0,
         "registry": "items"
       },
-      "resource_class": "renewable",
+      "resource_class": "manual_capital",
       "side_stream_class": null,
       "first_use_tier": 0,
-      "first_renewable_tier": 0,
-      "canonical_route": "bench/furnace",
+      "first_renewable_tier": null,
+      "canonical_route": "vanilla/minecraft:furnace",
       "future_consumers": [],
-      "handling": null,
+      "handling": {
+        "action": "store",
+        "discard_allowed": true,
+        "hazardous": false,
+        "containment": null,
+        "treatment_route": null
+      },
       "recycling": null,
       "originating_catalyst": null,
       "uncertainty": null,
       "producers": [
-        {
-          "route": "assemble/bootstrap/furnace",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:furnace",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "bench/furnace",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:furnace",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
         {
           "route": "vanilla/minecraft:furnace",
           "source": "classpath:data/minecraft/recipes/furnace.json@pack=vanilla@1.20.1@composition=commutative_membership_or_explicit_unknown@sha256=288dfc35a147f5bf8927fa1c17221ef56224624dd0a04b69f5116b84024c9082@recipe_contract=unique_or_identical_definitions",
@@ -12890,17 +11741,6 @@
         }
       ],
       "consumers": [
-        {
-          "route": "assemble/bootstrap/biomass_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:furnace",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
         {
           "route": "assemble/bootstrap/firing_chamber",
           "source": "ProcessGraph.generate",
@@ -12921,17 +11761,6 @@
           "unconditional": true,
           "unlock_tier": 1,
           "optional": true,
-          "discharged": false
-        },
-        {
-          "route": "bench/biomass_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:furnace",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
           "discharged": false
         },
         {
@@ -12980,7 +11809,7 @@
         }
       ],
       "sources": {
-        "canonical:bench/furnace": "ProcessGraph.generate"
+        "canonical:vanilla/minecraft:furnace": "classpath:data/minecraft/recipes/furnace.json@pack=vanilla@1.20.1@composition=commutative_membership_or_explicit_unknown@sha256=288dfc35a147f5bf8927fa1c17221ef56224624dd0a04b69f5116b84024c9082@recipe_contract=unique_or_identical_definitions"
       }
     },
     {
@@ -13048,17 +11877,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/bootstrap/research_terminal",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:glass",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/relay_matrix",
           "source": "ProcessGraph.generate",
           "via": "item:minecraft:glass",
@@ -13093,17 +11911,6 @@
         },
         {
           "route": "bench/process_atlas",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:glass",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/research_terminal",
           "source": "ProcessGraph.generate",
           "via": "item:minecraft:glass",
           "kind": "consumed_input",
@@ -13461,39 +12268,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/arc_furnace",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/iron",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/crude_extractor",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/iron",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/hand_crank_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/iron",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/coil_die",
           "source": "ProcessGraph.generate",
           "via": "tag:forge:ingots/iron",
@@ -13538,28 +12312,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/press",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/iron",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/pulverizer",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/iron",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/rod_die",
           "source": "ProcessGraph.generate",
           "via": "tag:forge:ingots/iron",
@@ -13579,28 +12331,6 @@
           "unconditional": true,
           "unlock_tier": 1,
           "optional": true,
-          "discharged": false
-        },
-        {
-          "route": "bench/crude_extractor",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/iron",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/hand_crank_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/iron",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
           "discharged": false
         },
         {
@@ -13980,40 +12710,7 @@
       "producers": [],
       "consumers": [
         {
-          "route": "assemble/bootstrap/assembly_bench",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/biocultivator",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/chest",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/clay_mixer",
           "source": "ProcessGraph.generate",
           "via": "tag:grindless:boards",
           "kind": "consumed_input",
@@ -14057,40 +12754,7 @@
           "discharged": false
         },
         {
-          "route": "assemble/bootstrap/geological_collector",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/hand_pump",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/process_atlas",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/research_terminal",
           "source": "ProcessGraph.generate",
           "via": "tag:grindless:boards",
           "kind": "consumed_input",
@@ -14134,40 +12798,7 @@
           "discharged": false
         },
         {
-          "route": "bench/assembly_bench",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/biocultivator",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/chest",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/clay_mixer",
           "source": "ProcessGraph.generate",
           "via": "tag:grindless:boards",
           "kind": "consumed_input",
@@ -14211,40 +12842,7 @@
           "discharged": false
         },
         {
-          "route": "bench/geological_collector",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/hand_pump",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/process_atlas",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "complete_tag_member",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/research_terminal",
           "source": "ProcessGraph.generate",
           "via": "tag:grindless:boards",
           "kind": "consumed_input",
@@ -14751,17 +13349,6 @@
       ],
       "consumers": [
         {
-          "route": "assemble/arc_furnace",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:redstone",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/data_core",
           "source": "ProcessGraph.generate",
           "via": "item:minecraft:redstone",
@@ -15109,39 +13696,6 @@
       ],
       "consumers": [
         {
-          "route": "assemble/bootstrap/assembly_bench",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:stick",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/biomass_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:stick",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/clay_mixer",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:stick",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/crank_handle",
           "source": "ProcessGraph.generate",
           "via": "item:minecraft:stick",
@@ -15175,28 +13729,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/bootstrap/hand_crank_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:stick",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/hand_pump",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:stick",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/multitool",
           "source": "ProcessGraph.generate",
           "via": "item:minecraft:stick",
@@ -15209,17 +13741,6 @@
         },
         {
           "route": "assemble/bootstrap/process_atlas",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:stick",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/quern",
           "source": "ProcessGraph.generate",
           "via": "item:minecraft:stick",
           "kind": "consumed_input",
@@ -15249,39 +13770,6 @@
           "unconditional": true,
           "unlock_tier": null,
           "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "bench/assembly_bench",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:stick",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/biomass_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:stick",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/clay_mixer",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:stick",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
           "discharged": false
         },
         {
@@ -15318,28 +13806,6 @@
           "discharged": false
         },
         {
-          "route": "bench/hand_crank_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:stick",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/hand_pump",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:stick",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/multitool",
           "source": "ProcessGraph.generate",
           "via": "item:minecraft:stick",
@@ -15352,17 +13818,6 @@
         },
         {
           "route": "bench/process_atlas",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:stick",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/quern",
           "source": "ProcessGraph.generate",
           "via": "item:minecraft:stick",
           "kind": "consumed_input",
@@ -15674,17 +14129,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/bootstrap/biomass_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/copper",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/conveyor_belt",
           "source": "ProcessGraph.generate",
           "via": "tag:forge:ingots/copper",
@@ -15730,17 +14174,6 @@
         },
         {
           "route": "bench/basic_tank",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/copper",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/biomass_dynamo",
           "source": "ProcessGraph.generate",
           "via": "tag:forge:ingots/copper",
           "kind": "consumed_input",
@@ -16051,39 +14484,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/arc_furnace",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/iron",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/crude_extractor",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/iron",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/hand_crank_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/iron",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/coil_die",
           "source": "ProcessGraph.generate",
           "via": "tag:forge:ingots/iron",
@@ -16128,28 +14528,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/press",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/iron",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/pulverizer",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/iron",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/rod_die",
           "source": "ProcessGraph.generate",
           "via": "tag:forge:ingots/iron",
@@ -16169,28 +14547,6 @@
           "unconditional": true,
           "unlock_tier": 1,
           "optional": true,
-          "discharged": false
-        },
-        {
-          "route": "bench/crude_extractor",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/iron",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/hand_crank_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "tag:forge:ingots/iron",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
           "discharged": false
         },
         {
@@ -16752,40 +15108,7 @@
       "producers": [],
       "consumers": [
         {
-          "route": "assemble/bootstrap/assembly_bench",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/biocultivator",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/chest",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/clay_mixer",
           "source": "ProcessGraph.generate",
           "via": "tag:grindless:boards",
           "kind": "consumed_input",
@@ -16829,40 +15152,7 @@
           "discharged": false
         },
         {
-          "route": "assemble/bootstrap/geological_collector",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/hand_pump",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/process_atlas",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/research_terminal",
           "source": "ProcessGraph.generate",
           "via": "tag:grindless:boards",
           "kind": "consumed_input",
@@ -16906,40 +15196,7 @@
           "discharged": false
         },
         {
-          "route": "bench/assembly_bench",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/biocultivator",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/chest",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/clay_mixer",
           "source": "ProcessGraph.generate",
           "via": "tag:grindless:boards",
           "kind": "consumed_input",
@@ -16983,40 +15240,7 @@
           "discharged": false
         },
         {
-          "route": "bench/geological_collector",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/hand_pump",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/process_atlas",
-          "source": "ProcessGraph.generate",
-          "via": "tag:grindless:boards",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/research_terminal",
           "source": "ProcessGraph.generate",
           "via": "tag:grindless:boards",
           "kind": "consumed_input",
@@ -18186,62 +16410,7 @@
       "producers": [],
       "consumers": [
         {
-          "route": "assemble/arc_furnace",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/assembly_bench",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/biocultivator",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/biomass_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/clay_conduit",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/clay_mixer",
           "source": "ProcessGraph.generate",
           "via": "tag:minecraft:stone_crafting_materials",
           "kind": "consumed_input",
@@ -18263,17 +16432,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/bootstrap/crude_extractor",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/firing_chamber",
           "source": "ProcessGraph.generate",
           "via": "tag:minecraft:stone_crafting_materials",
@@ -18285,73 +16443,7 @@
           "discharged": false
         },
         {
-          "route": "assemble/bootstrap/furnace",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/geological_collector",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/hand_crank_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/hand_pump",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/multitool",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/quern",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/bootstrap/research_terminal",
           "source": "ProcessGraph.generate",
           "via": "tag:minecraft:stone_crafting_materials",
           "kind": "consumed_input",
@@ -18406,28 +16498,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/press",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "assemble/pulverizer",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/rod_die",
           "source": "ProcessGraph.generate",
           "via": "tag:minecraft:stone_crafting_materials",
@@ -18439,62 +16509,7 @@
           "discharged": false
         },
         {
-          "route": "assemble/thermal_generator",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 1,
-          "optional": true,
-          "discharged": false
-        },
-        {
-          "route": "bench/assembly_bench",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/biocultivator",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/biomass_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/clay_conduit",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/clay_mixer",
           "source": "ProcessGraph.generate",
           "via": "tag:minecraft:stone_crafting_materials",
           "kind": "consumed_input",
@@ -18516,17 +16531,6 @@
           "discharged": false
         },
         {
-          "route": "bench/crude_extractor",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/firing_chamber",
           "source": "ProcessGraph.generate",
           "via": "tag:minecraft:stone_crafting_materials",
@@ -18538,73 +16542,7 @@
           "discharged": false
         },
         {
-          "route": "bench/furnace",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/geological_collector",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/hand_crank_dynamo",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/hand_pump",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/multitool",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/quern",
-          "source": "ProcessGraph.generate",
-          "via": "tag:minecraft:stone_crafting_materials",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/research_terminal",
           "source": "ProcessGraph.generate",
           "via": "tag:minecraft:stone_crafting_materials",
           "kind": "consumed_input",
@@ -18931,6 +16869,17 @@
           "unconditional": true,
           "unlock_tier": null,
           "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "craft/thermal_generator_from_core",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/thermal_generator_from_core.json",
+          "via": "tag:minecraft:stone_crafting_materials",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 1,
+          "optional": true,
           "discharged": false
         },
         {
