@@ -1,5 +1,5 @@
 {
-  "authority_snapshot_sha256": "6a433632343bcdc8a1e6c7a39f3c30c1f256a2ae506ef08944be1e07b6d1dfb6",
+  "authority_snapshot_sha256": "7843fb64d4051b8b98a08e8602461c4e542394cbd171472de8f5e9256a09b74e",
   "balance_ledger": [
     {
       "new": "Explicit paid recovery",
@@ -2347,6 +2347,12 @@
         "inputPotential": null,
         "outputPotential": null,
         "route": "quest/industrial_matrix"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/wet_beneficiation"
       },
       {
         "disposition": "NON_INCREASING",
@@ -5186,6 +5192,22 @@
       "source": "QuestCatalogue.rewards"
     },
     {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/wet_beneficiation",
+      "inputs": {
+        "finite_claim:wet_beneficiation": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "assembler"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
       "boundary": "CONVERSION",
       "duration_ticks": 0,
       "family": "VANILLA_COMPATIBILITY",
@@ -6043,7 +6065,7 @@
   "source_comparison": {
     "common/src/main/java/io/github/ezequiel24123z/grindless/quest/QuestCatalogue.java": {
       "baseline_blob": "7f2ca7be3141021ac24edb8dc56002f1399ad5d5",
-      "evaluated_blob": "db73589200bb9cb89456515dd3e63ea495e5cc1a",
+      "evaluated_blob": "5dbec0460494ee596b6262f945f4361f4e9b5182",
       "source_equal": false
     },
     "common/src/main/java/io/github/ezequiel24123z/grindless/recipe/BootstrapProcesses.java": {

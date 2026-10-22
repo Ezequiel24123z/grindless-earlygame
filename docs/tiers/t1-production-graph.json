@@ -1,5 +1,5 @@
 {
-  "authority_snapshot_sha256": "6a433632343bcdc8a1e6c7a39f3c30c1f256a2ae506ef08944be1e07b6d1dfb6",
+  "authority_snapshot_sha256": "7843fb64d4051b8b98a08e8602461c4e542394cbd171472de8f5e9256a09b74e",
   "entry_route": "craft/relay_matrix",
   "exit_route": "assemble/relay_matrix_f2",
   "global_optimum_claimed": false,
@@ -1023,6 +1023,179 @@
           "one_shot": false,
           "outputs": {
             "item:grindless:coil_die": 1
+          },
+          "source": "ProcessGraph.generate"
+        }
+      ]
+    },
+    {
+      "id": "wet_beneficiation",
+      "requirement": "OPTIONAL",
+      "requires_lines": [
+        "assembly"
+      ],
+      "routes": [
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "informational_milestone": "industrial"
+          },
+          "discharged": [],
+          "duration_ticks": 200,
+          "fu_per_tick": 32,
+          "id": "assemble/motor",
+          "inputs": {
+            "energy:FU": 6400,
+            "item:grindless:copper_coil": 2,
+            "item:grindless:machine_casing": 1,
+            "tag:forge:rods/iron": 1
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 6400,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:motor": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "informational_milestone": "industrial"
+          },
+          "discharged": [],
+          "duration_ticks": 400,
+          "fu_per_tick": 32,
+          "id": "assemble/chemical_washer",
+          "inputs": {
+            "energy:FU": 12800,
+            "item:grindless:machine_casing": 1,
+            "item:grindless:motor": 2,
+            "tag:forge:plates/iron": 4
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 12800,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:chemical_washer": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "agitation": "STIRRED"
+          },
+          "discharged": [],
+          "duration_ticks": 400,
+          "fu_per_tick": 32,
+          "id": "b2/iron",
+          "inputs": {
+            "energy:FU": 12800,
+            "fluid:minecraft:water": 2000,
+            "tag:grindless:crushed_materials/iron": 8
+          },
+          "machine_family": "CHEMICAL_WASHER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 12800,
+          "one_shot": false,
+          "outputs": {
+            "tag:forge:ingots/lead": 1,
+            "tag:grindless:washed_crushed_materials/iron": 8
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "agitation": "STIRRED"
+          },
+          "discharged": [],
+          "duration_ticks": 400,
+          "fu_per_tick": 32,
+          "id": "b2/copper",
+          "inputs": {
+            "energy:FU": 12800,
+            "fluid:minecraft:water": 2000,
+            "tag:grindless:crushed_materials/copper": 8
+          },
+          "machine_family": "CHEMICAL_WASHER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 12800,
+          "one_shot": false,
+          "outputs": {
+            "tag:forge:ingots/gold": 1,
+            "tag:grindless:washed_crushed_materials/copper": 8
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "atmosphere": "REDUCING",
+            "temperature_c": "1500.0"
+          },
+          "discharged": [
+            "fluid:grindless:carbon_monoxide"
+          ],
+          "duration_ticks": 240,
+          "fu_per_tick": 32,
+          "id": "b2_r1/iron",
+          "inputs": {
+            "energy:FU": 7680,
+            "tag:grindless:carbon": 1,
+            "tag:grindless:washed_crushed_materials/iron": 1
+          },
+          "machine_family": "ARC_FURNACE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 7680,
+          "one_shot": false,
+          "outputs": {
+            "fluid:grindless:carbon_monoxide": 1000,
+            "item:grindless:slag": 1,
+            "tag:forge:ingots/iron": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "atmosphere": "REDUCING",
+            "temperature_c": "1500.0"
+          },
+          "discharged": [
+            "fluid:grindless:carbon_monoxide"
+          ],
+          "duration_ticks": 240,
+          "fu_per_tick": 32,
+          "id": "b2_r1/copper",
+          "inputs": {
+            "energy:FU": 7680,
+            "tag:grindless:carbon": 1,
+            "tag:grindless:washed_crushed_materials/copper": 1
+          },
+          "machine_family": "ARC_FURNACE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 7680,
+          "one_shot": false,
+          "outputs": {
+            "fluid:grindless:carbon_monoxide": 1000,
+            "item:grindless:slag": 1,
+            "tag:forge:ingots/copper": 1
           },
           "source": "ProcessGraph.generate"
         }
