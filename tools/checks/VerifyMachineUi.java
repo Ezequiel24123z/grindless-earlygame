@@ -274,7 +274,10 @@ public final class VerifyMachineUi {
             buffer.writeByte(1);
         });
         rejectRequest("overlong client IDs cannot bypass the explicit ID limit", buffer -> {
-            buffer.writeInt(19).writeLong(5L).writeInt(8).writeUtf("x".repeat(257));
+            buffer.writeInt(19);
+            buffer.writeLong(5L);
+            buffer.writeInt(8);
+            buffer.writeUtf("x".repeat(257));
         });
 
         var state = new MachineMenuHost.RecipeSelection("removed/selected", "assemble/chemical_washer", 160.34375,

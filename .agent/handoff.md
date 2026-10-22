@@ -4,13 +4,16 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
-**Actual selector CI compile red, no new PC grant:** exactcb2d/run39791306862/
+**Selector CI compile red source-repaired, confirmation pending:** exactcb2d/run39791306862/
 artifact12430349463 has environment0/build0 but tool-javac fails before every
 suite at VerifyMachineUi277: chained inherited writes return ByteBuf, which
 has no writeUtf. Original behaviorSHA5ac9aff6 is preserved, Windows tooling
-succeeds and native smoke is skipped. Owner0752 receives the precise
-fixture-only split-writes repair, with no casts/negative-test weakening or
-VerifyRecipes edit. Parent's initial hash observer has a PowerShell pipeline
+succeeds and native smoke is skipped. Normal0ab654b/exact438 parent changes
+only the four typed buffer writes in that same negative plus its changelog
+disclosure. Parent directly reviews/preserves the full test blob; no cast,
+257/decoder weakening or VerifyRecipes edit. Actual new compiler confirmation
+and combined qualification remain pending; no PC grant yet.
+Parent's initial hash observer has a PowerShell pipeline
 syntax error, then recovers exact five raw hashes through array capture;
 no production/CI replay or Git/auth configuration change occurs.
 

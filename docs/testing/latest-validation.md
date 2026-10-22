@@ -827,6 +827,16 @@ Parent's first read-only hash observer fails at PowerShell foreach-pipeline
 syntax before hashing. Array capture repairs that observer, not production;
 the original files and CI are never rerun or rewritten.
 
+**Fixture compile source repair0ab, not a compiler pass:** normal
+0ab654bee8ed4db005443d02d1b8af0a37e68a6e has exact parent438 and changes
+only VerifyMachineUi's four separate typed writes plus its original changelog
+bullet. Parent reviews the exact replacement and preserves field order,
+19/5L/8/257, callback type and decoder negative with no cast/relaxation/skip.
+Private follow-upSHA9a5d63ea3761d6adc409f2a021111630b6e46653474f9b8b789d9c35aeeb2b17
+records scope/tree/trailers/static evidence. Normal composition does not
+rewrite the original CI red or claim Java/AST/native; new exact-source
+compiler confirmation is required before claiming execution.
+
 **Completed controller source, not a new pass:** data58 normalab3/exact045
 is composed with the single authorizedcb2d baseline as3045778 (parentsab3/
 cb2d), then normalccfe2f382d10633a0cd795686ba8283e09a7239b completes the

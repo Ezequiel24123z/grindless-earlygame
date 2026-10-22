@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Normally integrate the precise FriendlyByteBuf fixture repair.**
+  Source0ab654b/exact438 parent splits four writes on the same typed buffer,
+  preserving19/5L/8/257 and the same decoder refusal without casts/skips.
+  The only other change is its required changelog disclosure; all released
+  recipe/data/runtime files remain intact. Originalcb2d tool-javac red stays
+  red; actual compiler and combined mechanism qualification still need G9.
 - **Compose the completed nine-controller data without hiding the selector CI red.**
   Preserve normalab3/304/ccfe, all four reviewed data/check blobs and every
   selector test. Only changelog conflicts, retaining both histories.
@@ -139,6 +145,10 @@ entries below reference those records by id.
   fixtures derive the actual equal bills rather than fixing their group count; local
   non-JVM evidence cannot qualify Java, native behavior, appearance, the
   player's world or whole T1. No recipes, bills, dependencies or outputs change.
+  Recovered cb2d CI built the application but failed check compilation before
+  any suite: retain that red and split the overlong-request FriendlyByteBuf
+  writes instead of chaining through Netty's ByteBuf return type. The257
+  negative and decoder stay unchanged; actual compiler confirmation is pending.
 - **Choose explicit Assembler targets instead of repricing colliding recipes.**
   ADR-0185 selects a stable-ID, server-authoritative menu choice on the existing
   executor and transaction. Reuse bounded GT/Mekanism configuration/validation
