@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Fix the observed native carrier without rewriting the resolver.**
+  G3 actual common/Forge/classpath native0 and selected javac0 are preserved
+  after a shared-log hash observer failure, without replay. The one native
+  run really fails at the Press material fixture before find/capability:
+  NoSuchElement/assertions66,18/19 markers, harness/wrapper1 with natural save/
+  stop, not aggregate PASS. Normal957613f supplies real counted cobblestone for
+  that vanilla input tag and requires real matches; production resolver/counts/
+  markers/budgets stay intact. Independent7c55 stages continue, no live Sync.
 - **Bind the repaired source's real CI contracts without replay.**
   Exact7c55 run39739650564 has main/tool compile0 and only three canonical
   equality failures; index/order and other behavior/asset contracts pass.

@@ -237,6 +237,42 @@ future redundant pure checks; necessary PC classes/runtime/new boundaries and
 normal writers remain required. Duplicate39740386065 was merely in progress
 when observed, with no inferred conclusion or manual retry.
 
+**G3 actual preparation, not replay:** stage01 common/Forge/classpath starts
+07:36:33Z; original native-exit sidecar records0. The observer then cannot hash
+the still-shared stdout, preserving phase failure and the transient settling
+Java observation. Once exact wrappers11508/7336 are absent, closed raw/sidecar
+are recovered and only the two attributable locks are released; compilation is
+not repeated. Actual stage02 selected javac subsequently exits0.
+
+**Actual native red:**07:44:50.8012062Z to07:48:47.1951540Z, source7c55,
+harness1/wrapper1. Primary reports
+GRINDLESS_MATRIX_INPUT_NATIVE_FAIL assertions=66 and NoSuchElementException at
+ControlMatrixInputChecks.primaryControl96/run71: the generic vanilla stone
+input tag is not supported by the material-output resolver. It throws while
+constructing non-Matrix inputs, BEFORE find/minimum-primary/capability. This
+does not establish that F3 was rejected.18/19 required markers appear, with
+PASS0/FAIL1 for the aggregate probe; only its PASS marker is missing. Old16
+and MATRIX-CONTROL-BLOCKED/CONSUMED-ONCE are real; core Item/registry already
+passes in registered(). They are not relabeled a passing scenario.
+Stopping/Saving worlds/All dimensions saved are observed, but there is no
+separate server-exit receipt in this red, so do not invent server0.
+
+Primary SHA-256
+`007d16b3044cfe8e59a5e2c0e22ccbf7c5effed60d3d098bd065b004594b68d9`
+is parent-verified. Native stdout
+`223252f579e8012a18d61a83e868015c3f5bcc0f82d0f39ecd2c0333b597f7d2`
+and stderr `4c0051bc259f20297e7c5b741b78a3bda8ae4cc6d0ce140eb7fc482954ceffc9`
+are reported by the executor pending final transport custody. At07:48:47Z
+the native phase has clean7c55/Java0/locksfalse; G3 ownership remains with604
+for independent authorized stages. Preserve its diagnostic/JAR before Gradle.
+
+Normal957613f source-only fixes this carrier with a counted real COBBLESTONE
+for minecraft:stone_crafting_materials plus ProcessLookup.matches for every
+actual fixture ingredient. Production resolver/matcher, stock, exact F2,
+markers and budget do not change. Parent directly reviews the one-file delta;
+only the corrected fixture/previously unreachable property needs new native
+evidence, not another writer/paid-FTB replay. No live7c55 source switch occurs.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

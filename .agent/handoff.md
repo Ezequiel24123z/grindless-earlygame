@@ -196,6 +196,28 @@ task, compiler receipt/export or native marker is observed in that CI. The first
 artifact read expects a flat layout and fails before reading logs; nested raw
 custody is recovered, without a CI/PC replay.
 
+**Current actual G3 progress:** source7c55 Sync0; stage01 Gradle/classpath's
+original native-exit sidecar is0. Hashing its still-shared stdout fails after
+execution, not as a compile error. Recover closed raw/receipt without replay;
+only the two exact Prepare locks/source/lease/PID11508 are released after
+11508/7336 disappear and owned Java0. Stage02 selected javac then actually0.
+Native runs07:44:50.8012062Z to07:48:47.1951540Z with harness/wrapper1:
+primary FAIL at assertions66/NoSuchElementException primaryControl96, before
+minimum-primary find/capability.18/19 markers, missing only the aggregate
+GRINDLESS_MATRIX_INPUT_NATIVE_PASS; old16 plus both blocked/once-control markers
+are observed. Core real Item/registry check already passes in registered().
+Natural stop/save/all dimensions saved are real, but no separate server0 receipt
+is invented for this red. Parent verifies primary007d16b3 original hash.
+
+Source-only follow-up957613f now normally integrates a counted real vanilla
+COBBLESTONE for the input tag minecraft:stone_crafting_materials and validates
+every material through actual ProcessLookup.matches. The production output
+resolver deliberately does not support arbitrary vanilla input tags; it stays
+unchanged. No budget/marker/matcher/bill change. Do not retarget G3 to the fix:
+sole604 continues independent managed/legacy and normal generation on7c55,
+preserves red world/JAR/receipts, then closes/bundles before the next exact
+native qualification. This is a fixture failure, not evidence F3 matching failed.
+
 Next integrate coherent local checkpoints and select only their changed proofs.
 Any heavy qualification needs a new sole-owner lease on an exact published
 source. Preserve all previous failures and successful source-bound evidence.

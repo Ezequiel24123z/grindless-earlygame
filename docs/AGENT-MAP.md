@@ -206,6 +206,12 @@ make thermal reflection tests run.
 The same existing ControlMatrixInputChecks.registered probe now checks the new
 core's actual Item class/registry ID, without another case or marker. This
 observation is pending execution, not supplied by synthetic lookup carriers.
+Actual G3 registered() now passes including that binding, but the aggregate
+probe fails later at primaryControl's vanilla input-tag materialization.
+Follow-up957613f uses genuine counted cobblestone and actual input matching.
+Never widen ProcessLookup.resolve's material-output domain just to satisfy
+the fixture. Corrected primary selection/capability still needs actual execution;
+the observed blocked/once-cycle markers alone are not aggregate PASS.
 
 The owner's2026-10-21 instruction separately opens T1 development (ADR-0168/0169).
 Use [the first-factory plan](../plan/feature-t1-first-factory-1.md): live route
