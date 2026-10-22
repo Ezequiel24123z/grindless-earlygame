@@ -274,7 +274,9 @@ public final class VerifyResourceGuidance {
         equal("hazard handling remains visible even with unknown action", true, hasTranslation(hazardLines, PREFIX + "hazardous"));
         equal("unknown containment is not an invented API", true, hasTranslation(hazardLines, PREFIX + "containment"));
         equal("unknown treatment is explicit", true, hasTranslation(hazardLines, PREFIX + "treatment"));
-        var capital = new ResourceMetadata(ResourceClass.MANUAL_CAPITAL, null, 0, null, "craft/capital",
+        // This vocabulary/DTO fixture references its actual fixture producer. It is not a
+        // Survival construction proof and must not invent a runtime craft/capital authority.
+        var capital = new ResourceMetadata(ResourceClass.MANUAL_CAPITAL, null, 0, null, "fixture/source",
                 List.of(), new Handling(Action.STORE, true, false, null, null), null, null, null);
         Document capitalDocument = ResourceGuidanceProjection.project(fixture(capital));
         equal("the existing metadata format losslessly carries manual durable capital", capitalDocument,
@@ -285,6 +287,15 @@ public final class VerifyResourceGuidance {
                 hasTranslation(capitalLines, PREFIX + "class.manual_capital"));
         equal("manual capital never borrows the renewable tooltip label", false,
                 hasTranslation(capitalLines, PREFIX + "class.renewable"));
+        var absentCapital = new ResourceMetadata(ResourceClass.MANUAL_CAPITAL, null, 0, null, "craft/capital",
+                List.of(), new Handling(Action.STORE, true, false, null, null), null, null, null);
+        try {
+            ResourceGuidanceProjection.project(fixture(absentCapital));
+            throw new AssertionError("a declared absent capital route must remain a failure");
+        } catch (IllegalArgumentException expected) {
+            equal("missing capital authority keeps its exact absent-route diagnosis",
+                    "A declared guidance route is absent: craft/capital", expected.getMessage());
+        }
     }
 
     private static void identities() {

@@ -111,7 +111,8 @@ public final class VerifySustainability {
                 VerifySustainability::executedClaimObjectiveScope, VerifySustainability::typedFindingTierScope,
                 VerifySustainability::outputOnlyFirstUseException, VerifySustainability::continuedCustody,
                 VerifySustainability::continuationRefusals, VerifySustainability::exhaustedContinuation,
-                VerifySustainability::manualCapital, VerifySustainability::finiteFurnaceSubassembly)) {
+                VerifySustainability::manualCapital, VerifySustainability::finiteFurnaceSubassembly,
+                VerifySustainability::formedCapitalWithManualUpstream)) {
             try {
                 fixture.run();
             } catch (Exception failure) {
@@ -316,6 +317,85 @@ public final class VerifySustainability {
                 no("the recurring deficit cannot receive a conditional pass", T0ConditionalGate.evaluate(recurring).pass());
             }
         }
+    }
+
+    private static void formedCapitalWithManualUpstream() {
+        group("R34 automatic formed-controller assembly is finite capital when its Furnace input is manual");
+        Resource controller = new Resource(Kind.ITEM, "grindless:firing_chamber");
+        Resource furnace = new Resource(Kind.ITEM, "minecraft:furnace");
+        for (long budget : List.of(2L, 1L)) {
+            Fixture fixture = finiteFormedFixture(budget);
+            var result = fixture.audit();
+            eq("only sufficient finite raw custody establishes the formed operating base",
+                    budget == 2, T0ConditionalGate.evaluate(result).pass());
+            yes("qualitative controller construction is still available", available(result, controller));
+            no("an allowed automatic recipe does not prove unlimited controller-item supply",
+                    renewable(result, controller));
+            yes("the formed machine's operating output keeps its real renewable feed path", renewable(result, SIDE));
+            no("a once-built controller is not a recurring construction feed",
+                    result.tiers().get(0).recurring().contains(controller));
+            if (budget == 2) {
+                var state = result.tiers().get(0).witnessState();
+                yes("the conditional proof still issues genuine conserved custody", state != null);
+                if (state != null) {
+                    yes("the finite controller is installed", state.installedMachines().contains(controller));
+                    eq("installation does not duplicate the controller as free stock", 0L,
+                            state.freeStock().getOrDefault(controller, 0L));
+                    eq("one real automatic construction batch is paid once", 1L,
+                            state.establishmentBatches().get("fixture/formed_controller"));
+                    eq("its manual Furnace is actually manufactured", 1L,
+                            state.establishmentBatches().get("fixture/manual_furnace"));
+                    eq("its raw construction custody is really spent", 2L, state.playerDeliveries().get(RAW));
+                }
+            } else {
+                yes("an unbuildable finite controller keeps the actual material failure",
+                        hasRule(result, "entry_profile_insufficient"));
+                eq("qualitative renewability never manufactures an underfunded checkpoint",
+                        null, result.tiers().get(0).witnessState());
+            }
+        }
+        Fixture falseClaim = finiteFormedFixture(2);
+        falseClaim.meta(controller, renewable("fixture/formed_controller"));
+        var claimed = falseClaim.audit();
+        yes("the precise erroneous R0 controller claim remains a hard finding",
+                findingAt(claimed, "renewable_claim", controller.key(), "T0"));
+        yes("the unchanged gate retains its explicit R0 unmet obligation",
+                T0ConditionalGate.evaluate(claimed).unmetObligations().containsKey("renewable_claim:" + controller.key()));
+        no("the old R0 label cannot certify a manual-Furnace-fed controller", T0ConditionalGate.evaluate(claimed).pass());
+
+        Fixture consumption = finiteFormedFixture(2);
+        Resource consumed = item("formed_capital_consumption");
+        consumption.add(route("fixture/consume_controller", Map.of(controller, 1L, SAFE, 1L), Map.of(),
+                Map.of(consumed, 1L), null)).meta(consumed, renewable("fixture/consume_controller")).root(consumed);
+        var recurring = consumption.audit();
+        yes("real controller withdrawal enters ordinary recurring closure",
+                recurring.tiers().get(0).recurring().contains(controller));
+        yes("recurring manufacture still reaches the real manual Furnace deficit",
+                findingAt(recurring, "finite_dependency", furnace.key(), "T0"));
+        no("finite-capital metadata cannot launder recurrent controller consumption", renewable(recurring, consumed));
+        no("the unchanged hard gate refuses that recurring deficit", T0ConditionalGate.evaluate(recurring).pass());
+    }
+
+    private static Fixture finiteFormedFixture(long budget) {
+        Resource controller = new Resource(Kind.ITEM, "grindless:firing_chamber");
+        Resource furnace = new Resource(Kind.ITEM, "minecraft:furnace");
+        // Algorithm contract only, not live construction quantities or a new Survival route.
+        Fixture fixture = gateFixture().seed(MACHINE, 1)
+                .terminal("formed_raw", RAW, TerminalKind.MANUAL_WORLD, false, true)
+                .meta(RAW, metadata(ResourceClass.BOOTSTRAP, null, null, List.of(), null, null, null, null));
+        fixture.add(new Route("fixture/manual_furnace", Authority.CRAFTING_JSON, "fixture:not_a_live_bill", null,
+                Map.of(SAFE, 1L), Map.of(), Map.of(furnace, 1L), Set.of(), 0, 0, Map.of(), Set.of(),
+                false, true, false)).meta(furnace, metadata(ResourceClass.MANUAL_CAPITAL, null,
+                "fixture/manual_furnace", List.of(), null, null, null, null));
+        fixture.machines.put("BENCH", new Machine("BENCH", MACHINE, 0));
+        fixture.add(route("fixture/formed_controller", Map.of(furnace, 1L, RAW, 2L), Map.of(),
+                Map.of(controller, 1L), "BENCH")).meta(controller, metadata(ResourceClass.BOOTSTRAP, null,
+                "fixture/formed_controller", List.of(), null, null, null, null));
+        fixture.machines.put("FORMED_OPERATION", new Machine("FORMED_OPERATION", controller, 0));
+        fixture.add(route("fixture/formed_operation", Map.of(SAFE, 1L), Map.of(), Map.of(SIDE, 1L), "FORMED_OPERATION"))
+                .meta(SIDE, renewable("fixture/formed_operation")).root(SIDE);
+        fixture.entryProfile = fixture.entryProfile.withBill(Map.of(RAW, budget), 0);
+        return fixture;
     }
 
     private static void continuedCustody() {

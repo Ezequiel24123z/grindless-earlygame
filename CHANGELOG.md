@@ -15,6 +15,20 @@ entries below reference those records by id.
 
 ### Added
 
+- **Repair the first integrated conditional-model regressions without replaying CI.**
+  Original exactf1b9 CI confirms environment/build/tool compilation and the
+  2195 sustainability checks, but Economy/T1 really fail their conditional gate.
+  The live automatic Firing Chamber constructor consumes one manual Furnace;
+  its inherited R0 controller-item label was false. Declare finite bootstrap
+  capital without changing that allowed recipe or its renewable operating feeds.
+  Keep the hard gate, finite budgets and recurring-consumption failures intact.
+  Fix the guidance DTO fixture's absent `craft/capital` reference using its actual
+  fixture producer and retain the missing route as an exact negative. Add narrow
+  controller/funding/false-R0 regressions and failure diagnostics. Old A9 guidance
+  equality and A's separate Factory literal failure remain distinct original reds;
+  no canonical output, protected gate/adapter, bill, world or paid state is edited.
+  This corrective source is unexecuted; only proportional source/static checks
+  are permitted before a later reviewed exact-source qualification.
 - **Normally compose the complete manual-manufacturing source.**
   Preserve A652's40, C ab1e's14 and B dc048's10 non-changelog blobs exactly
   through ordinary merges; only changelog conflicts, retaining every history.

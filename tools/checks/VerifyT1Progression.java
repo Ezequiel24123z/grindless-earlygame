@@ -117,7 +117,21 @@ public final class VerifyT1Progression {
     public static int verify(SustainabilityAudit.Result t0) {
         int before = assertions;
         Snapshot snapshot = t0.authorities();
-        equal("the reused boundary is the actual conditional T0 gate", true, T0ConditionalGate.evaluate(t0).pass());
+        var gate = T0ConditionalGate.evaluate(t0);
+        equal("the reused boundary is the actual conditional T0 gate; unmet=" + gate.unmetObligations()
+                        + "; blocking=" + gate.decisions().stream().filter(T0ConditionalGate.Decision::blocking)
+                        .map(T0ConditionalGate.Decision::fingerprint).toList(),
+                true, gate.pass());
+        Resource firing = item("grindless:firing_chamber");
+        var firingCapital = t0.annotations().resources().get(firing);
+        equal("the manual-Furnace-fed formed controller is finite construction, not an R0 item promise",
+                SustainabilityAnnotations.ResourceClass.BOOTSTRAP, firingCapital.resourceClass());
+        equal("local automatic construction does not author an unlimited controller renewal tier",
+                null, firingCapital.firstRenewableTier());
+        equal("the real allowed controller constructor remains selected", "bench/firing_chamber",
+                firingCapital.canonicalRoute());
+        equal("loss of automatic controller-item supply does not remove renewable operating ceramics", true,
+                t0.tiers().get(0).renewable().contains(item("grindless:ceramic_insulator")));
         equal("new declarations do not silently activate the canonical T0 model's next tier",
                 true, t0.tiers().get(1).unknown() != null);
         Map<String, List<Route>> lines = T1Sustainability.selectedRoutes(snapshot);

@@ -74,7 +74,11 @@ public final class VerifyEconomy {
         equal("the minimum boundary states its immediate infrastructure",
                 Set.of("item:minecraft:crafting_table", "item:grindless:research_terminal"), minimum.immediateInfrastructure());
         var witness = ProgressionCostModel.witness(result);
-        equal("reuse requires the existing conditional gate, not an unsupported summary", true, witness.conditionalGatePass());
+        var gate = T0ConditionalGate.evaluate(result);
+        equal("reuse requires the existing conditional gate, not an unsupported summary; unmet="
+                        + gate.unmetObligations() + "; blocking=" + gate.decisions().stream()
+                        .filter(T0ConditionalGate.Decision::blocking).map(T0ConditionalGate.Decision::fingerprint).toList(),
+                true, witness.conditionalGatePass());
         equal("one projected cost row per real replayed route", result.tiers().get(0).establishmentBatches().size(),
                 witness.batches().size());
         long ticks = 0;

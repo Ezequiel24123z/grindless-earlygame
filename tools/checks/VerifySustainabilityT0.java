@@ -30,9 +30,14 @@ public final class VerifySustainabilityT0 {
         DebtManifest debt = DebtManifest.read(root.resolve(Path.of("tools", "sustainability", "debt.json")));
         var derivation = SustainabilityAudit.deriveEntryProfile(snapshot, annotations, debt, 0);
         var result = derivation.replay();
-        passed += VerifyResourceGuidance.verifyCanonical(root, result);
         var tier = result.tiers().get(0);
         T0ConditionalGate.Gate gate = T0ConditionalGate.evaluate(result);
+        // Keep semantic failures visible even when the independent generated-asset equality is
+        // also stale. The equality and the hard pass assertion below are not skipped or waived.
+        gate.unmetObligations().forEach((id, reason) -> System.out.println("GATE BLOCKED " + id + ": " + reason));
+        gate.decisions().stream().filter(T0ConditionalGate.Decision::blocking)
+                .forEach(decision -> System.out.println("GATE BLOCKED " + decision.fingerprint() + ": " + decision.basis()));
+        passed += VerifyResourceGuidance.verifyCanonical(root, result);
         Path report = root.resolve(Path.of("build", "sustainability", "t0-conditional"));
         String revision = revision(root);
         AuditReports.Hashes hashes = AuditReports.write(report, result, revision, true);
@@ -56,9 +61,6 @@ public final class VerifySustainabilityT0 {
                 System.out.println("T0 " + finding.severity() + " " + finding.fingerprint() + ": " + finding.message());
             }
         }
-        gate.unmetObligations().forEach((id, reason) -> System.out.println("GATE BLOCKED " + id + ": " + reason));
-        gate.decisions().stream().filter(T0ConditionalGate.Decision::blocking)
-                .forEach(decision -> System.out.println("GATE BLOCKED " + decision.fingerprint() + ": " + decision.basis()));
         eq("the hard gate covers relevant global evidence, not only detail T0", true, gate.pass());
         eq("a finite conditional entry is explicitly identified", template.id(), derivation.profile().id());
         eq("the entire prototype route inventory remains present", true,
@@ -120,6 +122,20 @@ public final class VerifySustainabilityT0 {
         eq("the old Bench Furnace constructor is absent", false, snapshot.routes().containsKey("bench/furnace"));
         eq("the old Assembler Furnace constructor is absent", false,
                 snapshot.routes().containsKey("assemble/bootstrap/furnace"));
+        Resource firingController = annotations.machines().get("FIRING_CHAMBER").construction();
+        ResourceMetadata firingCapital = annotations.resources().get(firingController);
+        eq("the allowed formed-controller constructor is finite capital with its manual Furnace input",
+                ResourceClass.BOOTSTRAP, firingCapital.resourceClass());
+        eq("finite formed capital does not promise R0 controller-item renewal", null,
+                firingCapital.firstRenewableTier());
+        eq("the actual automatic controller authority is retained", "bench/firing_chamber", firingCapital.canonicalRoute());
+        eq("local automatic controller assembly remains permitted", true,
+                snapshot.routes().get(firingCapital.canonicalRoute()).automatable());
+        eq("the actual controller bill still consumes one real Furnace", 1L,
+                snapshot.routes().get(firingCapital.canonicalRoute()).inputs().get(furnace));
+        eq("controller-item supply is not automatically renewable", false, tier.renewable().contains(firingController));
+        eq("the installed controller still supports actual renewable ceramics", true,
+                tier.renewable().contains(new Resource(Kind.ITEM, "grindless:ceramic_insulator")));
         for (Machine machine : annotations.machines().values()) {
             Resource capital = machine.construction();
             if (!io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy.isManualFinalMachine(capital.id())) {
