@@ -936,6 +936,17 @@ old partial-balance check. All three failures are source-repaired, not yet
 Java/runtime-confirmed. ReceiptSHA2595aa886d078ad6b4a94646971f0f00b31073915715a0bb337de1ff9ba7af1c
 records scope/tree/trailers; another exact combined qualification is required.
 
+**Full G10 assignment, not a pass:** exacta54/sole604/fresh admission on
+the still-unmaterialized native root after the unused G9 return.
+Native-only2e was never dispatched and is superseded. Require new actual
+UI/Persistence compiler/Java confirmation before the existing one canonical
+clean-source matrix-lifecycle, then normal four-payload model generation/
+independent checks/provenance/canonical proof. Optional normal A9 is an exact
+parenta54 data-only child after actual passes/frozen other inputs/zero JVM/
+locks, not a new runtime source claim. Source/aliasa54 freezes throughout.
+No old-source replay, extra scenario/budget or FTB/package/target/client/
+ownerworld/acceptance result or permission is inferred.
+
 **G7 report12:21:13Z, still awaiting final custody/leaseback:** clean
 ApplicableSource26e/Java0/locksfalse; one direct plain FTB boot reports0,
 ready51/Done and natural save/stop, with tested JAR/inventory captured before

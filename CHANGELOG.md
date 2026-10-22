@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Assign full combined G10 on the reviewed repaired harness source.**
+  Sole604 receives exacta54/new-root admission after unused G9 return and
+  undispatched native-only withdrawal. Confirm actual repaired UI/Persistence
+  Java gates, then one clean-source existing matrix-lifecycle and normal
+  writers/independent checks/canonical/provenance with only four A9 payloads.
+  Preserve old source reds and reuse unchanged FTB/ABI/file proofs. No new
+  scenario/budget, package/Prism/target/client-wire or acceptance follows.
 - **Compose the minimal bb5 harness repair and avoid an unnecessary old-source native run.**
   Normal014/exact0ab changes only UI/Persistence and their original changelog
   bullet: real vanilla bootstrap after pure/index/wire negatives, typed

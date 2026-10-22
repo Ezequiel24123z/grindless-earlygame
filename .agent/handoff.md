@@ -4,6 +4,20 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**NEW FULL G10 GO, results pending:** sole604/exact
+a54f8de2b8113a1c796183498b1a9c18c2470941, fresh inventory admission on the
+previously absent G9 root. This supersedes native-only2e BEFORE dispatch and
+does not resume an old source grant. Confirm the repaired UI/Persistence
+Java/compiler gates (or exact-source original-CI reuse), then one canonical
+matrix-lifecycle on CLEANa54 for real selection/work/NBT/menu/reentrancy/server
+registration. Snapshot native JAR/inventory/raw exits before later Gradle.
+Normal Guidance/Economy/T1 write/independent CheckOnly/resource refresh/
+canonical checks may then change only four payloads. Normal local A9 with
+exact parenta54/both trailers/frozen other inputs/Java0/locksfalse is allowed;
+no push/runtime stage after data. No source hotfix/live Sync, FTB/ABI/paid
+replay/package/Prism/target/player or whole-tier claim. All old failures stay
+bound to their original source; new actual observations are still pending.
+
 **Harness source014 is ready; native-only2e was withdrawn BEFORE dispatch.**
 The repair arrived during the native-only grant publication, before any GO
 was sent to604. Thus no native/host action or new observation is attributed to
