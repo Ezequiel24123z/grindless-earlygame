@@ -44,10 +44,28 @@ public final class VerifyT1Progression {
         String exporter = Files.readString(root.resolve(Path.of("tools", "t1", "T1Export.java")));
         var fingerprinted = java.util.regex.Pattern.compile(
                 "for \\(Class<\\?> type : List\\.of\\(([\\s\\S]*?)\\)\\) \\{").matcher(exporter);
-        equal("the exporter fingerprints the executed adapter and typed inputs (source contract)", true,
+        equal("the exporter fingerprints typed inputs, the catalogue and actual wet-proof implementations (source contract)", true,
                 fingerprinted.find() && List.of("AuthorityAdapters.class", "IngredientSpec.class",
-                        "IngredientSpec.MatrixRole.class", "ControlMatrixSpec.class").stream()
+                        "IngredientSpec.MatrixRole.class", "ControlMatrixSpec.class",
+                        "QuestCatalogue.class", "QuestCatalogue.Task.class", "QuestCatalogue.Reward.class",
+                        "QuestCatalogue.Chapter.class", "QuestCatalogue.Evidence.class", "QuestCatalogue.Type.class",
+                        "ProcessLogic.class", "ProcessLookup.class", "FluxTier.class", "MachineMenuKind.class",
+                        "ProcessMachineKind.class", "ProcessMachineKind.ASSEMBLER.getClass()",
+                        "ProcessMachineKind.CHEMICAL_WASHER.getClass()", "ProcessMachineKind.ARC_FURNACE.getClass()",
+                        "MachineEnvelopes.class", "ConditionState.class", "Agitation.class",
+                        "ProcessConditions.class", "ProcessConditions.Builder.class",
+                        "ConditionEnvelope.class", "ConditionEnvelope.Builder.class", "ConditionBand.class",
+                        "ConditionReport.class", "ConditionFault.class").stream()
                         .allMatch(fingerprinted.group(1)::contains));
+        var sources = java.util.regex.Pattern.compile(
+                "SOURCES = List\\.of\\(([\\s\\S]*?)\\);").matcher(exporter);
+        equal("the exporter binds the sources of its new catalogue and wet applicability claims (source contract)", true,
+                sources.find() && List.of("quest/QuestCatalogue.java", "machine/ProcessMachineKind.java",
+                        "recipe/ProcessLogic.java", "recipe/ProcessLookup.java", "energy/FluxTier.java",
+                        "menu/MachineMenuKind.java", "process/MachineEnvelopes.java", "process/ConditionState.java",
+                        "process/Agitation.java", "process/ProcessConditions.java", "process/ConditionEnvelope.java",
+                        "process/ConditionBand.java", "process/ConditionReport.java", "process/ConditionFault.java")
+                        .stream().allMatch(sources.group(1)::contains));
         SustainabilityAudit.Result t0 = canonicalResult(root);
         int checks = verify(t0);
         Path generated = root.resolve(Path.of("docs", "tiers", "t1-production-graph.json"));
@@ -59,7 +77,7 @@ public final class VerifyT1Progression {
         Path markdown = generated.resolveSibling("t1-production-graph.md");
         equal("generated human costs equal the same actual routes", T1Sustainability.markdown(t0),
                 Files.readString(markdown, StandardCharsets.UTF_8).replace("\r\n", "\n"));
-        System.out.println("ALL T1 FIRST-FACTORY CONTRACTS PASSED: " + (checks + 3)
+        System.out.println("ALL T1 FIRST-FACTORY CONTRACTS PASSED: " + (checks + 4)
                 + "; source/conditional-model scope, not native play or full T1 closure");
     }
 

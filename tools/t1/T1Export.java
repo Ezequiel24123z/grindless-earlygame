@@ -1,9 +1,23 @@
 package io.github.ezequiel24123z.grindless.sustainability;
 
 import com.google.gson.GsonBuilder;
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
+import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
+import io.github.ezequiel24123z.grindless.menu.MachineMenuKind;
+import io.github.ezequiel24123z.grindless.process.Agitation;
+import io.github.ezequiel24123z.grindless.process.ConditionBand;
+import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
+import io.github.ezequiel24123z.grindless.process.ConditionFault;
+import io.github.ezequiel24123z.grindless.process.ConditionReport;
+import io.github.ezequiel24123z.grindless.process.ConditionState;
+import io.github.ezequiel24123z.grindless.process.MachineEnvelopes;
+import io.github.ezequiel24123z.grindless.process.ProcessConditions;
 import io.github.ezequiel24123z.grindless.progression.T1Progression;
 import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
+import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
+import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
+import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +37,13 @@ public final class T1Export {
             JAVA + "recipe/IngredientSpec.java", JAVA + "matrix/ControlMatrixSpec.java",
             JAVA + "sustainability/AuthorityAdapters.java",
             JAVA + "recipe/FabricationLogic.java", JAVA + "matrix/ControlMatrixNbt.java",
+            JAVA + "quest/QuestCatalogue.java", JAVA + "machine/ProcessMachineKind.java",
+            JAVA + "recipe/ProcessLogic.java", JAVA + "recipe/ProcessLookup.java",
+            JAVA + "energy/FluxTier.java", JAVA + "menu/MachineMenuKind.java",
+            JAVA + "process/MachineEnvelopes.java", JAVA + "process/ConditionState.java",
+            JAVA + "process/Agitation.java", JAVA + "process/ProcessConditions.java",
+            JAVA + "process/ConditionEnvelope.java", JAVA + "process/ConditionBand.java",
+            JAVA + "process/ConditionReport.java", JAVA + "process/ConditionFault.java",
             "common/src/main/resources/data/grindless/recipes/flux_cell.json",
             "tools/checks/VerifyT1Progression.java", "tools/t1/T1Export.java",
             "tools/t1/export.ps1", "tools/t1/export.sh");
@@ -70,6 +91,15 @@ public final class T1Export {
                 T1Progression.AtlasSelection.class, T1Sustainability.class,
                 T1Sustainability.InputEvidence.class, T1Sustainability.SeedAllocation.class,
                 AuthorityAdapters.class, IngredientSpec.class, IngredientSpec.MatrixRole.class, ControlMatrixSpec.class,
+                QuestCatalogue.class, QuestCatalogue.Task.class, QuestCatalogue.Reward.class,
+                QuestCatalogue.Chapter.class, QuestCatalogue.Evidence.class, QuestCatalogue.Type.class,
+                ProcessLogic.class, ProcessLookup.class, FluxTier.class, MachineMenuKind.class,
+                ProcessMachineKind.class, ProcessMachineKind.ASSEMBLER.getClass(),
+                ProcessMachineKind.CHEMICAL_WASHER.getClass(), ProcessMachineKind.ARC_FURNACE.getClass(),
+                MachineEnvelopes.class, ConditionState.class, Agitation.class,
+                ProcessConditions.class, ProcessConditions.Builder.class,
+                ConditionEnvelope.class, ConditionEnvelope.Builder.class, ConditionBand.class,
+                ConditionReport.class, ConditionFault.class,
                 VerifyT1Progression.class, T1Export.class)) {
             String resource = "/" + type.getName().replace('.', '/') + ".class";
             try (InputStream stream = type.getResourceAsStream(resource)) {
