@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Restore pure and deterministic minimum-primary indexing.**
+  Normala5a89a4 removes registry enumeration from Graph.index, stores typed
+  minimum-primary descriptors by family and merges them with nonempty hits in
+  ordinal order without duplicates. Keep complete-family miss fallback and the
+  established matcher/fluid/count/condition semantics. Add pre-bootstrap pure
+  regressions and extend the same real Relay probe, without fake registration,
+  swallowed errors, suite exclusion, new markers or budgets. Actual repaired
+  Java/native/writer qualification remains pending;85e failures stay real.
 - **Close the obsolete wire-line adjacency oracle in source.**
   Normalf1097b7 requires wire_forming after assembly rather than immediately
   adjacent, preserving its exact dependency/routes/optional role and first-F2

@@ -182,6 +182,12 @@ descriptor indexing and runtime candidate composition without fake bootstrap;
 min-primary candidates must not vanish merely because another keyed list exists.
 Keep optional wire ordering relative to assembly, not obsolete adjacency once
 factory reproduction is inserted.
+Follow-upa5a89a4 keeps a pure minimumPrimary index and private IndexedRecipe
+ordinals. Graph.candidates merges/deduplicates keyed and role candidates in
+authoritative order, including nonempty ordinary hits; only find/JEI resolution
+touch real runtime registries. VerifyRecipes begins with a pre-bootstrap rebuild
+and pure descriptor counterexamples. The existing native probe adds real
+RelayF3-first-slot selection without another scenario/marker/budget.
 
 ADR-0180's thermal lane is separate from the original eight-craft whitelist:
 an actual ordinary core plus final three-group assembly must cancel to the

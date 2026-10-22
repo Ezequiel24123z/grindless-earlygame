@@ -75,6 +75,13 @@ after assembly, with its dependency/four routes/OPTIONAL/F2 guards unchanged.
 It neither reorders gameplay nor supplies a writer/JVM pass; the pure-index
 repair remains independent. Thermal source must not reinstate another rigid
 adjacency contract.
+Pure-index follow-upa5a89a4 now normally integrates: per-family minimum-primary
+descriptors and ordinal TreeMap candidate union require no registry/bootstrap.
+Minimum candidates join nonempty keyed hits, deduplicate and retain graph order;
+wet-first/last-dry matching/count/conditions are unchanged. Nine pure pre-boot/
+index regressions and nine additional real RelayF3 primary-slot assertions in
+the existing native fixture are authored, not executed. No new marker/budget.
+Both real85e source causes are source-repaired, not yet behavior-qualified.
 
 ADR-0176 selects only the existing Wire Mill's F1 control operand as a minimum
 capacity requirement. Existing exact factories, F2 Matrix predecessor, outputs

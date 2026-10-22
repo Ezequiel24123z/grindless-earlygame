@@ -9,7 +9,6 @@ import io.github.ezequiel24123z.grindless.material.MaterialRegistry;
 import io.github.ezequiel24123z.grindless.item.ControlMatrixItem;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.material.MaterialSnapshot;
-import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
 import io.github.ezequiel24123z.grindless.process.Agitation;
 import io.github.ezequiel24123z.grindless.process.Atmosphere;
 import io.github.ezequiel24123z.grindless.process.ProcessConditions;
@@ -26,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 /**
  * The live process graph: generated from the current tag scan and indexed for lookup (ADR-0043).
@@ -40,7 +40,7 @@ public final class ProcessLookup {
     private ProcessLookup() {
     }
 
-    /** Rebuilds from the current material snapshot. Called next to {@link MaterialRegistry#rebuild}. */
+    /** Rebuilds pure descriptor indexes, without native registry access, next to {@link MaterialRegistry#rebuild}. */
     public static void rebuild(MaterialSnapshot snapshot) {
         List<ProcessGraph.MaterialView> views = new ArrayList<>();
         for (Material material : snapshot.materials()) {
@@ -102,31 +102,17 @@ public final class ProcessLookup {
     public static Optional<ProcessRecipe> find(MachineFamily family, ItemStack[] inputs,
                                                FluidState fluid, List<FluidState> neighbours) {
         Graph graph = GRAPH;
-        List<ProcessRecipe> keyed = new ArrayList<>();
+        List<String> keys = new ArrayList<>();
         if (inputs.length > 0 && !inputs[0].isEmpty()) {
-            inputs[0].getTags().forEach(tag -> {
-                List<ProcessRecipe> found = graph.byTag.get(key(family, tag.location().toString()));
-                if (found != null) {
-                    keyed.addAll(found);
-                }
-            });
+            inputs[0].getTags().forEach(tag -> keys.add(tag.location().toString()));
             ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(inputs[0].getItem());
-            List<ProcessRecipe> byItem = graph.byTag.get(key(family, "item:" + itemId));
-            if (byItem != null) {
-                keyed.addAll(byItem);
-            }
+            keys.add("item:" + itemId);
         }
         if (fluid != null && !fluid.isEmpty()) {
-            List<ProcessRecipe> byFluid = graph.byTag.get(key(family, "fluid:" + fluid.id()));
-            if (byFluid != null) {
-                keyed.addAll(byFluid);
-            }
-        }
-        if (keyed.isEmpty()) {
-            keyed.addAll(graph.byFamily.getOrDefault(family, List.of()));
+            keys.add("fluid:" + fluid.id());
         }
         Optional<ProcessRecipe> dry = Optional.empty();
-        for (ProcessRecipe recipe : keyed) {
+        for (ProcessRecipe recipe : graph.candidates(family, keys)) {
             if (recipe.family() != family || !matches(recipe, inputs)
                     || !matchesFluid(recipe, fluid, neighbours)) {
                 continue;
@@ -365,56 +351,76 @@ public final class ProcessLookup {
         return family.name() + "|" + id;
     }
 
+    private record IndexedRecipe(int order, ProcessRecipe recipe) {
+    }
+
     private record Graph(
             Generation generation,
             List<ProcessRecipe> recipes,
             Map<MachineFamily, List<ProcessRecipe>> byFamily,
-            Map<String, List<ProcessRecipe>> byTag) {
+            Map<String, List<IndexedRecipe>> byTag,
+            Map<MachineFamily, List<IndexedRecipe>> minimumPrimary) {
 
-        static final Graph EMPTY = new Graph(new Generation(), List.of(), Map.of(), Map.of());
+        static final Graph EMPTY = new Graph(new Generation(), List.of(), Map.of(), Map.of(), Map.of());
 
         static Graph index(List<ProcessRecipe> recipes) {
             Map<MachineFamily, List<ProcessRecipe>> byFamily = new EnumMap<>(MachineFamily.class);
-            Map<String, List<ProcessRecipe>> byTag = new HashMap<>();
-            for (ProcessRecipe recipe : recipes) {
+            Map<String, List<IndexedRecipe>> byTag = new HashMap<>();
+            Map<MachineFamily, List<IndexedRecipe>> minimumPrimary = new EnumMap<>(MachineFamily.class);
+            for (int order = 0; order < recipes.size(); order++) {
+                ProcessRecipe recipe = recipes.get(order);
+                IndexedRecipe indexed = new IndexedRecipe(order, recipe);
                 byFamily.computeIfAbsent(recipe.family(), ignored -> new ArrayList<>()).add(recipe);
                 if (!recipe.itemInputs().isEmpty()) {
-                    index(byTag, recipe, recipe.itemInputs().get(0));
+                    index(byTag, minimumPrimary, indexed, recipe.itemInputs().get(0));
                 } else if (!recipe.catalysts().isEmpty()) {
-                    index(byTag, recipe, recipe.catalysts().get(0));
+                    index(byTag, minimumPrimary, indexed, recipe.catalysts().get(0));
                 }
                 if (!recipe.fluidInputs().isEmpty()) {
                     IngredientSpec fluid = recipe.fluidInputs().get(0);
                     byTag.computeIfAbsent(key(recipe.family(), "fluid:" + fluid.id()),
-                            ignored -> new ArrayList<>()).add(recipe);
+                            ignored -> new ArrayList<>()).add(indexed);
                 }
             }
             Map<MachineFamily, List<ProcessRecipe>> frozenFamily = new EnumMap<>(MachineFamily.class);
             byFamily.forEach((family, list) -> frozenFamily.put(family, List.copyOf(list)));
-            Map<String, List<ProcessRecipe>> frozenTags = new HashMap<>();
+            Map<String, List<IndexedRecipe>> frozenTags = new HashMap<>();
             byTag.forEach((key, list) -> frozenTags.put(key, List.copyOf(list)));
+            Map<MachineFamily, List<IndexedRecipe>> frozenMinimum = new EnumMap<>(MachineFamily.class);
+            minimumPrimary.forEach((family, list) -> frozenMinimum.put(family, List.copyOf(list)));
             return new Graph(new Generation(), List.copyOf(recipes), Map.copyOf(frozenFamily),
-                    Map.copyOf(frozenTags));
+                    Map.copyOf(frozenTags), Map.copyOf(frozenMinimum));
         }
 
-        private static void index(Map<String, List<ProcessRecipe>> byTag, ProcessRecipe recipe,
-                                  IngredientSpec primary) {
-            if (primary.isMinimumControl()) {
-                for (Item item : BuiltInRegistries.ITEM) {
-                    if (item instanceof ControlMatrixItem matrix
-                            && primary.acceptsMatrix(BuiltInRegistries.ITEM.getKey(item).toString(),
-                            new ControlMatrixSpec(
-                                    matrix.architecture(), matrix.architecture().lastFrontier()))) {
-                        byTag.computeIfAbsent(key(recipe.family(), "item:" + BuiltInRegistries.ITEM.getKey(item)),
-                                ignored -> new ArrayList<>()).add(recipe);
-                    }
+        /** Graph order owns priority; a row reached through several keys is still one candidate. */
+        private List<ProcessRecipe> candidates(MachineFamily family, List<String> keys) {
+            Map<Integer, ProcessRecipe> keyed = new TreeMap<>();
+            for (String id : keys) {
+                for (IndexedRecipe indexed : byTag.getOrDefault(key(family, id), List.of())) {
+                    keyed.put(indexed.order(), indexed.recipe());
                 }
+            }
+            if (keyed.isEmpty()) {
+                return byFamily.getOrDefault(family, List.of());
+            }
+            for (IndexedRecipe indexed : minimumPrimary.getOrDefault(family, List.of())) {
+                keyed.put(indexed.order(), indexed.recipe());
+            }
+            return List.copyOf(keyed.values());
+        }
+
+        private static void index(Map<String, List<IndexedRecipe>> byTag,
+                                  Map<MachineFamily, List<IndexedRecipe>> minimumPrimary, IndexedRecipe indexed,
+                                  IngredientSpec primary) {
+            ProcessRecipe recipe = indexed.recipe();
+            if (primary.isMinimumControl()) {
+                minimumPrimary.computeIfAbsent(recipe.family(), ignored -> new ArrayList<>()).add(indexed);
                 return;
             }
             String id = IngredientSpec.ITEM.equals(primary.kind())
                     ? "item:" + primary.id()
                     : primary.id();
-            byTag.computeIfAbsent(key(recipe.family(), id), ignored -> new ArrayList<>()).add(recipe);
+            byTag.computeIfAbsent(key(recipe.family(), id), ignored -> new ArrayList<>()).add(indexed);
         }
     }
 }

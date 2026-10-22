@@ -167,6 +167,17 @@ OPTIONAL role and F2 guards remain. Parent reviews the one-function delta;
 actual T1.verify/writer confirmation is still pending the independent pure-index
 repair and a newly pinned execution source.
 
+Normala5a89a4 source closes the independent early-registry cause. Graph.index
+uses only descriptors, minimumPrimary by family and private row ordinals;
+Graph.candidates unions role candidates into nonempty hits and deduplicates in
+canonical order, retaining full-family miss fallback and wet-first/last-dry.
+Parent reviews the three-file delta directly and verifies the existing core
+matching/conditions remain unchanged. Nine before-bootstrap/index and nine
+additional real RelayF3-first-slot fixture assertions are authored, not run;
+old markers/scenarios/budgets remain intact. Required next proof is the three
+actual failing contracts plus new/affected candidate/Machine checks and the
+one already-required native interaction, not all prior green proofs.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the
