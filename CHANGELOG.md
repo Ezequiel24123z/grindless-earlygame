@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Assign the combined selector/controller mechanism qualification on repaired source.**
+  Sole604 receives G9/exactbb5/new full root after verified G8 return.
+  Confirm the tool compile repair and changed Java/AST/recipe/view/persistence
+  contracts, then one existing clean-source matrix-lifecycle probe for the
+  genuinely new server registration/selection/paid-work/menu/NBT boundary.
+  Normal writers/independent checks may then produce only four payloads/A9.
+  No repeated FTB/paid/ABI/package/target or per-recipe smoke; native menu
+  carriers are not rendered GUI or actual client-wire evidence.
 - **Normally integrate the precise FriendlyByteBuf fixture repair.**
   Source0ab654b/exact438 parent splits four writes on the same typed buffer,
   preserving19/5L/8/257 and the same decoder refusal without casts/skips.

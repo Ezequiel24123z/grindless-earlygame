@@ -860,6 +860,19 @@ seams. Java/AST/server/packet/native/rendered/real-save proof still needs a
 new exact-source window. Data58 receives this actual published baseline for
 the now-released shared check; no code or receipt is live-retargeted.
 
+**G9 assignment only:** sourcebb5/sole604/new full root after verified G8
+return. Actual compiler confirmation and affected selector/controller Java/
+AST/lookup/UI/NBT contracts precede one canonical existing matrix-lifecycle
+on CLEANbb5. It must resolve the changed server registration, real BE target/
+paid double-credit/suspension/reload/menu/reentrancy boundary, not old G4
+or one run per content row. Capture exact tested/staged/remapped JAR/inventory/
+raw exits/natural stop before any later Gradle. Native menu/player carrier
+state and codec coverage are not graphical or actual client-wire proof.
+Normal writers/CheckOnly/canonical/provenance then may produce only four
+payloads and a bounded local dataA9 exactparentbb5 after passes/frozen inputs.
+No FTB/backend/ABI/paid/package/target/client/ownerworld or acceptance
+permission/result follows; all new observations remain pending.
+
 **G7 report12:21:13Z, still awaiting final custody/leaseback:** clean
 ApplicableSource26e/Java0/locksfalse; one direct plain FTB boot reports0,
 ready51/Done and natural save/stop, with tested JAR/inventory captured before

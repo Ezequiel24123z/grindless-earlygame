@@ -4,6 +4,28 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**NEW G9 GO, no result inferred:** sole604/exact
+bb5f137b945277c04fd4042b43d121ad3552c2ff/new inventoried full root.
+All selector438/controllerccfe/fixture0ab sources are reviewed and normally
+composed, old CI red preserved. First confirm actual tool-javac and changed
+logic/recipe/Atlas/UI/persistence/registry contracts with original exact-source
+CI reuse when available. One existing canonical matrix-lifecycle on cleanbb5
+then resolves a NEW uncertainty: server registration and real selected-ID/
+recipe-owned fractional/suspended/blocked work, menu authority, NBT/reload and
+reentrant settlement. Old G4 cannot prove this new behavior. No new scenario/
+budget/quest-paid probe; retain the new diagnostic world and actual JAR/
+inventory/exits before later Gradle.
+
+After that, normal Guidance/Economy/T1 writers, independent CheckOnly/resource
+refresh/canonical checks and actual observed provenance may change only the
+four normal payloads. A local normal A9 with exact parentbb5/both trailers is
+allowed after real passes/frozen other inputs/Java0/locksfalse, with bundle
+for parent; no push or runtime stage after data. Reuse unchanged G7 FTB/ABI/
+file proof and old unrelated mechanisms. No package/Prism/target/player action.
+The native fixture's menu-player carriers do not prove rendered GUI or actual
+client wire delivery. Return raw/class/payload/native/guard custody and fresh
+explicit leaseback; no live source hotfix/Sync or whole-tier claim.
+
 **Selector CI compile red source-repaired, confirmation pending:** exactcb2d/run39791306862/
 artifact12430349463 has environment0/build0 but tool-javac fails before every
 suite at VerifyMachineUi277: chained inherited writes return ByteBuf, which
