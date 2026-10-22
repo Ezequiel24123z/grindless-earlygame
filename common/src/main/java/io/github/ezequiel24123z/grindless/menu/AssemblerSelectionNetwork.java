@@ -18,7 +18,6 @@ import java.util.Optional;
 public final class AssemblerSelectionNetwork {
     private static final ResourceLocation SELECT = Grindless.id("assembler_select");
     private static final ResourceLocation STATE = Grindless.id("assembler_selection");
-    private static final int MAX_ROWS = 4096;
 
     public record Request(int container, long token, int revision, String recipe) {
     }
@@ -41,6 +40,7 @@ public final class AssemblerSelectionNetwork {
                     if (context.getPlayer() instanceof ServerPlayer player) {
                         refuse(player, MachineMenuHost.SelectionResult.MALFORMED);
                         if (player.containerMenu instanceof ProcessMachineMenu menu) {
+                            menu.recordSelectionResult(MachineMenuHost.SelectionResult.MALFORMED);
                             menu.sendSelection(true);
                         }
                     }
@@ -56,6 +56,7 @@ public final class AssemblerSelectionNetwork {
                                 && result != MachineMenuHost.SelectionResult.UNCHANGED) {
                             refuse(player, result);
                         }
+                        menu.recordSelectionResult(result);
                         menu.sendSelection(true);
                     } else {
                         refuse(player, MachineMenuHost.SelectionResult.CLOSED);
@@ -150,19 +151,25 @@ public final class AssemblerSelectionNetwork {
         if (!Double.isFinite(progress) || progress < 0.0) {
             throw new io.netty.handler.codec.DecoderException("Invalid synchronized Assembler progress");
         }
-        MachineMenuHost.SelectionIssue issue = data.readEnum(MachineMenuHost.SelectionIssue.class);
+        int issueCode = data.readVarInt();
+        if (issueCode < 0 || issueCode >= MachineMenuHost.SelectionIssue.values().length) {
+            throw new io.netty.handler.codec.DecoderException("Invalid synchronized Assembler issue");
+        }
+        MachineMenuHost.SelectionIssue issue = MachineMenuHost.SelectionIssue.values()[issueCode];
         Map<String, Double> suspended = new LinkedHashMap<>();
-        int count = readCount(data);
+        int count = readCount(data, 1 + Double.BYTES);
         for (int index = 0; index < count; index++) {
             String id = data.readUtf(AssemblerWork.MAX_ID_LENGTH);
             double work = data.readDouble();
-            if (!Double.isFinite(work) || work <= 0.0 || suspended.putIfAbsent(id, work) != null) {
+            if (!Double.isFinite(work) || work <= 0.0
+                    || id.equals(active) && (!id.isEmpty() || progress > 0.0)
+                    || suspended.putIfAbsent(id, work) != null) {
                 throw new io.netty.handler.codec.DecoderException("Invalid synchronized suspended Assembler work");
             }
         }
         Optional<List<ProcessMachineMenu.RecipeChoice>> catalogue = Optional.empty();
         if (data.readBoolean()) {
-            int size = readCount(data);
+            int size = readCount(data, 2);
             List<ProcessMachineMenu.RecipeChoice> choices = new ArrayList<>(size);
             java.util.Set<String> ids = new java.util.HashSet<>();
             for (int index = 0; index < size; index++) {
@@ -182,9 +189,9 @@ public final class AssemblerSelectionNetwork {
                 catalogue, acknowledgement);
     }
 
-    private static int readCount(FriendlyByteBuf data) {
+    private static int readCount(FriendlyByteBuf data, int minimumBytes) {
         int count = data.readVarInt();
-        if (count < 0 || count > MAX_ROWS) {
+        if (count < 0 || count > data.readableBytes() / minimumBytes) {
             throw new io.netty.handler.codec.DecoderException("Invalid Assembler row count: " + count);
         }
         return count;

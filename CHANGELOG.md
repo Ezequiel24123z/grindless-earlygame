@@ -20,7 +20,8 @@ entries below reference those records by id.
   double base-work, fail-closed retained malformed state and server-owned
   menu/opening/catalogue validation. A native searchable output picker
   extends only the Assembler; AUTO, other layouts, stores and rollback stay
-  intact. Existing contract/native-fixture cases are being authored; local
+  intact. Existing contract/native-fixture cases are authored, including the
+  strictly coupled work-entry AST profile and refusal mutations; local
   non-JVM evidence cannot qualify Java, native behavior, appearance, the
   player's world or whole T1. No recipes, bills, dependencies or outputs change.
 - **Choose explicit Assembler targets instead of repricing colliding recipes.**

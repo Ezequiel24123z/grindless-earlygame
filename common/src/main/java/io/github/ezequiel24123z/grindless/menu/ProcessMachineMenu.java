@@ -55,6 +55,7 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
         }
     };
     private final long openingToken;
+    private final SimpleContainerData selectionResult = new SimpleContainerData(1);
     private ProcessLookup.Generation selectionGeneration;
     private int selectionRevision;
     private String lastTarget;
@@ -103,6 +104,8 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
                 }
             }
             addDataSlots(opening);
+            selectionResult.set(0, MachineMenuHost.SelectionResult.UNCHANGED.ordinal());
+            addDataSlots(selectionResult);
         }
     }
 
@@ -222,6 +225,20 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
 
     public boolean selectionPending() {
         return selectionPending;
+    }
+
+    public MachineMenuHost.SelectionResult selectionResult() {
+        int code = selectionResult.get(0);
+        var results = MachineMenuHost.SelectionResult.values();
+        return code >= 0 && code < results.length ? results[code] : MachineMenuHost.SelectionResult.MALFORMED;
+    }
+
+    void recordSelectionResult(MachineMenuHost.SelectionResult result) {
+        if (!(owner instanceof ServerPlayer)) {
+            throw new IllegalStateException("Only the server records Assembler selection results");
+        }
+        selectionResult.set(0, result.ordinal());
+        broadcastChanges();
     }
 
     public void requestSelection(SelectionView displayed, String recipeId) {

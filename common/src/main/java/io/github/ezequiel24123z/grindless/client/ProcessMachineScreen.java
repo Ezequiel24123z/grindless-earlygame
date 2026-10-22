@@ -160,6 +160,8 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
                 && shownSelection.state().issue() != MachineMenuHost.SelectionIssue.INVALID_WORK;
         auto.active = enabled;
         auto.setMessage(Component.translatable(menu.selectionPending() ? "gui.grindless.assembler.waiting"
+                : shownSelection != null && shownSelection.state().issue() == MachineMenuHost.SelectionIssue.INVALID_WORK
+                        ? "gui.grindless.assembler.invalid_state"
                 : shownSelection != null && shownSelection.state().selected().isEmpty()
                         ? "gui.grindless.assembler.auto_selected" : "gui.grindless.assembler.auto"));
         for (int row = 0; row < recipeButtons.size(); row++) {
@@ -341,6 +343,12 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
     private Component statusLine() {
         Component base = machineStatusLine();
         if (menu.kind() == MachineMenuKind.ASSEMBLER) {
+            var result = menu.selectionResult();
+            if (!menu.selectionPending() && result != MachineMenuHost.SelectionResult.SELECTED
+                    && result != MachineMenuHost.SelectionResult.UNCHANGED) {
+                base = Component.translatable(result.translationKey()).withStyle(ChatFormatting.RED)
+                        .append("\n").append(base);
+            }
             return Component.empty().append(base).append("\n").append(shownSelection == null
                     ? Component.translatable("gui.grindless.assembler.loading")
                     : Component.translatable(shownSelection.state().issue().translationKey()));
@@ -350,7 +358,9 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
 
     private Component targetLine() {
         String id = shownSelection.state().selected();
-        Component name = id.isEmpty() ? Component.translatable("gui.grindless.assembler.auto")
+        Component name = shownSelection.state().issue() == MachineMenuHost.SelectionIssue.INVALID_WORK
+                ? Component.translatable("gui.grindless.assembler.invalid_state")
+                : id.isEmpty() ? Component.translatable("gui.grindless.assembler.auto")
                 : shownSelection.choices().stream().filter(choice -> choice.id().equals(id)).findFirst()
                         .map(choice -> choice.output().isEmpty() ? Component.literal(id) : choice.output().getHoverName())
                         .orElseGet(() -> Component.translatable("gui.grindless.assembler.unavailable", id));
@@ -358,6 +368,9 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
     }
 
     private Component workLine() {
+        if (shownSelection.state().issue() == MachineMenuHost.SelectionIssue.INVALID_WORK) {
+            return Component.translatable("gui.grindless.assembler.retained_work");
+        }
         return Component.translatable("gui.grindless.assembler.work", Double.toString(shownSelection.state().activeWork()),
                 shownSelection.state().suspended().size());
     }
@@ -402,11 +415,14 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
                 tooltip.add(Component.literal(shownSelection.state().selected()));
                 tooltip.add(Component.translatable(shownSelection.state().issue().translationKey()));
                 tooltip.add(workLine());
-                tooltip.add(Component.translatable("gui.grindless.assembler.active_work",
-                        shownSelection.state().activeRecipe().isEmpty()
-                                ? Component.translatable("gui.grindless.assembler.unattributed")
-                                : shownSelection.state().activeRecipe(),
-                        Double.toString(shownSelection.state().activeWork())));
+                if (shownSelection.state().issue() != MachineMenuHost.SelectionIssue.INVALID_WORK) {
+                    tooltip.add(Component.translatable("gui.grindless.assembler.active_work",
+                            shownSelection.state().activeRecipe().isEmpty()
+                                    ? Component.translatable(shownSelection.state().activeWork() > 0
+                                            ? "gui.grindless.assembler.unattributed" : "gui.grindless.assembler.no_active_recipe")
+                                    : shownSelection.state().activeRecipe(),
+                            Double.toString(shownSelection.state().activeWork())));
+                }
                 tooltip.add(Component.translatable("gui.grindless.assembler.work_help"));
                 ResourceGuidanceClient.renderTooltip(graphics, font, tooltip, mouseX, mouseY);
             }

@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.material.MaterialSnapshot;
+import io.github.ezequiel24123z.grindless.fluid.FluidState;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuKind;
 import io.github.ezequiel24123z.grindless.process.ConditionBand;
 import io.github.ezequiel24123z.grindless.process.MachineEnvelopes;
@@ -67,6 +68,7 @@ public final class VerifyRecipes {
         pressure();
         logic();
         crafts();
+        explicitAssemblerLookup();
 
         System.out.println(failures == 0
                 ? "ALL RECIPE CHECKS PASSED"
@@ -125,6 +127,128 @@ public final class VerifyRecipes {
         yes("minimum-primary candidates never cross machine families",
                 List.of(otherFamily).equals(candidates.invoke(graph, MachineFamily.PRESS,
                         List.of("fluid:minecraft:water"))));
+    }
+
+    private static void explicitAssemblerLookup() throws Exception {
+        ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
+        List<ProcessRecipe> real = ProcessLookup.recipes();
+        for (ProcessRecipe row : real) {
+            yes(row.id() + " has one current stable identity in its exact family",
+                    ProcessLookup.byId(row.family(), row.id()).orElseThrow() == row);
+            yes(row.id() + " fits the bounded ID wire contract",
+                    row.id().length() <= io.github.ezequiel24123z.grindless.machine.AssemblerWork.MAX_ID_LENGTH);
+        }
+        yes("the family view exhaustively retains graph order",
+                ProcessLookup.recipes(MachineFamily.ASSEMBLER).equals(real.stream()
+                        .filter(row -> row.family() == MachineFamily.ASSEMBLER).toList()));
+        ProcessRecipe washer = ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/chemical_washer").orElseThrow();
+        ProcessRecipe reactor = ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/chemical_reactor").orElseThrow();
+        ProcessRecipe cell = ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/electrolysis_cell").orElseThrow();
+        yes("real Washer, Reactor and Cell are distinct IDs with the same unchanged bill",
+                washer.inputs().equals(reactor.inputs()) && washer.inputs().equals(cell.inputs())
+                        && !washer.outputs().equals(reactor.outputs()) && !washer.outputs().equals(cell.outputs()));
+        yes("the same bill remains casing1, motor2 and plates4",
+                washer.itemInputs().equals(List.of(IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.item(FabricationLogic.MOTOR, 2), IngredientSpec.tag("forge:plates/iron", 4))));
+        no("exact ID lookup never borrows another family",
+                ProcessLookup.byId(MachineFamily.CHEMICAL_WASHER, washer.id()).isPresent());
+        no("unknown saved IDs do not acquire another current identity",
+                ProcessLookup.byId(MachineFamily.ASSEMBLER, "removed/unknown").isPresent());
+
+        SharedConstants.tryDetectVersion();
+        Bootstrap.bootStrap();
+        List<IngredientSpec> carriers = List.of(IngredientSpec.item("minecraft:quartz", 1),
+                IngredientSpec.item("minecraft:copper_ingot", 2), IngredientSpec.item("minecraft:iron_ingot", 4));
+        ProcessRecipe boundWasher = new ProcessRecipe(washer.id(), washer.family(), carriers, washer.outputs(),
+                washer.temperatureC(), washer.atmosphere(), washer.durationTicks(), washer.fuPerTick());
+        ProcessRecipe boundReactor = new ProcessRecipe(reactor.id(), reactor.family(), carriers, reactor.outputs(),
+                reactor.temperatureC(), reactor.atmosphere(), reactor.durationTicks(), reactor.fuPerTick());
+        ProcessRecipe foreign = new ProcessRecipe("press/plate/iron", MachineFamily.PRESS, carriers,
+                washer.outputs(), Double.NaN, null, 20, 32);
+        List<IngredientSpec> wetInputs = new ArrayList<>(carriers);
+        wetInputs.add(IngredientSpec.fluid("minecraft:water", 250));
+        wetInputs.add(IngredientSpec.fluid("grindless:oxygen", 100));
+        ProcessRecipe wet = new ProcessRecipe("check/selected_wet", MachineFamily.ASSEMBLER, wetInputs,
+                washer.outputs(), Double.NaN, null, 20, 32);
+        ItemStack[] inputs = {new ItemStack(Items.QUARTZ), new ItemStack(Items.COPPER_INGOT, 2),
+                new ItemStack(Items.IRON_INGOT, 4), ItemStack.EMPTY};
+        Field graph = ProcessLookup.class.getDeclaredField("GRAPH");
+        graph.setAccessible(true);
+        Object original = graph.get(null);
+        Method index = original.getClass().getDeclaredMethod("index", List.class);
+        index.setAccessible(true);
+        try {
+            graph.set(null, index.invoke(null, List.of(boundWasher, boundReactor, foreign, wet)));
+            eq("AUTO keeps the last dry match (vanilla carriers, not native acquisition)", boundReactor.id(),
+                    ProcessLookup.find(MachineFamily.ASSEMBLER, inputs).orElseThrow().id());
+            for (ProcessRecipe selected : List.of(boundWasher, boundReactor)) {
+                yes(selected.id() + " independently resolves instead of last-dry shadowing (carriers)",
+                        ProcessLookup.findSelected(MachineFamily.ASSEMBLER, selected.id(), inputs,
+                                FluidState.EMPTY, List.of()).orElseThrow() == selected);
+            }
+            no("an explicit unknown target never falls back to a matching dry row",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, "removed/unknown", inputs,
+                            FluidState.EMPTY, List.of()).isPresent());
+            no("an explicit foreign target never falls back to a matching dry row",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, foreign.id(), inputs,
+                            FluidState.EMPTY, List.of()).isPresent());
+            inputs[2].setCount(3);
+            no("the explicit target still needs the entire real bill's plate count (carriers)",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, boundWasher.id(), inputs,
+                            FluidState.EMPTY, List.of()).isPresent());
+            inputs[2] = new ItemStack(Items.IRON_INGOT, 4);
+            inputs[1] = new ItemStack(Items.PAPER, 2);
+            no("equal counts of the wrong physical item cannot start the selected target",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, boundWasher.id(), inputs,
+                            FluidState.EMPTY, List.of()).isPresent());
+            inputs[1] = new ItemStack(Items.COPPER_INGOT, 2);
+            inputs[3] = new ItemStack(Items.REDSTONE, 64);
+            yes("explicit targeting preserves the incumbent surplus-slot matching contract",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, boundWasher.id(), inputs,
+                            FluidState.EMPTY, List.of()).isPresent());
+            no("a selected wet mechanism requires primary fluid",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, wet.id(), inputs,
+                            FluidState.EMPTY, List.of(FluidState.of("grindless:oxygen", 100))).isPresent());
+            no("a selected wet mechanism rejects short primary fluid",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, wet.id(), inputs,
+                            FluidState.of("minecraft:water", 249),
+                            List.of(FluidState.of("grindless:oxygen", 100))).isPresent());
+            no("a selected wet mechanism rejects a wrong primary fluid",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, wet.id(), inputs,
+                            FluidState.of("minecraft:lava", 250),
+                            List.of(FluidState.of("grindless:oxygen", 100))).isPresent());
+            no("a selected wet mechanism rejects short adjacent fluid",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, wet.id(), inputs,
+                            FluidState.of("minecraft:water", 250),
+                            List.of(FluidState.of("grindless:oxygen", 99))).isPresent());
+            yes("the same selected mechanism admits exact primary and adjacent supplies",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, wet.id(), inputs,
+                            FluidState.of("minecraft:water", 250),
+                            List.of(FluidState.of("grindless:oxygen", 100))).orElseThrow() == wet);
+            ProcessLookup.Generation old = ProcessLookup.generation();
+            graph.set(null, index.invoke(null, List.of(boundReactor, boundWasher, foreign, wet)));
+            yes("reindexing atomically changes the generation and ID table", old != ProcessLookup.generation());
+            eq("reordering changes only the incumbent AUTO dry priority", boundWasher.id(),
+                    ProcessLookup.find(MachineFamily.ASSEMBLER, inputs).orElseThrow().id());
+            eq("reordering cannot change the explicit Reactor target", boundReactor.id(),
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, boundReactor.id(), inputs,
+                            FluidState.EMPTY, List.of()).orElseThrow().id());
+            ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
+            yes("a real rebuild resolves the selected stable ID to the new real row, not the carrier object",
+                    ProcessLookup.byId(MachineFamily.ASSEMBLER, washer.id()).orElseThrow() != boundWasher);
+            no("old carrier inputs cannot execute a current real recipe after reload",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, washer.id(), inputs,
+                            FluidState.EMPTY, List.of()).isPresent());
+            try {
+                index.invoke(null, List.of(boundWasher, boundWasher));
+                fail("duplicate recipe IDs must not publish an arbitrary identity");
+            } catch (java.lang.reflect.InvocationTargetException expected) {
+                yes("duplicate recipe IDs fail graph construction explicitly",
+                        expected.getCause() instanceof IllegalArgumentException);
+            }
+        } finally {
+            graph.set(null, original);
+        }
     }
 
     private static void graph() throws Exception {

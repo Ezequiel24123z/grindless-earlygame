@@ -46,7 +46,7 @@ public interface MachineMenuHost {
     }
 
     enum SelectionIssue {
-        AUTO, SELECTED, UNAVAILABLE, MISSING_ITEMS, MISSING_FLUID, CONDITIONS, OUTPUT_BLOCKED, INVALID_WORK, WORK_LIMIT;
+        AUTO, SELECTED, UNAVAILABLE, MISSING_ITEMS, MISSING_FLUID, CONDITIONS, OUTPUT_BLOCKED, INVALID_WORK;
 
         public String translationKey() {
             return "gui.grindless.assembler.state." + name().toLowerCase(java.util.Locale.ROOT);
@@ -54,7 +54,7 @@ public interface MachineMenuHost {
     }
 
     enum SelectionResult {
-        SELECTED, UNCHANGED, CLOSED, DENIED, STALE, INVALID_RECIPE, NOT_ASSEMBLER, BUSY, INVALID_WORK, MALFORMED, WORK_LIMIT;
+        SELECTED, UNCHANGED, CLOSED, DENIED, STALE, INVALID_RECIPE, NOT_ASSEMBLER, BUSY, INVALID_WORK, MALFORMED;
 
         public String translationKey() {
             return "gui.grindless.assembler.result." + name().toLowerCase(java.util.Locale.ROOT);

@@ -19,7 +19,6 @@ public final class AssemblerWork {
     public static final String TARGET = "SelectedRecipe";
     public static final String SUSPENDED = "SuspendedWork";
     public static final int MAX_ID_LENGTH = 256;
-    public static final int MAX_SUSPENDED = 4096;
     private static final List<String> SAVED_KEYS = List.of(
             "Progress", "Recipe", "WorkRecipe", TARGET, SUSPENDED);
 
@@ -50,19 +49,13 @@ public final class AssemblerWork {
         selected = id;
     }
 
-    public boolean hasRoom(String previousId, double previousWork, String nextId) {
-        return previousId.equals(nextId) || previousWork <= 0.0
-                || suspended.containsKey(nextId) || suspended.size() < MAX_SUSPENDED;
-    }
-
     /** Moves, never adds, an exact double balance. The empty owner retains unattributed legacy work. */
     public double activate(String previousId, double previousWork, String nextId) {
         requireValid();
         requireId(previousId);
         requireId(nextId);
         if (nextId.isEmpty() || !Double.isFinite(previousWork) || previousWork < 0.0
-                || suspended.containsKey(previousId) && (!previousId.isEmpty() || previousWork > 0.0)
-                || !hasRoom(previousId, previousWork, nextId)) {
+                || suspended.containsKey(previousId) && (!previousId.isEmpty() || previousWork > 0.0)) {
             throw new IllegalStateException("Invalid active Assembler work transition");
         }
         if (previousId.equals(nextId)) {
@@ -92,7 +85,6 @@ public final class AssemblerWork {
             requireId(target);
             if (tag.contains(SUSPENDED)) {
                 if (!(tag.get(SUSPENDED) instanceof ListTag rows)
-                        || rows.size() > MAX_SUSPENDED
                         || !rows.isEmpty() && rows.getElementType() != Tag.TAG_COMPOUND) {
                     throw new IllegalArgumentException("SuspendedWork must contain work compounds");
                 }

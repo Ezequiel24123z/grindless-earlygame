@@ -45,7 +45,7 @@ public final class VerifyLogic {
         AssemblerWork work = new AssemblerWork();
         yes("a fresh machine is unselected AUTO", work.selected().isEmpty() && work.suspended().isEmpty());
         work.select(washer);
-        double paid = 17.0 + ProcessLogic.work(13L, 32L, 0.75, 0.8);
+        double paid = 17.0 + ProcessLogic.work(13L, 32L, 0.75, 1.3);
         double fraction = ProcessLogic.work(1L, 32L, 0.5, 0.8);
         Map<String, Double> expected = new LinkedHashMap<>();
         expected.put(washer, paid);
@@ -100,6 +100,21 @@ public final class VerifyLogic {
                 completed.activate(reactor, 0.0, washer));
         exact("selecting the current recipe cannot duplicate fractional carry", carry,
                 completed.activate(washer, carry, washer));
+
+        AssemblerWork history = new AssemblerWork();
+        String historical = "removed/history/0";
+        for (int index = 1; index <= 4100; index++) {
+            String nextHistory = "removed/history/" + index;
+            history.activate(historical, 0.125, nextHistory);
+            historical = nextHistory;
+        }
+        exact("unavailable history cannot impose a paid-job cap on a new selected target", 0.0,
+                history.activate(historical, 0.125, washer));
+        exact("fractional work remains switchable even beside thousands of unavailable old IDs", 0.0,
+                history.activate(washer, 0.25, reactor));
+        exact("that fractional work remains exactly recoverable without deleting unavailable history", 0.25,
+                history.activate(reactor, 0.0, washer));
+        yes("all unavailable history remains retained", history.suspended().size() == 4101);
     }
 
     private static void exact(String what, double expected, double actual) {

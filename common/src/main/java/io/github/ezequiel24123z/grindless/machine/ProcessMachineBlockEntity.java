@@ -419,6 +419,8 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     private boolean currentAssemblerWork(ProcessRecipe recipe) {
         return assemblerWork.valid() && recipe.family() == kind.family()
                 && recipe.id().equals(workRecipeId) && progress >= recipe.durationTicks()
+                && kind.regulationReport(recipe).canRun()
+                && ProcessLookup.conditionsOf(recipe).evaluate(conditions()).canRun()
                 && (assemblerWork.selected().isEmpty() || assemblerWork.selected().equals(recipe.id()))
                 && (ProcessLookup.byId(kind.family(), recipe.id()).filter(current -> current == recipe).isPresent()
                 || assemblerWork.selected().isEmpty() && LegacyGuideAssembly.retired(kind.family(), recipe.id()));
@@ -643,10 +645,6 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             return cached;
         }
         cached = matchingRecipe(sources).orElse(null);
-        if (cached != null && kind == ProcessMachineKind.ASSEMBLER
-                && !assemblerWork.hasRoom(workRecipeId, progress, cached.id())) {
-            cached = null;
-        }
         cachedRecipeId = cached == null ? "" : cached.id();
         if (cached != null) {
             if (kind == ProcessMachineKind.ASSEMBLER) {
@@ -1146,10 +1144,6 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             return SelectionIssue.INVALID_WORK;
         }
         if (assemblerWork.selected().isEmpty()) {
-            Optional<ProcessRecipe> automatic = matchingRecipe(FluidInsert.neighbours(getLevel(), getBlockPos()));
-            if (automatic.isPresent() && !assemblerWork.hasRoom(workRecipeId, progress, automatic.get().id())) {
-                return SelectionIssue.WORK_LIMIT;
-            }
             return SelectionIssue.AUTO;
         }
         ProcessRecipe selected = ProcessLookup.byId(kind.family(), assemblerWork.selected()).orElse(null);
@@ -1191,6 +1185,10 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
                 || !player.mayUseItemAt(getBlockPos(), Direction.UP, ItemStack.EMPTY)) {
             return SelectionResult.DENIED;
         }
+        return changeRecipeSelection(id);
+    }
+
+    private SelectionResult changeRecipeSelection(String id) {
         if (loadingInventory || processing || settling) {
             return SelectionResult.BUSY;
         }
@@ -1203,9 +1201,6 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         }
         if (assemblerWork.selected().equals(id)) {
             return SelectionResult.UNCHANGED;
-        }
-        if (!id.isEmpty() && !assemblerWork.hasRoom(workRecipeId, progress, id)) {
-            return SelectionResult.WORK_LIMIT;
         }
         if (!id.isEmpty()) {
             activateAssemblerWork(id);
