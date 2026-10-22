@@ -341,6 +341,16 @@ public final class VerifyT1Progression {
         equal("the existing exporter includes all six live wet authorities", 6,
                 wetDocument.getAsJsonArray("routes").size());
         equal("raw source hashes are not embedded in committed model data", false, document.has("authority_sha256"));
+        equal("finite quantity evidence cannot approve the open external Furnace policy boundary",
+                "OPEN_COORDINATOR_PRODUCT_BOUNDARY_NOT_AN_EXEMPTION",
+                document.get("external_furnace_policy").getAsString());
+        equal("the open boundary lists actual automatic Furnace authorities rather than inventing an exemption",
+                snapshot.routes().values().stream().filter(route -> route.automatable()
+                                && route.retainedOutputs().containsKey(item("minecraft:furnace")))
+                        .map(Route::id).toList(),
+                java.util.stream.StreamSupport.stream(
+                                document.getAsJsonArray("external_furnace_automatic_routes").spliterator(), false)
+                        .map(element -> element.getAsString()).toList());
         for (String flag : List.of("t1_accepted", "t1_renewable_closure_proven", "global_optimum_claimed")) {
             equal("bounded source evidence cannot invent " + flag, false, document.get(flag).getAsBoolean());
         }
@@ -355,6 +365,7 @@ public final class VerifyT1Progression {
                 List.of("The finite conditional continuation does not certify recursive T1 renewable closure or the broader T1 family contract.",
                         "This finite witness chooses automatic recurring components where available; manual alternatives remain valid player choices. Complete recurrent input, power and routing closure is not proved.",
                         "Continuous factory power, nighttime/restart recovery, routing throughput and captured-gas handling need separate evidence.",
+                        "Inherited automatic Minecraft Furnace routes remain an open product boundary, not an approved component/infrastructure exemption.",
                         "Native client, Survival play, actual crafting and longitudinal save compatibility are not proved by this export."),
                 T1Sustainability.document(t0).get("unproved"));
         equal("every direct consumption/catalyst edge is exported", inputs.size(),
@@ -816,7 +827,7 @@ public final class VerifyT1Progression {
             manualNormalConstruction(snapshot.routes().get("craft/" + machine));
         }
         for (Route route : snapshot.routes().values()) {
-            equal("no live automatic producer can manufacture complete normal machines: " + route.id(), false,
+            equal("no live automatic producer can manufacture policy-classified Grindless normal machines: " + route.id(), false,
                     route.automatable() && route.retainedOutputs().keySet().stream()
                             .anyMatch(resource -> ManufacturingPolicy.isManualFinalMachine(resource.id())));
         }

@@ -207,8 +207,13 @@ public final class T1Sustainability {
                 "exit_route", T1Progression.EXIT_ROUTE,
                 "lines", lines,
                 "finite_selected_routes", T1Progression.finiteRouteIds(),
-                "manufacturing_policy", "Normal final machines are manual capital; operating processes automate. "
-                        + "Other products retain their actual authored methods; automatic capability is not an obligation.",
+                "manufacturing_policy", "Policy-classified Grindless normal finals are manual capital; operating processes automate. "
+                        + "Other products retain authored methods; this is not universal external-product policy closure.",
+                "external_furnace_policy", "OPEN_COORDINATOR_PRODUCT_BOUNDARY_NOT_AN_EXEMPTION",
+                "external_furnace_automatic_routes", snapshot.routes().values().stream()
+                        .filter(route -> route.automatable()
+                                && route.retainedOutputs().containsKey(item("minecraft:furnace")))
+                        .map(Route::id).toList(),
                 "mandatory_input_evidence", inputEvidence,
                 "finite_execution", finiteDocument(finite),
                 "seed_allocation", row("batch_output", allocation.batchOutput(),
@@ -236,6 +241,7 @@ public final class T1Sustainability {
                                 : "The finite conditional continuation is blocked; inspect its actual completed batches and findings.",
                         "This finite witness chooses automatic recurring components where available; manual alternatives remain valid player choices. Complete recurrent input, power and routing closure is not proved.",
                         "Continuous factory power, nighttime/restart recovery, routing throughput and captured-gas handling need separate evidence.",
+                        "Inherited automatic Minecraft Furnace routes remain an open product boundary, not an approved component/infrastructure exemption.",
                         "Native client, Survival play, actual crafting and longitudinal save compatibility are not proved by this export."));
         return Collections.unmodifiableMap(document);
     }
@@ -266,7 +272,7 @@ public final class T1Sustainability {
                 .append("## Exact batches\n\n")
                 .append("Each row is one batch at its catalogue conditions. Alternative recipes ")
                 .append("are choices, not mandatory duplicate crafts or simultaneous machine loads. ")
-                .append("Normal final machines are assembled manually; their operating processes automate. ")
+                .append("Policy-classified Grindless normal finals are assembled manually; their operating processes automate. ")
                 .append("Generator FU output is in the output ")
                 .append("column; the demand column is consumption only.\n\n")
                 .append("| Line | Role | Live authority | Machine | Consumed inputs | Retained catalysts | Outputs | Ticks | FU/t | Demand FU/batch |\n")
@@ -295,6 +301,9 @@ public final class T1Sustainability {
             text.append("- `").append(finding.fingerprint()).append("`: ").append(finding.message()).append("\n");
         }
         text.append("\n## Supply and proof boundaries\n\n")
+                .append("The inherited automatic Minecraft Furnace routes remain an open coordinator product decision. ")
+                .append("The manufacturing policy's OTHER classification is not an approved component/infrastructure exemption; ")
+                .append("this finite model does not settle that external-processor boundary.\n\n")
                 .append("The JSON records every mandatory consumed/catalytic edge separately. ")
                 .append("`T0_AUDITED_RENEWABLE` means the existing conditional audit proves that ")
                 .append("boundary under its stated environment and finite-establishment assumptions. ")
