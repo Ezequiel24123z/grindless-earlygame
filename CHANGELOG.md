@@ -20,9 +20,12 @@ entries below reference those records by id.
   process constructors, retaining their casing1/motor2/plates4 prefix,
   ordinary outputs,400ticks/32FU, milestones and all unrelated recipes.
   Atlas covers each live role/bill and T1 keeps Motor controller-free while
-  checking Washer's actual fourth-role supply. Phase A deliberately leaves
-  the shared VerifyRecipes six-role guard unchanged until selector release.
-  Java, normal writers, combined acquisition proof and deployment are not run;
+  checking Washer's actual fourth-role supply. Phase A preserves the leased
+  recipe verifier; after explicit release and normal cb2d30b composition,
+  Phase B checks exactly the old6+new9 identities/order and all nine complete
+  grouped bills, slots, costs and ordinary outputs. Preserve every selector
+  assertion and previous recipe guard outside that superseded role set.
+  Combined Java, normal writers, acquisition proof and deployment are not run;
   neither stronger substitution nor this data correction is a chassis upgrade.
 - **Normally compose the reviewed Assembler selector with F1 and A8.**
   Preserve the three source commits and all sixteen non-registry code/test/
