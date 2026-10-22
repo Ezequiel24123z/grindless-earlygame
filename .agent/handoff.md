@@ -4,7 +4,30 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
-**G10 repaired Java gates actually report PASS:** canonical Synca54 is
+**G10 actual native and model stages report PASS; final custody is pending.**
+Sole604 reports one canonical matrix-lifecycle on cleana54,19 expectations,
+aggregatePASS1/FAIL0, natural save-stop and retained world. Tested/staged/
+remapped JARs and inventory were frozen before subsequent Gradle. Three
+normal writers, three independent CheckOnly processes and three post-write
+canonical checks exit0, with four payload byte/mtime invariance and actual
+31/41 provenance. Last16:33:13Z Java0/locksfalse is intermediate, not returned.
+Normal A9 command157 and final raw/hash custody are still in progress; do not
+guess its SHA, assertion counts or leaseback. No replay is needed.
+
+**ADR-0187 source is running independently in the created isolated worktree.**
+Published decisionf5c2dde fixes conservation of actual T0 witness state through
+the existing auditor/reserve, not another starter kit/planner or a world
+inventory claim. App sessionb430ff47 is created, but its CLI startup and the
+same-session delivery recovery both fail at launch_and_sdk_start/30s without
+confirmed app-worker start or message delivery. Preserve that failure, do not
+create duplicate sessions. Runtime worker1c9a6363 is the single alternative
+implementation channel on that same isolated source branch. It owns only
+the audit/reserve/T1 source, existing checks/provenance and its bounded
+map/changelog entry; no PC/JVM/writer/gameplay/save/publication permission.
+Source basef5c2dde stays exact; it may not absorb A9/future refs on its own.
+The coordinator remains architecture/product/integration owner, not coder.
+
+**Earlier G10 repaired Java boundary:** canonical Synca54 is
 VerifiedDetached in the new root; common+Forge/classes/classpath and tool
 javac exit0. Source014's MachineUi and Persistence mains both execute exit0,
 without invoker bootstrap. Counts/raw hashes await final custody; stage
@@ -224,9 +247,9 @@ identity repairs invocation without altering Git configuration.
 
 | Category | Current integration boundary |
 | --- | --- |
-| COMPLETED | Verified G7/A7/G8/A8; selector/controller/fix source integrated; bb5 actual tool-javac confirms0ab; G9 ten-file original/unused-closure custody verified |
-| BLOCKED | Source014 repairs UI/NaN/AUTO harness authorship, but new compiler/suite/native confirmation, finite establishment and genuine upgrades remain |
-| NOT EXECUTED | G9 Sync/PC suites/native/writers/A9, final selector/UI/controller proof; player deployment, target launch, main/release and whole-tier acceptance |
+| COMPLETED | Verified G7/A7/G8/A8 and unused G9 custody; selector/controller/014 source integrated; G10 actual compiler/repaired mains/one native/normal model stages report0, final custody pending; ADR-0187 source decision published and one isolated runtime implementation started |
+| BLOCKED | Whole-T1 delivery still lacks finite establishment/autonomy/genuine upgrade/client/world evidence. App CLI startup failed twice; one runtime worker continues source instead, not a silent coordinator-coder fallback |
+| NOT EXECUTED | Final G10 A9/custody acceptance/integration; ADR-0187 Java/finite replay/writers; player deployment, target launch, main/release and whole-tier acceptance. Unused G9 remains unexecuted |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
 | NEEDS MY DECISION | None |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |

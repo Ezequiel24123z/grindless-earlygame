@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Keep finite-continuation source moving after a disclosed app startup failure.**
+  App sessionb430 is created but CLI startup and same-session delivery each
+  time out without a confirmed start/delivery. One runtime Sol6.1Max worker owns the
+  same isolated worktree/ADR-0187 outcome instead; the coordinator does not
+  become coder. Record actual G10 native/model stage reports separately from
+  pending A9/custody/leaseback and all unexecuted client/world work.
 - **Continue the finite first-factory boundary without replaying G10.**
   The executor reports one actual clean-a54 native aggregate PASS with all19
   expectations, natural save-stop and frozen JAR/inventory before subsequent

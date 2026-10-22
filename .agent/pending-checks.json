@@ -18,8 +18,19 @@
     "escalation": "serious_blocker_or_urgent_owner_decision",
     "no_implicit_public_release_main_merge_or_paid_generation": true
   },
+  "finite_T1_custody_continuation": {
+    "policy": "ADR-0187",
+    "status": "single_runtime_source_worker_running_in_created_isolated_worktree",
+    "source_base": "f5c2dde688c7c5b7e53cac3d9fe108ad8d3119cf",
+    "runtime_worker": "1c9a6363-a0ee-49cd-ba2b-ff5ea30661b7",
+    "associated_app_session": "b430ff47-f463-4b31-9598-042070fe829a",
+    "startup_failures": "two_appCLI_launch_and_sdk_start_timeouts30s_without_confirmed_workerstart_or_messagedelivery_alternative_runtime_task_only",
+    "scope": "existing_audit_reserve_conserved_T0_custody_firstfactory_F1reproduction_F2_existingchecks_provenance",
+    "PC_JVM_writers_gameplay_world_or_publication_authorized": false,
+    "finite_T1_or_whole_tier_proven": false
+  },
   "baseline_family_control_gap": {
-    "status": "sourceccfe_complete_normalcomposition_thischeckpoint_actual_combined_proof_pending",
+    "status": "sourceccfe_integrated_G10_actual_compiler_representative_native_normalmodels0_reported_finalA9_custody_pending",
     "final_source_checkpoint": "ccfe2f382d10633a0cd795686ba8283e09a7239b",
     "phaseA_checkpoint": "ab3bd4da7c3eb0b765969d65f555b4faf6b00b10",
     "policy": "ADR-0186",
@@ -32,12 +43,12 @@
     "next": "noncompeting_data_source_now_shared_VerifyRecipes_only_after_selector_explicitrelease_no_G8retarget"
   },
   "assembler_recipe_choice": {
-    "status": "source438_normalintegration_with_F1_A8_thischeckpoint_JVM_native_pending",
+    "status": "source438_0ab_014_integrated_G10_actual_repairedJava_ONE_native_models0_reported_finalA9_custody_pending_NOT_rendered_wire_world",
     "policy": "ADR-0185",
     "owner_session": "0752df7b-209e-4fd5-afe5-b3cf7c376471",
     "source_base": "3c00af09e26718671308fa4537a5ac483279c967",
     "source_checkpoint": "43838b8fdc17db468a45f80f91b766009f98e089",
-    "actual_CI_blocker": "originalcb2d_TOOLjavac1_preserved_source0ab_fixture_repair_reviewed_normalmerge_thischeckpoint_compiler_confirmation_pending_NO_PC",
+    "actual_CI_blocker": "historicalcb2d_TOOLjavac1_andbb5_UI_NaN_AUTO_reds_preserved_0ab_compilerconfirmed_bb5_repaired014_actualG10_JavaUI_Persistence0_native0_modelstages0_finalcustodypending",
     "VerifyRecipes_released_by_selector": true,
     "data_owner_requires_parent_integrated_baseline": true,
     "coupled_registry_scope": "only_work_wrapper_workCycle_fullnormalized_profile_plus_negatives_after_F1source_finished_no_defaultF1_profile_or_G8source_change",
@@ -86,7 +97,7 @@
     "qualification_package_fictitious_target_plan_authorized": false,
     "real_PrismRoot_player_world_writes_authorized": false,
     "allowed_data_derivation": "NORMALA9subset4_exact_parenta54_actualpasses_andfrozennonoutputs_JVM0locks0_bothtrailers_normal_localcommit_bundle_NO_push",
-    "result": "G10_actuala54_SyncCommonForgeClasspath_toolsJavac_UI_Persistence_ALL0_reported_native_next_no_models_yet_finalcustody_pending",
+    "result": "G10_actuala54_compiler_UI_Persistence_ONEcanonicalNative_3writers_3independentCheckOnly_3canonical_ALL0_reported_native19expectations_PASS1_FAIL0_frozenJARinventory_beforeGradle_last16_33_13Z_Java0locksfalse_INTERMEDIATE_A9command157_and_custody_return_pending",
     "returned": false,
     "returned_utc": null,
     "return_state": "NOT_OBSERVED_for_new_full_G10_window",

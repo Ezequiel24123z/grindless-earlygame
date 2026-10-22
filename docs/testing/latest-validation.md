@@ -955,6 +955,28 @@ raws/counts/hash custody is still pending. Sourcea54 is clean/Java0/locksfalse
 between stages, not returned. Executor continues the one existing canonical
 native before writers; no native, rendered or actual-wire result is inferred.
 
+**G10 actual native/model stage report, final custody pending:** the executor
+reports one clean-a54 canonical matrix-lifecycle0,19 expectations,
+aggregatePASS1/FAIL0, natural save-stop and retained world. Tested/staged/
+remapped JAR/inventory custody was frozen before later Gradle. The19 is the
+expectation count, not a guessed assertion count. Three normal writers,
+three independent CheckOnly processes and post-canonical14/15/16 exit0;
+four payload bytes/mtimes stay invariant through checks and actual31/41
+provenance is observed. Last16:33:13Z allJava0/locksfalse is intermediate.
+A9 command157/final raw hashes/counts/closure and coordinator acceptance are
+pending. No FTB/backend/old-root/package/Prism/GUI/owner-world stage occurred.
+
+**Independent ADR-0187 source dispatch and recovered startup failure:**
+app sessionb430ff47/worktree is created from publishedf5c2dde, but
+create_session and same-session message opening both time out at
+launch_and_sdk_start/30s without confirmed app-worker start or prompt delivery.
+Do not label that source execution or silently switch the coordinator to
+coding. One runtime Sol6.1Max worker1c9a6363 implements the same bounded
+source outcome in that isolated worktree instead; no duplicate project
+session, PC/JVM/writer or proof is created. Its future finite continuation
+must reuse the existing source-bound audit/reserve and actual custody;
+implementation and Java execution remain pending.
+
 **G7 report12:21:13Z, still awaiting final custody/leaseback:** clean
 ApplicableSource26e/Java0/locksfalse; one direct plain FTB boot reports0,
 ready51/Done and natural save/stop, with tested JAR/inventory captured before
