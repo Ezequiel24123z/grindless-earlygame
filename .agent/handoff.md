@@ -4,6 +4,32 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**G11 native-only is reported complete and explicitly returned; QA pending.**
+Fresh20:49:11Z absent-root admission/VerifiedDetached Syncf1b9 precedes one
+canonical matrix-lifecycle. Actual1273 assertions,19 markers exactly once,
+PASS1/FAIL0 and harness/native-sidecar/wrapper0 are reported; launcher0 is
+derived from the canonical rejection path, not an independent server receipt.
+Natural save-stop/new diagnostic world retained. Runtime snapshot20:55:46Z
+binds tested/staged/remapped JARea327c67/2576414 bytes, only Architectury
+and Grindless. No writer/check/canonical refresh/actual43-98/A10 exists.
+
+Custody46/manifesta7e8b510 and2599 unchanged source/old-output inputs plus
+four payload byte/mtime invariance are reported. Review4390aa5b checks the
+local raw/native/JAR/input/CI5/guard chain, not another producer. Fresh final
+read-only20:59:08.9449678Z reports cleanf1b9/owned-allJava0/locksfalse/own
+guard99725563 removed/absent; rawfinalc5bc4b7f remains outside the capsule.
+The amended ruling was admitted before return. No PC task remains or new
+grant is implied. All five original CI reds remain genuine model/fixture debt.
+
+**Factory oracle source repairf863 is normally integrated, not executed.**
+Exact parentf1b9/treefce2064a changes only VerifyFactory and its own bullet
+(43 insertions2 deletions). Parent directly reviews the complete typed bill,
+actual shipped JSON decoder, one minimumF1/control/output and four precise
+negative variants, with all other world conditions intact. Private separate
+handoff11666 bytes/SHAb0020864 is parent verified. Normal merge preserves
+its exact test blob and source/runtime/canonical files; no new compile/native
+pass or CI retarget follows. C still diagnoses actual-gate/guidance failures.
+
 **Owner decision fallback:** if the owner is unavailable for a question,
 use relevant verified GregTech/comparable technical-modpack precedent,
 adapt it to existing Grindless authorities and record a bounded decision.
@@ -544,9 +570,9 @@ identity repairs invocation without altering Git configuration.
 
 | Category | Current integration boundary |
 | --- | --- |
-| COMPLETED | Historical proofs/source integration preserved; exactf1b9 CI compiler and listed changed contracts pass; original5 CI logs parent-hash verified; A/C source repair ownership assigned |
-| BLOCKED | Actual conditional T0 gate false, Factory typed-control oracle and missing craft/capital guidance fixture; not all five red suites are stale. No urgent owner/credential decision |
-| NOT EXECUTED | New native result and fresh lease return; actual finite/model/writers/observed43-98/A10 remain blocked. No rendered/client-wire/owner-world/campaign/package/player deployment/main/release/whole-tier acceptance |
+| COMPLETED | Exactf1b9 CI compiler/named contracts and native-only1273/19/clean return reported; originalCI5 parent hashes verified; Factoryf863 source repair normally integrated; local46-file QA in progress |
+| BLOCKED | Actual conditional T0 gate and missing guidance fixture remain; repaired Factory test still needs actual execution. Native does not close those model errors |
+| NOT EXECUTED | Revised-source compiler/model/normal writers/actual43-98/A10 and final independent G11 custody acceptance; no rendered/client-wire/owner-world/campaign/package/player deployment/main/release/whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
 | NEEDS MY DECISION | None |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |

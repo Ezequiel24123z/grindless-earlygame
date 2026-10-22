@@ -3,9 +3,11 @@ package io.github.ezequiel24123z.grindless.factory;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.material.Material;
 import io.github.ezequiel24123z.grindless.material.MaterialForm;
 import io.github.ezequiel24123z.grindless.planet.PlanetCatalogue;
+import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
 import io.github.ezequiel24123z.grindless.recipe.ProcessGraph;
 import io.github.ezequiel24123z.grindless.recipe.T1Recipes;
 import io.github.ezequiel24123z.grindless.vein.ChunkVein;
@@ -14,12 +16,17 @@ import io.github.ezequiel24123z.grindless.vein.VeinGenerator;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /** Behaviour checks for the construction world and its non-free resource fields. */
 public final class VerifyFactory {
     private static final Path DATA = Path.of("common/src/main/resources/data");
+    private static final IngredientSpec PORTAL_CONTROL =
+            IngredientSpec.minimumControl("grindless:relay_matrix", FluxTier.F1, 1);
     private static int failures = 0;
 
     public static void main(String[] args) throws IOException {
@@ -44,17 +51,43 @@ public final class VerifyFactory {
         yes("a factory field is finite", vein.reserve() > 0L);
     }
 
-    private static void portalRecipe() {
+    private static void portalRecipe() throws IOException {
         T1Recipes.Shaped portal = T1Recipes.shaped().stream()
                 .filter(recipe -> recipe.name().equals("factory_portal"))
                 .findFirst().orElse(null);
         yes("the portal is a physical T1 craft", portal != null);
         if (portal != null) {
-            yes("the portal consumes a Relay Matrix", portal.key().containsValue(T1Recipes.RELAY_MATRIX));
+            yes("the portal retains its exact typed bill with one minimum-F1 Matrix",
+                    hasPortalBill(portal.ingredients()));
+            JsonObject shipped = read(DATA.resolve("grindless/recipes/factory_portal.json"));
+            eq("the shipped portal requires the same typed minimum-F1 control", PORTAL_CONTROL,
+                    IngredientSpec.manualControl(shipped.getAsJsonObject("key").getAsJsonObject("M")));
             eq("the portal is one placed block", "grindless:factory_portal", portal.result());
+            eq("the portal still produces exactly one ordinary block", 1, portal.resultCount());
+            int control = portal.ingredients().indexOf(PORTAL_CONTROL);
+            if (control >= 0) {
+                for (IngredientSpec changed : List.of(
+                        IngredientSpec.item(PORTAL_CONTROL.id(), 1),
+                        IngredientSpec.matrix(PORTAL_CONTROL.id(), FluxTier.F1, 1),
+                        IngredientSpec.minimumControl(PORTAL_CONTROL.id(), FluxTier.F2, 1),
+                        IngredientSpec.minimumControl(PORTAL_CONTROL.id(), FluxTier.F1, 2))) {
+                    List<IngredientSpec> inputs = new ArrayList<>(portal.ingredients());
+                    inputs.set(control, changed);
+                    no("the portal oracle rejects a changed control contract: " + changed, hasPortalBill(inputs));
+                }
+            }
         }
         no("the portal is not a generated machine recipe", ProcessGraph.generate(List.of()).stream()
                 .anyMatch(recipe -> recipe.id().equals("assemble/factory_portal")));
+    }
+
+    private static boolean hasPortalBill(List<IngredientSpec> inputs) {
+        return inputs.stream().collect(Collectors.groupingBy(input -> input, Collectors.counting()))
+                .equals(Map.of(
+                        IngredientSpec.item("minecraft:glass", 1), 4L,
+                        IngredientSpec.tag("forge:ingots/copper", 1), 2L,
+                        IngredientSpec.item("minecraft:redstone", 1), 2L,
+                        PORTAL_CONTROL, 1L));
     }
 
     private static void world() throws IOException {

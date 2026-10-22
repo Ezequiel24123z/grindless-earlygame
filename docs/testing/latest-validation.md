@@ -1145,6 +1145,52 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
+**G11 amended native-only final report, independent custody pending.**
+Exactf1b9 is actually admitted from absent new root at20:49:11Z and canonically
+Synced VerifiedDetached. One existing native reports1273 actual assertions,
+19 expectations exactly once, PASS1/FAIL0, harness/native-sidecar/wrapper0 and
+natural save-stop with the new diagnostic world retained. Launcher0 remains
+honestly DERIVED from the canonical nonzero rejection, not a separately
+captured server exit. Full source/model green is not inferred.
+
+Runtime snapshot20:55:46.9897138Z binds tested/staged/remapped JAR2576414
+bytes/SHA256ea327c675dd324663fc5943957ce844743b3dc02a1e4268922b3cc9814adb8ef.
+Primary logSHA25643a6e495fed4df15b523b3190b01a4908d2d983518efdf605f629c6721954692.
+Inventory is only the existing Architectury599211 bytes/SHA47d5eca3 and
+Grindless. All2599 tracked source/old-canonical inputs and four output
+bytes/mtimes remain unchanged; no writer, CheckOnly, canonical refresh,
+model provenance43/98, data child or A10 exists.
+
+Reported46-file capsule manifestSHA256
+a7e8b51019525975406fc539d91bac78ee0aa0b55af5f8eb25ca545a9a043051
+includes complete original CI5 and native/input/exit custody. Independent
+read-only QA4390aa5b is assigned to that chain, not another code/producer review.
+Local parser169/175 errors remain preserved with read-only correction and no
+producer replay. Legacy runtime-ID routing failures are not guessed-recipient
+authorization; the coordinator already delivered exact original evidence.
+
+After settled custody, fresh read-only20:59:08.9449678Z reports cleanf1b9,
+owned/allJava0/work-cache locksfalse and own guard99725563b4f90a97cc9d06d162843cdcb7bcc27af33002a96d16e1422aefd10a
+hash-verified removed/absent. Final stdoutSHA256
+c5bc4b7f539e8d5f0d93e75e16715d74b948152fd54d31affffef7930a7c363d
+and stderr remain outside the immutable capsule. Leaseback is explicit;
+no PC task remains. The narrowed ruling was admitted before any return.
+Actual client-wire/GUI/Survival/owner-world/finite-T1 evidence is not supplied.
+
+**Factory oracle correction, source-only:** normal
+f863e3981c921664818ee3f94432166f2e5343c7/exactf1b9,
+treefce2064a0b7542d2202c0b581e4374c068b9e3dd, changes only the existing
+VerifyFactory and its original bullet (43 insertions2 deletions).
+The old bare-string oracle is replaced by the complete actual typed bill and
+shipped minimum-control JSON decode, exact F1/count1/output1 plus negatives
+for bare/exact descriptors, wrong threshold and count. Parent directly
+reviews that bounded diff; all other world conditions/runtime/bills/permissions
+remain intact. Private handoff11666 bytes/SHA256
+b00208645da36585b98df2dbb690812a3c2e0f2bcf1a9a426d1e127ccf4f029a
+is verified before a normal conflict-free merge. Repaired Java is not executed.
+Originalf1b9 Factory red and other model failures are not relabeled, while
+its unchanged actual native remains source-bound evidence for later reuse.
+
 **Actual G11 source CI blocks before personal-PC production:** exact
 f1b9/run39849913599/artifact12455889777 originals record environment/build0
 and successful tooljavac. Actual Sustainability2195/0 includes R29=46,
