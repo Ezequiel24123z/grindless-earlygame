@@ -4,6 +4,34 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**NEW G12 MODEL-ONLY GO, no observation yet.** Sole604/exact
+cb1e124173a8530e3faf205d53aeef90651c7187, private inventory1b8 and separate
+local preparation975bca14. The proposed finite-continuation root has never
+been observed/admitted; fresh safety/headroom/ownership and canonical Sync
+precede needed common/classes/classpath/tool images. No parent/other worker
+PC/cache access is authorized under the lease. Source/aliascb1e freezes;
+grant documentation is not the executed source.
+
+Execute repaired Factory/Guidance/auditR34 and actual T0-gate/finite-T1
+contracts through existing mains/pure exporter checks, using original exact-CI
+evidence only when assumptions match. Normal Guidance/Economy/T1 writers,
+THREE independent CheckOnly JVMs preserving four bytes/mtimes, only guidance
+resource refresh and postcanonical checks must supply actual43/98
+source/images, not authored counts. A real gate/material/path/work deficit
+stops dependents and retains diagnostics/custody; no injection, false stale
+label, waived assertion or live source hotfix.
+
+Optional normal A10 is only four existing outputs, exact parentcb1e, after
+real passes/frozen other inputs/Java0/locksfalse/contiguous trailers/clean
+local bundle. No push/runtime after data. Final raw/source/image/output/CI
+custody and fresh actual-final-SHA/own guard removal+absence/owned-allJava0/
+locksfalse/explicit return remain required.
+
+NO Forge/native/FTB/old CLI/compiler enclave/ABI/JDK fixtures/Blueprint/assets/
+package/Prism/target/owner-world/dependency/provider action. Only common
+metadata and source tests changed afterf1b9; reuse its verified G11 native
+and unchanged proofs without reexecution/retarget. No G12 pass exists yet.
+
 **G11 native-only is complete, independently verified and returned.**
 Fresh20:49:11Z absent-root admission/VerifiedDetached Syncf1b9 precedes one
 canonical matrix-lifecycle. Actual1273 assertions,19 markers exactly once,
@@ -46,12 +74,13 @@ negative. R34 checks actual finite funding/false-R0/recurrent deficits; gate
 failures now expose their fingerprints without skipping canonical parity.
 This repairs a necessary source blocker, not an observed complete model pass.
 
-Executor604 prepares G12 LOCALLY ONLY on the never-admitted model root/
+Earlier executor604 prepares G12 LOCALLY ONLY on the never-admitted model root/
 inventory1b8, preserving old preparation files. Needed common/tool images,
 repaired Factory/Guidance/auditR34, normal writers/independent checks/canonical
 refresh and actual43/98 follow one future exact-source GO. The reviewed
 repair does not change G11's native/loader/BE inputs, so do not repeat that
-native or FTB/ABI/Blueprint work. No model source/lease is bound yet.
+native or FTB/ABI/Blueprint work. The exact GO above now supersedes that
+preparation-only hold, not the actual proof and fresh-admission requirements.
 
 **Owner decision fallback:** if the owner is unavailable for a question,
 use relevant verified GregTech/comparable technical-modpack precedent,

@@ -20,7 +20,7 @@
   },
   "normal_machine_manufacturing": {
     "policy": "ADR-0188",
-    "status": "G11nativeonly_CLOSED46QAverified_AFactoryf863_C82ac_sourcefixes_normallycomposed_newG12modelproof_required_NO_repairedJava_orA10",
+    "status": "G11nativeonly_CLOSED46QAverified_repairedcb1e_composite_G12MODELONLY_granted_NO_repairedJava_model_orA10result",
     "normal_final_manual_only_operating_processes_automatable": true,
     "other_product_modes": ["MANUAL_ONLY", "MACHINE_ONLY", "BOTH"],
     "infrastructure_manual_and_machine_methods_per_product": true,
@@ -131,6 +131,31 @@
     "not_proved": "finiteT1_establishment_renewability_autonomy_gameplay_client_or_acceptance"
   },
   "current_PC_execution": {
+    "assignment": "manual-model-qualification-g12-20261022",
+    "active": true,
+    "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
+    "source": "cb1e124173a8530e3faf205d53aeef90651c7187",
+    "writer_invocation_source": "cb1e124173a8530e3faf205d53aeef90651c7187",
+    "applicable_source_runtime": null,
+    "normal_data_checkpoint": null,
+    "inventory_sha256": "1b8c82facdec8b67e3cfa3002716beeb0a6e6f478e1c39fa9749250cc73e9738",
+    "local_preparation_sha256": "975bca145f5eedd4515afa33c8ee82857011f3d0af419431b56094a20a9842b0",
+    "previous_G11_returned_utc": "2026-10-22T20:59:08.9449678Z",
+    "scope": "G12MODELONLY_exactcb1e_NEWmodelroot_freshguards_Sync_common_tools_Factory_Guidance_auditR34_actualgate_finiteT1_NORMAL3writers_independentchecks_canonical43_98_A10subset4",
+    "other_workers_parent_PC_or_T0_access_authorized": false,
+    "source_frozen_until_active_stages_and_locks_close": true,
+    "qualification_package_fictitious_target_plan_authorized": false,
+    "real_PrismRoot_player_world_writes_authorized": false,
+    "allowed_data_derivation": "NORMALA10subset4_exactparentcb1e_actualpasses_frozenotherinputs_Java0locksfalse_contiguoustrailers_clean_localbundle_NOPUSH_RUNTIMEafterdata",
+    "native": "NOT_AUTHORIZED_reuse_closedG11_f1b9_1273_19_46custody_unchanged_runtimebindings",
+    "prohibition": "NO_FTB_Forge_native_oldCLI_compiler_ABI_JDKfixture_Blueprint_assets_package_Prism_target_ownerworld_deps_provider_sourcehotfix_or_waivedgate",
+    "result": "GRANTED_NOT_OBSERVED_NO_admission_Sync_commoncompile_modelpass_write_actual43_98_A10",
+    "returned": false,
+    "returned_utc": null,
+    "return_state": "NOT_OBSERVED_G12",
+    "new_explicit_guarded_window_required": false
+  },
+  "closed_G11_execution": {
     "assignment": "manual-machine-qualification-g11-20261022",
     "active": false,
     "owner_session": null,
@@ -210,7 +235,7 @@
   },
   "active_development_wave": {
     "base": "ad5b50dd509b0261818101ff08e786750826161a",
-    "status": "G11_nativeonly_reported1273_19_returned_QApending_model_source_reds_repair_AFactorysource_integrated_Crunning_NOactivePCgrant",
+    "status": "G11native_CLOSEDverified_models_source_repairedcb1e_G12MODELONLY_only604_exactsource_no_results_yet",
     "earlier_source_fields": "historical_initial_wave_snapshots_not_current_failures_or_execution_grants_current_PC_execution_and_finite_T1_custody_continuation_govern",
     "owners": {
       "managed_FTB_definitions": "cb273782-4065-44e2-90a3-9c0c036367ce",
@@ -241,8 +266,8 @@
     "asset_EOL_checkpoint": "5aa56be_shared_Java_writer_twin_callers_actualG4_existingJDKfixture34_total_22new_EOL_pass_parent_raw_verified_no_normal_generator_replay",
     "normal_G3_outputs": "A3e1efe470_normal5outputs_integrated_parent_verified205files_2573inputs_4images_bothT1receipts_5Gitblobs_equal_writer_bytes_bundle3a9ac835_manifestde198742_normalwrite_check_Guidance74_5323_Economy416_17_T1794_canonical417_2908_0_797_G3_returned08_34_07Z",
     "qualification_preparer": "604195bd-6826-4299-89af-1dcf39545263_last_G10_executor_returned17_04_48Z_no_current_PC_grant",
-    "PC_owner": null,
-    "PC_source": "f1b9cb3fd09efa663b2a62faa2219f0df4f4dd96",
+    "PC_owner": "604195bd-6826-4299-89af-1dcf39545263",
+    "PC_source": "cb1e124173a8530e3faf205d53aeef90651c7187",
     "PC_source_worker_access": false,
     "T0_world_client_deploy_or_acceptance": false,
     "evidence_reuse": "keep_source426_models_e260_contracts_M_Blueprint_native_and_independent_full_CI_bound_to_their_actual_sources_no_unrelated_replay"

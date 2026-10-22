@@ -1145,6 +1145,37 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
+**G12 model-only assignment, not a result:** source
+cb1e124173a8530e3faf205d53aeef90651c7187 normally composes reviewed Factoryf863
+and C82ac, exact source tree313655674d12d457b36346219d3b188c12a0f855.
+Sole604 receives a NEW exclusive model lease using unchanged private
+inventory1b8c82facdec8b67e3cfa3002716beeb0a6e6f478e1c39fa9749250cc73e9738
+and separate local preparation975bca145f5eedd4515afa33c8ee82857011f3d0af419431b56094a20a9842b0.
+The model root is unobserved/unadmitted until fresh guards and canonical Sync.
+Old native roots/worlds and original preparation files remain intact.
+
+Required common/classes/classpath/tool images and repaired Factory/Guidance/
+auditR34 plus actual conditional T0/finite T1 must execute or be honestly
+reused from exact-source originals. Normal writers invoke their unchanged
+hard pure checks before output. Three independent CheckOnly JVMs preserve
+all four output hashes/mtimes; guidance resource refresh and postcanonicals
+follow. Actual43/98 source/image emission/copies are required, not guessed
+from declarations. Preserve unmet findings/partial state and stop dependent
+work if a real gate/path/material/budget failure remains.
+
+Only four existing output paths may change; optional normal A10 has exact
+parentcb1e, actual passes/frozen other inputs/Java0/locksfalse/both contiguous
+trailers/clean local bundle. No worker push or runtime after data.
+Fresh settled-custody source/guard/Java/lock closure and explicit leaseback
+remain required. No new G12 observation/pass or data child is claimed here.
+
+One metadata declaration and source checks changed afterf1b9; native
+registration/ingredient/recipe/Bench runtime is unchanged. Reuse verified
+G11 at its actual source rather than another native/Forge/FTB/ABI/Blueprint/
+asset/JDK run. No package/Prism/target/owner-world/provider/dependency action.
+A stale trailing handoff context in the grant edit is recovered after reading
+actual JSON/handoff state; only the unapplied document hunk is completed.
+
 **G11 custody independently closed, models still separate.** QA4390aa5b verifies
 46/46 safe contained unique files and manifest a7e8b510,2599 unchanged inputs,
 all four output hashes/mtimes, actual1273 aggregate/19 exact-once markers,

@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Assign only the repaired model boundary to G12.**
+  Sole604/exactcb1e receives the never-admitted model root/inventory1b8:
+  fresh guards/Sync, necessary common/tool classes, repaired Factory/Guidance/
+  auditR34 and real T0/finite-T1 checks, normal writers/independent/canonical
+  proof and actual43/98 images. Reuse verified unchanged G11 native, not
+  another Forge/FTB/backend or player action. A10 is only the four normal
+  outputs/exactcb1e parent after real passes/closure; no result is inferred
+  from the grant. Recover only unapplied documentation after a partial
+  context mismatch; executable inputs and original proof remain intact.
 - **Close G11 native custody and normally integrate the finite-controller correction.**
   Independent QA verifies46/46 files,2599 frozen inputs, actual1273/19 native
   and JAR/exit/CI/guard relations through the fresh20:59:08Z return, without
