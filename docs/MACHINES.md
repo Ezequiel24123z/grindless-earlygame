@@ -251,6 +251,28 @@ always better telemetry rather than less complexity.
 
 ---
 
+### Assembler target and paid work
+
+The ADR-0185 development source extends the existing Assembler screen with
+**Assembly target**, a searchable output/ID list and an explicit
+**AUTO (from inputs)** option. Choose a named target for equal-input
+construction recipes; JEI remains the authority for ordinary ingredient
+quantities. AUTO preserves legacy lookup rather than guessing the player's
+intended output. This source feature is not yet the installed player build.
+
+Target configuration and paid work are separate. The server admits only a
+current Assembler recipe through the live authorized menu; missing inputs or
+an unavailable target wait visibly without a different automatic output.
+Switching stores work by its exact recipe ID, including fractional carry;
+return to that ID to resume it. Completed blocked work waits for output room
+without another work tick. A stale-menu refusal asks for the refreshed menu,
+not an inventory reset or manual save edit.
+
+These are implemented source contracts, not a claim of graphical/transport/
+longitudinal acceptance. The [current validation record](testing/latest-validation.md)
+distinguishes actual tests from pending native and human gates. Process Cards,
+genuine in-place chassis capabilities and full tier readiness remain separate.
+
 ## Control matrices
 
 Technology tier, controller rating and Flux tier advance together from T0/F0 through T15/F15

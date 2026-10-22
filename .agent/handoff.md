@@ -4,6 +4,14 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**G10 repaired Java gates actually report PASS:** canonical Synca54 is
+VerifiedDetached in the new root; common+Forge/classes/classpath and tool
+javac exit0. Source014's MachineUi and Persistence mains both execute exit0,
+without invoker bootstrap. Counts/raw hashes await final custody; stage
+labels17/18 are not assertion counts. Intermediate16:12:17.9237387Z sourcea54
+is clean/Java0/locksfalse, not leaseback or native acceptance. Executor
+continues exactly one canonical matrix-lifecycle before normal writers.
+
 **NEW FULL G10 GO, results pending:** sole604/exact
 a54f8de2b8113a1c796183498b1a9c18c2470941, fresh inventory admission on the
 previously absent G9 root. This supersedes native-only2e BEFORE dispatch and

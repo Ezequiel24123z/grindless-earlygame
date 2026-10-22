@@ -947,6 +947,14 @@ locks, not a new runtime source claim. Source/aliasa54 freezes throughout.
 No old-source replay, extra scenario/budget or FTB/package/target/client/
 ownerworld/acceptance result or permission is inferred.
 
+**G10 actual repaired-suite boundary reported16:12:17.9237387Z:** Synca54
+VerifiedDetached, common+Forge/classes/classpath0 and tooljavac0. Both the
+MachineUi and Persistence repaired mains execute0, without a bootstrap
+injected by the invoker. Stage labels17/18 are not assertion counts; final
+raws/counts/hash custody is still pending. Sourcea54 is clean/Java0/locksfalse
+between stages, not returned. Executor continues the one existing canonical
+native before writers; no native, rendered or actual-wire result is inferred.
+
 **G7 report12:21:13Z, still awaiting final custody/leaseback:** clean
 ApplicableSource26e/Java0/locksfalse; one direct plain FTB boot reports0,
 ready51/Done and natural save/stop, with tested JAR/inventory captured before

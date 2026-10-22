@@ -15,6 +15,17 @@ entries below reference those records by id.
 
 ### Added
 
+- **Observe real repaired UI/Persistence execution before the one native gate.**
+  G10 reports canonical Synca54, common/Forge/classpath0, toolsjavac0 and both
+  repaired mains exit0, without invoker bootstrap. Source is clean/Java0/
+  locksfalse at the intermediate16:12:17Z boundary; counts/raws/custody follow.
+  This confirms the source repairs, not rendered/transport/native acceptance;
+  exactly one existing matrix-lifecycle is next, before normal writers.
+- **Document the actual Assembler target affordance without inventing a client pass.**
+  Explain Assembly target search, named selection versus legacy AUTO, JEI
+  ingredients and recipe-owned retained work in the README/machine handbook.
+  Mark it development source, not the installed T0 UI, full Process Cards,
+  a chassis upgrade or proven rendered/transport/longitudinal behavior.
 - **Assign full combined G10 on the reviewed repaired harness source.**
   Sole604 receives exacta54/new-root admission after unused G9 return and
   undispatched native-only withdrawal. Confirm actual repaired UI/Persistence

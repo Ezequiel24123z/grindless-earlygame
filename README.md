@@ -1604,6 +1604,22 @@ A machine above T1 has **no crafting-table recipe at all**. Not a hidden one, no
 expensive one — none exists. The only way to obtain it is to run the process, which means owning
 and feeding a production line.
 
+### Assembler target selection
+
+**Development source, not the installed T0 build:** the Assembler's
+**Assembly target** panel lets you search output names or IDs and select a
+named recipe before loading its JEI ingredients. This matters when several
+machines share a construction bill. **AUTO (from inputs)** deliberately keeps
+the legacy input-based choice; it does not guarantee the output you intended.
+
+The selected recipe still needs its actual inputs, fluids, power, conditions
+and output space. An unavailable target waits rather than substituting another
+output. Switching retains paid work under its original recipe ID; select that
+same target to resume it. This is not the full Process Card or chassis-upgrade
+system. See the current source-bound qualification limits in the
+[validation ledger](docs/testing/latest-validation.md); native completion and
+rendered usability must not be inferred from these instructions.
+
 ### Components — the intermediate economy
 
 Machines are not built from ingots. They are built from parts, and those parts are where the real
