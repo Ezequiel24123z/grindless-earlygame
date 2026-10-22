@@ -252,6 +252,10 @@ guard fix; source-only Java is still unexecuted. Host QuestDefinitions228/29 is
 actual/reused. G6 independently proved common checks and historical50 CLI but
 started no writer; next binding must execute repaired source profiles/normal
 outputs instead of treating the five original CI reds as stale data.
+Source30/normal empty31 pins the newly changed outer registry parser in the
+same exporter/guards:29 sources/38 image expressions authored. The subject-only
+metadata mistake in30 is preserved and attributed by append, never rewritten.
+Require actual updated provenance later; old G3/G6 counts are not retargeted.
 The same existing ControlMatrixInputChecks.registered probe now checks the new
 core's actual Item class/registry ID, without another case or marker. This
 observation is pending execution, not supplied by synthetic lookup carriers.

@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Bind the changed source-claim parser without rewriting history.**
+  Normal31e33dc preserves source30b151a: add only the changed outer
+  VerifySustainabilityRegistry source/class to existing T1 exporter lists and
+  guards, authored29/38 with18 non-JVM checks, not emitted hashes.
+  Source30 accidentally omitted body/trailers; normal empty31 appends the full
+  evidence/attribution with the identical tree. No amend/reset/commit-tree,
+  code drift, generic closure or canonical edit conceals that metadata error.
 - **Integrate known native51 compatibility and its strict common-profile repair.**
   Normal07c7cb8 preserves API99 over the separate381/wet merge: complete
   source-bound46/50/51 identities, historical CLI, actual-current planner,

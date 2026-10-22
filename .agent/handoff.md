@@ -558,6 +558,15 @@ other claim-source guards remain exact. The original CI5 reds are preserved,
 not relabeled stale. A new source-bound window must prove the repaired profiles,
 new API and actual normal outputs before any51 delivery.
 
+**Changed-parser provenance pin is source-integrated:** source30b151a adds only
+the outer VerifySustainabilityRegistry source/class and existing guard tokens
+after its07 profile change. Lists are authored29/38, not observed writer
+output. Normal empty31e33dc appends the missing body/trailers accidentally
+omitted from30's invocation; both trees are verified identical. Preserve30's
+historical subject-only metadata explicitly, no amend/reset/commit-tree or
+owner escalation. The parent integration carries both trailers. Actual Java/
+model/old-classpath source-file/native51/real-managed50-to51 proof is still next.
+
 | Category | Current qualification state: G4/G5 closed, G6 safely returned, API51 source integrated |
 | --- | --- |
 | COMPLETED | G3/A3, verified G4/G5 current50 outcomes; G6 authentic50/common independent passes/103-file custody and safe return; reviewed wet338/API99/profile07 source and actual focused host228 |

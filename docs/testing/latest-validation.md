@@ -617,6 +617,15 @@ and exact chapter/inventory/negative deltas are reviewed, not runtime qualificat
 Known content/schema/source/loaded-image/ownership/paid/recovery guards remain;
 the preserved original CI source red still needs affected repaired execution.
 
+**Changed-parser image source30/31 is composed, not a writer result.**
+Two-file source30 adds only VerifySustainabilityRegistry.java/class and tokens
+in existing guards after the07 source-claim parser change, authored29/38.
+Eighteen static checks are non-JVM. Its own commit command accidentally omits
+the prepared body/trailers; normal empty31 appends exact scope/evidence and both
+trailers, with identical tree7c143402 and parent30 verified. Preserve that
+historical exception; no amend/reset/commit-tree or code change repairs metadata.
+No old proof is invalidated or new executed hash is inferred by this source pin.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the
