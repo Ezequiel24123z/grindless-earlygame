@@ -1,5 +1,33 @@
 # Current T0/T1 validation
 
+## Active continuation — source before integrated qualification
+
+The owner requests continued autonomous development and delivery of genuinely
+ready whole tiers (ADR-0178); the new increments are not yet a ready tier.
+Normal source63142dd/5b359a5 adds four Assembler die recipes from the actual
+manual catalogue and optional post-assembly `tool_reproduction`. All manual
+craft JSON, existing quests/rewards, mandatory forming/first-F2 edges and
+retained Press catalysts stay unchanged.
+
+The worker's static PowerShell comparison passes after two incorrect probe
+expectations are repaired (coil cobblestone6, not4; retained catalysts are
+declared through the shared Press helper). Python never runs because only a
+Store shim is available; no dependency is installed to repeat that static check.
+Initial Git identity absence is repaired command-locally, not by global config.
+Parent review then catches four certainly false Atlas slot assertions:
+viewer inputs expand units9/5/8/9, whereas ProcessRecipe has grouped inputs.
+Follow-up5b359a5 checks actual grouped slots while retaining exact multiset
+parity. This is a static oracle correction, not an executed Java red/green.
+
+Expected fixture sizes205 graph/80 Assembler/262 all Atlas are authored shapes,
+not observed runtime/assertion counts. Compilation, focused Recipe/Atlas/T1,
+normal writer/independent CheckOnly and integration with the two mechanism
+lanes remain pending. Existing executor/native-completion proof is reused for
+ordinary die content; no new native run per die is justified.
+Qualifier604195bd prepares locally only. No PC/SSH/SCP/cache/JVM grant,
+Prism/world/client change or new runtime pass exists for this continuation.
+The older source-bound results below remain exact to their original inputs.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

@@ -83,7 +83,8 @@ public final class VerifyT1Progression {
                 List.of("relay_f2"), T1Progression.lines().stream()
                         .filter(line -> line.requirement() == T1Progression.Requirement.EXIT)
                         .map(T1Progression.Line::id).toList());
-        for (String optional : List.of("wire_forming", "extraction", "logistics", "storage", "kiln", "factory_space")) {
+        for (String optional : List.of("wire_forming", "tool_reproduction", "extraction", "logistics",
+                "storage", "kiln", "factory_space")) {
             equal("the optional branch is not a first-factory mandate: " + optional, false,
                     T1Progression.byId(optional).mandatory());
         }
@@ -130,6 +131,7 @@ public final class VerifyT1Progression {
                 snapshot.routes().containsKey("bench/relay_matrix"));
         componentRoutes(snapshot);
         wireForming(snapshot);
+        toolReproduction(snapshot);
 
         Route exit = snapshot.routes().get(T1Progression.EXIT_ROUTE);
         Resource ratedF1 = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX, FluxTier.F1.ordinal(), "items");
@@ -210,12 +212,13 @@ public final class VerifyT1Progression {
                         List.of("craft/press", "craft/press"), Set.of()));
         for (String id : List.of("craft/machine_casing", "craft/flux_cell",
                 T1Progression.CASING_ROUTE, T1Progression.FLUX_CELL_ROUTE,
+                "assemble/plate_die", "assemble/rod_die", "assemble/gear_die", "assemble/coil_die",
                 "assemble/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper")) {
             Map<String, Route> missing = new TreeMap<>(snapshot.routes());
             missing.remove(id);
             Snapshot incomplete = new Snapshot(snapshot.resources(), missing, snapshot.terminals(), snapshot.tags(),
                     snapshot.objectives(), snapshot.inputHashes(), snapshot.findings());
-            rejects("a missing selected component or optional wire authority fails visibly: " + id,
+            rejects("a missing selected component or optional manufacturing authority fails visibly: " + id,
                     () -> T1Sustainability.selectedRoutes(incomplete));
         }
         String json = T1Sustainability.json(t0);
@@ -242,6 +245,14 @@ public final class VerifyT1Progression {
                 wireDocument.get("requirement").getAsString());
         equal("the existing exporter includes all four live base routes", 4,
                 wireDocument.getAsJsonArray("routes").size());
+        var toolDocument = document.getAsJsonArray("lines")
+                .get(T1Progression.lines().indexOf(T1Progression.byId("tool_reproduction"))).getAsJsonObject();
+        equal("the existing exporter projects the optional tool line", "tool_reproduction",
+                toolDocument.get("id").getAsString());
+        equal("the existing exporter keeps tool reproduction optional", "OPTIONAL",
+                toolDocument.get("requirement").getAsString());
+        equal("the existing exporter includes all four live die routes", 4,
+                toolDocument.getAsJsonArray("routes").size());
         equal("raw source hashes are not embedded in committed model data", false, document.has("authority_sha256"));
         for (String flag : List.of("t1_accepted", "t1_renewable_closure_proven",
                 "t1_finite_establishment_replayed", "global_optimum_claimed")) {
@@ -289,6 +300,41 @@ public final class VerifyT1Progression {
         }
         equal("the Assembler task itself remains on mandatory assembly",
                 T1Progression.byId("assembly"), T1Progression.byQuest("assembler"));
+    }
+
+    private static void toolReproduction(Snapshot snapshot) {
+        T1Progression.Line line = T1Progression.byId("tool_reproduction");
+        equal("optional tool reproduction selects only the four source-backed die routes",
+                List.of("assemble/plate_die", "assemble/rod_die", "assemble/gear_die", "assemble/coil_die"),
+                line.routeIds());
+        equal("optional tool reproduction follows only the existing Assembler line",
+                Set.of("assembly"), line.requires());
+        equal("the tool reproduction line remains optional", T1Progression.Requirement.OPTIONAL,
+                line.requirement());
+        for (String die : List.of("plate_die", "rod_die", "gear_die", "coil_die")) {
+            Route route = snapshot.routes().get("assemble/" + die);
+            equal("the die route uses the existing Assembler: " + die, "ASSEMBLER", route.family());
+            equal("the die route remains ordinary live process authority: " + die,
+                    Authority.PROCESS_GRAPH, route.authority());
+            equal("the die route has its exact ordinary output: " + die,
+                    Map.of(item("grindless:" + die), 1L), route.outputs());
+            equal("the die route is automated without a new prerequisite: " + die, true, route.automatable());
+            equal("the die route adds no catalyst: " + die, Map.of(), route.catalysts());
+        }
+        for (String task : List.of("forming_dies", "copper_coil", "assembler", "matrix_line")) {
+            equal("automatic die reproduction does not rewrite quest route selection: " + task, false,
+                    T1Progression.questRouteIds(task).stream().anyMatch(line.routeIds()::contains));
+        }
+        equal("mandatory forming still depends only on reduction", Set.of("reduction"),
+                T1Progression.byId("forming").requires());
+        equal("the first F2 exit still depends only on assembly", Set.of("assembly"),
+                T1Progression.byId("relay_f2").requires());
+        equal("the first F2 quest retains its existing production route ids",
+                List.of("craft/flux_cell", T1Progression.FLUX_CELL_ROUTE, T1Progression.EXIT_ROUTE),
+                T1Progression.byId("relay_f2").routeIds());
+        equal("no automatic die route enters the mandatory first-F2 path", false,
+                T1Sustainability.mandatoryRoutes(snapshot).stream()
+                        .anyMatch(route -> line.routeIds().contains(route.id())));
     }
 
     private static void componentRoutes(Snapshot snapshot) {

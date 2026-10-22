@@ -141,6 +141,12 @@ output parity from `T1Recipes` plus shipped JSON. Manual dies seed forming;
 `tool_reproduction` depends on assembly, not the other way around. No new items,
 wear, recipe engine or first-F2 requirement. Normal writers must emit any changed
 canonical projections after integration, never a manual report edit.
+Source63142dd/5b359a5 now normally integrates the four rows through
+`automaticDieCrafts`, an explicit whitelist grouped from the live shaped
+catalogue. `VerifyRecipes` cross-checks shipped JSON; `VerifyAtlas` checks
+displayed units separately from physical ProcessRecipe input groups, and
+`VerifyT1Progression` keeps the new line optional/acyclic. Java and canonical
+writer results remain pending, not supplied by these authored checks.
 
 The owner's2026-10-21 instruction separately opens T1 development (ADR-0168/0169).
 Use [the first-factory plan](../plan/feature-t1-first-factory-1.md): live route

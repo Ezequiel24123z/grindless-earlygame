@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate automatic die reproduction as source, not a passing build.**
+  Normal63142dd/5b359a5 ancestry adds only the four source-derived ordinary
+  Assembler die recipes and optional post-assembly line. Keep manual JSON,
+  retained Press catalysts, quest IDs and initial-F2 requirements unchanged.
+  Correct the Atlas expanded-unit/physical-slot oracle before JVM rather than
+  weakening its four-slot limit. Normal canonical writers and affected Java
+  contracts remain pending the fixed integrated source; a dedicated local
+  qualifier prepares without a PC grant. Retain the worker's failed static
+  probes/missing Python and the unexecuted distinction.
 - **Close the concrete Forge upgrade-source comparison.** Pin Mekanism10.4.16
   at96c7362/Minecraft1.20.1/Forge47.1.76/MIT and trace real snapshot/apply code:
   values copy into a replacement BE, with capability/network invalidation and

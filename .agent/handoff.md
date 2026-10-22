@@ -19,12 +19,19 @@ Two isolated source lanes start at exactad5b50dd509b0261818101ff08e786750826161a
 cb273782 owns an explicit stopped/hash-bound FTB46-to50 managed-definition
 update and recovery;347a1c5b owns explicit minimum-capacity control ingredients.
 Third source ownerb2fd298b starts at61fdf76 (same application baseline) and
-implements automatic reproduction of the four existing reusable Press dies
-through the ordinary Assembler, with exact manual material/output parity.
-Its optional post-assembly line must not create a forming/assembly cycle or a
-new first-F2 prerequisite; no new item, station or bill is authorized.
+now supplies63142dd plus follow-up5b359a5, normally integrated here:
+four existing reusable Press dies reproduce through the ordinary Assembler
+with exact manual material/output parity. Optional `tool_reproduction` follows
+assembly without a forming/assembly cycle or new first-F2 prerequisite.
+No new item, station or bill is introduced. Expected fixture sizes become
+205 graph rows/80 Assembler/262 all Atlas rows; these are not executed counts.
+Parent catches an Atlas unit-list versus slot-count oracle before JVM;5b359a5
+checks the actual ProcessRecipe groups and preserves the material assertion.
 The coordinator retains root architecture/docs/integration/publication.
 No source worker has a PC/cache/JVM grant and no new execution has passed.
+Qualification preparer604195bd reads existing local tools/private evidence only;
+it has no SSH/SCP/PC/cache/JVM grant until the exact integrated GO. Do not treat
+preparation as execution or rerun per-die native content already using the executor.
 
 ADR-0176 selects only the existing Wire Mill's F1 control operand as a minimum
 capacity requirement. Existing exact factories, F2 Matrix predecessor, outputs
