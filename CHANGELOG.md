@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Grant only changed continuation/model proofs to G13.**
+  Sole604/exact489 uses a new unobserved root after fresh guards/Sync.
+  Qualify paid native funding/refill and physical Press/F1/F2 through
+  changed common/audit/T1 proofs, normal writers/independent/canonical
+  checks and actual source/images. Reuse unchanged native and fixture
+  proofs. Retain exact partial outputs on failure; A10 requires full passes
+  and exact489 parent. No result, new native or player update is implied.
 - **Normally integrate the reviewed continuation-funding correction.**
   Preserve all four source/check blobs from f30a5f79/exactcb1e, with direct
   review of funding, active-route guards, selected producer refill, retained

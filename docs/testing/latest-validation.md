@@ -1145,6 +1145,27 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
+**New G13 model-only assignment.** Exact merged source
+489bf01fb382a907c184f6172e6c1027dcf248e9/tree8f0ee498c3e5a9ec5c045535d78a368dc7443951
+normally preserves all four reviewed f30 code/check blobs. Sole604 receives
+the new unobserved root via inventory59274f4a and preparation795d130e,
+with fresh guards/Sync required; G12 remains dirty and preserved.
+The property requiring fresh proof is continued native funding/refill and
+actual physical Press/F1/F2 under conserved custody, not loader registration.
+Use needed common/affected-tool compilation, R35/prior audit regressions,
+normal writers/hard pure checks, three independent CheckOnly/all4 hash+mtime,
+Guidance refresh/postcanonicals and actual declared-source/image custody.
+No current result is inferred from this assignment.
+
+Unchanged G11 native and G12 Factory/Guidance fixtures remain source-bound
+reusable proofs; no Forge/native/FTB/ABI/Blueprint/assets or player action.
+Optional A10 is exactparent489/subset4 only after genuine passes/frozen
+other inputs/Java0/locksfalse/contiguous trailers/clean local bundle.
+Any failure preserves real partial outputs and diagnostics in place,
+stops dependents and closes DIRTY exactsubset without restore/injection/
+waiver/replay. The final raw filenames must accompany settled custody and
+fresh source/Java/locks/own guard removal+absence/explicit return.
+
 **Reviewed continuation-funding correction, not a new pass.** Normal
 f30a5f7926e80546f7aeb0cc21ada391f98d2009 has exact parentcb1e and tree
 858fa75aa6c1957f86f158378dafa55d6ed11983, five files291 insertions/four

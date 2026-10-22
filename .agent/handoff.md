@@ -4,6 +4,29 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**G13 MODEL-ONLY GO, not a result.** Sole604/exact source
+489bf01fb382a907c184f6172e6c1027dcf248e9, inventory59274f4a/preparation795d130e.
+Use a NEW previously unobserved custody-carry root after fresh admission and
+canonical Sync. Preserve the G12 dirty root/114-file proof and every older
+root, world and artifact. No parent/other worker PC/cache access.
+
+The newly unproved mechanism is real continued paid-native FU funding before
+consumer activation, selected-producer refill and actual Press/F1/F2 under
+the inherited material/work state. Required common/affected tools and audit
+regressions including R35 precede normal writers with their hard pure
+checks. Reuse unchanged G11 native and G12 Factory/Guidance fixtures.
+No Forge/native/FTB/ABI/Blueprint/assets/package/Prism/world/provider action.
+
+Normal three writers, three independent CheckOnly JVMs/all four byte+mtime
+invariants, only required Guidance resource refresh/postcanonicals and actual
+43/98 source/image emissions/copies remain required. A10 is optional only
+after all passes/frozen other inputs/Java0/locksfalse, exact parent489,
+subset4, contiguous trailers/clean local bundle. No push/runtime after data.
+Any real failure stops dependents and retains actual diagnostics/partial
+outputs: DIRTY exact subset is the expected failure closure, never restored
+apparent cleanliness or budget/stock/test waiver. Fresh final guard/Java/
+locks/custody/explicit return remains required. No G13 pass is claimed.
+
 **Continuation funding source f30 is complete, directly reviewed and normally
 composed; revised execution is still pending.** Exact parentcb1e/tree858fa75,
 five files291 insertions/four deletions; four executable/check blobs remain
@@ -19,8 +42,8 @@ R35's cold native-funded fixture and absent-alias negative are authored, not
 executed. Bounded diagnostics expose an attempted result without replay or
 invented zero balances. No new source/image type or recipe/loader/BE change.
 
-G13 inventory59274f4a and plan795d130e are LOCAL preparations only.
-Source/grant/lease remain null until one published exact-source GO.
+G13 inventory59274f4a and plan795d130e were LOCAL preparations only.
+The exact GO above now binds source/lease without inventing execution.
 The unproved property is actual continued funding/refill and Press/F1/F2
 execution under the conserved budget. Reuse unchanged G11 native and G12
 Factory/Guidance fixtures; fresh common/changed audit/T1/model proofs are

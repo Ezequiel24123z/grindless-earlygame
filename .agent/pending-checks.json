@@ -20,7 +20,7 @@
   },
   "normal_machine_manufacturing": {
     "policy": "ADR-0188",
-    "status": "G11native_verified_G12_finiteFAIL_closed_DIRTY114_verified_sourcef30_repair_reviewed_composed_NO_revisedmodel_PClease_orA10",
+    "status": "G11native_verified_G12finiteFAIL_closed114verified_f30_repair_composed489_G13MODELONLY_granted_NO_new_model_orA10",
     "normal_final_manual_only_operating_processes_automatable": true,
     "other_product_modes": ["MANUAL_ONLY", "MACHINE_ONLY", "BOTH"],
     "infrastructure_manual_and_machine_methods_per_product": true,
@@ -131,6 +131,29 @@
     "not_proved": "finiteT1_establishment_renewability_autonomy_gameplay_client_or_acceptance"
   },
   "current_PC_execution": {
+    "assignment": "continued-funding-qualification-g13-20261022",
+    "active": true,
+    "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
+    "source": "489bf01fb382a907c184f6172e6c1027dcf248e9",
+    "writer_invocation_source": "489bf01fb382a907c184f6172e6c1027dcf248e9",
+    "applicable_source_runtime": null,
+    "normal_data_checkpoint": null,
+    "inventory_sha256": "59274f4a4b7da8abba88047c7dd14898b67b12dd36dcb0617498276d4fd80e2c",
+    "local_preparation_sha256": "795d130ec94c98c2caada6eff75e1a6e2274393dde71ee68b6292cb11026408c",
+    "scope": "MODELONLY_freshnewroot_Sync489_common_tools_R35_priorregressions_actualfinite_PressF1F2_NORMAL3writers_independentchecks_refresh_postcanonicals_actual43_98_A10subset4_custodyreturn",
+    "other_workers_parent_PC_or_T0_access_authorized": false,
+    "source_frozen_until_active_stages_and_locks_close": true,
+    "real_PrismRoot_player_world_writes_authorized": false,
+    "reuse": "unchanged_G11native_f1b9_G12Factory_Guidancefixture_FTB_ABI_Blueprint_assets_NO_replay",
+    "failure_policy": "preserve_actualpartial_outputs_DIRTYexactsubset_NO_restore_reconstruct_checkout_more_producers_stock_budget_gate_waiver_or_live_hotfix",
+    "allowed_data_derivation": "NORMALA10_onlyfullpasses_exactparent489_four_existing_outputsubset_frozenothers_Java0locksfalse_contiguoustrailers_cleanbundle_NOPUSH_RUNTIMEafterdata",
+    "result": "GRANTED_NOT_OBSERVED_NO_G13_execution_pass_or_A10",
+    "returned": false,
+    "returned_utc": null,
+    "return_state": "NOT_OBSERVED_G13",
+    "new_explicit_guarded_window_required": false
+  },
+  "closed_G12_execution": {
     "assignment": "manual-model-qualification-g12-20261022",
     "active": false,
     "owner_session": null,
@@ -175,7 +198,7 @@
     "reuse": "unchanged_G11native_atf1b9_G12Factory_and_Guidance_fixture_other_unchanged_FTB_ABI_Blueprint",
     "future_G13_inventory_sha256": "59274f4a4b7da8abba88047c7dd14898b67b12dd36dcb0617498276d4fd80e2c",
     "future_G13_preparation_sha256": "795d130ec94c98c2caada6eff75e1a6e2274393dde71ee68b6292cb11026408c",
-    "source_grant_lease": null
+    "source_grant_lease": "exact489bf01fb382a907c184f6172e6c1027dcf248e9_MODELONLY_continued-funding-qualification-g13-20261022"
   },
   "closed_G11_execution": {
     "assignment": "manual-machine-qualification-g11-20261022",
@@ -257,7 +280,7 @@
   },
   "active_development_wave": {
     "base": "ad5b50dd509b0261818101ff08e786750826161a",
-    "status": "G11native_CLOSEDverified_G12_repairedcontracts_T0writers_pass_finiteFAIL_returned_DIRTYpartial2_QA_verified_Csource_repair_NOactivePC",
+    "status": "G11native_G12closure_verified_f30_repair_composed489_G13MODELONLY_sole604_granted_NO_result",
     "earlier_source_fields": "historical_initial_wave_snapshots_not_current_failures_or_execution_grants_current_PC_execution_and_finite_T1_custody_continuation_govern",
     "owners": {
       "managed_FTB_definitions": "cb273782-4065-44e2-90a3-9c0c036367ce",
@@ -288,8 +311,8 @@
     "asset_EOL_checkpoint": "5aa56be_shared_Java_writer_twin_callers_actualG4_existingJDKfixture34_total_22new_EOL_pass_parent_raw_verified_no_normal_generator_replay",
     "normal_G3_outputs": "A3e1efe470_normal5outputs_integrated_parent_verified205files_2573inputs_4images_bothT1receipts_5Gitblobs_equal_writer_bytes_bundle3a9ac835_manifestde198742_normalwrite_check_Guidance74_5323_Economy416_17_T1794_canonical417_2908_0_797_G3_returned08_34_07Z",
     "qualification_preparer": "604195bd-6826-4299-89af-1dcf39545263_last_G10_executor_returned17_04_48Z_no_current_PC_grant",
-    "PC_owner": null,
-    "PC_source": "cb1e124173a8530e3faf205d53aeef90651c7187",
+    "PC_owner": "604195bd-6826-4299-89af-1dcf39545263",
+    "PC_source": "489bf01fb382a907c184f6172e6c1027dcf248e9",
     "PC_source_worker_access": false,
     "T0_world_client_deploy_or_acceptance": false,
     "evidence_reuse": "keep_source426_models_e260_contracts_M_Blueprint_native_and_independent_full_CI_bound_to_their_actual_sources_no_unrelated_replay"
