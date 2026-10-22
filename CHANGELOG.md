@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate optional wet processing and its concrete writer provenance as source.**
+  Normal338db24d preserves738105d4: six existing Motor/Washer/B2/B2-R1 routes,
+  one free native acquisition lesson and3 new locale keys, without a bill/
+  engine/first-F2/seed/save change. Parent reviews production and contract
+  deltas; old50 IDs/positions/rewards and865 locale values remain fixed.
+  Existing exporter pins28 source paths/37 image expressions including the
+  three actual selected enum implementations. Static143/30QA/101 are not
+  Java/writer passes. Catalogue51 API guards and canonical projections remain
+  explicitly pending; no package/player update or replay of G4/G5.
 - **Observe the actual current50 plan/apply/no-op outcome, pending final custody.**
   G5 reports real988 package/runtime and canonical package update preserving
   authentic46 bytes/mtime, then one fresh CURRENT compile and bound plan with

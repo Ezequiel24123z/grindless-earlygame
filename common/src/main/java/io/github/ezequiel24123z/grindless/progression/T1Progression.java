@@ -74,6 +74,9 @@ public final class T1Progression {
             new Line("tool_reproduction", Requirement.OPTIONAL,
                     List.of("assemble/plate_die", "assemble/rod_die", "assemble/gear_die", "assemble/coil_die"),
                     Set.of("assembly")),
+            new Line("wet_beneficiation", Requirement.OPTIONAL,
+                    List.of("assemble/motor", "assemble/chemical_washer", "b2/iron", "b2/copper",
+                            "b2_r1/iron", "b2_r1/copper"), Set.of("assembly")),
             new Line("relay_f2", Requirement.EXIT,
                     List.of("craft/flux_cell", FLUX_CELL_ROUTE, EXIT_ROUTE), Set.of("assembly")),
             new Line("extraction", Requirement.OPTIONAL,
@@ -110,6 +113,7 @@ public final class T1Progression {
             case "furnace" -> "reduction";
             case "press", "forming_dies", "copper_coil" -> "forming";
             case "assembler", "matrix_line" -> "assembly";
+            case "wet_beneficiation" -> "wet_beneficiation";
             case "glass" -> "glass";
             case "industrial_matrix", "flux_cell" -> "relay_f2";
             case "scanner", "terrestrial" -> "extraction";

@@ -85,9 +85,9 @@
     "policy": "ADR-0182",
     "source_owner_session": "d35d3b04-9e9d-4c84-8f34-b4b150fb1b37",
     "source_base": "e4cc108389ed0b58d15ed5c0678ecd27660aa103",
-    "status": "local_source738105d4_ready_old50_invariants_static_only_not_yet_integrated_publisher_planner_startup_host51_compatibility_pending",
-    "source_checkpoint": "738105d48cafc71c38fbb66f703122906afcf2f3",
-    "provenance_followup": "338db24d_parent738_T1Export_sources_images_extend_existing28_37_including3kind_getClass_actual101nonJVMchecks_noJava_writers_receipts_parent_reviewed_not_yet_integrated",
+    "status": "source338_with738_normally_integrated_old50_invariants_static_only_Java_writers_and_publisher_planner_startup_host51_pending",
+    "source_checkpoint": "338db24d968d29096c5412564ba5e75edd3d5642",
+    "provenance_followup": "338db24d_normally_integrated_parent738_T1Export_existing28_37_including3kind_getClass_actual101nonJVMchecks_parent_reviewed_noJava_writers_receipts",
     "no_recipe_bill_engine_save_or_firstF2_change": true,
     "no_PC_JVM_cache_player_or_G4_alias_access": true
   },

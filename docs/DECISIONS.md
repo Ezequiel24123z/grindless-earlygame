@@ -193,7 +193,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0179](#adr-0179--reproduce-four-slot-fit-first-factory-machines-without-repricing-bootstrap) | Reproduce four-slot-fit first-factory machines without repricing bootstrap | Accepted bounded acquisition scope; implementation/proof pending |
 | [0180](#adr-0180--reproduce-the-thermal-generator-through-an-honest-two-stage-subassembly) | Reproduce the Thermal Generator through an honest two-stage subassembly | Accepted bounded acquisition scope; implementation/proof pending |
 | [0181](#adr-0181--compare-one-generated-platform-shim-by-exact-self-name-equivalence) | Compare one generated platform shim by exact self-name equivalence | Source555dbe9 integrated; G4 managed201/authentic publication0 custody verified |
-| [0182](#adr-0182--expose-existing-wet-beneficiation-as-an-optional-t1-baseline-line) | Expose existing wet beneficiation as an optional T1 baseline line | Accepted bounded content scope; implementation/qualification pending |
+| [0182](#adr-0182--expose-existing-wet-beneficiation-as-an-optional-t1-baseline-line) | Expose existing wet beneficiation as an optional T1 baseline line | Source738/338 integrated; Java/outputs/catalogue51 compatibility pending |
 | [0183](#adr-0183--version-known-native-catalogue-lineage-without-weakening-provenance) | Version known native catalogue lineage without weakening provenance | Accepted compatibility scope for51; implementation/proof pending |
 
 ---
@@ -8621,7 +8621,8 @@ fixture is not that real export or managed-plan consumption.
 ## ADR-0182 — Expose existing wet beneficiation as an optional T1 baseline line
 
 **Status.** Accepted bounded content selection under the owner's ADR-0174/0178
-direction, 2026-10-22. Source implementation and qualification are pending.
+direction, 2026-10-22. Source738/338 is normally integrated; actual Java/
+normal-output qualification and ADR-0183 compatibility remain pending.
 This adds a real basic processing branch beyond first-factory reproduction;
 it neither completes T1 nor deploys a partial tier.
 

@@ -490,6 +490,17 @@ never launched, no player state touched. Preserve the G5 root at988 with its
 f8 receipt/classes/classpath/JARs: a later actual50 publication can reuse CLI8
 without recompiling. Do not Sync51 into that receipt's historical source root.
 
+**Wet source338/738 normally integrated, still not release-qualified:** the
+parent directly reviews the six live selections, one optional/native free
+Washer-acquisition task, appended old50-stable layout/IDs and3 new English
+keys. No recipe/power/bill/envelope/registration/save change occurs. The
+provenance follow-up uses existing lists/resource reader for28 sources and37
+image expressions including real selected-kind implementations. Source-only
+143/30QA/101 evidence is not Java execution. Actual common checks/normal
+projections and the separate51 compatibility lane remain pending. Do not run
+the still50-only publisher/planner/startup/host consumers as a qualified51
+candidate or deploy it; current50 G4/G5 proofs retain their historical sources.
+
 | Category | Current qualification state: G4/G5 current50 outcome verified closed |
 | --- | --- |
 | COMPLETED | G3/A3 models/custody; G4 real legacy/native89/19markers/managed201/JDK34 and176-file custody; G5 actual configuration/fresh compiler/plan/apply/same-plan with87-file custody/2578 inputs/24 target files/16 protected files and safe leaseback; reviewed wet338 source |

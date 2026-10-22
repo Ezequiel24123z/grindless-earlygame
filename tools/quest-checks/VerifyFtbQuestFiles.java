@@ -23,7 +23,8 @@ import static io.github.ezequiel24123z.grindless.forge.quest.FtbQuestDefinitionP
 
 /** Real native-parser/filesystem contracts, not a real dd0 export or native team/world execution. */
 public final class VerifyFtbQuestFiles {
-    private static final Set<String> ADDED = Set.of("first_grid", "forming_dies", "copper_coil", "flux_cell");
+    private static final Set<String> ADDED = Set.of(
+            "first_grid", "forming_dies", "copper_coil", "flux_cell", "wet_beneficiation");
     private static final String CURRENT_SOURCE = "a".repeat(40);
     private static int assertions;
 
@@ -39,6 +40,24 @@ public final class VerifyFtbQuestFiles {
         jarPayloadContract(fixture);
         Map<String, CompoundTag> current = FtbQuestDefinitions.chapters();
         Map<String, FtbQuestFiles.Chapter> encodedCurrent = FtbQuestFiles.generated(current);
+        Map<String, CompoundTag> previous50 = new LinkedHashMap<>();
+        current.forEach((name, document) -> {
+            CompoundTag copy = document.copy();
+            ListTag quests = copy.getList("quests", Tag.TAG_COMPOUND);
+            for (int index = quests.size() - 1; index >= 0; index--) {
+                if (quests.getCompound(index).getString("id")
+                        .equals(FtbQuestDefinitions.code(FtbQuestDefinitions.questId("wet_beneficiation")))) {
+                    quests.remove(index);
+                }
+            }
+            previous50.put(name, copy);
+        });
+        Path config50 = fixture.resolve("previous50-config");
+        FtbQuestFiles.ensure(config50, previous50);
+        Map<Path, String> before50 = snapshot(config50);
+        refuses(() -> FtbQuestFiles.ensure(config50, current),
+                "startup preserves its fail-closed50-to51 boundary for a missing optional lesson");
+        equal(before50, snapshot(config50), "missing wet definitions cannot silently rewrite an installed50 chapter");
         // Synthetic old-ID input: never publish this as an authentic historical source/hash receipt.
         Map<String, CompoundTag> previous = new LinkedHashMap<>();
         current.forEach((name, document) -> {
@@ -80,12 +99,12 @@ public final class VerifyFtbQuestFiles {
         Files.createDirectories(team.getParent());
         Files.writeString(team, "SYNTHETIC OPAQUE PAID/TEAM STATE: NEVER PARSE OR REWRITE");
         Map<Path, String> before = snapshot(instance);
-        refuses(() -> FtbQuestFiles.ensure(config, current), "startup preserves its fail-closed46-to50 boundary");
+        refuses(() -> FtbQuestFiles.ensure(config, current), "startup preserves its fail-closed46-to51 boundary");
         equal(before, snapshot(instance), "startup missing-ID refusal never changes either chapter");
         JsonObject plan = FtbQuestUpdatePlanner.prepare(instance, encode(reference), destination);
         equal(before, snapshot(instance), "whole native preflight writes no target byte");
         equal(2, plan.getAsJsonArray("files").size(), "only the two known definition filenames are replacements");
-        equal(50, plan.getAsJsonObject("receipt").get("questCount").getAsInt(), "new receipt identifies50 definitions");
+        equal(51, plan.getAsJsonObject("receipt").get("questCount").getAsInt(), "new receipt identifies51 definitions");
         for (var element : plan.getAsJsonArray("files")) {
             JsonObject replacement = element.getAsJsonObject();
             String name = replacement.get("fileName").getAsString();
@@ -203,7 +222,7 @@ public final class VerifyFtbQuestFiles {
         FtbQuestFiles.ensure(compatibleConfig, current);
         Path compatibleT1 = FtbQuestFiles.chapterDirectory(compatibleConfig).resolve("grindless_t1.snbt");
         CompoundTag compatible = current.get("grindless_t1.snbt").copy();
-        compatible.putString("title", "USER-COMPATIBLE COMPLETE50 CHAPTER");
+        compatible.putString("title", "USER-COMPATIBLE COMPLETE51 CHAPTER");
         Files.writeString(compatibleT1, compatible + "\n");
         byte[] compatibleBytes = Files.readAllBytes(compatibleT1);
         FtbQuestFiles.ensure(compatibleConfig, current);

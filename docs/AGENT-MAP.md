@@ -231,6 +231,13 @@ recipe/bill/engine/registration/save changes. Reuse actual default-F1/STIRRED
 Washer and both output streams. One new free acquisition lesson preserves all
 old50 IDs/rewards/values and cannot gate initial F2. No canonical hand edits or
 PC/cache/G4 alias access follows from source ownership.
+Source738/338 is now normally integrated: the actual progression/one LESSON/
+locale seams are changed, not recipes or native layout code. Existing
+VerifyT1Progression/Teaching/Quest/Claims/FTB/legacy fixtures preserve old50.
+T1Export's existing source/class lists now pin the concrete catalogue, runtime
+conditions/slots/FU and selected kinds' getClass() images (28/37 authored,
+not observed hashes). Normal canonical outputs and Java/API51 proof still
+need execution; no source-only result substitutes for them.
 ADR-0183 closes51 compatibility in the existing FtbQuestDefinitionPublisher/
 FtbQuestUpdatePlanner/FtbQuestIntegration and host Read-PrismQuestPlan receipt
 validation (currently hardcoded50). Preserve authentic historical source-file
