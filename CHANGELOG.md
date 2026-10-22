@@ -101,6 +101,30 @@ entries below reference those records by id.
   valid vanilla basic. The Thermal core remains an allowed local process supplied
   with a manually constructed Furnace upstream, not a newly automatic renewable claim.
   No PC lease, generated canonical edit, save/player change or qualification claim.
+- **Rebind the conserved first-factory witness to manual capital (ADR-0188, lane C).**
+  Add explicit nonrenewable `MANUAL_CAPITAL` for genuine normal-machine contracts:
+  finite manual construction can establish installed capital while real recurring
+  feeds still require automatic renewable supply. Preserve generic custody and
+  admission; retire the factory-reproduction teaching goal, select manual Wire
+  Mill/Washer authorities and distinguish player method alternatives from the
+  finite witness's chosen batches. The shared pure `ManufacturingPolicy` API is
+  supplied by recipe lane A, not duplicated here. Existing capital/conservation,
+  T0/T1/teaching/guidance contracts cover real manual construction, recurring-feed
+  refusal, alias/automatic-producer negatives, manual control and method choices;
+  native51 IDs/rewards and all33 deployed T0 lesson bodies remain exact.
+  Explicit exporter lists author43 sources/98 image expressions, including A's
+  policy/Kind dependency, not standalone compilation. Source/JSON/copy checks and
+  963 links pass; an incorrect observer-only adapter path is preserved/corrected.
+  Finished Ad686 is read-only source-inspected without composition: its API,
+  shaped-key projection and two policy image names match. The coordinator then
+  selects manual-only vanilla Furnace manufacture, not an owner-confirmed
+  Furnace preference. Resolve its actual `vanilla/minecraft:furnace` authority
+  without a new recipe/Matrix/bill; a manually funded Furnace may feed a finite
+  optional capital subassembly once, never unbounded automatic core supply.
+  Narrow contracts retain real material-deficit and conservation failures.
+  Supply B's exact two-argument Bench retained-work message without changing
+  runtime/fault/transport code or claiming rendered-client evidence.
+  No Java/model/native/writer, actual class hash or player-save result is claimed.
 - **Correct the manufacturing objective to manual final normal machines.**
   The owner explicitly rejects universal factory self-replication. ADR-0188
   supersedes automatic complete-normal-machine fabrication, not automated

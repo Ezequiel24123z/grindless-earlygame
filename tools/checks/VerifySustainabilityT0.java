@@ -108,6 +108,52 @@ public final class VerifySustainabilityT0 {
             eq("each allowlisted construction has actual resolved recipe data: " + id, true, craft != null);
             eq("vanilla construction crafts stay manual: " + id, false, craft != null && craft.automatable());
         }
+        Resource furnace = new Resource(Kind.ITEM, "minecraft:furnace");
+        ResourceMetadata furnaceCapital = annotations.resources().get(furnace);
+        eq("the coordinator's external Furnace decision uses the existing manual vanilla authority",
+                "vanilla/minecraft:furnace", furnaceCapital.canonicalRoute());
+        eq("the vanilla Furnace is finite manual capital, not recurring automatic item supply",
+                ResourceClass.MANUAL_CAPITAL, furnaceCapital.resourceClass());
+        eq("no Matrix ingredient is added to the vanilla Furnace", false,
+                snapshot.routes().get(furnaceCapital.canonicalRoute()).inputs().keySet().stream()
+                .anyMatch(input -> input.id().equals("grindless:relay_matrix")));
+        eq("the old Bench Furnace constructor is absent", false, snapshot.routes().containsKey("bench/furnace"));
+        eq("the old Assembler Furnace constructor is absent", false,
+                snapshot.routes().containsKey("assemble/bootstrap/furnace"));
+        for (Machine machine : annotations.machines().values()) {
+            Resource capital = machine.construction();
+            if (!io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy.isManualFinalMachine(capital.id())) {
+                continue;
+            }
+            ResourceMetadata metadata = annotations.resources().get(capital);
+            eq("real normal-machine capital has its explicit nonrenewable class: " + capital.key(),
+            ResourceClass.MANUAL_CAPITAL, metadata.resourceClass());
+            eq("manual capital has no automatic item-renewability tier: " + capital.key(), null,
+            metadata.firstRenewableTier());
+            eq("manual capital uses an actual manual construction route: " + capital.key(), false,
+            snapshot.routes().get(metadata.canonicalRoute()).automatable());
+            eq("a normal machine item is not an R0 recurring supply: " + capital.key(), false,
+            tier.renewable().contains(capital));
+            eq("possession/installation is not a recurring raw-feed obligation: " + capital.key(), false,
+            tier.recurring().contains(capital));
+            eq("normal capital remains constructible and available: " + capital.key(), true,
+            tier.available().contains(capital));
+        }
+        for (Route route : snapshot.routes().values()) {
+            RoutePolicy policy = annotations.routes().get(route.id());
+            if (policy == null || !Integer.valueOf(0).equals(policy.unlockTier())) {
+                continue;
+            }
+            for (Resource output : route.retainedOutputs().keySet()) {
+                if (io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy.isManualFinalMachine(output.id())) {
+            eq("all actual T0 normal-machine outputs, not only process-family bindings, have capital metadata: "
+                            + route.id() + "/" + output.key(),
+                    ResourceClass.MANUAL_CAPITAL, annotations.resources().get(output).resourceClass());
+            eq("a T0 capital output is never a renewable item claim: " + output.key(), false,
+                    tier.renewable().contains(output));
+                }
+            }
+        }
         Resource exit = annotations.ledger().get(0).exitObjective();
         Resource relayDeclaration = new Resource(Kind.ITEM, "grindless:relay_matrix");
         eq("the T0 exit retains the exact physical F1 quest identity",

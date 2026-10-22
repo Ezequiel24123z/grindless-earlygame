@@ -20,6 +20,7 @@ import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
 import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
+import io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 
@@ -39,6 +40,7 @@ public final class T1Export {
             JAVA + "progression/T1Progression.java", JAVA + "sustainability/T1Sustainability.java",
             JAVA + "recipe/ProcessGraph.java", JAVA + "recipe/T1Recipes.java",
             JAVA + "recipe/IngredientSpec.java", JAVA + "matrix/ControlMatrixSpec.java",
+            JAVA + "recipe/ManufacturingPolicy.java",
             JAVA + "sustainability/AuthorityAdapters.java",
             JAVA + "recipe/FabricationLogic.java", JAVA + "matrix/ControlMatrixNbt.java",
             JAVA + "matrix/MatrixArchitecture.java",
@@ -104,6 +106,8 @@ public final class T1Export {
                 T1Progression.AtlasSelection.class, T1Sustainability.class,
                 T1Sustainability.InputEvidence.class, T1Sustainability.SeedAllocation.class,
                 AuthorityAdapters.class, IngredientSpec.class, IngredientSpec.MatrixRole.class, ControlMatrixSpec.class,
+                ManufacturingPolicy.class,
+                Class.forName("io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy$Kind"),
                 ControlMatrixNbt.class, MatrixArchitecture.class, ResourceGuidanceContext.class,
                 QuestCatalogue.class, QuestCatalogue.Task.class, QuestCatalogue.Reward.class,
                 QuestCatalogue.Chapter.class, QuestCatalogue.Evidence.class, QuestCatalogue.Type.class,

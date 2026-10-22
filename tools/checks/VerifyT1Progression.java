@@ -12,6 +12,7 @@ import io.github.ezequiel24123z.grindless.process.ConditionState;
 import io.github.ezequiel24123z.grindless.progression.T1Progression;
 import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
 import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
+import io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy;
 import io.github.ezequiel24123z.grindless.recipe.ProcessGraph;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
@@ -90,6 +91,10 @@ public final class VerifyT1Progression {
                         "JAVA + \"sustainability/DebtManifest.java\"", "JAVA + \"sustainability/AuditFinding.java\"",
                         "JAVA + \"sustainability/AuditReports.java\"", "\"tools/checks/VerifyEconomy.java\"")
                         .stream().allMatch(sourceExpressions::contains));
+        equal("the exporter pins the actual shared manufacturing policy API, not a duplicated sustainability catalogue",
+                true, sourceExpressions.contains("JAVA + \"recipe/ManufacturingPolicy.java\"")
+                        && imageExpressions.contains("ManufacturingPolicy.class")
+                        && imageExpressions.contains("Class.forName(\"io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy$Kind\")"));
         SustainabilityAudit.Result t0 = canonicalResult(root);
         int checks = verify(t0);
         Path generated = root.resolve(Path.of("docs", "tiers", "t1-production-graph.json"));
@@ -101,7 +106,7 @@ public final class VerifyT1Progression {
         Path markdown = generated.resolveSibling("t1-production-graph.md");
         equal("generated human costs equal the same actual routes", T1Sustainability.markdown(t0),
                 Files.readString(markdown, StandardCharsets.UTF_8).replace("\r\n", "\n"));
-        System.out.println("ALL T1 FIRST-FACTORY CONTRACTS PASSED: " + (checks + 4)
+        System.out.println("ALL T1 FIRST-FACTORY CONTRACTS PASSED: " + (checks + 5)
                 + "; source/conditional-model scope, not native play or full T1 closure");
     }
 
@@ -138,7 +143,7 @@ public final class VerifyT1Progression {
                 List.of("relay_f2"), T1Progression.lines().stream()
                         .filter(line -> line.requirement() == T1Progression.Requirement.EXIT)
                         .map(T1Progression.Line::id).toList());
-        for (String optional : List.of("factory_reproduction", "wire_forming", "tool_reproduction",
+        for (String optional : List.of("component_fabrication", "wire_forming", "tool_reproduction",
                 "wet_beneficiation", "extraction", "logistics", "storage", "kiln", "factory_space")) {
             equal("the optional branch is not a first-factory mandate: " + optional, false,
                     T1Progression.byId(optional).mandatory());
@@ -187,7 +192,7 @@ public final class VerifyT1Progression {
         physicalControllerSupply(t0);
         finiteContinuation(t0);
         componentRoutes(snapshot);
-        factoryReproduction(snapshot);
+        componentFabrication(snapshot);
         thermalGeneratorAssembly(t0);
         wireForming(snapshot);
         toolReproduction(snapshot);
@@ -273,9 +278,9 @@ public final class VerifyT1Progression {
         for (String id : List.of("craft/machine_casing", "craft/flux_cell",
                 T1Progression.CASING_ROUTE, T1Progression.FLUX_CELL_ROUTE,
                 "assemble/plate_die", "assemble/rod_die", "assemble/gear_die", "assemble/coil_die",
-                "assemble/thermal_generator_core", "assemble/thermal_generator",
-                "assemble/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper",
-                "assemble/motor", "assemble/chemical_washer", "b2/iron", "b2/copper",
+                "assemble/thermal_generator_core", "craft/thermal_generator_from_core",
+                "craft/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper",
+                "assemble/motor", "craft/chemical_washer", "b2/iron", "b2/copper",
                 "b2_r1/iron", "b2_r1/copper")) {
             Map<String, Route> missing = new TreeMap<>(snapshot.routes());
             missing.remove(id);
@@ -320,12 +325,12 @@ public final class VerifyT1Progression {
         equal("the existing exporter includes all four live die routes", 4,
                 toolDocument.getAsJsonArray("routes").size());
         var factoryDocument = document.getAsJsonArray("lines")
-                .get(T1Progression.lines().indexOf(T1Progression.byId("factory_reproduction"))).getAsJsonObject();
-        equal("the existing exporter projects the optional factory reproduction line", "factory_reproduction",
+                .get(T1Progression.lines().indexOf(T1Progression.byId("component_fabrication"))).getAsJsonObject();
+        equal("the existing exporter projects optional component fabrication", "component_fabrication",
                 factoryDocument.get("id").getAsString());
-        equal("the existing exporter keeps factory reproduction optional", "OPTIONAL",
+        equal("the existing exporter keeps component fabrication optional", "OPTIONAL",
                 factoryDocument.get("requirement").getAsString());
-        equal("the existing exporter includes five machine routes and the explicit Thermal core operation", 6,
+        equal("the existing exporter includes the actual core and its manual consumer", 2,
                 factoryDocument.getAsJsonArray("routes").size());
         var wetDocument = document.getAsJsonArray("lines")
                 .get(T1Progression.lines().indexOf(T1Progression.byId("wet_beneficiation"))).getAsJsonObject();
@@ -336,6 +341,16 @@ public final class VerifyT1Progression {
         equal("the existing exporter includes all six live wet authorities", 6,
                 wetDocument.getAsJsonArray("routes").size());
         equal("raw source hashes are not embedded in committed model data", false, document.has("authority_sha256"));
+        equal("manual-only Furnace policy is attributed to the coordinator, not invented owner confirmation",
+                "MANUAL_ONLY_COORDINATOR_DECISION_NOT_OWNER_CONFIRMED",
+                document.get("external_furnace_policy").getAsString());
+        equal("the Furnace uses its actual existing manual authority, not a new recipe",
+                "vanilla/minecraft:furnace", document.get("external_furnace_manual_route").getAsString());
+        equal("the retired automatic Furnace projections do not survive as an exemption",
+                List.of(),
+                java.util.stream.StreamSupport.stream(
+                                document.getAsJsonArray("external_furnace_automatic_routes").spliterator(), false)
+                        .map(element -> element.getAsString()).toList());
         for (String flag : List.of("t1_accepted", "t1_renewable_closure_proven", "global_optimum_claimed")) {
             equal("bounded source evidence cannot invent " + flag, false, document.get(flag).getAsBoolean());
         }
@@ -348,7 +363,7 @@ public final class VerifyT1Progression {
                 document.getAsJsonObject("finite_execution").getAsJsonArray("findings").size());
         equal("finite establishment removes only its own proof limitation",
                 List.of("The finite conditional continuation does not certify recursive T1 renewable closure or the broader T1 family contract.",
-                        "Automatic casing and Flux Cell recipes require the established Assembler; complete recurrent input, power and routing closure is not proved.",
+                        "This finite witness chooses automatic recurring components where available; manual alternatives remain valid player choices. Complete recurrent input, power and routing closure is not proved.",
                         "Continuous factory power, nighttime/restart recovery, routing throughput and captured-gas handling need separate evidence.",
                         "Native client, Survival play, actual crafting and longitudinal save compatibility are not proved by this export."),
                 T1Sustainability.document(t0).get("unproved"));
@@ -396,10 +411,13 @@ public final class VerifyT1Progression {
         }
         Map<String, Long> completed = new TreeMap<>();
         finite.batches().forEach(batch -> completed.merge(batch.route(), 1L, Math::addExact));
-        for (Route route : T1Sustainability.mandatoryRoutes(t0.authorities())) {
-            equal("every actual mandatory selection has a completed batch: " + route.id(), true,
-                    completed.getOrDefault(route.id(), 0L) > 0);
+        for (String id : T1Progression.finiteRouteIds()) {
+            equal("every actual finite-witness selection has a completed batch: " + id, true,
+                    completed.getOrDefault(id, 0L) > 0);
         }
+        equal("the finite witness does not force both valid Flux Cell methods", false, completed.containsKey("craft/flux_cell"));
+        equal("manual Flux Cells remain a real player-facing alternative", true,
+                T1Progression.byId("relay_f2").routeIds().contains("craft/flux_cell"));
         for (T1Progression.Line line : T1Progression.lines()) {
             if (!line.mandatory()) {
                 equal("optional selections never become finite construction obligations: " + line.id(),
@@ -414,6 +432,7 @@ public final class VerifyT1Progression {
         for (var machine : allocation.machineDraws().entrySet()) {
             equal("each first controller is fabricated once: " + machine.getKey(), 1L, completed.get(machine.getKey()));
             Route route = t0.authorities().routes().get(machine.getKey());
+            manualNormalConstruction(route);
             Resource block = route.retainedOutputs().keySet().iterator().next();
             equal("each fabricated first controller is installed: " + block.key(), true, after.installedMachines().contains(block));
             equal("an installed controller is not also spendable stock: " + block.key(), 0L,
@@ -478,6 +497,8 @@ public final class VerifyT1Progression {
         equal("no physical balance is negative", true, actual.values().stream().allMatch(count -> count >= 0));
         equal("a missing predecessor is explicitly refused at the T1 boundary", "predecessor_missing",
                 T1Sustainability.finiteWitness(null).findings().get(0).rule());
+        equal("displaying the manual F1 alternative does not replay the inherited T0 exit in this witness", false,
+                T1Progression.finiteRouteIds().contains(T1Progression.ENTRY_ROUTE));
 
         // Model-contract mutation only: an incorrect reproduction output cannot supply the exact
         // predecessor. Even the resulting physical F2 stock cannot replace execution of the exit.
@@ -563,7 +584,7 @@ public final class VerifyT1Progression {
     private static void wireForming(Snapshot snapshot) {
         T1Progression.Line line = T1Progression.byId("wire_forming");
         equal("optional wire forming selects only the existing base manufacturing and mill routes",
-                List.of("assemble/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper"),
+                List.of("craft/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper"),
                 line.routeIds());
         equal("optional wire forming follows only established assembly", Set.of("assembly"), line.requires());
         equal("optional wire forming remains after assembly", true,
@@ -577,14 +598,14 @@ public final class VerifyT1Progression {
                         "craft/thermal_generator", 1L, "craft/pulverizer", 1L, "craft/arc_furnace", 1L,
                         "craft/press", 1L, "craft/assembler", 1L)),
                 T1Sustainability.seedAllocation(snapshot));
-        Route manufacture = snapshot.routes().get("assemble/wire_mill");
+        Route manufacture = snapshot.routes().get("craft/wire_mill");
         equal("the ordinary Wire Mill's actual base kind stays F1", FluxTier.F1, ProcessMachineKind.WIRE_MILL.tier());
-        equal("the base mill is manufactured by the Assembler", "ASSEMBLER", manufacture.family());
+        manualNormalConstruction(manufacture);
         equal("the base mill consumes one controller at its actual F1 kind rating", 1L,
                 manufacture.inputs().get(new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX,
                         ProcessMachineKind.WIRE_MILL.tier().ordinal(), "items")));
         equal("the audit labels that F1 supply as one valid minimum-control option",
-                "item:grindless:relay_matrix [F1]", manufacture.conditions().get("minimum_control_input_3"));
+                "item:grindless:relay_matrix [F1]", manufacture.conditions().get("minimum_control_key_M"));
         equal("the audit does not promise exhaustive alternate-controller supply",
                 "canonical_option_not_exhaustive_alternatives",
                 manufacture.conditions().get("control_supply_projection"));
@@ -595,10 +616,11 @@ public final class VerifyT1Progression {
                 Map.of(item(FabricationLogic.WIRE_MILL), 1L), manufacture.outputs());
         for (String id : line.routeIds()) {
             Route route = snapshot.routes().get(id);
-            equal("the optional route reuses its existing process authority: " + id,
-                    Authority.PROCESS_GRAPH, route.authority());
-            equal("the optional route retains its F1 draw: " + id, 32L, route.fuPerTick());
-            if (!id.equals("assemble/wire_mill")) {
+            if (!id.equals("craft/wire_mill")) {
+                equal("the optional operating route reuses process authority: " + id,
+                        Authority.PROCESS_GRAPH, route.authority());
+                equal("the optional operating route retains its F1 draw: " + id,
+                        FluxTier.F1.nominal(), route.fuPerTick());
                 equal("the optional milling route uses the real base Wire Mill: " + id,
                         "WIRE_MILL", route.family());
             }
@@ -646,7 +668,7 @@ public final class VerifyT1Progression {
         Snapshot snapshot = t0.authorities();
         T1Progression.Line line = T1Progression.byId("wet_beneficiation");
         equal("wet beneficiation selects only the six accepted existing authorities",
-                List.of("assemble/motor", "assemble/chemical_washer", "b2/iron", "b2/copper",
+                List.of("assemble/motor", "craft/chemical_washer", "b2/iron", "b2/copper",
                         "b2_r1/iron", "b2_r1/copper"), line.routeIds());
         equal("wet beneficiation follows only established assembly", Set.of("assembly"), line.requires());
         equal("wet beneficiation remains optional", T1Progression.Requirement.OPTIONAL, line.requirement());
@@ -680,8 +702,15 @@ public final class VerifyT1Progression {
         var atlas = T1Progression.atlasForQuest("wet_beneficiation", AtlasLogic.allEntries(processes));
         equal("every wet route is actually representable in the Atlas", Set.of(), atlas.nonAtlasRouteIds());
         for (String id : line.routeIds()) {
-            var process = processes.stream().filter(recipe -> recipe.id().equals(id)).findFirst().orElseThrow();
             Route route = snapshot.routes().get(id);
+            if (id.equals("craft/chemical_washer")) {
+                manualNormalConstruction(route);
+                equal("manual Washer construction retains its actual ordinary Atlas output",
+                        List.of("item:" + FabricationLogic.CHEMICAL_WASHER), atlas.entries().stream()
+                                .filter(entry -> entry.id().equals(id)).findFirst().orElseThrow().outputs());
+                continue;
+            }
+            var process = processes.stream().filter(recipe -> recipe.id().equals(id)).findFirst().orElseThrow();
             equal("wet projection preserves all live inputs, outputs, conditions and costs: " + id,
                     AuthorityAdapters.process(process), route);
             equal("wet Atlas preserves the complete live recipe: " + id, AtlasLogic.entry(process),
@@ -705,32 +734,29 @@ public final class VerifyT1Progression {
             equal("held conditions support the actual full-speed wet cadence: " + id,
                     ConditionReport.OPTIMAL, conditions.evaluate(kind.heldConditions()));
         }
-        for (String id : List.of("assemble/motor", "assemble/chemical_washer")) {
-            Route manufacture = snapshot.routes().get(id);
-            equal("existing wet construction stays in the Assembler: " + id, "ASSEMBLER", manufacture.family());
-        }
         Route motor = snapshot.routes().get("assemble/motor");
+        equal("the Motor component remains an actual Assembler product", "ASSEMBLER", motor.family());
         equal("the component Motor retains its complete controller-free bill",
                 Map.of(item(FabricationLogic.MACHINE_CASING), 1L, item(FabricationLogic.COPPER_COIL), 2L,
                         new Resource(Kind.TAG, "forge:rods/iron"), 1L), physicalInputs(motor));
         equal("the component Motor still has no minimum-control role", false,
                 motor.conditions().keySet().stream().anyMatch(key -> key.startsWith("minimum_control_")));
-        Route manufacture = snapshot.routes().get("assemble/chemical_washer");
+        Route manufacture = snapshot.routes().get("craft/chemical_washer");
         Resource controller = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX, FluxTier.F1.ordinal(), "items");
         equal("the baseline Washer retains its material quantities and consumes exactly one F1 control option",
                 Map.of(item(FabricationLogic.MACHINE_CASING), 1L, item(FabricationLogic.MOTOR), 2L,
                         new Resource(Kind.TAG, "forge:plates/iron"), 4L, controller, 1L), physicalInputs(manufacture));
-        equal("the Washer exposes only its explicit fourth minimum-control role", List.of("minimum_control_input_3"),
+        equal("manual Washer construction exposes its actual shaped-key control role", List.of("minimum_control_key_M"),
                 manufacture.conditions().keySet().stream().filter(key -> key.startsWith("minimum_control_")).toList());
         equal("the Washer names real F1 supply rather than an invented rated item",
-                "item:grindless:relay_matrix [F1]", manufacture.conditions().get("minimum_control_input_3"));
+                "item:grindless:relay_matrix [F1]", manufacture.conditions().get("minimum_control_key_M"));
         equal("the Washer's minimum role remains one canonical supply option, not exhaustive alternatives",
                 "canonical_option_not_exhaustive_alternatives",
                 manufacture.conditions().get("control_supply_projection"));
         equal("the Washer still produces the ordinary baseline machine",
                 Map.of(item(FabricationLogic.CHEMICAL_WASHER), 1L), manufacture.outputs());
-        equal("the Washer retains its twenty-second construction cycle", 400L, manufacture.durationTicks());
-        equal("the Washer retains its F1 construction draw", 32L, manufacture.fuPerTick());
+        equal("manual Washer final construction does not claim a powered cycle", 0L, manufacture.durationTicks());
+        equal("manual Washer final construction does not claim a powered draw", 0L, manufacture.fuPerTick());
         for (String material : List.of("iron", "copper")) {
             Resource crushed = new Resource(Kind.TAG, "grindless:crushed_materials/" + material);
             Resource washed = new Resource(Kind.TAG, "grindless:washed_crushed_materials/" + material);
@@ -782,39 +808,33 @@ public final class VerifyT1Progression {
                         materials.stream().filter(view -> view.name().equals("iron")).toList()))));
     }
 
-    private static void factoryReproduction(Snapshot snapshot) {
-        T1Progression.Line line = T1Progression.byId("factory_reproduction");
-        equal("optional factory reproduction retains four direct routes and adds both explicit Thermal steps",
-                List.of("assemble/pulverizer", "assemble/arc_furnace", "assemble/press", "assemble/assembler",
-                        "assemble/thermal_generator_core", "assemble/thermal_generator"),
-                line.routeIds());
-        equal("optional factory reproduction follows the manually seeded Assembler line",
-                Set.of("assembly"), line.requires());
-        equal("factory reproduction stays optional", T1Progression.Requirement.OPTIONAL, line.requirement());
-        equal("factory reproduction is taught after assembly",
+    private static void componentFabrication(Snapshot snapshot) {
+        rejects("the obsolete factory-reproduction goal is retired, not renamed as a live machine factory",
+                () -> T1Progression.byId("factory_reproduction"));
+        T1Progression.Line line = T1Progression.byId("component_fabrication");
+        equal("optional fabrication selects a real component and manual consumer only",
+                List.of("assemble/thermal_generator_core", "craft/thermal_generator_from_core"), line.routeIds());
+        equal("optional component fabrication follows assembly", Set.of("assembly"), line.requires());
+        equal("component fabrication stays optional", T1Progression.Requirement.OPTIONAL, line.requirement());
+        equal("component fabrication is taught after assembly",
                 T1Progression.lines().indexOf(T1Progression.byId("assembly")) + 1,
                 T1Progression.lines().indexOf(line));
-        List<Route> mandatory = T1Sustainability.mandatoryRoutes(snapshot);
-        for (String machine : List.of("pulverizer", "arc_furnace", "press", "assembler", "thermal_generator")) {
-            Route route = snapshot.routes().get("assemble/" + machine);
-            equal("machine reproduction uses the existing Assembler: " + machine, "ASSEMBLER", route.family());
-            equal("machine reproduction stays ordinary live process authority: " + machine,
-                    Authority.PROCESS_GRAPH, route.authority());
-            equal("machine reproduction preserves the ordinary baseline output: " + machine,
-                    Map.of(item("grindless:" + machine), 1L), route.outputs());
-            equal("machine reproduction uses the existing automatic process: " + machine, true,
-                    route.automatable());
-            equal("machine reproduction adds no catalyst: " + machine, Map.of(), route.catalysts());
-            equal("machine reproduction adds no route prerequisite: " + machine, Set.of(),
-                    route.prerequisites());
-            equal("machine reproduction is not a new mandatory route: " + machine, false,
-                    mandatory.stream().anyMatch(candidate -> candidate.id().equals(route.id())));
+        for (String machine : List.of("pulverizer", "arc_furnace", "press", "assembler", "thermal_generator",
+                "wire_mill", "chemical_washer")) {
+            equal("obsolete automatic final construction is absent: " + machine, false,
+                    snapshot.routes().containsKey("assemble/" + machine));
+            manualNormalConstruction(snapshot.routes().get("craft/" + machine));
+        }
+        for (Route route : snapshot.routes().values()) {
+            equal("no live automatic producer can manufacture policy-classified normal machines/processors: " + route.id(), false,
+                    route.automatable() && route.retainedOutputs().keySet().stream()
+                            .anyMatch(resource -> ManufacturingPolicy.isManualFinalMachine(resource.id())));
         }
         equal("the Assembler quest remains bound to the existing assembly line",
                 T1Progression.byId("assembly"), T1Progression.byQuest("assembler"));
         equal("the Assembler lesson keeps its established route selection",
                 List.of("craft/assembler", T1Progression.CASING_ROUTE, T1Progression.REPRODUCTION_ROUTE,
-                        "assemble/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper"),
+                        "craft/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper"),
                 T1Progression.questRouteIds("assembler"));
         equal("the optional factory line does not become a first-F2 prerequisite",
                 Set.of("assembly"), T1Progression.byId("relay_f2").requires());
@@ -826,7 +846,7 @@ public final class VerifyT1Progression {
         Snapshot snapshot = t0.authorities();
         Resource component = item(FabricationLogic.THERMAL_GENERATOR_CORE);
         Route core = snapshot.routes().get("assemble/thermal_generator_core");
-        Route finished = snapshot.routes().get("assemble/thermal_generator");
+        Route finished = snapshot.routes().get("craft/thermal_generator_from_core");
         Route manual = snapshot.routes().get("craft/thermal_generator");
         equal("the manual first Thermal remains the first power seed", false, manual.automatable());
         equal("the mandatory power line still selects manual Thermal construction",
@@ -836,42 +856,48 @@ public final class VerifyT1Progression {
         equal("the core has exactly its three physical source groups",
                 Set.of(item("minecraft:furnace"), new Resource(Kind.TAG, "grindless:carbon"),
                         new Resource(Kind.TAG, "forge:ingots/iron")), physicalInputs(core).keySet());
+        var furnaceCapital = t0.annotations().resources().get(item("minecraft:furnace"));
+        equal("core manufacture consumes manually supplied Furnace capital, not a renewable machine item",
+                SustainabilityAnnotations.ResourceClass.MANUAL_CAPITAL, furnaceCapital.resourceClass());
+        equal("the capital source is the actual unchanged manual vanilla authority",
+                "vanilla/minecraft:furnace", furnaceCapital.canonicalRoute());
+        equal("local machine-only core processing does not imply automatic net Furnace supply", false,
+                t0.tiers().get(0).renewable().contains(item("minecraft:furnace")));
         equal("the core never consumes a hidden Matrix", false,
                 physicalInputs(core).keySet().stream().anyMatch(resource -> resource.id().equals(FabricationLogic.RELAY_MATRIX)));
         Resource controller = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX, FluxTier.F1.ordinal(), "items");
         equal("final Thermal exposes exactly one canonical F1 control option", 1L, finished.inputs().get(controller));
-        equal("only final Thermal exposes minimum control",
-                "item:grindless:relay_matrix [F1]", finished.conditions().get("minimum_control_input_2"));
+        equal("manual final Thermal exposes its source-backed minimum control option", true,
+                finished.conditions().values().contains("item:grindless:relay_matrix [F1]"));
         equal("the core has no minimum-control role", false, core.conditions().keySet().stream()
-                .anyMatch(key -> key.startsWith("minimum_control_input_")));
+                .anyMatch(key -> key.startsWith("minimum_control_")));
         equal("the final controller retains truthful canonical-option provenance",
                 "canonical_option_not_exhaustive_alternatives", finished.conditions().get("control_supply_projection"));
         Map<Resource, Long> composed = new TreeMap<>(physicalInputs(core));
         physicalInputs(finished).forEach((resource, amount) -> composed.merge(resource, amount, Math::addExact));
         equal("exactly one core is consumed and cancelled from the composed input bill", 1L, composed.remove(component));
-        equal("the same physical F1 controller is present once in manual and automatic construction", 1L,
+        equal("the same physical F1 controller is present once in both manual final methods", 1L,
                 composed.get(controller));
         equal("both Thermal steps preserve the full manual construction materials", physicalInputs(manual), composed);
-        equal("Thermal reproduction preserves the ordinary manual machine output", manual.outputs(), finished.outputs());
+        equal("the manual core consumer preserves the ordinary machine identity", manual.outputs(), finished.outputs());
+        manualNormalConstruction(finished);
+        equal("the core remains actual automatic process authority", Authority.PROCESS_GRAPH, core.authority());
+        equal("the core uses the existing Assembler", "ASSEMBLER", core.family());
+        equal("the core remains automatic work", true, core.automatable());
+        equal("the core retains its actual complete cycle", (long) FabricationLogic.ASSEMBLE_TICKS, core.durationTicks());
+        equal("the core retains its actual F1 draw", FabricationLogic.FU_PER_TICK, core.fuPerTick());
+        equal("the core accounts for all paid work",
+                Math.multiplyExact(core.durationTicks(), core.fuPerTick()), core.inputs().get(ENERGY));
         for (Route stage : List.of(core, finished)) {
-            equal("each Thermal step is actual process authority: " + stage.id(), Authority.PROCESS_GRAPH, stage.authority());
-            equal("each Thermal step uses the existing Assembler: " + stage.id(), "ASSEMBLER", stage.family());
-            equal("each Thermal step is implemented automatic work: " + stage.id(), true, stage.automatable());
-            equal("each Thermal step retains a complete normal cycle: " + stage.id(),
-                    (long) FabricationLogic.ASSEMBLE_TICKS, stage.durationTicks());
-            equal("each Thermal step retains a complete F1 draw: " + stage.id(),
-                    FabricationLogic.FU_PER_TICK, stage.fuPerTick());
-            equal("each Thermal step accounts for its own complete energy: " + stage.id(),
-                    Math.multiplyExact(stage.durationTicks(), stage.fuPerTick()), stage.inputs().get(ENERGY));
             equal("Thermal adds no retained catalyst: " + stage.id(), Map.of(), stage.catalysts());
             equal("Thermal adds no permission: " + stage.id(), Set.of(), stage.prerequisites());
             equal("neither Thermal step enters the mandatory first-F2 path: " + stage.id(), false,
                     T1Sustainability.mandatoryRoutes(snapshot).contains(stage));
         }
-        equal("the composed Thermal work is explicitly two normal operations", 800L,
+        equal("manual final assembly adds no fictitious second powered process", core.durationTicks(),
                 Math.addExact(core.durationTicks(), finished.durationTicks()));
-        equal("the composed Thermal energy includes both paid operations", 25_600L,
-                Math.addExact(core.inputs().get(ENERGY), finished.inputs().get(ENERGY)));
+        equal("the composed work charges only the actual automatic core operation", core.inputs().get(ENERGY),
+                Math.addExact(core.inputs().get(ENERGY), finished.inputs().getOrDefault(ENERGY, 0L)));
         var metadata = t0.annotations().resources().get(component);
         equal("the new component does not invent a renewable supply class", null, metadata.resourceClass());
         equal("the new component is not mislabeled a by-product", null, metadata.sideStreamClass());
@@ -935,7 +961,7 @@ public final class VerifyT1Progression {
                 T1Progression.byId("relay_f2").requires());
         equal("the Assembler lesson follows construction and reproduction with only optional base wire forming",
                 List.of("craft/assembler", T1Progression.CASING_ROUTE, T1Progression.REPRODUCTION_ROUTE,
-                        "assemble/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper"),
+                        "craft/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper"),
                 T1Progression.questRouteIds("assembler"));
         equal("the Flux Cell lesson retains the manual alternative alongside automatic production",
                 List.of("craft/flux_cell", T1Progression.FLUX_CELL_ROUTE), T1Progression.questRouteIds("flux_cell"));
@@ -960,7 +986,7 @@ public final class VerifyT1Progression {
                 T1Progression.FLUX_CELL_ROUTE, "flux_cell",
                 T1Progression.CASING_ROUTE, "assembler",
                 T1Progression.REPRODUCTION_ROUTE, "assembler",
-                "assemble/wire_mill", "assembler",
+                "craft/wire_mill", "assembler",
                 "mill/wire/iron", "assembler",
                 "mill/wire/copper", "assembler",
                 "mill/coil/copper", "assembler").entrySet()) {
@@ -999,6 +1025,20 @@ public final class VerifyT1Progression {
         Map<Resource, Long> inputs = new TreeMap<>(route.inputs());
         inputs.keySet().removeIf(resource -> resource.kind() == Kind.ENERGY);
         return inputs;
+    }
+
+    private static void manualNormalConstruction(Route route) {
+        equal("manual final construction exists", true, route != null);
+        equal("normal final manufacture is manual: " + route.id(), false, route.automatable());
+        equal("normal final manufacture uses the real crafting authority: " + route.id(), true,
+                Set.of(Authority.CRAFTING_JSON, Authority.T1_RECIPES, Authority.BOOTSTRAP_RECIPES).contains(route.authority()));
+        equal("normal final manufacture uses the crafting table: " + route.id(), "CRAFTING_TABLE", route.family());
+        equal("manual manufacture has no synthetic powered tick charge: " + route.id(), 0L, route.durationTicks());
+        equal("manual manufacture has no synthetic FU draw: " + route.id(), 0L, route.fuPerTick());
+        equal("manual manufacture injects no ENERGY requirement: " + route.id(), false, route.inputs().containsKey(ENERGY));
+        equal("manual capital refers to genuine normal-machine output contracts: " + route.id(), true,
+                !route.retainedOutputs().isEmpty() && route.retainedOutputs().keySet().stream()
+                        .allMatch(resource -> ManufacturingPolicy.isManualFinalMachine(resource.id())));
     }
 
     private static void rejects(String name, Runnable action) {

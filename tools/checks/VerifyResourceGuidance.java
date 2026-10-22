@@ -274,6 +274,17 @@ public final class VerifyResourceGuidance {
         equal("hazard handling remains visible even with unknown action", true, hasTranslation(hazardLines, PREFIX + "hazardous"));
         equal("unknown containment is not an invented API", true, hasTranslation(hazardLines, PREFIX + "containment"));
         equal("unknown treatment is explicit", true, hasTranslation(hazardLines, PREFIX + "treatment"));
+        var capital = new ResourceMetadata(ResourceClass.MANUAL_CAPITAL, null, 0, null, "craft/capital",
+                List.of(), new Handling(Action.STORE, true, false, null, null), null, null, null);
+        Document capitalDocument = ResourceGuidanceProjection.project(fixture(capital));
+        equal("the existing metadata format losslessly carries manual durable capital", capitalDocument,
+                ResourceGuidanceJson.read(ResourceGuidanceJson.write(capitalDocument)));
+        List<Component> capitalLines = ResourceGuidanceClient.lines(new ResourceGuidanceRuntime.Loaded(capitalDocument, null),
+                item("fixture:resource"), true, false);
+        equal("manual capital has an explicit localized classification", true,
+                hasTranslation(capitalLines, PREFIX + "class.manual_capital"));
+        equal("manual capital never borrows the renewable tooltip label", false,
+                hasTranslation(capitalLines, PREFIX + "class.renewable"));
     }
 
     private static void identities() {
@@ -487,7 +498,7 @@ public final class VerifyResourceGuidance {
                     ResourceGuidanceContext.resource(invalid).isEmpty());
         }
         List<AtlasLogic.Entry> entries = AtlasLogic.allEntries(ProcessGraph.generate(List.of()));
-        var mill = entries.stream().filter(entry -> entry.id().equals("assemble/wire_mill")).findFirst().orElseThrow();
+        var mill = entries.stream().filter(entry -> entry.id().equals("craft/wire_mill")).findFirst().orElseThrow();
         var control = ResourceGuidanceContext.operands(mill).stream()
                 .filter(operand -> operand.resource().id().equals("grindless:relay_matrix")).findFirst().orElseThrow();
         equal("teaching does not silently drop the minimum input", 1, control.amount());
@@ -559,8 +570,8 @@ public final class VerifyResourceGuidance {
                 "craft/relay_matrix", ResourceGuidanceContext.Role.OUTPUT,
                 "assemble/relay_matrix", ResourceGuidanceContext.Role.OUTPUT,
                 "craft/thermal_generator", ResourceGuidanceContext.Role.INPUT,
-                "assemble/thermal_generator", ResourceGuidanceContext.Role.INPUT,
-                "assemble/wire_mill", ResourceGuidanceContext.Role.INPUT).entrySet()) {
+                "craft/thermal_generator_from_core", ResourceGuidanceContext.Role.INPUT,
+                "craft/wire_mill", ResourceGuidanceContext.Role.INPUT).entrySet()) {
             var authored = entries.stream().filter(row -> row.id().equals(selection.getKey())).findFirst().orElseThrow();
             var matrices = ResourceGuidanceContext.operands(authored).stream()
                     .filter(operand -> operand.resource().id().equals(FabricationLogic.RELAY_MATRIX)).toList();

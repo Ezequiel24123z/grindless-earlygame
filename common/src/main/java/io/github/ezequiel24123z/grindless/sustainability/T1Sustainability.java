@@ -7,6 +7,7 @@ import io.github.ezequiel24123z.grindless.machine.GeneratorKind;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.progression.T1Progression;
 import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
+import io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,6 +64,7 @@ public final class T1Sustainability {
         return Collections.unmodifiableMap(selected);
     }
 
+    /** Method options in required lines, not an instruction to execute every dual-method alternative. */
     public static List<Route> mandatoryRoutes(Snapshot snapshot) {
         Map<String, Route> routes = new TreeMap<>();
         Map<String, List<Route>> selected = selectedRoutes(snapshot);
@@ -72,7 +74,7 @@ public final class T1Sustainability {
     }
 
     /**
-     * Classifies each direct consumed/catalytic edge. T1 producer links are deliberately not a
+     * Classifies each method option's direct consumed/catalytic edge. T1 producer links are deliberately not a
      * claim of automatic net supply; recursive T0 supply comes only from the existing audit.
      */
     public static List<InputEvidence> inputs(SustainabilityAudit.Result t0) {
@@ -114,9 +116,7 @@ public final class T1Sustainability {
             return refusal;
         }
         // The teaching order is already dependency ordered. Optional branches are not establishment obligations.
-        Set<String> selected = new LinkedHashSet<>();
-        T1Progression.lines().stream().filter(T1Progression.Line::mandatory)
-                .forEach(line -> selected.addAll(line.routeIds()));
+        Set<String> selected = new LinkedHashSet<>(T1Progression.finiteRouteIds());
         return SustainabilityAudit.continueFinite(t0, finiteAnnotations(t0, selected),
                 List.copyOf(selected), T1Progression.EXIT_ROUTE);
     }
@@ -139,15 +139,17 @@ public final class T1Sustainability {
             String name = kind.name().toLowerCase(Locale.ROOT);
             Route craft = require(t0.authorities(), "craft/" + name);
             Resource block = item("grindless:" + name);
-            if (!craft.retainedOutputs().equals(Map.of(block, 1L))) {
+            if (!ManufacturingPolicy.isManualFinalMachine(block.id()) || craft.automatable()
+                    || !craft.retainedOutputs().equals(Map.of(block, 1L))) {
                 throw new IllegalArgumentException("The selected machine craft no longer constructs " + kind.family());
             }
             machines.putIfAbsent(kind.family().name(), new Machine(kind.family().name(), block, kind.tier().ordinal()));
         }
         Route power = require(t0.authorities(), T1Progression.POWER_ROUTE);
         Resource generator = item("grindless:" + GeneratorKind.THERMAL.id());
-        if (!require(t0.authorities(), "craft/" + GeneratorKind.THERMAL.id())
-                .retainedOutputs().equals(Map.of(generator, 1L))) {
+        Route generatorCraft = require(t0.authorities(), "craft/" + GeneratorKind.THERMAL.id());
+        if (!ManufacturingPolicy.isManualFinalMachine(generator.id()) || generatorCraft.automatable()
+                || !generatorCraft.retainedOutputs().equals(Map.of(generator, 1L))) {
             throw new IllegalArgumentException("The selected Thermal construction no longer matches its actual kind");
         }
         machines.putIfAbsent(power.family(), new Machine(power.family(), generator, GeneratorKind.THERMAL.tier().ordinal()));
@@ -173,6 +175,7 @@ public final class T1Sustainability {
         for (T1Progression.Line line : T1Progression.lines()) {
             lines.add(row("id", line.id(), "requirement", line.requirement().name(),
                     "requires_lines", new TreeSet<>(line.requires()),
+                    "route_selection_scope", "Authored methods/options, not an obligation to execute every alternative",
                     "routes", selected.get(line.id()).stream().map(T1Sustainability::routeDocument).toList()));
         }
         List<Object> inputEvidence = new ArrayList<>();
@@ -203,6 +206,15 @@ public final class T1Sustainability {
                 "reproduction_route", T1Progression.REPRODUCTION_ROUTE,
                 "exit_route", T1Progression.EXIT_ROUTE,
                 "lines", lines,
+                "finite_selected_routes", T1Progression.finiteRouteIds(),
+                "manufacturing_policy", "Policy-classified normal finals are manual capital; operating processes automate. "
+                        + "The coordinator includes the vanilla Furnace; other products retain their actual authored methods.",
+                "external_furnace_policy", "MANUAL_ONLY_COORDINATOR_DECISION_NOT_OWNER_CONFIRMED",
+                "external_furnace_manual_route", require(snapshot, "vanilla/minecraft:furnace").id(),
+                "external_furnace_automatic_routes", snapshot.routes().values().stream()
+                        .filter(route -> route.automatable()
+                                && route.retainedOutputs().containsKey(item("minecraft:furnace")))
+                        .map(Route::id).toList(),
                 "mandatory_input_evidence", inputEvidence,
                 "finite_execution", finiteDocument(finite),
                 "seed_allocation", row("batch_output", allocation.batchOutput(),
@@ -228,7 +240,7 @@ public final class T1Sustainability {
                         finite.completed()
                                 ? "The finite conditional continuation does not certify recursive T1 renewable closure or the broader T1 family contract."
                                 : "The finite conditional continuation is blocked; inspect its actual completed batches and findings.",
-                        "Automatic casing and Flux Cell recipes require the established Assembler; complete recurrent input, power and routing closure is not proved.",
+                        "This finite witness chooses automatic recurring components where available; manual alternatives remain valid player choices. Complete recurrent input, power and routing closure is not proved.",
                         "Continuous factory power, nighttime/restart recovery, routing throughput and captured-gas handling need separate evidence.",
                         "Native client, Survival play, actual crafting and longitudinal save compatibility are not proved by this export."));
         return Collections.unmodifiableMap(document);
@@ -259,7 +271,9 @@ public final class T1Sustainability {
                 .append("These are source costs, not a promised world inventory.\n\n")
                 .append("## Exact batches\n\n")
                 .append("Each row is one batch at its catalogue conditions. Alternative recipes ")
-                .append("are not simultaneous machine loads. Generator FU output is in the output ")
+                .append("are choices, not mandatory duplicate crafts or simultaneous machine loads. ")
+                .append("Policy-classified normal finals, including the vanilla Furnace, are assembled manually; their operating processes automate. ")
+                .append("Generator FU output is in the output ")
                 .append("column; the demand column is consumption only.\n\n")
                 .append("| Line | Role | Live authority | Machine | Consumed inputs | Retained catalysts | Outputs | Ticks | FU/t | Demand FU/batch |\n")
                 .append("| --- | --- | --- | --- | --- | --- | --- | ---: | ---: | ---: |\n");
@@ -269,8 +283,8 @@ public final class T1Sustainability {
                         .append(" | `").append(route.id()).append("` | ")
                         .append(route.family() == null ? "Manual craft" : route.family())
                         .append(" | ").append(describe(route.inputs(), Set.of()))
-                        .append(route.conditions().keySet().stream().anyMatch(key -> key.startsWith("minimum_control_input_"))
-                                ? " (minimum control; higher ratings of any architecture may substitute; canonical supply shown)" : "")
+                        .append(route.conditions().keySet().stream().anyMatch(key -> key.startsWith("minimum_control_"))
+                                ? " (minimum control; valid higher-rated registered control may substitute; canonical supply shown)" : "")
                         .append(" | ").append(describe(route.catalysts(), Set.of()))
                         .append(" | ").append(describe(route.outputs(), route.discharged()))
                         .append(" | ").append(route.durationTicks()).append(" | ").append(route.fuPerTick())
@@ -287,6 +301,10 @@ public final class T1Sustainability {
             text.append("- `").append(finding.fingerprint()).append("`: ").append(finding.message()).append("\n");
         }
         text.append("\n## Supply and proof boundaries\n\n")
+                .append("The coordinator selects manual-only final vanilla Furnace manufacture; this is not an owner-confirmed ")
+                .append("Furnace preference. Its existing vanilla manual authority and material bill remain. ")
+                .append("Automatic Thermal core work may consume a manually supplied Furnace once for finite capital, ")
+                .append("but that does not establish automatic net core supply.\n\n")
                 .append("The JSON records every mandatory consumed/catalytic edge separately. ")
                 .append("`T0_AUDITED_RENEWABLE` means the existing conditional audit proves that ")
                 .append("boundary under its stated environment and finite-establishment assumptions. ")
@@ -299,7 +317,8 @@ public final class T1Sustainability {
                 .append("execution above is conditional, not a whole-T1 or world proof. The first Assembler uses a finite ")
                 .append("manual casing seed from the forming line; automatic casing production only ")
                 .append("starts after that Assembler exists. Existing manual casing and Flux Cell ")
-                .append("crafts remain bootstrap/compatibility alternatives. Their Assembler routes ")
+                .append("crafts remain valid alternatives, not just emergency fallbacks. This witness selects ")
+                .append("one Flux Cell method, not both; the player need not automate either component. Their Assembler routes ")
                 .append("provide implemented automatic recurring components with the same material ")
                 .append("bills, not a net-renewability or complete factory-autonomy proof.\n\n")
                 .append("Thermal power uses the mod-owned T0 biomass route. Per-route rated draw ")
@@ -321,6 +340,12 @@ public final class T1Sustainability {
         if (resource.equals(ENERGY)) {
             return new InputEvidence(route.id(), resource, amount, catalyst,
                     "T1_THERMAL_FROM_T0_RENEWABLE_BIOMASS", List.of(T1Progression.POWER_ROUTE));
+        }
+        var capital = t0.annotations().resources().get(resource);
+        if (capital != null && capital.resourceClass() == ResourceClass.MANUAL_CAPITAL) {
+            return new InputEvidence(route.id(), resource, amount, catalyst,
+                    "MANUAL_CAPITAL_NOT_RECURRING_ITEM_SUPPLY",
+                    capital.canonicalRoute() == null ? List.of() : List.of(capital.canonicalRoute()));
         }
         if (t0.tiers().get(0).renewable().contains(resource)) {
             var metadata = t0.annotations().resources().get(resource);

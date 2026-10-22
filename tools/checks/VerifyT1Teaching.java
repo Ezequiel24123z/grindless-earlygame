@@ -40,9 +40,9 @@ public final class VerifyT1Teaching {
     private static final Set<String> NEW_LESSONS = Set.of(
             "first_grid", "forming_dies", "copper_coil", "flux_cell", "wet_beneficiation");
     private static final Set<String> WIRE_FORMING_ROUTES = Set.of(
-            "assemble/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper");
+            "craft/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper");
     private static final Set<String> WET_ROUTES = Set.of(
-            "assemble/motor", "assemble/chemical_washer", "b2/iron", "b2/copper",
+            "assemble/motor", "craft/chemical_washer", "b2/iron", "b2/copper",
             "b2_r1/iron", "b2_r1/copper");
     // dd0b4bc: sorted key + NUL + decoded body + LF for the 33 native FTB T0 lesson keys.
     private static final String T0_BODY_DIGEST =
@@ -150,13 +150,16 @@ public final class VerifyT1Teaching {
                 lang.get(QuestTeaching.bodyKey(QuestCatalogue.byId("flux_cell"))).getAsString()
                         .contains("does not require stored charge"));
         String cell = lang.get(QuestTeaching.bodyKey(QuestCatalogue.byId("flux_cell"))).getAsString();
-        check("the Flux Cell lesson teaches automatic production without removing manual bootstrap",
-                cell.contains("automatically in the Assembler") && cell.contains("manual bootstrap"));
+        check("the Flux Cell lesson presents actual dual methods as choices, not a forced duplicate",
+                cell.contains("by hand or in the Assembler") && cell.contains("Choose either route"));
         String assembler = lang.get(QuestTeaching.bodyKey(QuestCatalogue.byId("assembler"))).getAsString();
-        check("the Assembler lesson places optional wire expansion after controller reproduction",
-                assembler.contains("reproduce F1 Relay batches")
-                        && assembler.contains("Optional Wire Mill expansion follows reproduction")
+        check("the Assembler lesson distinguishes manual machines from optional automatic components",
+                assembler.contains("Manually assemble") && assembler.contains("when useful")
+                        && assembler.contains("Normal machines stay manually assembled")
                         && assembler.contains("not required for the first F2 Matrix"));
+        String matrices = lang.get(QuestTeaching.bodyKey(QuestCatalogue.byId("matrix_line"))).getAsString();
+        check("the Matrix lesson preserves both actual F1 methods and the machine-only frontier",
+                matrices.contains("by hand or in the Assembler") && matrices.contains("machine-only F2"));
         equal("the Assembler objective remains mandatory despite its optional expansion",
                 QuestTeaching.Path.T1_CORE, QuestTeaching.path(QuestCatalogue.byId("assembler")));
         String wet = lang.get(QuestTeaching.bodyKey(QuestCatalogue.byId("wet_beneficiation"))).getAsString();
@@ -164,7 +167,7 @@ public final class VerifyT1Teaching {
         equal("the wet title matches acquisition evidence", "Acquire a Chemical Washer",
                 lang.get("gui.grindless.quest.task.wet_beneficiation").getAsString());
         check("the wet lesson starts with possession, not a claimed successful operation",
-                wet.startsWith("Acquire a Chemical Washer."));
+                wet.startsWith("Acquire a Chemical Washer by manual assembly."));
         for (String concept : List.of("water", "crushed feed", "washed feed", "secondary ingot",
                 "Reduce", "Arc Furnace", "JEI", "optional")) {
             check("short wet teaching explains " + concept, wet.contains(concept));
@@ -196,7 +199,7 @@ public final class VerifyT1Teaching {
                 rejects("duplicate live rows cannot duplicate teaching " + id + "/" + entry.id(),
                         () -> QuestTeaching.recipes(QuestCatalogue.byId(id), duplicate), entry.id());
                 for (String deferred : List.of("mill/", "contact/", "pickle/", "wash/", "electrolysis/",
-                        "assemble/wire_mill", "assemble/flux_exosuit", "assemble/flux_drill")) {
+                        "craft/wire_mill", "assemble/flux_exosuit", "assemble/flux_drill")) {
                     check("only the bounded optional base wire routes bypass deferred exclusions "
                                     + id + "/" + deferred,
                             !entry.id().startsWith(deferred)
@@ -258,7 +261,9 @@ public final class VerifyT1Teaching {
         equal("wet teaching selects exactly the six real Motor/Washer/B2/B2-R1 authorities", WET_ROUTES,
                 wet.stream().map(AtlasLogic.Entry::id).collect(Collectors.toSet()));
         equal("the wet acquisition route produces the actual Washer item",
-                List.of("item:grindless:chemical_washer"), route(wet, "assemble/chemical_washer").outputs());
+                List.of("item:grindless:chemical_washer"), route(wet, "craft/chemical_washer").outputs());
+        equal("the Washer is manually assembled rather than a live automatic final product",
+                "CRAFTING_TABLE", route(wet, "craft/chemical_washer").station());
         for (String material : List.of("iron", "copper")) {
             AtlasLogic.Entry wash = route(wet, "b2/" + material);
             equal("wet teaching uses the actual Washer family " + material,
@@ -274,8 +279,8 @@ public final class VerifyT1Teaching {
                             .contains("tag:grindless:washed_crushed_materials/" + material));
         }
         List<AtlasLogic.Entry> assembler = QuestTeaching.recipes(QuestCatalogue.byId("assembler"), entries);
-        AtlasLogic.Entry mill = route(assembler, "assemble/wire_mill");
-        equal("the optional base Wire Mill is manufactured by the Assembler", MachineFamily.ASSEMBLER, mill.family());
+        AtlasLogic.Entry mill = route(assembler, "craft/wire_mill");
+        equal("the optional base Wire Mill is manually assembled", "CRAFTING_TABLE", mill.station());
         check("the optional base Wire Mill teaches minimum control, not an exact predecessor",
                 mill.inputs().contains("item:grindless:relay_matrix [F1+]"));
         equal("the optional base Wire Mill remains an ordinary output, not MK2",
@@ -288,6 +293,16 @@ public final class VerifyT1Teaching {
                 Set.of("craft/coil_die", "press/coil/copper"),
                 QuestTeaching.recipes(QuestCatalogue.byId("copper_coil"), entries).stream()
                         .map(AtlasLogic.Entry::id).collect(Collectors.toSet()));
+        check("F1 teaching includes both existing actual manufacturing methods",
+                QuestTeaching.recipes(QuestCatalogue.byId("matrix_line"), entries).stream().map(AtlasLogic.Entry::id)
+                        .collect(Collectors.toSet()).containsAll(Set.of(T1Progression.ENTRY_ROUTE, T1Progression.REPRODUCTION_ROUTE)));
+        Set<String> bench = QuestTeaching.recipes(QuestCatalogue.byId("assembly_bench"), entries).stream()
+                .map(AtlasLogic.Entry::id).collect(Collectors.toSet());
+        check("Bench teaching retains its component routes", bench.containsAll(Set.of("bench/data_core", "bench/crank_handle")));
+        check("Bench teaching selects real manual normal-machine counterparts",
+                bench.containsAll(Set.of("craft/hand_pump", "craft/biocultivator")));
+        check("retired automatic normal-machine targets are not taught", !bench.contains("bench/hand_pump")
+                && !bench.contains("bench/biocultivator"));
         equal("the cell lesson uses the actual shaped Flux Cell route", "CRAFTING_TABLE",
                 route(QuestTeaching.recipes(QuestCatalogue.byId("flux_cell"), entries), "craft/flux_cell").station());
         check("the frontier contains the same real Flux Cell craft, not a Drill Cell",
