@@ -69,10 +69,10 @@ public final class VerifyRecipes {
         yes("no existing production recipe acquires a pressure requirement",
                 recipes.stream().noneMatch(ProcessRecipe::namesPressure));
         eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable sources, primitive assembly, glass, redstone, steel, silicon and Relay Matrix graph",
-                201, recipes.size());
+                205, recipes.size());
         c3Routes(recipes);
         legacyGuideWork(recipes);
-        componentCrafts(recipes);
+        assemblerCrafts(recipes);
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -905,8 +905,18 @@ public final class VerifyRecipes {
                         || recipe.id().contains("stellar_forge")));
     }
 
-    private static void componentCrafts(List<ProcessRecipe> recipes) throws IOException {
-        for (String name : List.of("machine_casing", "flux_cell")) {
+    private static void assemblerCrafts(List<ProcessRecipe> recipes) throws IOException {
+        List<String> dieNames = List.of("plate_die", "rod_die", "gear_die", "coil_die");
+        eq("the four existing manual Press dies are the only authored die crafts",
+                dieNames, T1Recipes.shaped().stream().filter(craft -> craft.name().endsWith("_die"))
+                        .map(T1Recipes.Shaped::name).toList());
+        List<String> automaticDies = recipes.stream()
+                .filter(row -> row.id().startsWith("assemble/")
+                        && row.itemOutputs().stream().anyMatch(output -> output.id().endsWith("_die")))
+                .map(row -> row.id().substring("assemble/".length())).toList();
+        eq("only the explicitly selected Press dies have automatic routes", dieNames, automaticDies);
+
+        for (String name : List.of("machine_casing", "flux_cell", "plate_die", "rod_die", "gear_die", "coil_die")) {
             T1Recipes.Shaped craft = T1Recipes.shaped().stream().filter(row -> row.name().equals(name))
                     .findFirst().orElseThrow();
             String id = "assemble/" + name;
@@ -914,13 +924,16 @@ public final class VerifyRecipes {
             projection(recipes, MachineFamily.ASSEMBLER, id, inputs, craft.result(), craft.resultCount(),
                     FabricationLogic.ASSEMBLE_TICKS, FabricationLogic.FU_PER_TICK);
             ProcessRecipe automatic = recipe(recipes, id);
-            eq(id + " uses exactly two grouped item inputs", 2, automatic.itemInputs().size());
+            eq(id + " keeps exactly the source craft's grouped item inputs", inputs.size(),
+                    automatic.itemInputs().size());
+            yes(id + " fits the existing four Assembler input slots", automatic.itemInputs().size() <= 4);
             yes(id + " has no fluid input, output or hidden material", automatic.fluidInputs().isEmpty()
                     && automatic.fluidOutputs().isEmpty());
             no(id + " adds no physical condition or permission", automatic.namesTemperature() || automatic.namesPressure()
                     || automatic.namesAtmosphere() || automatic.namesAgitation() || automatic.milestone() != null);
             yes(id + " requires no charged or rated component",
                     automatic.inputs().stream().allMatch(input -> input.matrixRating() == 0));
+            yes(id + " adds no unconsumed catalyst", automatic.catalysts().isEmpty());
             no(id + " is not an earlier Bench route", recipes.stream()
                     .filter(row -> row.family() == MachineFamily.ASSEMBLY_BENCH)
                     .flatMap(row -> row.itemOutputs().stream()).anyMatch(output -> output.id().equals(craft.result())));

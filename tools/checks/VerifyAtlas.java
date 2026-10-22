@@ -21,12 +21,12 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 201, rows.size());
+        eq("atlas lists every generated recipe", 205, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        // The 33 assemble/bootstrap/* projections supplement the 43 other Assembler routes.
-        eq("seventy-six reachable assembler crafts in this set", 76,
+        // The 33 assemble/bootstrap/* projections supplement the 47 other Assembler routes.
+        eq("eighty reachable assembler crafts in this set", 80,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
@@ -35,7 +35,7 @@ public final class VerifyAtlas {
                         && Double.isNaN(row.pressureHalfWidthMPa())));
         pressure();
         // The existing Flux Cell JSON now has the same catalogue/Atlas projection as other T1 crafts.
-        eq("atlas includes every machine, Bootstrap craft and calibration route", 258, allRows.size());
+        eq("atlas includes every machine, Bootstrap craft and calibration route", 262, allRows.size());
         yes("the retired Guide has no craft or machine route", allRows.stream().noneMatch(row ->
                 row.outputs().contains("item:grindless:field_guide")));
         for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {
@@ -100,6 +100,22 @@ public final class VerifyAtlas {
             yes(component + " is discoverable through ordinary output lookup",
                     ids(AtlasLogic.producing(recipes, "grindless:" + component))
                             .equals(List.of("assemble/" + component)));
+        }
+        for (String die : List.of("plate_die", "rod_die", "gear_die", "coil_die")) {
+            AtlasLogic.Entry manual = route(allRows, "craft/" + die);
+            AtlasLogic.Entry automatic = route(allRows, "assemble/" + die);
+            eq(die + " remains available from its crafting-table bootstrap", "CRAFTING_TABLE", manual.station());
+            eq(die + " is reproduced by the existing Assembler", "ASSEMBLER", automatic.station());
+            yes(die + " preserves the exact authored ingredient multiset",
+                    manual.inputs().stream().sorted().toList().equals(automatic.inputs().stream().sorted().toList()));
+            yes(die + " preserves the authored output batch", manual.outputs().equals(automatic.outputs()));
+            yes(die + " fits the existing four Assembler input slots", automatic.inputs().size() <= 4);
+            yes(die + " adds no consumed-recipe catalyst", automatic.catalysts().isEmpty());
+            eq(die + " uses the existing Assembler duration",
+                    FabricationLogic.ASSEMBLE_TICKS, automatic.durationTicks());
+            eq(die + " uses the existing F1 draw", FabricationLogic.FU_PER_TICK, automatic.fuPerTick());
+            yes(die + " is discoverable through ordinary output lookup",
+                    ids(AtlasLogic.producing(recipes, "grindless:" + die)).equals(List.of("assemble/" + die)));
         }
         yes("the detail pane distinguishes the bootstrap and Industrial outputs",
                 !AtlasLogic.describe(assembledRelay.outputs())
@@ -366,8 +382,14 @@ public final class VerifyAtlas {
         }
         yes("slag fires into that brick",
                 ids(AtlasLogic.consuming(recipes, "grindless:slag")).contains("ceramic/refractory_brick"));
-        yes("the plate die is a catalyst, not an input",
-                ids(AtlasLogic.consuming(recipes, "grindless:plate_die")).contains("press/plate/iron"));
+        for (String[] pressDie : List.of(
+                new String[]{"plate_die", "press/plate/iron"},
+                new String[]{"rod_die", "press/rod/iron"},
+                new String[]{"gear_die", "press/gear/iron"},
+                new String[]{"coil_die", "press/coil/copper"})) {
+            yes(pressDie[0] + " remains a retained Press catalyst, not a consumed input",
+                    ids(AtlasLogic.consuming(recipes, "grindless:" + pressDie[0])).contains(pressDie[1]));
+        }
 
         AtlasLogic.Entry roast = kiln.stream()
                 .filter(row -> row.id().equals("roast/iron"))

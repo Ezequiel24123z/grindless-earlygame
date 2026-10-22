@@ -4,8 +4,10 @@ import io.github.ezequiel24123z.grindless.energy.FluxTier;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -69,6 +71,7 @@ public final class ProcessGraph {
                 io.github.ezequiel24123z.grindless.source.SourceLogic.BENCH_TICKS, FluxTier.F0.nominal()));
         recipes.addAll(BootstrapAssembly.recipes(MachineFamily.ASSEMBLER,
                 io.github.ezequiel24123z.grindless.source.SourceLogic.INDUSTRIAL_ASSEMBLY_TICKS, FluxTier.F1.nominal()));
+        recipes.addAll(automaticDieCrafts());
         List<String> secondaryMaterials = eligibleSecondaries(materials);
         for (MaterialView material : materials) {
             String feed = feedTag(material);
@@ -215,6 +218,55 @@ public final class ProcessGraph {
 
     public static String tailingsTag(String material) {
         return "grindless:tailings/" + material;
+    }
+
+    private static List<ProcessRecipe> automaticDieCrafts() {
+        List<String> selected = List.of("plate_die", "rod_die", "gear_die", "coil_die");
+        List<ProcessRecipe> recipes = new ArrayList<>();
+        for (T1Recipes.Shaped craft : T1Recipes.shaped()) {
+            if (!selected.contains(craft.name())) {
+                continue;
+            }
+            Map<String, Integer> grouped = new LinkedHashMap<>();
+            for (String row : craft.pattern()) {
+                for (char symbol : row.toCharArray()) {
+                    if (symbol != ' ') {
+                        String ingredient = craft.key().get(String.valueOf(symbol));
+                        if (ingredient == null) {
+                            throw new IllegalArgumentException("Missing T1 crafting ingredient for " + craft.name());
+                        }
+                        grouped.merge(ingredient, 1, Integer::sum);
+                    }
+                }
+            }
+            if (grouped.size() > 4) {
+                throw new IllegalArgumentException("Automatic die craft exceeds four Assembler inputs: " + craft.name());
+            }
+            List<IngredientSpec> inputs = new ArrayList<>();
+            grouped.forEach((ingredient, count) -> {
+                if (ingredient.startsWith("tag:")) {
+                    inputs.add(IngredientSpec.tag(ingredient.substring(4), count));
+                } else if (ingredient.startsWith("item:")) {
+                    inputs.add(IngredientSpec.item(ingredient.substring(5), count));
+                } else {
+                    throw new IllegalArgumentException("Unknown T1 crafting ingredient: " + ingredient);
+                }
+            });
+            recipes.add(new ProcessRecipe(
+                    "assemble/" + craft.name(),
+                    MachineFamily.ASSEMBLER,
+                    inputs,
+                    List.of(OutputSpec.item(craft.result(), craft.resultCount())),
+                    Double.NaN,
+                    null,
+                    FabricationLogic.ASSEMBLE_TICKS,
+                    FabricationLogic.FU_PER_TICK));
+        }
+        if (recipes.size() != selected.size()
+                || recipes.stream().map(ProcessRecipe::id).distinct().count() != selected.size()) {
+            throw new IllegalStateException("The four selected Press die crafts must exist exactly once");
+        }
+        return List.copyOf(recipes);
     }
 
     public static String oxideTag(String material) {
