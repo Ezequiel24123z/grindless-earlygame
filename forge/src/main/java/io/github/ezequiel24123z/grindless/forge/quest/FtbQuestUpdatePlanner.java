@@ -5,8 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
@@ -15,8 +13,6 @@ import net.minecraft.nbt.TagParser;
 import net.minecraft.server.Bootstrap;
 
 import java.io.IOException;
-import java.io.StringReader;
-import java.math.BigDecimal;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -24,7 +20,6 @@ import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -45,32 +40,33 @@ public final class FtbQuestUpdatePlanner {
     }
 
     public static void main(String[] args) throws Exception {
-        if (args.length != 9) {
-            throw new IllegalArgumentException("Expected ROOT SOURCE RUNTIME JAR JAR_SHA256 INSTANCE PREVIOUS PREVIOUS_SHA256 OUTPUT");
+        if (args.length != 11) {
+            throw new IllegalArgumentException("Expected ROOT SOURCE RUNTIME JAR JAR_SHA256 COMPILATION COMPILATION_SHA256 INSTANCE PREVIOUS PREVIOUS_SHA256 OUTPUT");
         }
         Path root = Path.of(args[0]).toAbsolutePath().normalize();
         verifySource(root, args[1], args[2]);
-        requireClassOrigin(root, FtbQuestDefinitions.class);
-        requireClassOrigin(root, QuestCatalogue.class);
         if (!hash(readRegular(Path.of(args[3]), 64 * 1024 * 1024)).equals(args[4])) {
             throw new IOException("Planner runtime JAR differs from its verified SHA256");
         }
+        CompilationProof proof = verifyCompilation(root, args[1], Path.of(args[3]), Path.of(args[5]), args[6]);
+        requireClassOrigin(proof, "forge", FtbQuestDefinitions.class);
+        requireClassOrigin(proof, "common", QuestCatalogue.class);
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
-        JsonObject current = definitionSet(FtbQuestDefinitions.chapters(), args[1], args[2], args[4]);
-        byte[] previous = readRegular(Path.of(args[6]), 4 * 1024 * 1024);
-        requireHash(args[7]);
-        if (!hash(previous).equals(args[7])) {
+        JsonObject current = definitionSet(FtbQuestDefinitions.chapters(), args[1], args[2], args[4], args[6]);
+        byte[] previous = readRegular(Path.of(args[8]), 4 * 1024 * 1024);
+        requireHash(args[9]);
+        if (!hash(previous).equals(args[9])) {
             throw new IOException("Previous definition publication differs from the explicitly verified SHA256");
         }
-        JsonObject plan = prepare(Path.of(args[5]), previous, current);
-        Path output = Path.of(args[8]).toAbsolutePath().normalize();
+        JsonObject plan = prepare(Path.of(args[7]), previous, current);
+        Path output = Path.of(args[10]).toAbsolutePath().normalize();
         if (!output.startsWith(root.resolve("build")) && !output.startsWith(root.resolve("forge").resolve("build"))) {
             throw new IOException("Update plans belong only in the execution checkout's build output");
         }
         writeNew(output, encode(plan));
         System.out.println("FTB_DEFINITION_PLAN_PUBLISHED source=" + args[1] + " sha256=" + hash(encode(plan))
-                + " target_writes=0 native_progress_writes=0");
+                + " compilation=" + args[6] + " target_writes=0 native_progress_writes=0");
     }
 
     static JsonObject prepare(Path instance, byte[] previousPublication, JsonObject currentPublication) throws IOException {
@@ -88,7 +84,7 @@ public final class FtbQuestUpdatePlanner {
         FtbQuestFiles.refusePendingUpdate(config);
         byte[] ownerBytes = readRegular(instance.resolve(OWNER), 2 * 1024 * 1024);
         byte[] deploymentBytes = readRegular(instance.resolve(DEPLOYMENT), 2 * 1024 * 1024);
-        JsonObject owner = object(ownerBytes);
+        JsonObject owner = readObject(ownerBytes);
         keys(owner, "schemaVersion", "tool", "purpose", "instanceId", "ownershipId");
         String ownership = string(owner, "ownershipId");
         if (integer(owner, "schemaVersion") != 1 || !string(owner, "tool").equals("grindless-prism-dev")
@@ -96,13 +92,13 @@ public final class FtbQuestUpdatePlanner {
                 || !string(owner, "instanceId").equals(instanceId) || !ownership.matches("[0-9a-f]{32}")) {
             throw new IOException("Missing or unknown managed instance ownership");
         }
-        JsonObject deployment = object(deploymentBytes);
+        JsonObject deployment = readObject(deploymentBytes);
         if (integer(deployment, "schemaVersion") != 1 || !string(deployment, "tool").equals("grindless-prism-dev")
                 || !string(deployment, "state").equals("deployed") || !string(deployment, "instanceId").equals(instanceId)
                 || !string(deployment, "ownershipId").equals(ownership)) {
             throw new IOException("Unknown deployment provenance");
         }
-        DefinitionSet previous = readSet(object(previousPublication));
+        DefinitionSet previous = readSet(readObject(previousPublication));
         DefinitionSet current = readSet(currentPublication);
         if (current.questCount() != 50 || !current.documents().equals(FtbQuestDefinitions.chapters())) {
             throw new IOException("Update destination must be the actual current 50-quest generator");
@@ -120,7 +116,7 @@ public final class FtbQuestUpdatePlanner {
         DefinitionSet before = previous;
         if (Files.exists(receiptPath, LinkOption.NOFOLLOW_LINKS)) {
             receiptBytes = readRegular(receiptPath, 2 * 1024 * 1024);
-            JsonObject existing = object(receiptBytes);
+            JsonObject existing = readObject(receiptBytes);
             if (existing.equals(newReceipt)) {
                 before = current;
             } else if (!existing.equals(receipt(previous, instanceId, ownership))) {
@@ -182,8 +178,9 @@ public final class FtbQuestUpdatePlanner {
     }
 
     private static DefinitionSet readSet(JsonObject published) throws IOException {
-        keys(published, "schemaVersion", "tool", "sourceRevision", "runtimeSourceRevision", "grindlessSha256", "questCount", "files");
-        if (integer(published, "schemaVersion") != 1 || !string(published, "tool").equals("grindless-ftb-definition-set")) {
+        keys(published, "schemaVersion", "tool", "sourceRevision", "runtimeSourceRevision", "grindlessSha256",
+                "compilationSha256", "questCount", "files");
+        if (integer(published, "schemaVersion") != 2 || !string(published, "tool").equals("grindless-ftb-definition-set")) {
             throw new IOException("Unknown native definition publication version");
         }
         String source = string(published, "sourceRevision");
@@ -192,6 +189,7 @@ public final class FtbQuestUpdatePlanner {
         requireRevision(source);
         requireRevision(runtime);
         requireHash(jar);
+        requireHash(string(published, "compilationSha256"));
         int questCount = integer(published, "questCount");
         if ((questCount != 46 && questCount != 50) || !published.get("files").isJsonArray()
                 || published.getAsJsonArray("files").size() != 2) {
@@ -313,59 +311,6 @@ public final class FtbQuestUpdatePlanner {
             throw new IOException("Missing or invalid native definition integer: " + name);
         }
         return value.getAsInt();
-    }
-
-    private static JsonObject object(byte[] bytes) throws IOException {
-        try (JsonReader reader = new JsonReader(new StringReader(StandardCharsets.UTF_8.newDecoder()
-                .onMalformedInput(CodingErrorAction.REPORT).decode(java.nio.ByteBuffer.wrap(bytes)).toString()))) {
-            reader.setLenient(false);
-            JsonElement value = json(reader, 0);
-            if (!value.isJsonObject() || reader.peek() != JsonToken.END_DOCUMENT) {
-                throw new IOException("Native definition metadata must be one complete JSON object");
-            }
-            return value.getAsJsonObject();
-        } catch (IllegalStateException | NumberFormatException exception) {
-            throw new IOException("Malformed native definition JSON", exception);
-        }
-    }
-
-    private static JsonElement json(JsonReader reader, int depth) throws IOException {
-        if (depth > 40) {
-            throw new IOException("Native definition metadata exceeds its nesting bound");
-        }
-        return switch (reader.peek()) {
-            case BEGIN_OBJECT -> {
-                reader.beginObject();
-                JsonObject value = new JsonObject();
-                Set<String> names = new HashSet<>();
-                while (reader.hasNext()) {
-                    String name = reader.nextName();
-                    if (!names.add(name)) {
-                        throw new IOException("Duplicate native definition metadata field");
-                    }
-                    value.add(name, json(reader, depth + 1));
-                }
-                reader.endObject();
-                yield value;
-            }
-            case BEGIN_ARRAY -> {
-                reader.beginArray();
-                JsonArray value = new JsonArray();
-                while (reader.hasNext()) {
-                    value.add(json(reader, depth + 1));
-                }
-                reader.endArray();
-                yield value;
-            }
-            case STRING -> new JsonPrimitive(reader.nextString());
-            case NUMBER -> new JsonPrimitive(new BigDecimal(reader.nextString()));
-            case BOOLEAN -> new JsonPrimitive(reader.nextBoolean());
-            case NULL -> {
-                reader.nextNull();
-                yield JsonNull.INSTANCE;
-            }
-            default -> throw new IOException("Malformed native definition JSON token");
-        };
     }
 
     private record DefinitionSet(String source, String runtime, String jarHash, int questCount,

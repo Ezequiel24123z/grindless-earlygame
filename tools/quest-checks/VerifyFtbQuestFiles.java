@@ -8,6 +8,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.Bootstrap;
 
 import java.io.IOException;
+import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,6 +34,7 @@ public final class VerifyFtbQuestFiles {
         Bootstrap.bootStrap();
         Files.createDirectories(Path.of("build"));
         Path fixture = Files.createTempDirectory(Path.of("build"), "ftb-managed-files-");
+        staleCompilation(fixture);
         Map<String, CompoundTag> current = FtbQuestDefinitions.chapters();
         Map<String, FtbQuestFiles.Chapter> encodedCurrent = FtbQuestFiles.generated(current);
         // Synthetic old-ID input: never publish this as an authentic historical source/hash receipt.
@@ -49,8 +51,8 @@ public final class VerifyFtbQuestFiles {
             previous.put(name, copy);
         });
         JsonObject reference = definitionSet(previous, FtbQuestUpdatePlanner.LEGACY_SOURCE,
-                FtbQuestUpdatePlanner.LEGACY_SOURCE, FtbQuestUpdatePlanner.LEGACY_JAR);
-        JsonObject destination = definitionSet(current, CURRENT_SOURCE, CURRENT_SOURCE, "b".repeat(64));
+                FtbQuestUpdatePlanner.LEGACY_SOURCE, FtbQuestUpdatePlanner.LEGACY_JAR, "f".repeat(64));
+        JsonObject destination = definitionSet(current, CURRENT_SOURCE, CURRENT_SOURCE, "b".repeat(64), "f".repeat(64));
         Path instance = fixture.resolve("Grindless-File-Dev");
         Path config = instance.resolve("minecraft").resolve("config");
         Path chapters = FtbQuestFiles.chapterDirectory(config);
@@ -118,8 +120,13 @@ public final class VerifyFtbQuestFiles {
         equal(true, Files.exists(foreign), "an arbitrary nested item id is not a native object collision");
 
         JsonObject unknownVersion = reference.deepCopy();
-        unknownVersion.addProperty("schemaVersion", 2);
+        unknownVersion.addProperty("schemaVersion", 3);
         refuses(() -> FtbQuestUpdatePlanner.prepare(instance, encode(unknownVersion), destination), "unknown publication schema refuses");
+        JsonObject unqualifiedV1 = reference.deepCopy();
+        unqualifiedV1.addProperty("schemaVersion", 1);
+        unqualifiedV1.remove("compilationSha256");
+        refuses(() -> FtbQuestUpdatePlanner.prepare(instance, encode(unqualifiedV1), destination),
+                "old path-only publication cannot stand in for compilation provenance");
         JsonObject unknownSource = reference.deepCopy();
         unknownSource.addProperty("sourceRevision", "d".repeat(40));
         refuses(() -> FtbQuestUpdatePlanner.prepare(instance, encode(unknownSource), destination), "unreceipted unknown source refuses despite matching names and IDs");
@@ -142,7 +149,7 @@ public final class VerifyFtbQuestFiles {
             }
         }
         JsonObject changedTask = definitionSet(changedContract, FtbQuestUpdatePlanner.LEGACY_SOURCE,
-                FtbQuestUpdatePlanner.LEGACY_SOURCE, FtbQuestUpdatePlanner.LEGACY_JAR);
+                FtbQuestUpdatePlanner.LEGACY_SOURCE, FtbQuestUpdatePlanner.LEGACY_JAR, "f".repeat(64));
         refuses(() -> FtbQuestUpdatePlanner.prepare(instance, encode(changedTask), destination),
                 "retained task contract cannot change even under a selected reference", "retained logical/task/reward");
         changedContract.clear();
@@ -156,7 +163,7 @@ public final class VerifyFtbQuestFiles {
             }
         }
         JsonObject changedReward = definitionSet(changedContract, FtbQuestUpdatePlanner.LEGACY_SOURCE,
-                FtbQuestUpdatePlanner.LEGACY_SOURCE, FtbQuestUpdatePlanner.LEGACY_JAR);
+                FtbQuestUpdatePlanner.LEGACY_SOURCE, FtbQuestUpdatePlanner.LEGACY_JAR, "f".repeat(64));
         refuses(() -> FtbQuestUpdatePlanner.prepare(instance, encode(changedReward), destination),
                 "paid reward contract cannot change even under a selected reference", "retained logical/task/reward");
         Path ownerPath = instance.resolve(".grindless-dev-owner.json");
@@ -201,6 +208,64 @@ public final class VerifyFtbQuestFiles {
         equal(true, Arrays.equals(compatibleBytes, Files.readAllBytes(compatibleT1)), "ensure remains identity-complete, never unconditional exact-byte management");
         System.out.println("FTB_MANAGED_FILE_CONTRACT_PASS assertions=" + assertions + " fixture=" + fixture.toAbsolutePath());
         System.out.println("SYNTHETIC_REFERENCE_ONLY: this is not a genuine dd0 publication, registered native execution, paid-receipt reopen or owner-world pass.");
+    }
+
+    private static void staleCompilation(Path fixture) throws Exception {
+        Path root = fixture.resolve("compiler-proof").toAbsolutePath();
+        Path expected = root.resolve("build").resolve("ftb-compilation-" + "1".repeat(32))
+                .resolve("forge").resolve("classes").resolve("java").resolve("main");
+        Path stale = root.resolve("forge").resolve("build").resolve("classes").resolve("java").resolve("main");
+        Path source = root.resolve("src").resolve("fixture").resolve("Definitions.java");
+        Path otherSource = fixture.resolve("other-source").resolve("fixture").resolve("Definitions.java").toAbsolutePath();
+        Files.createDirectories(source.getParent());
+        Files.createDirectories(otherSource.getParent());
+        Files.createDirectories(expected);
+        Files.createDirectories(stale);
+        String prefix = "package fixture; public class Definitions { public static int chapters() { return 46; } "
+                + "public static String content() { return \"";
+        Files.writeString(source, prefix + "correct\"; } }");
+        Files.writeString(otherSource, prefix + "stale\"; } }");
+        var compiler = javax.tools.ToolProvider.getSystemJavaCompiler();
+        if (compiler == null) { throw new AssertionError("A real JDK compiler is required for the stale-class regression"); }
+        equal(0, compiler.run(null, null, null, "-proc:none", "-d", expected.toString(), source.toString()), "compile the reference fixture");
+        equal(0, compiler.run(null, null, null, "-proc:none", "-d", stale.toString(), otherSource.toString()), "compile same-count stale fixture");
+        String member = "fixture/Definitions.class";
+        byte[] expectedBytes = Files.readAllBytes(expected.resolve(member));
+        byte[] staleBytes = Files.readAllBytes(stale.resolve(member));
+        String sourceHash = hash(Files.readAllBytes(source));
+        Path selectedJar = root.resolve("correct-runtime.jar");
+        try (var zip = new java.util.zip.ZipOutputStream(Files.newOutputStream(selectedJar))) {
+            zip.putNextEntry(new java.util.zip.ZipEntry(member));
+            zip.write(expectedBytes);
+            zip.closeEntry();
+        }
+        String jarHash = hash(Files.readAllBytes(selectedJar));
+        var proof = new FtbQuestDefinitionPublisher.CompilationProof(
+                Map.of("forge", expected), Map.of("forge", Map.of(member, hash(expectedBytes))));
+        try (var loader = new URLClassLoader(new java.net.URL[]{stale.toUri().toURL()}, ClassLoader.getPlatformClassLoader())) {
+            Class<?> type = Class.forName("fixture.Definitions", true, loader);
+            equal(46, type.getMethod("chapters").invoke(null), "stale generator retains46, so counts cannot detect it");
+            equal(true, Path.of(type.getProtectionDomain().getCodeSource().getLocation().toURI()).startsWith(root),
+                    "stale classes pass the old under-root origin check");
+            refuses(() -> requireClassOrigin(proof, "forge", type), "same root/unchanged source/correct JAR cannot authorize stale classes",
+                    "not the actual receipted compiler output");
+        }
+        Files.write(expected.resolve(member), staleBytes);
+        try (var loader = new URLClassLoader(new java.net.URL[]{expected.toUri().toURL()}, ClassLoader.getPlatformClassLoader())) {
+            Class<?> type = Class.forName("fixture.Definitions", true, loader);
+            equal(46, type.getMethod("chapters").invoke(null), "in-place stale replacement also retains46");
+            refuses(() -> requireClassOrigin(proof, "forge", type), "correct receipted path alone is still insufficient",
+                    "loaded class bytes differ");
+        }
+        Files.write(expected.resolve(member), expectedBytes);
+        try (var loader = new URLClassLoader(new java.net.URL[]{expected.toUri().toURL()}, ClassLoader.getPlatformClassLoader())) {
+            Class<?> type = Class.forName("fixture.Definitions", true, loader);
+            requireClassOrigin(proof, "forge", type);
+            equal("correct", type.getMethod("content").invoke(null), "actual receipted class image is admitted");
+        }
+        equal(sourceHash, hash(Files.readAllBytes(source)), "fixture source bytes remain unchanged throughout the counterexample");
+        equal(jarHash, hash(Files.readAllBytes(selectedJar)), "the selected correct JAR never changed");
+        System.out.println("SYNTHETIC_STALE_CLASS_REGRESSION: same46/root/source/JAR; receipt directory and actual class bytes both enforced.");
     }
 
     private static Map<Path, String> snapshot(Path root) throws IOException {
