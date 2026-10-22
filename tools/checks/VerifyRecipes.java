@@ -288,7 +288,7 @@ public final class VerifyRecipes {
         yes("no existing production recipe acquires a pressure requirement",
                 recipes.stream().noneMatch(ProcessRecipe::namesPressure));
         eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable sources, primitive assembly, glass, redstone, steel, silicon and Relay Matrix graph",
-                170, recipes.size());
+                168, recipes.size());
         c3Routes(recipes);
         legacyGuideWork(recipes);
         assemblerCrafts(recipes);
@@ -1209,10 +1209,20 @@ public final class VerifyRecipes {
                         ProcessLookup.findSelected(MachineFamily.ASSEMBLER, "assemble/thermal_generator",
                                 finalStock, FluidState.EMPTY, List.of()).isPresent());
             }
-            eq("generic bulk cobblestone still selects the unchanged furnace construction route",
-                    "assemble/bootstrap/furnace", ProcessLookup.find(MachineFamily.ASSEMBLER, new ItemStack[]{
-                            new ItemStack(Items.COBBLESTONE, 64), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY})
-                            .orElseThrow().id());
+            for (int cobble : List.of(8, 64)) {
+                ItemStack[] stock = {new ItemStack(Items.COBBLESTONE, cobble),
+                        ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY};
+                no("exact/bulk vanilla Furnace materials cannot select its retired Assembler final: " + cobble,
+                        ProcessLookup.findSelected(MachineFamily.ASSEMBLER, "assemble/bootstrap/furnace",
+                                stock, FluidState.EMPTY, List.of()).isPresent());
+                no("exact/bulk vanilla Furnace materials cannot select its retired Bench final: " + cobble,
+                        ProcessLookup.findSelected(MachineFamily.ASSEMBLY_BENCH, "bench/furnace",
+                                stock, FluidState.EMPTY, List.of()).isPresent());
+                no("AUTO cannot produce a normal vanilla Furnace from exact/bulk construction stock: " + cobble,
+                        ProcessLookup.find(MachineFamily.ASSEMBLER, stock).stream()
+                                .flatMap(row -> row.outputs().stream())
+                                .anyMatch(output -> output.id().equals("minecraft:furnace")));
+            }
         } finally {
             graph.set(null, original);
             BuiltInRegistries.ITEM.bindTags(originalTags);
@@ -1364,13 +1374,29 @@ public final class VerifyRecipes {
         Set<String> manualOutputs = new java.util.TreeSet<>();
         T1Recipes.shaped().forEach(craft -> manualOutputs.add(craft.result()));
         BootstrapRecipes.shaped().forEach(craft -> manualOutputs.add(craft.result()));
+        var vanilla = new io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Builder();
+        io.github.ezequiel24123z.grindless.sustainability.AuthorityAdapters.vanillaTransformation(
+                "minecraft:furnace", VerifyRecipes.class.getClassLoader(), vanilla);
+        var furnace = vanilla.build().routes().get("vanilla/minecraft:furnace");
+        yes("vanilla Furnace manual availability comes from its real existing vanilla authority",
+                furnace != null && !furnace.automatable()
+                        && furnace.authority() == io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Authority.VANILLA_TRANSFORMATION);
+        if (furnace == null) {
+            throw new IOException("The actual vanilla/minecraft:furnace manual authority is missing");
+        }
+        furnace.outputs().keySet().forEach(output -> manualOutputs.add(output.id()));
+        yes("the same pure policy classifies the real vanilla Furnace as a manual final",
+                ManufacturingPolicy.isManualFinalMachine("minecraft:furnace"));
+        no("the coordinator decision invents no Grindless furnace manual recipe",
+                T1Recipes.shaped().stream().anyMatch(craft -> craft.name().equals("furnace"))
+                        || Files.exists(RECIPES.resolve("furnace.json")));
         for (String id : ManufacturingPolicy.manualFinalMachines()) {
             boolean withheld = Set.of("grindless:lunar_link", "grindless:starward_link").contains(id);
             yes(id + " has an accepted manual counterpart or remains an explicitly withheld prototype",
                     manualOutputs.contains(id) != withheld);
             yes(id + " is refused before pattern storage/replication quoting",
                     io.github.ezequiel24123z.grindless.pattern.PatternLogic.refused(id));
-            String name = id.substring("grindless:".length());
+            String name = id.substring(id.indexOf(':') + 1);
             no(id + " has no selectable former direct normal constructor",
                     ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/" + name).isPresent());
             no(id + " has no selectable primitive Bench constructor",
@@ -1647,13 +1673,13 @@ public final class VerifyRecipes {
                 "crude_manipulator", "process_atlas", "quest_book", "crank_handle",
                 "workshop_item_input", "workshop_item_output", "settling_item_input", "settling_fluid_input",
                 "settling_item_output", "settling_fluid_output",
-                "data_core", "chest", "crafting_table", "furnace", "brick_block");
+                "data_core", "chest", "crafting_table", "brick_block");
         for (MachineFamily family : List.of(MachineFamily.ASSEMBLY_BENCH, MachineFamily.ASSEMBLER)) {
             boolean bench = family == MachineFamily.ASSEMBLY_BENCH;
             String prefix = bench ? "bench/" : "assemble/bootstrap/";
             List<String> projectedIds = recipes.stream().map(ProcessRecipe::id)
                     .filter(id -> id.startsWith(prefix)).map(id -> id.substring(prefix.length())).toList();
-            yes(family + " has exactly the twenty-three allowed primitive construction projections",
+            yes(family + " has exactly the twenty-two allowed primitive construction projections",
                     projectedIds.equals(primitiveCrafts));
             no(family + " cannot manufacture a retired Guide", recipes.stream()
                     .filter(recipe -> recipe.family() == family).flatMap(recipe -> recipe.itemOutputs().stream())
@@ -1676,8 +1702,8 @@ public final class VerifyRecipes {
                     "minecraft:chest", 1);
             projection(recipes, family, prefix + "crafting_table", Map.of(BootstrapRecipes.PLANKS, 4),
                     "minecraft:crafting_table", 1);
-            projection(recipes, family, prefix + "furnace", Map.of(BootstrapRecipes.COBBLE, 8),
-                    "minecraft:furnace", 1);
+            no(family + " cannot automatically manufacture the real vanilla Furnace",
+                    recipes.stream().anyMatch(row -> row.id().equals(prefix + "furnace")));
             projection(recipes, family, prefix + "brick_block", Map.of("item:minecraft:brick", 4),
                     "minecraft:bricks", 1);
         }

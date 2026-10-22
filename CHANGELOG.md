@@ -34,9 +34,16 @@ entries below reference those records by id.
   full canonical-tag overlap, compilation, models and representative native proof
   remain unexecuted. The first inline pattern observer falsely reported collisions
   because it omitted ordinary-item domains; its corrected data-only check passes.
-  Report the concrete remaining boundary: the older automatic vanilla Furnace
-  primitive projections are retained pending the coordinator's external-product
-  decision, not silently reclassified as infrastructure or a component exception.
+  The original d686 handoff retained the older automatic vanilla Furnace primitives
+  pending an explicit external-product decision, without calling them components.
+  The coordinator subsequently chooses the conservative no-implicit-exception
+  reading after reporting the owner unavailable: retire both automatic Furnace
+  finals and classify that actual standalone processor with the same pure policy.
+  This is a scoped coordinator decision, not an owner-confirmed Furnace choice.
+  Preserve actual `vanilla/minecraft:furnace` manual authority, its unchanged stone
+  bill without a Matrix tax, raw Thermal seed/materials, smelting and every other
+  valid vanilla basic. The Thermal core remains an allowed local process supplied
+  with a manually constructed Furnace upstream, not a newly automatic renewable claim.
   No PC lease, generated canonical edit, save/player change or qualification claim.
 - **Correct the manufacturing objective to manual final normal machines.**
   The owner explicitly rejects universal factory self-replication. ADR-0188

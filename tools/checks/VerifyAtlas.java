@@ -23,12 +23,12 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every allowed generated recipe", 170, rows.size());
+        eq("atlas lists every allowed generated recipe", 168, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the alphabetically first allowed tool", "assemble/blueprint_tool",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        // Twenty-three allowed primitive projections supplement thirty-two other Assembler routes.
-        eq("fifty-five reachable allowed assembler crafts in this set", 55,
+        // Twenty-two allowed primitive projections supplement thirty-two other Assembler routes.
+        eq("fifty-four reachable allowed assembler crafts in this set", 54,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
@@ -37,7 +37,11 @@ public final class VerifyAtlas {
                         && Double.isNaN(row.pressureHalfWidthMPa())));
         pressure();
         // The existing Flux Cell JSON now has the same catalogue/Atlas projection as other T1 crafts.
-        eq("atlas includes every process, manual craft and calibration route", 244, allRows.size());
+        eq("atlas includes every process, owned manual craft and calibration route", 242, allRows.size());
+        yes("the real vanilla Furnace has no automatic Atlas producer",
+                AtlasLogic.producing(recipes, "minecraft:furnace").isEmpty());
+        no("vanilla manual authority is not replaced with an invented Grindless craft",
+                allRows.stream().anyMatch(row -> row.id().equals("craft/furnace")));
         yes("the retired Guide has no craft or machine route", allRows.stream().noneMatch(row ->
                 row.outputs().contains("item:grindless:field_guide")));
         for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {

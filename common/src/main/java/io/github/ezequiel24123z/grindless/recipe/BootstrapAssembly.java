@@ -36,7 +36,6 @@ public final class BootstrapAssembly {
         }
         result.add(assemble(family, "chest", Map.of(BootstrapRecipes.PLANKS, 8), "minecraft:chest", 1, ticks, power));
         result.add(assemble(family, "crafting_table", Map.of(BootstrapRecipes.PLANKS, 4), "minecraft:crafting_table", 1, ticks, power));
-        result.add(assemble(family, "furnace", Map.of(BootstrapRecipes.COBBLE, 8), "minecraft:furnace", 1, ticks, power));
         result.add(assemble(family, "brick_block", Map.of("item:minecraft:brick", 4), "minecraft:bricks", 1, ticks, power));
         return List.copyOf(result);
     }

@@ -722,6 +722,23 @@ public final class VerifySustainabilityAdapters {
     private static void canonicalInventory() throws IOException, InterruptedException {
         Path root = Path.of("").toAbsolutePath().normalize();
         CanonicalPack pack = CanonicalPack.resolved(root);
+        Builder furnaceAuthority = new Builder();
+        Route furnace = AuthorityAdapters.canonicalVanillaTransformation(
+                "minecraft:furnace", root, pack, furnaceAuthority);
+        if (furnace == null) {
+            throw new AssertionError("The actual canonical vanilla Furnace manual recipe is missing or ambiguous");
+        }
+        eq("the real Furnace retains vanilla/minecraft:furnace, not an invented Grindless craft",
+                "vanilla/minecraft:furnace", furnace.id());
+        eq("the existing vanilla Furnace authority remains manual", false, furnace.automatable());
+        eq("the real Furnace manual recipe retains exactly eight existing stone materials and no Matrix tax",
+                Map.of(new Resource(Kind.TAG, "minecraft:stone_crafting_materials"), 8L), furnace.inputs());
+        eq("the real vanilla manual craft still produces exactly one unchanged Furnace",
+                Map.of(new Resource(Kind.ITEM, "minecraft:furnace"), 1L), furnace.outputs());
+        eq("vanilla Furnace manual capital uses the same classification policy", true,
+                io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy.isManualFinalMachine("minecraft:furnace"));
+        eq("the scoped decision does not replace actual vanilla crafting provenance",
+                Authority.VANILLA_TRANSFORMATION, furnace.authority());
         Resource iron = new Resource(Kind.TAG, "forge:ingots/iron");
         Resource copper = new Resource(Kind.TAG, "forge:ingots/copper");
         Resource planks = new Resource(Kind.TAG, "minecraft:planks");

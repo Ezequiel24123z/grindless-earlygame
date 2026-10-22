@@ -5,6 +5,7 @@ import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * ADR-0188's final-machine boundary, not a recipe or sustainability catalogue.
@@ -15,8 +16,9 @@ import java.util.stream.Collectors;
  * GroundArrayStructure and the actual transfer/storage implementations, not names or geometry.
  * Registered spatial prototypes are classified without granting them a survival recipe.
  * External products have no inferred machine role; OTHER is not a declaration of an allowed
- * manufacturing method. In particular, the older vanilla Furnace projection needs an explicit
- * product-boundary decision rather than quietly calling a real processor a component.
+ * manufacturing method. The coordinator's scoped no-implicit-exception decision also includes
+ * the vanilla Furnace: it is a real processor, not an automatic component exception.
+ * That conservative decision is not an owner-confirmed Furnace-specific choice.
  *
  * <p>No native registries or loader initialization: graph rebuilding and metadata inspection
  * must remain usable before Minecraft bootstrap. Structural checks bind this list to runtime.
@@ -68,7 +70,7 @@ public final class ManufacturingPolicy {
                     ? Kind.NORMAL_MACHINE : Kind.FORMED_CONTROLLER;
         }
         return switch (itemId) {
-            case "grindless:hand_crank_dynamo", "grindless:crude_extractor",
+            case "minecraft:furnace", "grindless:hand_crank_dynamo", "grindless:crude_extractor",
                     "grindless:research_terminal", "grindless:biomass_dynamo",
                     "grindless:thermal_generator", "grindless:solar_array",
                     "grindless:terrestrial_extractor", "grindless:fluid_well",
@@ -100,9 +102,10 @@ public final class ManufacturingPolicy {
         };
     }
 
-    /** Enumerates the declared block products only; this does not invent construction routes. */
+    /** Declared normal products, including the scoped vanilla Furnace; no construction routes. */
     public static Set<String> manualFinalMachines() {
-        return BlockCatalogue.blocks().stream().map(block -> "grindless:" + block.name())
+        return Stream.concat(BlockCatalogue.blocks().stream().map(block -> "grindless:" + block.name()),
+                        Stream.of("minecraft:furnace"))
                 .filter(ManufacturingPolicy::isManualFinalMachine).collect(Collectors.toUnmodifiableSet());
     }
 }
