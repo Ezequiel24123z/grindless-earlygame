@@ -35,6 +35,13 @@ public final class VerifyT1Progression {
 
     public static void main(String[] args) throws Exception {
         Path root = Path.of("").toAbsolutePath().normalize();
+        String exporter = Files.readString(root.resolve(Path.of("tools", "t1", "T1Export.java")));
+        var fingerprinted = java.util.regex.Pattern.compile(
+                "for \\(Class<\\?> type : List\\.of\\(([\\s\\S]*?)\\)\\) \\{").matcher(exporter);
+        equal("the exporter fingerprints the executed adapter and typed inputs (source contract)", true,
+                fingerprinted.find() && List.of("AuthorityAdapters.class", "IngredientSpec.class",
+                        "IngredientSpec.MatrixRole.class", "ControlMatrixSpec.class").stream()
+                        .allMatch(fingerprinted.group(1)::contains));
         SustainabilityAudit.Result t0 = canonicalResult(root);
         int checks = verify(t0);
         Path generated = root.resolve(Path.of("docs", "tiers", "t1-production-graph.json"));
@@ -46,7 +53,7 @@ public final class VerifyT1Progression {
         Path markdown = generated.resolveSibling("t1-production-graph.md");
         equal("generated human costs equal the same actual routes", T1Sustainability.markdown(t0),
                 Files.readString(markdown, StandardCharsets.UTF_8).replace("\r\n", "\n"));
-        System.out.println("ALL T1 FIRST-FACTORY CONTRACTS PASSED: " + (checks + 2)
+        System.out.println("ALL T1 FIRST-FACTORY CONTRACTS PASSED: " + (checks + 3)
                 + "; source/conditional-model scope, not native play or full T1 closure");
     }
 
