@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Close the control-provenance review finding and continue factory content.**
+  Independent review finds the missing executed AuthorityAdapters bytecode hash.
+  Normalf046923 adds that class and a focused source omission guard; observe
+  the actual entry during normal writer qualification, not another native run.
+  ADR-0179 selects four existing four-slot-fit first-factory reproduction routes
+  with manual material parity and explicit minimumF1 control; Thermal's five
+  groups stay excluded, without repricing bootstrap or inventing intermediates.
+  Separate source work continues while managed-FTB source/recovery review closes.
 - **Compose explicit minimum controller capacity with the die increment.**
   Normal1ee2e73 ancestry adds typed exact/minimum input roles, registered-only
   JEI alternatives, F1+ views, honest canonical-option audit metadata and

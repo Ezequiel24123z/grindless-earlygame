@@ -56,7 +56,11 @@ remain unchanged pending NORMAL generation on final integrated inputs.
 The existing matrix-lifecycle retains its16 original markers and adds three
 authored real-control markers, including an F3 blocked-output/complete cycle.
 No Java/native run has observed them. Independent exact-source reviewaa9e9e9a
-is pending; source-only static probes are not behavior red/green.
+finds one P2: the new adapter source is fingerprinted but its executed class is
+missing. Owner follow-upf046923 adds `AuthorityAdapters.class` to the existing
+binary hash loop and a focused omission guard; it is normally integrated here.
+Require that actual class entry in the later writer receipt. No native replay
+is justified by this tool-only fix; source-only red/green is not behavior proof.
 The focused external follow-up is complete in
 `docs/design/t1-external-references.md`: actual Forge1.20.1 Mekanism snapshots
 and copies values into replacement block entities, with no rollback in the
@@ -69,6 +73,17 @@ managed-file transition with known hash ownership, full preflight, backups and
 visible partial-failure recovery. Names alone do not prove management.
 Never rewrite native team/progress/paid SavedData or the owner world.
 Use real supported FTB/package/file primitives, not another quest engine.
+The author preserves preliminaryee4f504: actual Windows filesystem/tool tests
+153/20 focused and773/103 full pass, but Java/authenticdd0 publication remain
+unexecuted and a classpath follow-up is being closed. Independent reviewer
+1ce4d3be checks that exact preliminary transition/recovery source.
+
+To keep content moving during qualification, source ownera18f81ea implements
+ADR-0179 fromd840714: ordinary Assembler reproduction of Pulverizer, Arc Furnace,
+Press and Assembler with exact manual material bills and explicit F1+ control.
+Optional reproduction follows assembly; the manual first machines remain seeds.
+Thermal has five groups and stays out; no new intermediate/slots/bill or claim
+that all five machines are automated. This new source lane has no PC grant.
 
 Next integrate coherent local checkpoints and select only their changed proofs.
 Any heavy qualification needs a new sole-owner lease on an exact published

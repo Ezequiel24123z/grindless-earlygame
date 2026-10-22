@@ -47,6 +47,18 @@ Independent exact-source mechanism reviewaa9e9e9a is pending.
 Preparation604195bd is READY with a local plan/no PC or inventory access;
 the FTB update binding and exact published final GO still precede execution.
 
+That independent control review subsequently finds one P2: T1 source hashes
+include the adapter, but `executed_class_hashes` omits AuthorityAdapters.
+Normal follow-upf046923 adds its class to the existing byte-resource hash loop
+and a focused source omission assertion. The source counterexample goes red/
+green without JVM; actual writer qualification must observe the class entry.
+No additional native replay is justified by this provenance-only repair.
+Preliminary managed-FTBee4f504 has actual Windows filesystem153/20 and full
+Prism/PC773/103 fixture results, not a Java/authenticdd0 export or live update.
+Its final classpath follow-up and independent transition/recovery review1ce4d3be
+remain separate prerequisites. Parallel source ADR-0179 reproduction is not
+part of any already-proved candidate.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

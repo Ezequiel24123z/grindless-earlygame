@@ -69,7 +69,7 @@ public final class T1Export {
         for (Class<?> type : List.of(T1Progression.class, T1Progression.Requirement.class, T1Progression.Line.class,
                 T1Progression.AtlasSelection.class, T1Sustainability.class,
                 T1Sustainability.InputEvidence.class, T1Sustainability.SeedAllocation.class,
-                IngredientSpec.class, IngredientSpec.MatrixRole.class, ControlMatrixSpec.class,
+                AuthorityAdapters.class, IngredientSpec.class, IngredientSpec.MatrixRole.class, ControlMatrixSpec.class,
                 VerifyT1Progression.class, T1Export.class)) {
             String resource = "/" + type.getName().replace('.', '/') + ".class";
             try (InputStream stream = type.getResourceAsStream(resource)) {

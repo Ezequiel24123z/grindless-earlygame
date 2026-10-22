@@ -190,6 +190,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0176](#adr-0176--distinguish-exact-matrix-evidence-from-minimum-controller-capacity) | Distinguish exact Matrix evidence from minimum controller capacity | Accepted engineering scope; source integrated, qualification pending |
 | [0177](#adr-0177--update-managed-native-quest-definitions-only-through-an-explicit-guarded-transition) | Update managed native quest definitions only through an explicit guarded transition | Accepted engineering scope; implementation/proof pending |
 | [0178](#adr-0178--continue-autonomously-and-deliver-ready-tiers-to-the-longitudinal-game) | Continue autonomously and deliver ready tiers to the longitudinal game | Accepted direct owner operating mandate |
+| [0179](#adr-0179--reproduce-four-slot-fit-first-factory-machines-without-repricing-bootstrap) | Reproduce four-slot-fit first-factory machines without repricing bootstrap | Accepted bounded acquisition scope; implementation/proof pending |
 
 ---
 
@@ -8420,3 +8421,42 @@ updates, infer human acceptance, grant new paid/provider generation or credentia
 or independently request a public release/main merge. Existing isolated lanes,
 single PC/cache owner and serial publisher rules remain. Preserve historical
 receipts and earlier authority labels; apply this mandate prospectively.
+
+---
+
+## ADR-0179 — Reproduce four-slot-fit first-factory machines without repricing bootstrap
+
+**Status.** Accepted bounded acquisition scope under ADR-0174/0178, 2026-10-22.
+Implementation and qualification are pending; not all first-factory machinery
+or the whole T1 tier is declared automated or ready.
+
+**Context.** The first manual factory is intended to reproduce useful machines,
+not require repeated hand crafting forever. Existing T1 shaped catalogues and
+JSON already define the material bills. The Assembler has four grouped input
+slots; the Thermal Generator's manual bill has five distinct groups.
+
+**Decision.** Select ordinary Assembler reproduction of the existing Pulverizer,
+Arc Furnace, Press and Assembler only. Derive exact material multiplicities and
+ordinary outputs from their existing manual source/JSON; retain all manual
+bootstrap recipes. Reuse the existing fabrication cycle/FU and grouping helper
+with an explicit whitelist, not automatic projection of every future craft.
+
+Each new machine route declares its F1 controller as minimum capacity through
+ADR-0176's existing typed API. This is a new explicit opt-in for those four
+routes, not relaxation of old exact constructors, F2 predecessors, outputs or
+quest/reward evidence. Higher valid stock still yields the same ordinary
+baseline machine; it does not upgrade a chassis or its saved state.
+
+An optional reproduction line follows assembly. Manual first machines seed
+that line; it cannot become a mandatory bootstrap/first-F2 cycle. Existing die
+reproduction and retained catalysts remain intact. New route IDs are unique,
+and Atlas/JEI/audit use the shared role/projection rather than a parallel engine.
+Trace construction inputs honestly; an unresolved input is not a renewable-
+establishment certificate.
+
+**Not selected.** Keep Thermal reproduction separate because its five groups
+do not fit. Do not enlarge slots, invent a compressed ingredient/intermediate,
+discount a bill or claim all five machines automatically reproduced. Broader
+families, genuine capability upgrades and complete tier readiness remain work.
+Ordinary new rows reuse the proven executor/role mechanism: exhaustive data and
+affected normal projections, not one native smoke per machine.

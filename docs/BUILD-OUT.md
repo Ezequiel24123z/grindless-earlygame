@@ -51,6 +51,11 @@ affected Java/writers/native remain pending. Qualifier604195bd reports local
 READY only, without a PC grant. Await the managed-FTB source/binding and finish
 review before the single fixed-source execution window; do not replay old
 Blueprint/pressure or per-die native tests.
+The control review's one P2 is source-repaired inf046923: include executed
+AuthorityAdapters bytecode as well as source. Real writer receipt verification
+remains required. Parallel source work now selects four ordinary machine
+reproduction routes under ADR-0179; do not delay independent content just
+because these mechanism checks are being prepared.
 
 The protected native FTB handover under ADR-0171 is technically complete:
 Grindless-T0-FTB-Dev has exactdd0/29bc/79ce and the pristine existing-world/options
