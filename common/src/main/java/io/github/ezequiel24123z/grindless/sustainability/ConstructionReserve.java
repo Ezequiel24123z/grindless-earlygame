@@ -702,15 +702,10 @@ final class ConstructionReserve {
         Map<Resource, Long> previousShortages = new TreeMap<>(shortages);
         boolean previouslyUncertain = uncertain;
         try {
-            for (Route source : snapshot.routes().values()) {
-                if (source.authority() == Authority.QUEST_REWARD && source.oneShot()
-                        && audit.outputAmount(source, resource) > 0 && audit.unlocked(source, tier)
-                        && selectedClaim(source) && !claimed.contains(source.id())) {
-                    execute(source, 1);
-                    if (free(resource) >= amount) {
-                        return true;
-                    }
-                }
+            // Preserve standalone T0's claim priority. A continuation first uses its established
+            // producers, rather than constructing extra claim evidence with the five factory seeds.
+            if (completedEntryRoute == null && obtainRewards(resource, amount)) {
+                return true;
             }
             Route route = replenishing(resource);
             Machine readyMachine = route == null || route.family() == null
@@ -786,6 +781,9 @@ final class ConstructionReserve {
                     }
                 }
             }
+            if (completedEntryRoute != null && obtainRewards(resource, amount)) {
+                return true;
+            }
             if (provideManual(resource, amount)) {
                 return true;
             }
@@ -801,6 +799,20 @@ final class ConstructionReserve {
             }
             pending.remove(resource);
         }
+    }
+
+    private boolean obtainRewards(Resource resource, long amount) {
+        for (Route source : snapshot.routes().values()) {
+            if (source.authority() == Authority.QUEST_REWARD && source.oneShot()
+                    && audit.outputAmount(source, resource) > 0 && audit.unlocked(source, tier)
+                    && selectedClaim(source) && !claimed.contains(source.id())) {
+                execute(source, 1);
+                if (free(resource) >= amount) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private boolean manualCraft(Route route) {
@@ -966,6 +978,16 @@ final class ConstructionReserve {
     }
 
     private boolean executeBatch(Route route) {
+        if (completedEntryRoute != null) {
+            for (Resource output : route.retainedOutputs().keySet()) {
+                TagResolution tag = snapshot.tags().get(output);
+                if (output.kind() == Kind.TAG && (tag == null || !tag.complete() || tag.members().size() != 1)) {
+                    unknown(output, "Finite continuation requires an exact retained output, not an unresolved "
+                            + "or multi-member tag from " + route.id() + ".");
+                    return false;
+                }
+            }
+        }
         if (route.id().equals(completedEntryRoute)
                 || !audit.unlocked(route, tier) || audit.zeroInputUnjustified(route)
                 || !audit.environmentReady(route, available) || route.oneShot() && claimed.contains(route.id())

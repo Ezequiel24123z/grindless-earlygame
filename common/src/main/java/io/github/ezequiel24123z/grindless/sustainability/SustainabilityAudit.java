@@ -60,8 +60,13 @@ public final class SustainabilityAudit {
         private final ConstructionReserve.Custody custody;
 
         private WitnessState(Result result, TierResult evidence, int tier, ConstructionReserve.Custody custody) {
+            this(result, result.annotations(), evidence, tier, custody);
+        }
+
+        private WitnessState(Result result, SustainabilityAnnotations assumptions, TierResult evidence,
+                             int tier, ConstructionReserve.Custody custody) {
             source = result.authorities();
-            assumptions = result.annotations();
+            this.assumptions = assumptions;
             this.evidence = evidence;
             debt = result.debt();
             DebtManifest.Applied applied = result.findings();
@@ -95,6 +100,7 @@ public final class SustainabilityAudit {
         public int operations() { return custody.steps(); }
         public Map<String, Long> establishmentBatches() { return custody.executions(); }
         public List<ExecutedBatch> history() { return custody.history(); }
+        ConstructionReserve.Custody custody() { return custody; }
     }
 
     /** A finite continuation is not recursive renewable closure, continuous operation or world evidence. */
@@ -229,6 +235,7 @@ public final class SustainabilityAudit {
         TierResult t0 = predecessor.tiers().get(0);
         WitnessState state = t0.witnessState();
         if (successor == null || selectedRoutes == null || selectedRoutes.isEmpty()
+                || selectedRoutes.stream().anyMatch(id -> id == null || id.isBlank())
                 || new HashSet<>(selectedRoutes).size() != selectedRoutes.size()
                 || exitRoute == null || !selectedRoutes.contains(exitRoute)
                 || !preservesEntry(predecessor.annotations(), successor, selectedRoutes)) {
@@ -248,11 +255,19 @@ public final class SustainabilityAudit {
                 selectedRoutes, t0.exitProduction().route());
         boolean completed = reserve.continueFinite(selectedRoutes, exitRoute);
         List<Reserve> reserves = reserve.reserves();
-        completed &= reserve.findings().isEmpty();
-        WitnessState after = new WitnessState(predecessor, null, 1, reserve.custody());
+        List<AuditFinding> findings = new ArrayList<>(reserve.findings());
+        WorkReserve work = reserve.manualWorkReserve();
+        if (work != null && (work.marginActions() < 0 || !work.status().equals("conditional_established"))) {
+            findings.add(new AuditFinding("finite_work_unproven", work.terminal(), "T1", ERROR,
+                    "The inherited cumulative local-work reserve is not established; no budget reset is allowed.",
+                    List.of(state.assumptions.ledger().get(0).entryProfile().manualWork().source())));
+        }
+        completed &= findings.isEmpty() && reserves.stream().allMatch(value ->
+                value.margin() >= 0 && value.status().equals("conditional_established"));
+        WitnessState after = new WitnessState(predecessor, successor, null, 1, reserve.custody());
         return new FiniteResult(true, completed, completed ? "conditional_established" : "blocked",
                 state, after, after.history().subList(state.history().size(), after.history().size()),
-                reserves, reserve.manualWorkReserve(), reserve.exitProduction(), reserve.findings());
+                reserves, work, reserve.exitProduction(), findings);
     }
 
     /** Shared admission precedes even the T1-specific selection/binding projection. */
@@ -273,6 +288,14 @@ public final class SustainabilityAudit {
         }
         if (!state.matches(predecessor)) {
             return refused("predecessor_incompatible", "Authority, source, assumptions or evaluated T0 evidence changed.");
+        }
+        if (state.freeStock().entrySet().stream().anyMatch(entry -> entry.getKey().kind() == Kind.TAG && entry.getValue() > 0)
+                || state.retainedCatalysts().entrySet().stream().anyMatch(entry ->
+                entry.getKey().kind() == Kind.TAG && entry.getValue() > 0)
+                || state.installedMachines().stream().anyMatch(resource -> resource.kind() == Kind.TAG)
+                || state.installationParts().values().stream().anyMatch(parts ->
+                parts.entrySet().stream().anyMatch(entry -> entry.getKey().kind() == Kind.TAG && entry.getValue() > 0))) {
+            return refused("predecessor_stock_unknown", "A symbolic tag balance is not exact physical carry custody.");
         }
         return null;
     }

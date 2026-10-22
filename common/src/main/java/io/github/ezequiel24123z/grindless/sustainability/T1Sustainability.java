@@ -157,13 +157,16 @@ public final class T1Sustainability {
 
     /** Deterministic generated data; no source commit, timestamp or private execution path is embedded. */
     public static Map<String, Object> document(SustainabilityAudit.Result t0) {
+        return document(t0, finiteWitness(t0));
+    }
+
+    private static Map<String, Object> document(SustainabilityAudit.Result t0, SustainabilityAudit.FiniteResult finite) {
         T0ConditionalGate.Gate gate = T0ConditionalGate.evaluate(t0);
         if (!gate.pass()) {
             throw new IllegalArgumentException("The T1 boundary requires the actual passing conditional T0 model: "
                     + gate.unmetObligations());
         }
         Snapshot snapshot = t0.authorities();
-        SustainabilityAudit.FiniteResult finite = finiteWitness(t0);
         Map<String, List<Route>> selected = selectedRoutes(snapshot);
         SeedAllocation allocation = seedAllocation(snapshot);
         List<Object> lines = new ArrayList<>();
@@ -237,7 +240,8 @@ public final class T1Sustainability {
 
     /** Human-readable batch costs are generated from the same routes, never maintained by hand. */
     public static String markdown(SustainabilityAudit.Result t0) {
-        document(t0);
+        SustainabilityAudit.FiniteResult finite = finiteWitness(t0);
+        document(t0, finite);
         Snapshot snapshot = t0.authorities();
         Map<String, List<Route>> selected = selectedRoutes(snapshot);
         SeedAllocation seed = seedAllocation(snapshot);
@@ -274,7 +278,6 @@ public final class T1Sustainability {
                         .append(" |\n");
             }
         }
-        SustainabilityAudit.FiniteResult finite = finiteWitness(t0);
         text.append("\n## Conserved finite execution\n\n")
                 .append("Status: **").append(finite.status()).append("**. Completed authority batches: **")
                 .append(finite.batches().size()).append("**. No terminal, reward, installed part or work budget ")

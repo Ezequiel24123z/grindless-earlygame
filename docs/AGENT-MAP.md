@@ -300,11 +300,14 @@ uses ready selected producers, the original T0 supply, then real construction,
 never a repeated manual T0 exit. Exact F1 reproduction precedes further control
 withdrawals and the real F2 batch cannot be replaced by stock. The existing
 T1 export exposes before/after axes, completed physical batches and blocking
-findings; separate renewable/autonomy/whole-tier/world limits remain. Extend
-existing typed checks and explicit source/image lists, not another planner or
-receipt framework. Genuine gaps require coordinator review, not new gameplay.
-This is source-only, not executed Java/model qualification; G10, four canonical
-payloads, PC access, player saves and paid history remain untouched.
+findings; separate renewable/autonomy/whole-tier/world limits remain. Existing
+typed audit/T0/T1 checks cover conservation/admission/exhaustion/goal-stock
+negatives; `T1Export` explicitly authors42 source paths/96 image expressions
+including custody and executed-batch helpers, not a transitive framework.
+Symbolic tag balances cannot masquerade as exact physical carry/output.
+Genuine gaps require coordinator review, not new gameplay. Source/diff/link
+checks pass, not Java/model qualification or observed class hashes; G10, four
+canonical payloads, PC access, player saves and paid history remain untouched.
 
 ### Explicit Assembler recipe choice
 

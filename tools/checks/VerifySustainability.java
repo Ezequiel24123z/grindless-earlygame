@@ -109,13 +109,342 @@ public final class VerifySustainability {
                 VerifySustainability::singletonOutputCustody, VerifySustainability::heldQuestAccess,
                 VerifySustainability::coexistingClaimRequirements, VerifySustainability::claimsWithoutLedger,
                 VerifySustainability::executedClaimObjectiveScope, VerifySustainability::typedFindingTierScope,
-                VerifySustainability::outputOnlyFirstUseException)) {
+                VerifySustainability::outputOnlyFirstUseException, VerifySustainability::continuedCustody,
+                VerifySustainability::continuationRefusals, VerifySustainability::exhaustedContinuation)) {
             try {
                 fixture.run();
             } catch (Exception failure) {
                 fail("Algorithm counterexample must return a verdict, not throw: " + failure);
                 failure.printStackTrace(System.out);
             }
+        }
+    }
+
+    private static void continuedCustody() {
+        group("R29 immutable source-bound continuation conserves each physical and accounting axis");
+        Fixture fixture = continuationFixture();
+        var predecessor = fixture.audit();
+        var initial = predecessor.tiers().get(0).witnessState();
+        yes("a passing conditional T0 audit issues complete custody", initial != null);
+        if (initial == null) {
+            return;
+        }
+        Resource die = item("retained_die");
+        Resource part = item("installed_part");
+        Resource grant = item("prior_reward");
+        Resource manual = item("manual_material");
+        eq("the ordinary T0 exit is executed exactly once", 1L,
+                initial.establishmentBatches().get("manual_exit"));
+        eq("all five exit items are free stock, not duplicated as a delivery or catalyst", 5L,
+                initial.freeStock().get(PRODUCT));
+        eq("a manufactured exit is not a gift/accounting credit", 0L,
+                initial.cumulativeDeliveries().getOrDefault(PRODUCT, 0L));
+        eq("two exact source guarantees remain attributable separately", Map.of(
+                "seed/0", 1L, "seed/1", 2L, "seed/2", 1L, "seed/3", 1L, "seed/4", 2L, "seed/5", 100L,
+                "seed/6", 1L),
+                initial.bootstrapSources());
+        eq("the controller consumes only one of the three finite RAW", 2L, initial.freeStock().get(RAW));
+        eq("the actual constructed controller is installed", true, initial.installedMachines().contains(MACHINE));
+        eq("the controller is not also free", 0L, initial.freeStock().getOrDefault(MACHINE, 0L));
+        eq("the surrounding parts remain dedicated to their installation", Map.of(part, 2L),
+                initial.installationParts().get("FORMED"));
+        eq("dedicated parts are not free", 0L, initial.freeStock().getOrDefault(part, 0L));
+        eq("dedicated parts are not pooled catalysts", 0L, initial.retainedCatalysts().getOrDefault(part, 0L));
+        eq("the retained die is paid from actual finite player custody", 1L, initial.playerDeliveries().get(manual));
+        eq("a paid die is locked, never also free", 1L, initial.retainedCatalysts().get(die));
+        eq("the already claimed reward is recorded once", 3L, initial.rewardDeliveries().get(grant));
+        eq("the reward's locked requirement is not spendable free stock", 1L, initial.retainedCatalysts().get(grant));
+        eq("the remaining reward stock is exact", 2L, initial.freeStock().get(grant));
+        eq("actual startup work is already spent before continuation", 1L, initial.consumedManualActions());
+        var continued = SustainabilityAudit.continueFinite(predecessor, fixture.annotations(),
+                List.of("next/formed", "next/exit"), "next/exit");
+        yes("the conservative finite successor executes", continued.admitted() && continued.completed());
+        var after = continued.state();
+        if (after == null) {
+            return;
+        }
+        eq("the original immutable state remains the predecessor", initial, continued.predecessor());
+        eq("all bootstrap-source deliveries are inherited, never reloaded",
+                initial.bootstrapSources(), after.bootstrapSources());
+        eq("guaranteed delivery accounting is not another stock injection",
+                initial.guaranteedDeliveries(), after.guaranteedDeliveries());
+        eq("no consumed player custody is replenished", initial.playerDeliveries(), after.playerDeliveries());
+        eq("paid rewards are not replayed", initial.rewardDeliveries(), after.rewardDeliveries());
+        eq("one-shot claim identities remain exact", initial.claimedRoutes(), after.claimedRoutes());
+        eq("no second startup work budget is created", 1L, after.consumedManualActions());
+        eq("the original total action budget remains one", 1L, continued.manualWork().budgetActions());
+        eq("installed parts are retained without a second charge", initial.installationParts(), after.installationParts());
+        eq("all locked catalysts stay separate from installations", initial.retainedCatalysts(), after.retainedCatalysts());
+        eq("physical fluid stock is debited exactly", 75L, after.freeStock().get(WATER));
+        eq("the remaining RAW is physical carry, not its cumulative guarantee", 1L, after.freeStock().get(RAW));
+        eq("the RAW delivery ledger is cumulative accounting only", 3L, after.cumulativeDeliveries().get(RAW));
+        eq("actual initial exit stock is consumed exactly once", 4L, after.freeStock().get(PRODUCT));
+        eq("the original checkpoint is not mutated by the successor", 5L, initial.freeStock().get(PRODUCT));
+        eq("a physical successor batch is recorded rather than inferred from stock", 1L,
+                continued.exitProduction().executedBatches());
+        yes("the operation bound is cumulative, not reset", after.operations() > initial.operations());
+        eq("no already-claimed route completes again", false,
+                continued.batches().stream().anyMatch(batch -> initial.claimedRoutes().contains(batch.route())));
+        conservation(initial, after, continued.batches());
+        immutable("free stock cannot be supplied by mutating a checkpoint", () -> initial.freeStock().put(PRODUCT, 999L));
+        immutable("locked catalysts cannot be released by a caller", () -> initial.retainedCatalysts().clear());
+        immutable("installed machine custody is immutable", () -> initial.installedMachines().clear());
+        immutable("installation parts are deeply immutable", () -> initial.installationParts().get("FORMED").clear());
+        immutable("one-shot history cannot be cleared", () -> initial.claimedRoutes().clear());
+        immutable("source deliveries cannot be reset", () -> initial.bootstrapSources().clear());
+        immutable("completed batch custody is immutable", () -> initial.history().clear());
+        immutable("a batch's exact physical withdrawals are immutable",
+                () -> continued.batches().get(0).consumed().clear());
+    }
+
+    private static void continuationRefusals() {
+        group("R30 report-only, missing, failed, unknown and incompatible predecessors cannot fund a successor");
+        Fixture fixture = continuationFixture();
+        var original = fixture.audit();
+        var t0 = original.tiers().get(0);
+        var annotations = fixture.annotations();
+        eq("a missing predecessor is an explicit refusal", "predecessor_missing",
+                SustainabilityAudit.continueFinite(null, annotations, List.of("next/exit"), "next/exit")
+                        .findings().get(0).rule());
+        var reportOnly = new SustainabilityAudit.TierResult(t0.tier(), t0.mandatory(), t0.recurring(),
+                t0.available(), t0.renewable(), t0.availableRoutes(), t0.renewableRoutes(), t0.reserves(),
+                t0.retainedInventory(), t0.manualWork(), t0.exitProduction(), t0.establishmentBatches(), t0.unknown());
+        eq("legacy result constructors do not manufacture complete custody", "predecessor_state_missing",
+                continueFixture(replaceT0(original, reportOnly), annotations).findings().get(0).rule());
+        var unknown = new SustainabilityAudit.TierResult(0, Set.of(), Set.of(), Set.of(), Set.of(),
+                Set.of(), Set.of(), List.of(), "Unknown predecessor");
+        eq("an unknown T0 state is not a successful empty inventory", "predecessor_unknown",
+                continueFixture(replaceT0(original, unknown), annotations).findings().get(0).rule());
+        Snapshot bad = new Builder(original.authorities()).finding(new AuditFinding("fixture_failure", "source", "",
+                AuditFinding.Severity.ERROR, "Original failed authority evidence remains present.", List.of())).build();
+        var failed = SustainabilityAudit.run(bad, annotations, DebtManifest.empty());
+        eq("failed conditional audits never issue usable custody", null, failed.tiers().get(0).witnessState());
+        eq("a failed conditional audit is explicitly refused", "predecessor_failed",
+                continueFixture(failed, annotations).findings().get(0).rule());
+        Map<String, String> hashes = new TreeMap<>(original.authorities().inputHashes());
+        hashes.put("fixture:source", "changed_exact_source");
+        Snapshot relabelled = new Snapshot(original.authorities().resources(), original.authorities().routes(),
+                original.authorities().terminals(), original.authorities().tags(), original.authorities().objectives(),
+                hashes, original.authorities().findings());
+        var mismatch = new SustainabilityAudit.Result(relabelled, original.annotations(), original.tiers(),
+                original.debt(), original.findings());
+        eq("identical quantities cannot relabel an old checkpoint onto different sources", "predecessor_incompatible",
+                continueFixture(mismatch, annotations).findings().get(0).rule());
+        Map<String, Route> routes = new TreeMap<>(original.authorities().routes());
+        Route actual = routes.get("next/exit");
+        routes.put(actual.id(), new Route(actual.id(), actual.authority(), actual.source(), actual.family(),
+                Map.of(RAW, 999L), actual.catalysts(), actual.outputs(), actual.discharged(), actual.durationTicks(),
+                actual.fuPerTick(), actual.conditions(), actual.prerequisites(), actual.oneShot(),
+                actual.modOwned(), actual.automatable()));
+        Snapshot changedBatch = new Snapshot(original.authorities().resources(), routes,
+                original.authorities().terminals(), original.authorities().tags(), original.authorities().objectives(),
+                original.authorities().inputHashes(), original.authorities().findings());
+        var differentAuthority = new SustainabilityAudit.Result(changedBatch, original.annotations(), original.tiers(),
+                original.debt(), original.findings());
+        eq("a changed live batch cannot borrow the old checkpoint even with unchanged raw source labels",
+                "predecessor_incompatible", continueFixture(differentAuthority, annotations).findings().get(0).rule());
+        Resource goal = item("next_goal");
+        Map<Resource, Long> fake = new TreeMap<>(t0.retainedInventory());
+        fake.put(goal, 999L);
+        var forged = new SustainabilityAudit.TierResult(t0.tier(), t0.mandatory(), t0.recurring(), t0.available(),
+                t0.renewable(), t0.availableRoutes(), t0.renewableRoutes(), t0.reserves(), fake, t0.manualWork(),
+                t0.exitProduction(), t0.establishmentBatches(), t0.unknown(), t0.witnessState());
+        eq("caller-owned finished material cannot be appended to real evidence", "predecessor_incompatible",
+                continueFixture(replaceT0(original, forged), annotations).findings().get(0).rule());
+        Map<Integer, TierPlan> ledger = new TreeMap<>(annotations.ledger());
+        TierPlan plan = ledger.get(0);
+        ledger.put(0, plan.withEntryProfile(plan.entryProfile().withBill(Map.of(item("manual_material"), 999L), 999)));
+        var funded = new SustainabilityAnnotations(annotations.resources(), annotations.routes(), annotations.machines(),
+                annotations.loops(), annotations.plans(), ledger);
+        eq("a successor cannot replace the original finite materials/work budget", "continuation_incompatible",
+                continueFixture(original, funded).findings().get(0).rule());
+        var changedEntry = new SustainabilityAudit.Result(original.authorities(), funded, original.tiers(),
+                original.debt(), original.findings());
+        eq("an old proof cannot be rebound to different entry assumptions", "predecessor_incompatible",
+                continueFixture(changedEntry, funded).findings().get(0).rule());
+        eq("an unknown selected route is an explicit refusal", "continuation_route_unavailable",
+                SustainabilityAudit.continueFinite(original, annotations, List.of("missing"), "missing")
+                        .findings().get(0).rule());
+        eq("a quest claim cannot masquerade as repeatable exit production", "continuation_route_unavailable",
+                SustainabilityAudit.continueFinite(original, annotations, List.of("quest/prior"), "quest/prior")
+                        .findings().get(0).rule());
+        eq("duplicate selected identities cannot duplicate execution obligations", "continuation_incompatible",
+                SustainabilityAudit.continueFinite(original, annotations, List.of("next/exit", "next/exit"), "next/exit")
+                        .findings().get(0).rule());
+        fixture = continuationFixture();
+        Resource symbolic = new Resource(Kind.TAG, "fixture:ambiguous_stock");
+        fixture.builder.tag(symbolic, new TagResolution(Set.of(RAW, SAFE), true, Set.of(), List.of("fixture:ambiguous")));
+        fixture.seed(symbolic, 1);
+        var symbolicPredecessor = fixture.audit();
+        eq("symbolic tag stock cannot be admitted as exact physical carry", "predecessor_stock_unknown",
+                continueFixture(symbolicPredecessor, fixture.annotations()).findings().get(0).rule());
+    }
+
+    private static void exhaustedContinuation() {
+        group("R31 consumed custody, installed parts and goal stock cannot replace new production");
+        for (String id : List.of("next/exhaust_stock", "next/replay_reward", "next/spend_installed",
+                "next/spend_die")) {
+            Fixture fixture = continuationFixture();
+            // Even real stock in the checkpoint is not proof that this new exit recipe executed.
+            fixture.seed(item("next_goal"), 99);
+            var original = fixture.audit();
+            var result = SustainabilityAudit.continueFinite(original, fixture.annotations(), List.of(id), id);
+            yes("the valid predecessor is admitted for a failing real batch: " + id, result.admitted());
+            no("exhausted or protected custody fails visibly: " + id, result.completed());
+            eq("existing finished goal stock never substitutes for an executed batch: " + id,
+                    0L, result.exitProduction().executedBatches());
+            yes("the exact failed exit remains attributable: " + id, result.findings().stream().anyMatch(finding ->
+                    finding.rule().equals("finite_exit_unexecuted") && finding.subject().equals(id)));
+            var before = original.tiers().get(0).witnessState();
+            var after = result.state();
+            if (before == null || after == null) {
+                fail("expected a valid source-bound checkpoint for " + id);
+                continue;
+            }
+            eq("failed routes never replenish source guarantees: " + id, before.bootstrapSources(), after.bootstrapSources());
+            eq("failed routes never replay paid rewards: " + id, before.rewardDeliveries(), after.rewardDeliveries());
+            eq("installed parts remain dedicated on failure: " + id, before.installationParts(), after.installationParts());
+            eq("locked catalysts remain protected on failure: " + id, before.retainedCatalysts(), after.retainedCatalysts());
+            eq("the work already spent in T0 is not refunded: " + id, 1L, after.consumedManualActions());
+            conservation(before, after, result.batches());
+        }
+        // Lower-level executor contract: deliberately remove qualitative native supply for this
+        // negative only. This is not an admitted alternative to the public predecessor's R0 proof.
+        Fixture fixture = continuationFixture();
+        var predecessor = fixture.audit();
+        var before = predecessor.tiers().get(0).witnessState();
+        if (before == null) {
+            fail("the exhausted-work contract needs the actual completed native-startup checkpoint");
+            return;
+        }
+        var annotations = fixture.annotations();
+        var reserve = new ConstructionReserve(predecessor.authorities(), annotations,
+                new SustainabilityAudit(predecessor.authorities(), annotations),
+                predecessor.tiers().get(0).available(), Set.of(), before.custody(),
+                annotations.ledger().get(0).entryProfile(), List.of("next/work_again"), "manual_exit");
+        no("an exhausted inherited local-work allowance cannot fund the next request",
+                reserve.continueFinite(List.of("next/work_again"), "next/work_again"));
+        yes("exhausted local work retains its precise finding", reserve.findings().stream()
+                .anyMatch(finding -> finding.rule().equals("entry_work_insufficient")));
+        eq("the previously spent action is never refunded", 1L, reserve.custody().manualActions());
+        yes("the new unfunded request is cumulative, not a new budget",
+                reserve.custody().requiredManualActions() > before.requiredManualActions());
+        yes("the exhausted action margin remains negative", reserve.manualWorkReserve().marginActions() < 0);
+        eq("failed local work creates no transferable FU stock", before.freeStock(), reserve.custody().stock());
+        eq("the real retained native FU is not released as labour", before.retainedCatalysts(), reserve.custody().locked());
+        var ambiguous = SustainabilityAudit.continueFinite(predecessor, annotations,
+                List.of("next/ambiguous"), "next/ambiguous");
+        no("an ambiguous tag output cannot become exact physical continuation stock", ambiguous.completed());
+        yes("ambiguous output is diagnosed at its live batch rather than silently choosing a member",
+                ambiguous.findings().stream().anyMatch(finding -> finding.rule().equals("construction_reserve_unknown")
+                        && finding.message().contains("next/ambiguous")));
+    }
+
+    private static Fixture continuationFixture() {
+        Resource manual = item("manual_material");
+        Resource die = item("retained_die");
+        Resource part = item("installed_part");
+        Resource grant = item("prior_reward");
+        Resource startup = item("startup_bench");
+        Resource feed = item("formed_feed");
+        Resource goal = item("next_goal");
+        Resource carrier = item("circulating_seed");
+        Fixture fixture = new Fixture().seed(RAW, 1).seed(RAW, 2).seed(startup, 1).seed(TOOL, 1)
+                .seed(part, 2).seed(WATER, 100).seed(carrier, 1)
+                .terminal("manual_material", manual, TerminalKind.MANUAL_WORLD, false, true)
+                .meta(manual, metadata(ResourceClass.BOOTSTRAP, null, null, List.of(), null, null, null, null))
+                .workProfile(Map.of(manual, 1L), 1, Set.of("STARTUP"));
+        fixture.machines.put("STARTUP", new Machine("STARTUP", startup, 0));
+        fixture.machines.put("FORMED", new Machine("FORMED", MACHINE, 0));
+        fixture.add(route("make_controller", Map.of(RAW, 1L), Map.of(), Map.of(MACHINE, 1L), null));
+        fixture.add(route("native_power", Map.of(carrier, 1L, ENERGY, 160L, SAFE, 1L), Map.of(),
+                        Map.of(carrier, 1L, ENERGY, 320L), "STARTUP"))
+                .meta(ENERGY, renewable("native_power"))
+                .meta(carrier, metadata(ResourceClass.CLOSED_LOOP, null, "native_power",
+                        List.of(), null, null, null, null));
+        fixture.loops.put("native_startup", new ClosedLoop("native_startup", carrier, Set.of("native_power"), null));
+        fixture.add(new Route("craft/die", Authority.CRAFTING_JSON, "fixture:die", null, Map.of(manual, 1L),
+                Map.of(), Map.of(die, 1L), Set.of(), 0, 0, Map.of(), Set.of(), false, true, false));
+        fixture.add(new Route("formed_supply", Authority.PROCESS_GRAPH, "fixture:formed", "FORMED",
+                Map.of(SAFE, 1L), Map.of(part, 2L), Map.of(feed, 1L), Set.of(), 1, 0,
+                Map.of("workshop_structure", "fixture:formed"), Set.of(), false, true, true))
+                .meta(feed, renewable("formed_supply")).root(feed);
+        fixture.add(route("die_supply", Map.of(SAFE, 1L), Map.of(die, 1L), Map.of(SIDE, 1L), "FORMED"))
+                .meta(SIDE, renewable("die_supply")).root(SIDE);
+        fixture.add(new Route("quest/prior", Authority.QUEST_REWARD, "fixture:prior_reward", null,
+                Map.of(), Map.of(SAFE, 1L), Map.of(grant, 3L), Set.of(), 0, 0, Map.of(), Set.of(), true, true, false));
+        fixture.add(new Route("manual_exit", Authority.CRAFTING_JSON, "fixture:manual_exit", null,
+                Map.of(SAFE, 1L), Map.of(grant, 1L), Map.of(PRODUCT, 5L), Set.of(), 0, 0, Map.of(),
+                Set.of(), false, true, false));
+        fixture.meta(PRODUCT, metadata(ResourceClass.BOOTSTRAP, null, "manual_exit", List.of(), null, null, null, null));
+        fixture.builder.objective(new Objective("exit", PRODUCT, 5, Set.of(), null, "fixture:exit"));
+        fixture.requiredQuests.add("exit");
+        fixture.exitObjective = PRODUCT;
+        fixture.add(new Route("next/formed", Authority.PROCESS_GRAPH, "fixture:next_formed", "FORMED",
+                Map.of(SAFE, 1L), Map.of(part, 2L), Map.of(item("prepared"), 1L), Set.of(), 1, 0,
+                Map.of("workshop_structure", "fixture:formed"), Set.of(), false, true, true)).policy("next/formed", 1, false);
+        fixture.add(route("next/exit", Map.of(RAW, 1L, WATER, 25L, PRODUCT, 1L, grant, 1L),
+                Map.of(die, 1L), Map.of(goal, 1L), "FORMED")).policy("next/exit", 1, false);
+        for (var entry : Map.of("next/exhaust_stock", RAW, "next/replay_reward", grant,
+                "next/spend_installed", part, "next/spend_die", die).entrySet()) {
+            long count = entry.getValue().equals(RAW) || entry.getValue().equals(grant) ? 3 : 1;
+            fixture.add(route(entry.getKey(), Map.of(entry.getValue(), count), Map.of(), Map.of(goal, 1L), null))
+                    .policy(entry.getKey(), 1, false);
+        }
+        fixture.add(route("next/work_again", Map.of(ENERGY, 1_000_000L, SAFE, 1L), Map.of(), Map.of(goal, 1L), "STARTUP"))
+                .policy("next/work_again", 1, false);
+        Resource tag = new Resource(Kind.TAG, "fixture:ambiguous_output");
+        fixture.builder.tag(tag, new TagResolution(Set.of(RAW, SAFE), true, Set.of(), List.of("fixture:ambiguous")));
+        fixture.add(route("next/ambiguous", Map.of(SAFE, 1L), Map.of(), Map.of(tag, 1L), null))
+                .policy("next/ambiguous", 1, false);
+        return fixture;
+    }
+
+    private static SustainabilityAudit.FiniteResult continueFixture(SustainabilityAudit.Result result,
+                                                                    SustainabilityAnnotations annotations) {
+        return SustainabilityAudit.continueFinite(result, annotations, List.of("next/exit"), "next/exit");
+    }
+
+    private static SustainabilityAudit.Result replaceT0(SustainabilityAudit.Result result,
+                                                        SustainabilityAudit.TierResult replacement) {
+        Map<Integer, SustainabilityAudit.TierResult> tiers = new TreeMap<>(result.tiers());
+        tiers.put(0, replacement);
+        return new SustainabilityAudit.Result(result.authorities(), result.annotations(), tiers, result.debt(), result.findings());
+    }
+
+    private static void conservation(SustainabilityAudit.WitnessState before, SustainabilityAudit.WitnessState after,
+                                     List<SustainabilityAudit.ExecutedBatch> batches) {
+        Map<Resource, Long> expected = physicalCustody(before);
+        for (var batch : batches) {
+            batch.consumed().forEach((resource, count) -> expected.merge(resource, -count, Math::addExact));
+            batch.produced().forEach((resource, count) -> expected.merge(resource, count, Math::addExact));
+        }
+        after.playerDeliveries().forEach((resource, count) ->
+                expected.merge(resource, count - before.playerDeliveries().getOrDefault(resource, 0L), Math::addExact));
+        after.guaranteedDeliveries().forEach((resource, count) ->
+                expected.merge(resource, count - before.guaranteedDeliveries().getOrDefault(resource, 0L), Math::addExact));
+        Map<Resource, Long> actual = physicalCustody(after);
+        expected.entrySet().removeIf(entry -> entry.getValue() == 0 || entry.getKey().kind() == Kind.ENVIRONMENT);
+        actual.entrySet().removeIf(entry -> entry.getValue() == 0 || entry.getKey().kind() == Kind.ENVIRONMENT);
+        eq("exact resolved physical custody balances every completed batch and external delivery", expected, actual);
+        yes("no physical axis has a negative balance", actual.values().stream().allMatch(count -> count >= 0));
+    }
+
+    private static Map<Resource, Long> physicalCustody(SustainabilityAudit.WitnessState state) {
+        Map<Resource, Long> amounts = new TreeMap<>(state.freeStock());
+        state.retainedCatalysts().forEach((resource, count) -> amounts.merge(resource, count, Math::addExact));
+        state.installedMachines().forEach(resource -> amounts.merge(resource, 1L, Math::addExact));
+        state.installationParts().values().forEach(parts ->
+                parts.forEach((resource, count) -> amounts.merge(resource, count, Math::addExact)));
+        return amounts;
+    }
+
+    private static void immutable(String message, Runnable mutation) {
+        try {
+            mutation.run();
+            fail(message);
+        } catch (UnsupportedOperationException expected) {
+            yes(message, true);
         }
     }
 
