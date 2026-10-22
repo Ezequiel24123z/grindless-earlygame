@@ -1145,6 +1145,24 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
+**G14 delta-only assignment with two explicit source roles.** Checker source
+317ef1e87c54ef3ccf395ac4f569038aa7a2ef15/treeb1f0a98e935f26def1ac49f44acc5cc3516728f1
+normally preserves both483d checker blobs. Sole604 uses new inventory89b67ceb
+and preparation4d825999 after fresh admission/clean Sync. Materialize only
+the four byte-exact qualified G13 normal payloads before common resource
+binding. Original writer/check/43-98 provenance stays on489; transfer is not
+generation and neither a new writer nor CheckOnly replay is authorized.
+
+The new proof is changed-check compilation, R36 through the existing runner,
+corrected postT0 and the never-executed postT1, copied-output invariance and
+actual new wider-S1 identities. Production code and normalized model facts
+are unchanged; raw check identities are not falsely called unchanged.
+Optional normal A10 has exactparent317 and only the four identical original
+writer bytes after all new passes/frozen inputs/Java0/locksfalse/trailers/
+clean bundle. No push or later runtime. Any failure retains copied outputs
+and real diagnostics DIRTY, with no restore, waiver or producer replay.
+No G14 outcome, transfer or A10 pass is inferred from the grant itself.
+
 **Oracle-only repair and proportional next proof, source reviewed.**
 483d25d7d032127b2e0494072d306b52f8f5c21d/exactparent489/tree
 0a1605179b00dce641d3cea6091182aea252dfa0 changes only two checks and its

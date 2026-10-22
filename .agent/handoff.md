@@ -4,6 +4,28 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**G14 DELTA-ONLY GO, no new result.** Sole604/checker source
+317ef1e87c54ef3ccf395ac4f569038aa7a2ef15, private inventory89b67ceb and
+preparation4d825999. The NEW custody-oracle root needs fresh admission and
+canonical clean Sync. Then materialize ONLY the four verified complete G13
+payloads into that root, byte-exact, before normal common resource binding.
+Their writer/check/provenance source remains ORIGINAL489; no new writer or
+CheckOnly is authorized. Old roots, payloads and343-file capsule stay intact.
+
+Build only the needed common/classpath and changed-check closure. Execute
+the existing regression runner with R36, repaired postT0 and the previously
+unexecuted postT1. Preserve actual new wider-S1 source/class identity and
+all four copied payload hashes/mtimes plus frozen other inputs. Raw check
+identity may change; normalized model producer inputs did not.
+
+A10 is allowed only after those real passes, exact parent317, containing
+only the identical four G13 bytes, with settled Java/locks, contiguous
+trailers and a clean local bundle. No push/runtime after data. Failure
+stops dependents and preserves DIRTY exactsubset, actual new reports and
+original producer evidence; no restore, waiver or ungranted writer replay.
+Fresh final source/guard/Java/locks/custody/explicit leaseback is required.
+No Forge/native/FTB/ABI/Blueprint/assets/package/Prism/world/provider action.
+
 **Strict oracle repair483d25d7 is complete/reviewed and normally composed;
 changed-check execution remains pending.** Exactparent489/tree0a160517,
 three files154 insertions/four deletions, both checker blobs preserved.

@@ -20,7 +20,7 @@
   },
   "normal_machine_manufacturing": {
     "policy": "ADR-0188",
-    "status": "G13_models43_98_343verified_checker483d_reviewed_composed_G14_changed_checks_pending_NO_PClease_orA10",
+    "status": "G13_proofs343_verified_checker483d_composed317_G14_DELTA_ONLY_granted_NO_newcheck_orA10",
     "normal_final_manual_only_operating_processes_automatable": true,
     "other_product_modes": ["MANUAL_ONLY", "MACHINE_ONLY", "BOTH"],
     "infrastructure_manual_and_machine_methods_per_product": true,
@@ -131,6 +131,30 @@
     "not_proved": "finiteT1_establishment_renewability_autonomy_gameplay_client_or_acceptance"
   },
   "current_PC_execution": {
+    "assignment": "installed-capital-checker-g14-20261023",
+    "active": true,
+    "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
+    "source": "317ef1e87c54ef3ccf395ac4f569038aa7a2ef15",
+    "writer_invocation_source": "489bf01fb382a907c184f6172e6c1027dcf248e9",
+    "writer_source_scope": "REUSED_G13_ONLY_NO_G14_writer_CheckOnly_or_provenance_retarget",
+    "applicable_source_runtime": null,
+    "normal_data_checkpoint": null,
+    "inventory_sha256": "89b67cebfdcf1d8d44a55214ef85ff2a9773955c592d6e352b0c40b6f9b67550",
+    "local_preparation_sha256": "4d8259998b9afd95c757456945c439ce585b730373dfb383f4e5227cd21a0402",
+    "scope": "DELTA_ONLY_NEWroot_freshSync317_exact4verified_G13_payload_materialization_common_toolcompile_R36_postT0_postT1_invariance_newS1identity_A10_ifpassed",
+    "source_frozen_until_active_stages_and_locks_close": true,
+    "other_workers_parent_PC_or_T0_access_authorized": false,
+    "real_PrismRoot_player_world_writes_authorized": false,
+    "allowed_data_derivation": "NORMAL_A10_exactparent317_onlyoriginal489_four_payloadbytes_after_newchecks_invariance_frozenothers_Java0locksfalse_contiguoustrailers_cleanbundle_NOPUSH_RUNTIMEafterdata",
+    "failure_policy": "preserve_copied_payloads_and_actual_new_failure_DIRTYexactsubset_NO_restore_ungrantedwriters_waiver_or_hotfix",
+    "prohibited": "NO_writers_CheckOnly_Forge_native_FTB_ABI_Blueprint_assets_package_Prism_world_deps_provider_or_oldrootwrites",
+    "result": "GRANTED_NOT_OBSERVED_NO_G14_copy_check_or_A10_pass",
+    "returned": false,
+    "returned_utc": null,
+    "return_state": "NOT_OBSERVED_G14",
+    "new_explicit_guarded_window_required": false
+  },
+  "closed_G13_execution": {
     "assignment": "continued-funding-qualification-g13-20261022",
     "active": false,
     "owner_session": null,
@@ -167,7 +191,7 @@
     "required": "changed_check_compile_R36_corrected_postT0_unexecuted_postT1_payload_invariance_actual_new_widerS1identity",
     "future_G14_inventory_sha256": "89b67cebfdcf1d8d44a55214ef85ff2a9773955c592d6e352b0c40b6f9b67550",
     "future_G14_preparation_sha256": "4d8259998b9afd95c757456945c439ce585b730373dfb383f4e5227cd21a0402",
-    "source_grant_lease": null
+    "source_grant_lease": "exact317ef1e87c54ef3ccf395ac4f569038aa7a2ef15_installed-capital-checker-g14-20261023_DELTA_ONLY_reuse489"
   },
   "closed_G12_execution": {
     "assignment": "manual-model-qualification-g12-20261022",
@@ -296,7 +320,7 @@
   },
   "active_development_wave": {
     "base": "ad5b50dd509b0261818101ff08e786750826161a",
-    "status": "G13_livefinite_writer_checks_pass_POSTT0invariantFAIL_returned_DIRTY4_343QA_verified_Csource_review_NO_PClease",
+    "status": "G13_originalproofs_verified_strict_oracle483d_composed317_G14_delta_sole604_NO_result",
     "earlier_source_fields": "historical_initial_wave_snapshots_not_current_failures_or_execution_grants_current_PC_execution_and_finite_T1_custody_continuation_govern",
     "owners": {
       "managed_FTB_definitions": "cb273782-4065-44e2-90a3-9c0c036367ce",
@@ -327,8 +351,8 @@
     "asset_EOL_checkpoint": "5aa56be_shared_Java_writer_twin_callers_actualG4_existingJDKfixture34_total_22new_EOL_pass_parent_raw_verified_no_normal_generator_replay",
     "normal_G3_outputs": "A3e1efe470_normal5outputs_integrated_parent_verified205files_2573inputs_4images_bothT1receipts_5Gitblobs_equal_writer_bytes_bundle3a9ac835_manifestde198742_normalwrite_check_Guidance74_5323_Economy416_17_T1794_canonical417_2908_0_797_G3_returned08_34_07Z",
     "qualification_preparer": "604195bd-6826-4299-89af-1dcf39545263_last_G10_executor_returned17_04_48Z_no_current_PC_grant",
-    "PC_owner": null,
-    "PC_source": "489bf01fb382a907c184f6172e6c1027dcf248e9",
+    "PC_owner": "604195bd-6826-4299-89af-1dcf39545263",
+    "PC_source": "317ef1e87c54ef3ccf395ac4f569038aa7a2ef15",
     "PC_source_worker_access": false,
     "T0_world_client_deploy_or_acceptance": false,
     "evidence_reuse": "keep_source426_models_e260_contracts_M_Blueprint_native_and_independent_full_CI_bound_to_their_actual_sources_no_unrelated_replay"
