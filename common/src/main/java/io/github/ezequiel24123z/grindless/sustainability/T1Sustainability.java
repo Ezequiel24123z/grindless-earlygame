@@ -121,6 +121,61 @@ public final class T1Sustainability {
                 List.copyOf(selected), T1Progression.EXIT_ROUTE);
     }
 
+    /**
+     * Bounded observations of an actual attempted continuation, never another replay.
+     * Sparse quantities remain null/not recorded; diagnostics must not invent zero custody.
+     */
+    public static Map<String, Object> finiteDiagnostics(SustainabilityAudit.Result t0,
+                                                        SustainabilityAudit.FiniteResult finite) {
+        var before = finite.predecessor();
+        var after = finite.state();
+        List<Resource> focus = new ArrayList<>();
+        if (t0 != null) {
+            for (String key : List.of("energy:FU", "item:grindless:mineral_aggregate", "item:grindless:biomass",
+                    "tag:minecraft:stone_crafting_materials", "item:minecraft:cobblestone")) {
+                t0.authorities().resources().stream().filter(resource -> resource.key().equals(key))
+                        .findFirst().ifPresent(focus::add);
+            }
+            List<Resource> aliases = new ArrayList<>();
+            for (Resource resource : focus) {
+                TagResolution tag = t0.authorities().tags().get(resource);
+                if (tag != null) {
+                    tag.members().stream().limit(4).filter(member -> !focus.contains(member)).forEach(aliases::add);
+                }
+            }
+            focus.addAll(aliases.stream().distinct().toList());
+        }
+        List<Object> balances = new ArrayList<>();
+        for (Resource resource : focus) {
+            TagResolution tag = t0.authorities().tags().get(resource);
+            balances.add(row("resource", resource.key(),
+                    "physical_members", tag == null ? List.of() : tag.members().stream().limit(4).map(Resource::key).toList(),
+                    "free_before", before == null ? null : before.freeStock().get(resource),
+                    "free_after", after == null ? null : after.freeStock().get(resource),
+                    "locked_before", before == null ? null : before.retainedCatalysts().get(resource),
+                    "locked_after", after == null ? null : after.retainedCatalysts().get(resource)));
+        }
+        Map<String, Long> counts = new TreeMap<>();
+        finite.batches().forEach(batch -> counts.merge(batch.route(), 1L, Math::addExact));
+        Map<String, Long> boundedCounts = new TreeMap<>();
+        counts.entrySet().stream().limit(16).forEach(entry -> boundedCounts.put(entry.getKey(), entry.getValue()));
+        return Collections.unmodifiableMap(row("admitted", finite.admitted(), "completed", finite.completed(),
+                "before_operations", before == null ? null : before.operations(),
+                "after_operations", after == null ? null : after.operations(),
+                "completed_batches", finite.batches().size(), "completed_counts", boundedCounts,
+                "other_completed_route_count", counts.size() - boundedCounts.size(),
+                "last_completed_routes", finite.batches().stream().skip(Math.max(0, finite.batches().size() - 8))
+                        .map(SustainabilityAudit.ExecutedBatch::route).toList(),
+                "consumed_actions_before", before == null ? null : before.consumedManualActions(),
+                "consumed_actions_after", after == null ? null : after.consumedManualActions(),
+                "required_actions_before", before == null ? null : before.requiredManualActions(),
+                "required_actions_after", after == null ? null : after.requiredManualActions(),
+                "cumulative_work_reserve", finite.manualWork(),
+                "unestablished_reserves", finite.reserves().stream().filter(reserve ->
+                        reserve.margin() < 0 || !reserve.status().equals("conditional_established")).limit(8).toList(),
+                "balances", balances, "sparse_quantity_scope", "null means not recorded, not assumed zero"));
+    }
+
     /** Only selected execution bindings are added; T0 classifications, entry, loops and ledger stay exact. */
     private static SustainabilityAnnotations finiteAnnotations(SustainabilityAudit.Result t0, Set<String> selected) {
         SustainabilityAnnotations original = t0.annotations();
@@ -216,6 +271,7 @@ public final class T1Sustainability {
                                 && route.retainedOutputs().containsKey(item("minecraft:furnace")))
                         .map(Route::id).toList(),
                 "mandatory_input_evidence", inputEvidence,
+                "finite_diagnostics", finiteDiagnostics(t0, finite),
                 "finite_execution", finiteDocument(finite),
                 "seed_allocation", row("batch_output", allocation.batchOutput(),
                         "construction_draw", allocation.constructionDraw(), "remaining", allocation.remaining(),

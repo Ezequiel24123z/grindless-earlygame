@@ -1145,6 +1145,32 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
+**Reviewed continuation-funding correction, not a new pass.** Normal
+f30a5f7926e80546f7aeb0cc21ada391f98d2009 has exact parentcb1e and tree
+858fa75aa6c1957f86f158378dafa55d6ed11983, five files291 insertions/four
+deletions. Parent verifies handoffSHA
+98de7cba68617c354487b8bfa940e190db4b06acbe930cf695fd29735e19f5fc and
+directly reviews the complete diff plus existing funding/guard/allocation/
+rollback context. Four code/check blobs are normally preserved; only the
+shared changelog conflicts. No application edits are made during integration.
+
+The source-corroborated failure path is premature consumer activation while
+its producer needs the already-paid native circulation, plus selected
+producer refuelling/independence. The correction funds net FU before active
+admission/allocation, refills actual selected inputs and rejects circular
+funding without new inventory/budgets. Standalone T0 and all physical/paid
+carry remain unchanged. G12 did not emit its pending-route stack or detailed
+balances; the authored R35 cold boundary is a constructed regression, not
+a retrospective observation. Its missing-alias negative stays strict.
+Bounded diagnostics retain null for unrecorded quantities and never replay.
+
+Actual common/changed regressions including R35 and live conserved
+Press/F1/F2/model writers are still required under a new exact-source G13.
+No new type changes the authored43/98 list; those counts remain unobserved.
+G11 native and unchanged G12 Factory/Guidance fixtures are reusable at their
+original sources. No Forge/native/player update is justified by this
+audit-only correction. G13 preparation has no bound source/lease yet.
+
 **G12 failed-model custody independently verified by251d.** Capsule
 114/manifest24d84ed7c49245ff7c1d32b692a30f0ab2f05abacbcc807b3715af77fe9f4487
 preserves PC/SCP/local length+SHA parity,2595 unchanged non-output inputs

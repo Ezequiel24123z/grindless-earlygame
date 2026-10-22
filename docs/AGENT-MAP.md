@@ -351,12 +351,28 @@ withdrawals and the real F2 batch cannot be replaced by stock. The existing
 T1 export exposes before/after axes, completed physical batches and blocking
 findings; separate renewable/autonomy/whole-tier/world limits remain. Existing
 typed audit/T0/T1 checks cover conservation/admission/exhaustion/goal-stock
-negatives; `T1Export` explicitly authors42 source paths/96 image expressions
+negatives; `T1Export` explicitly authors43 source paths/98 image expressions
 including custody and executed-batch helpers, not a transitive framework.
 Symbolic tag balances cannot masquerade as exact physical carry/output.
 Genuine gaps require coordinator review, not new gameplay. Source/diff/link
 checks pass, not Java/model qualification or observed class hashes; G10, four
 canonical payloads, PC access, player saves and paid history remain untouched.
+
+For continued native supply, `ConstructionReserve.executeBatch` funds net FU
+before consumer activation/input allocation. Its transient `fundingRoutes`
+guard rejects true funding recursion without becoming stored custody.
+`obtain` refills an installed selected producer through actual paid inputs;
+`circulationSupply` must not treat a producer consuming the loop's own
+inventory as independent startup supply. Keep the retained prefix, spent
+work, aliases and completed sub-batches when a later consumer fails.
+These branches apply only to continuation, not standalone T0.
+Existing `VerifySustainability` R35 uses actual native batches with clearly
+synthetic drain/goal rows and a strict unprovided-alias negative.
+`T1Sustainability.finiteDiagnostics` observes the attempted result without
+rerunning it; absent quantities remain null and route/reserve lists are
+bounded. `VerifyT1Progression` still requires real Press/F1/F2 execution.
+Source f30a5f79 repairs the preserved G12 failure; its qualification remains
+separate from source review and the unchanged native/loader proof.
 
 ### Explicit Assembler recipe choice
 

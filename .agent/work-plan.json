@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 126,
+  "plan_revision": 127,
   "updated": "2026-10-22",
   "phase": "manual_final_normal_machines_and_authored_per_product_manufacturing_modes",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -89,6 +89,19 @@
     "return_state": "REPORTED_aftercustody_exactHEADcb1e_DIRTY_PARTIAL_onlyGuidanceEconomy_ownedallJava0_workcachelocksfalse_ownGuardremoved_absent_explicitreturn_NOT_live_reinspection",
     "new_explicit_guarded_window_required": true,
     "closure_required": "failed_G12_exactHEADcb1e_DIRTY_PARTIAL_only2preserved_normaloutputs_before_after_hashmtime_otherinputs_and_T1unchanged_original_receipts_failure_raws_fullcustody_fresh_ownedallJava0_locksfalse_onlyownGuardhashremoved_absent_explicitreturn_NO_restore_or_A10"
+  },
+  "continuation_funding_repair": {
+    "source": "f30a5f7926e80546f7aeb0cc21ada391f98d2009",
+    "parent": "cb1e124173a8530e3faf205d53aeef90651c7187",
+    "tree": "858fa75aa6c1957f86f158378dafa55d6ed11983",
+    "status": "SOURCE_COMPLETE_DIRECT_REVIEW_CLEAR_NORMAL_COMPOSITION_four_exact_code_check_blobs_NO_revisedJava_or_finite_pass",
+    "handoff_sha256": "98de7cba68617c354487b8bfa940e190db4b06acbe930cf695fd29735e19f5fc",
+    "scope": "ConstructionReserve_continuation_prefunding_before_active_or_allocated_selectedproducer_input_refill_true_independence_transient_recursionguard_T1bounded_diagnostics_R35",
+    "unchanged": "standaloneT0_initialization_financialcarry_budgets_claims_retainedprefix_recipes_actualF1F2_Forge_BE_and_4canonical_source_outputs",
+    "qualification": "NEW_commoncompile_affectedtools_auditregressions_including_authoredR35_actualfiniteT1_and_normalwriters_provenance_NO_native_replay",
+    "future_G13_inventory_sha256": "59274f4a4b7da8abba88047c7dd14898b67b12dd36dcb0617498276d4fd80e2c",
+    "future_G13_preparation_sha256": "795d130ec94c98c2caada6eff75e1a6e2274393dde71ee68b6292cb11026408c",
+    "future_G13_source_grant_lease": null
   },
   "closed_G11_execution": {
     "assignment": "manual-machine-qualification-g11-20261022",
@@ -260,7 +273,7 @@
   },
   "normal_machine_manufacturing": {
     "policy": "ADR-0188",
-    "status": "G11native_verified_G12_common_repairedcontracts_T0writers_pass_T1finite_FAIL_closed_DIRTY114custody_VERIFIED_SOURCE_C_repair_active_NO_PClease",
+    "status": "G11native_verified_G12_finiteFAIL_closed_DIRTY114_verified_SOURCE_f30_funding_repair_reviewed_composed_new_model_qualification_pending_NO_PClease",
     "vision": "GregTech_inspired_greater_complexity_content_futurism_NOT_universal_Factorio_selfreplication",
     "normal_final_manufacture_manual_only": true,
     "normal_operating_processes_automatable": true,

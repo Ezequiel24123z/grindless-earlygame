@@ -4,6 +4,28 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**Continuation funding source f30 is complete, directly reviewed and normally
+composed; revised execution is still pending.** Exact parentcb1e/tree858fa75,
+five files291 insertions/four deletions; four executable/check blobs remain
+exact. Private handoffSHA98de7cba is verified. Only the shared changelog
+conflicted; both histories remain. The map/ADR-0187/plan now describe the seam.
+
+Continuation funds net FU before consumer activation/allocation, refills the
+selected installed producer and rejects false independence of a producer
+consuming the loop's inventory. A transient funding-route guard rejects
+recursion without becoming persisted custody. Standalone T0, actual inputs,
+native prefix, financial carry, work, claims and physical F1/F2 remain strict.
+R35's cold native-funded fixture and absent-alias negative are authored, not
+executed. Bounded diagnostics expose an attempted result without replay or
+invented zero balances. No new source/image type or recipe/loader/BE change.
+
+G13 inventory59274f4a and plan795d130e are LOCAL preparations only.
+Source/grant/lease remain null until one published exact-source GO.
+The unproved property is actual continued funding/refill and Press/F1/F2
+execution under the conserved budget. Reuse unchanged G11 native and G12
+Factory/Guidance fixtures; fresh common/changed audit/T1/model proofs are
+required. No author fixture or source review accepts the finite model.
+
 **G12 is CLOSED/BLOCKED and explicitly RETURNED, not model-green.**
 Fresh final readonly AFTER custody21:34:03.4723711Z records exactHEADcb1e,
 intentional cleanFALSE and only Guidance/Economy modified. Both actual

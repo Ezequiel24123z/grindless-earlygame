@@ -9052,6 +9052,23 @@ exporter lists. Source/static checks are not Java or a successful replay.
 Later exact-source execution selects affected model proofs and normal
 writers; it does not repeat unchanged native/FTB mechanisms or retarget G10.
 
+**Observed continuation failure and bounded correction.** G12 on cb1e
+passes the repaired T0 gate and two normal writers, then fails strict finite
+Press/F2 establishment. Preserve that result and its two partial outputs;
+neither missing balances nor a new work allowance can be inferred from it.
+Source f30a5f79 repairs the existing executor's funding order: finance net FU
+before marking the consuming route active or allocating its inputs, so
+an already-paid native circulation can execute the necessary producer.
+A transient funding-route guard rejects true recursive funding; it is not
+new persisted custody. Refill the actual installed selected producer, and
+do not classify a producer consuming loop inventory as independent startup
+supply. Standalone T0, financial carry, budgets, claims, catalysts and real
+batch quantities remain unchanged. Completed paid sub-batches remain
+recorded if the later consumer fails. R35 and bounded actual-result
+diagnostics cover this correction without inventing another planner or
+turning synthetic regression rows into gameplay. Revised execution is still
+required; source review is not an accepted finite witness.
+
 **Rejected.** A new EntryProfile containing finished T0 machines/controllers
 would invent manual acquisition authorities and hide the transition cost.
 Adding synthetic terminals or a free conversion route duplicates custody.

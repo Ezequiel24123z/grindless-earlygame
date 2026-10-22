@@ -54,7 +54,13 @@ model/fixture reds. Normal Factoryf863 and C82ac source corrections preserve
 the hard gate and exact runtime: finite Firing Chamber construction is not
 automatic R0 controller-item renewal. Next is the newly bound model-only
 qualification after source composition, not another native or player update.
-G12 preparation remains local until its exact-source GO.
+G12 then passes repaired T0 and two normal writers but fails the finite
+Press/F2 continuation; its two partial outputs and114-file returned custody
+are independently verified. Reviewed sourcef30 fixes existing continuation
+funding/refill/independence without a new budget or planner. Next is actual
+fixed-source model qualification, including R35 and the live physical exit.
+G13 preparation remains local until one new exact-source GO; do not replay
+G11 native or modify the player's instance.
 
 **Current next (2026-10-22):** G7 is technically closed with verified339
 artifacts plus separately recovered original CI5, actual writer41df/normal
