@@ -9,8 +9,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
+import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
+import io.github.ezequiel24123z.grindless.quest.QuestProjection;
 import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.Bootstrap;
 
@@ -45,6 +48,17 @@ import java.util.zip.ZipFile;
 public final class FtbQuestDefinitionPublisher {
     static final Gson JSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeNulls().create();
     static final List<String> FILENAMES = List.of("grindless_t0.snbt", "grindless_t1.snbt");
+    private static final Set<String> CATALOGUE_46 = Set.of(
+            "starter_supplies", "quest_book_help", "superflat", "construction", "multitool", "manual_work",
+            "crank", "extractor", "quern", "water", "clay_mixer", "grog", "firing", "ceramics",
+            "geological_collector", "aggregate", "settling", "water_recovery", "mineral_feed",
+            "biocultivator", "biomass", "fibreboard", "biomass_dynamo", "fluid_logistics", "conveyors",
+            "workshop_flow", "assembly_bench", "research_terminal", "data_core", "calibrate",
+            "calibrated_core", "relay", "thermal", "pylon", "scanner", "terrestrial", "pulverizer",
+            "furnace", "press", "assembler", "matrix_line", "glass", "logistics", "kiln", "factory_world",
+            "industrial_matrix");
+    static final Set<String> ADDED_50 = Set.of("first_grid", "forming_dies", "copper_coil", "flux_cell");
+    static final Set<String> ADDED_51 = Set.of("wet_beneficiation");
     private static final String SHIM_PREFIX = "architectury_inject_grindless_common_";
     private static final String SHIM_FINGERPRINT = "0a84a9c64d4531a5942f7fab6de29d225f189424344d81b42e4642cb468923d6";
     private static final Pattern SHIM_NAME = Pattern.compile(
@@ -102,9 +116,10 @@ public final class FtbQuestDefinitionPublisher {
         result.addProperty("runtimeSourceRevision", runtime);
         result.addProperty("grindlessSha256", jarHash);
         result.addProperty("compilationSha256", compilationHash);
-        int quests = documents.values().stream().mapToInt(document -> document.getList("quests", Tag.TAG_COMPOUND).size()).sum();
-        if (quests != 46 && quests != 50) {
-            throw new IOException("Unknown generated native definition version: " + quests);
+        int quests = currentQuestCount();
+        requireKnownDefinitions(documents, quests);
+        if (!documents.equals(FtbQuestDefinitions.chapters())) {
+            throw new IOException("Publication requires the complete actual source-bound generator, not a historical subset");
         }
         result.addProperty("questCount", quests);
         JsonArray files = new JsonArray();
@@ -120,6 +135,89 @@ public final class FtbQuestDefinitionPublisher {
         }
         result.add("files", files);
         return result;
+    }
+
+    /** Historical identities validate lineage; they never generate an authentic historical publication. */
+    static Set<String> knownLogicalIds(int count) throws IOException {
+        Set<String> ids = new HashSet<>(CATALOGUE_46);
+        switch (count) {
+            case 46 -> { }
+            case 50 -> ids.addAll(ADDED_50);
+            case 51 -> {
+                ids.addAll(ADDED_50);
+                ids.addAll(ADDED_51);
+            }
+            default -> throw new IOException("Unknown native catalogue content version: " + count);
+        }
+        return Set.copyOf(ids);
+    }
+
+    static int currentQuestCount() throws IOException {
+        Set<String> actual = new HashSet<>();
+        for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
+            if (!actual.add(task.id())) { throw new IOException("Duplicate source-bound logical quest ID"); }
+        }
+        int count = QuestCatalogue.tasks().size();
+        if (!actual.equals(knownLogicalIds(count))) {
+            throw new IOException("Source-bound catalogue does not match a known exact logical identity set");
+        }
+        return count;
+    }
+
+    static void requireKnownDefinitions(Map<String, CompoundTag> documents, int count) throws IOException {
+        if (!documents.keySet().equals(Set.copyOf(FILENAMES))) {
+            throw new IOException("Known native content requires exactly the two owned chapters");
+        }
+        Map<String, String> expected = new LinkedHashMap<>();
+        for (String logical : knownLogicalIds(count)) {
+            expected.put(FtbQuestDefinitions.code(FtbQuestDefinitions.id("quest", logical)), logical);
+        }
+        Set<String> seen = new HashSet<>();
+        for (String filename : FILENAMES) {
+            CompoundTag document = documents.get(filename);
+            String chapter = filename.equals("grindless_t0.snbt") ? "T0" : "T1";
+            if (document == null || !document.getString("id").equals(
+                    FtbQuestDefinitions.code(FtbQuestDefinitions.id("chapter", chapter)))
+                    || !(document.get("quests") instanceof ListTag quests) || quests.getElementType() != Tag.TAG_COMPOUND) {
+                throw new IOException("Unknown native chapter identity or quest list");
+            }
+            for (Tag value : quests) {
+                CompoundTag quest = (CompoundTag) value;
+                String logical = expected.get(quest.getString("id"));
+                if (logical == null || !seen.add(logical)) {
+                    throw new IOException("Unknown, duplicate or replaced native quest identity");
+                }
+                QuestCatalogue.Task declared = QuestCatalogue.byId(logical);
+                if (declared == null || !QuestCatalogue.chapter(declared).name().equals(chapter)
+                        || !(quest.get("tags") instanceof ListTag tags) || tags.size() != 1
+                        || tags.getElementType() != Tag.TAG_STRING
+                        || !tags.getString(0).equals(QuestProjection.id(logical))) {
+                    throw new IOException("Native logical tag or chapter placement drifted");
+                }
+                if (!(quest.get("tasks") instanceof ListTag tasks) || tasks.size() != 1
+                        || tasks.getElementType() != Tag.TAG_COMPOUND || !tasks.getCompound(0).getString("id").equals(
+                        FtbQuestDefinitions.code(FtbQuestDefinitions.id("task", logical)))) {
+                    throw new IOException("Native task identity drifted");
+                }
+                if (!(quest.get("rewards") instanceof ListTag rewards)
+                        || (!rewards.isEmpty() && rewards.getElementType() != Tag.TAG_COMPOUND)
+                        || rewards.size() != declared.rewards().size()) {
+                    throw new IOException("Native reward identities drifted");
+                }
+                List<Long> rewardIds = FtbQuestDefinitions.rewardIds(declared);
+                for (int index = 0; index < rewardIds.size(); index++) {
+                    if (!rewards.getCompound(index).getString("id").equals(FtbQuestDefinitions.code(rewardIds.get(index)))) {
+                        throw new IOException("Native reward identity drifted");
+                    }
+                }
+                if ((ADDED_50.contains(logical) || ADDED_51.contains(logical)) && !rewards.isEmpty()) {
+                    throw new IOException("Reviewed catalogue additions must remain reward-free");
+                }
+            }
+        }
+        if (!seen.equals(knownLogicalIds(count))) {
+            throw new IOException("Missing native quest identities for known content version: " + count);
+        }
     }
 
     static JsonObject file(String name, byte[] contents) {

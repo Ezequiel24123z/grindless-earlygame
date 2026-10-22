@@ -23,7 +23,6 @@ import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static io.github.ezequiel24123z.grindless.forge.quest.FtbQuestDefinitionPublisher.*;
 
@@ -31,7 +30,6 @@ import static io.github.ezequiel24123z.grindless.forge.quest.FtbQuestDefinitionP
 public final class FtbQuestUpdatePlanner {
     static final String LEGACY_SOURCE = "dd0b4bc93187fe172fd336bfa330987220bd7be4";
     static final String LEGACY_JAR = "29bcce43372016719fe1202b8859a18c93147562c04a2ef1daf163fddf7cc54f";
-    private static final Set<String> ADDED_LESSONS = Set.of("first_grid", "forming_dies", "copper_coil", "flux_cell");
     private static final String OWNER = ".grindless-dev-owner.json";
     private static final String DEPLOYMENT = ".grindless-dev-deployment.json";
     private static final String RECEIPT = ".grindless-definitions.json";
@@ -100,8 +98,8 @@ public final class FtbQuestUpdatePlanner {
         }
         DefinitionSet previous = readSet(readObject(previousPublication));
         DefinitionSet current = readSet(currentPublication);
-        if (current.questCount() != 50 || !current.documents().equals(FtbQuestDefinitions.chapters())) {
-            throw new IOException("Update destination must be the actual current 50-quest generator");
+        if (current.questCount() != currentQuestCount() || !current.documents().equals(FtbQuestDefinitions.chapters())) {
+            throw new IOException("Update destination must be the complete actual source-bound generator");
         }
         JsonElement installedJar = deployment.get("grindless");
         if (installedJar == null || !installedJar.isJsonObject()
@@ -191,7 +189,8 @@ public final class FtbQuestUpdatePlanner {
         requireHash(jar);
         requireHash(string(published, "compilationSha256"));
         int questCount = integer(published, "questCount");
-        if ((questCount != 46 && questCount != 50) || !published.get("files").isJsonArray()
+        knownLogicalIds(questCount);
+        if (!published.get("files").isJsonArray()
                 || published.getAsJsonArray("files").size() != 2) {
             throw new IOException("Unknown native definition catalogue version");
         }
@@ -228,17 +227,15 @@ public final class FtbQuestUpdatePlanner {
         if (documents.values().stream().mapToInt(document -> document.getList("quests", Tag.TAG_COMPOUND).size()).sum() != questCount) {
             throw new IOException("Published native quest count does not match its documents");
         }
+        requireKnownDefinitions(documents, questCount);
         return new DefinitionSet(source, runtime, jar, questCount, contents, documents);
     }
 
     private static void validateTransition(DefinitionSet previous, DefinitionSet current) throws IOException {
         Map<String, CompoundTag> oldQuests = quests(previous.documents());
         Map<String, CompoundTag> newQuests = quests(current.documents());
-        Set<String> expectedOld = QuestCatalogue.tasks().stream()
-                .filter(task -> previous.questCount() == 50 || !ADDED_LESSONS.contains(task.id()))
-                .map(task -> FtbQuestDefinitions.code(FtbQuestDefinitions.questId(task.id()))).collect(Collectors.toSet());
-        if (!oldQuests.keySet().equals(expectedOld)) {
-            throw new IOException("Previous definition identities do not match the known 46/50 contract");
+        if (previous.questCount() > current.questCount() || !newQuests.keySet().containsAll(oldQuests.keySet())) {
+            throw new IOException("Known native catalogue lineage cannot remove or downgrade identities");
         }
         for (String name : FILENAMES) {
             if (!previous.documents().get(name).getString("id").equals(current.documents().get(name).getString("id"))) {
@@ -254,9 +251,8 @@ public final class FtbQuestUpdatePlanner {
                 throw new IOException("A retained logical/task/reward identity or paid reward contract changed");
             }
         }
-        for (String lesson : ADDED_LESSONS) {
-            CompoundTag quest = newQuests.get(FtbQuestDefinitions.code(FtbQuestDefinitions.questId(lesson)));
-            if (!quest.getList("rewards", Tag.TAG_COMPOUND).isEmpty()) {
+        for (var entry : newQuests.entrySet()) {
+            if (!oldQuests.containsKey(entry.getKey()) && !entry.getValue().getList("rewards", Tag.TAG_COMPOUND).isEmpty()) {
                 throw new IOException("New teaching must remain reward-free");
             }
         }

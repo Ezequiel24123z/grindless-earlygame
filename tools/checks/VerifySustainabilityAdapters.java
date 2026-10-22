@@ -64,8 +64,27 @@ public final class VerifySustainabilityAdapters {
 
     private static void questAccessPrerequisites() throws IOException {
         Snapshot snapshot = AuthorityAdapters.live(Path.of(""));
-        eq("all 46 retained objectives and four rewardless T1 lessons remain inventoried",
-                50, snapshot.objectives().size());
+        eq("all old50 objectives and the reward-free wet objective remain inventoried",
+                51, snapshot.objectives().size());
+        Set<String> old50 = Set.of(
+                "starter_supplies", "quest_book_help", "superflat", "construction", "multitool", "manual_work",
+                "crank", "extractor", "quern", "water", "clay_mixer", "grog", "firing", "ceramics",
+                "geological_collector", "aggregate", "settling", "water_recovery", "mineral_feed",
+                "biocultivator", "biomass", "fibreboard", "biomass_dynamo", "fluid_logistics", "conveyors",
+                "workshop_flow", "assembly_bench", "research_terminal", "data_core", "calibrate", "calibrated_core",
+                "relay", "thermal", "pylon", "first_grid", "scanner", "terrestrial", "pulverizer", "furnace",
+                "press", "forming_dies", "copper_coil", "assembler", "matrix_line", "glass", "logistics",
+                "kiln", "factory_world", "flux_cell", "industrial_matrix");
+        Set<String> expected = new TreeSet<>(old50);
+        expected.add("wet_beneficiation");
+        eq("the exact old50 objective identities are retained", 50, old50.size());
+        eq("no old objective is replaced or unknown objective invented", expected, snapshot.objectives().keySet());
+        Objective wet = snapshot.objectives().get("wet_beneficiation");
+        eq("wet acquisition uses the existing Washer as evidence", "item:grindless:chemical_washer", wet.subject().key());
+        eq("wet acquisition requires one existing Washer", 1L, wet.count());
+        eq("optional wet acquisition retains assembly and Relay prerequisites", Set.of("assembler", "relay"), wet.requires());
+        eq("wet acquisition invents no material reward route", null, wet.rewardRoute());
+        eq("wet acquisition has no corresponding reward supply", false, snapshot.routes().containsKey("quest/wet_beneficiation"));
         eq("only the original material-reward quests create reward routes", 26L,
                 snapshot.routes().values().stream().filter(route -> route.authority() == Authority.QUEST_REWARD).count());
         for (var task : io.github.ezequiel24123z.grindless.quest.QuestCatalogue.tasks()) {

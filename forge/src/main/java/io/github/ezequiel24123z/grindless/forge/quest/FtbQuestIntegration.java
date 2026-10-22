@@ -9,6 +9,7 @@ import dev.ftb.mods.ftbquests.quest.ServerQuestFile;
 import dev.ftb.mods.ftbquests.quest.TeamData;
 import dev.ftb.mods.ftbteams.api.event.TeamEvent;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.quest.QuestProgress;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -33,6 +34,8 @@ public final class FtbQuestIntegration {
         modBus.addListener((FMLCommonSetupEvent event) -> event.enqueueWork(() -> {
             FTBQuestsAPI.api().registerFilterAdapter(new FtbMatrixFilter());
             try {
+                FtbQuestDefinitionPublisher.requireKnownDefinitions(FtbQuestDefinitions.chapters(),
+                        FtbQuestDefinitionPublisher.currentQuestCount());
                 FtbQuestFiles.ensure(FMLPaths.CONFIGDIR.get());
             } catch (IOException exception) {
                 throw new IllegalStateException("Cannot install native Grindless FTB chapters; existing files were preserved",
@@ -63,7 +66,8 @@ public final class FtbQuestIntegration {
         }
         FtbQuestNative.verify(file);
         ready = true;
-        Grindless.LOG.info("Native FTB Quests ready: 50 stable Grindless quests; legacy reward claims are import-only");
+        Grindless.LOG.info("Native FTB Quests ready: {} stable Grindless quests; legacy reward claims are import-only",
+                QuestCatalogue.tasks().size());
     }
 
     public static void open(ServerPlayer player) {

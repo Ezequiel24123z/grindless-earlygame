@@ -20,8 +20,8 @@
   },
   "current_PC_execution": {
     "assignment": "wet-common-model-qualification-20261022",
-    "active": true,
-    "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
+    "active": false,
+    "owner_session": null,
     "last_owner_session": "604195bd-6826-4299-89af-1dcf39545263",
     "source": "fcfd6e2ed55b1db9768a6a454bd9a7a09ad904f8",
     "previous_G5_source": "98874f6254aa10c91a77dcb9312a37dc1a7c7b50",
@@ -36,14 +36,14 @@
     "source_frozen_until_active_stages_and_locks_close": true,
     "qualification_package_fictitious_target_plan_authorized": false,
     "real_PrismRoot_player_world_writes_authorized": false,
-    "result": "NEW_G6_fixedfcfd6e2_common_only_all_admission_Sync_changed_contract_writer_results_pending_API51_still_separate_no_G5_target_replay",
-    "returned": false,
-    "returned_utc": null,
-    "return_state": "NOT_OBSERVED_for_new_G6_window",
+    "result": "CLOSED_G6_parent103custody2574inputs_real_authentic50ref3d839_988f8_G5after_equal_commonclasspath_javac_Quest_Claims391_Teaching1133_Assets0_no_writers_A6_or_knownCIredreplays",
+    "returned": true,
+    "returned_utc": "2026-10-22T11:13:33.2105313Z",
+    "return_state": "parent_verified_cleanfcfd_Java0locksfalse_no_clientcmdline_read_no_cache_guard_created_explicit_leaseback",
     "previous_85e_attempt": "CI39733641733_main_toolcompile0_actual_regressions_Sync_only_noPCJVM_safe_return06_35_57Z_closure8363ad93",
     "previous_423a_attempt": "Sync0_real_CI_compile_red_no_PC_JVM_safe_return05_53_20Z_closure8d96179a_raw00348af1_preserved",
     "previous_returned_lease": "integrated_blueprint_native_20261021_cleanM_Java0_locks0_2026_10_21_21_56_31Z_evidence_preserved",
-    "new_explicit_guarded_window_required": false
+    "new_explicit_guarded_window_required": true
   },
   "active_development_wave": {
     "base": "ad5b50dd509b0261818101ff08e786750826161a",
@@ -96,7 +96,9 @@
   "catalogue51_compatibility": {
     "policy": "ADR-0183",
     "source_owner_session": "cb273782-4065-44e2-90a3-9c0c036367ce",
-    "status": "active_separate_source_lane_parentcfc2f63_plus_wet738_known46_50_51_ID_lineage_not_qualified",
+    "status": "source07_over_API99_normally_integrated_parentreviewed_PShost228_29actual_verified_newJava_loader_models_plan51_still_unqualified",
+    "source_checkpoint": "07c7cb8cc5dceccf89ca79763bb231e4393cdbd8",
+    "common_profile_block": "exactfcfdCI5reds_preserved_source07_exactchapter_and_objective51_fix_integrated_no_skip_or_profile_weakening_new_execution_required",
     "surfaces": "publisher_planner_runtime_integration_host_receipt_and_existing_focused_tests",
     "no_unknown_count_adoption_new_wire_schema_or_G5_retarget": true
   },

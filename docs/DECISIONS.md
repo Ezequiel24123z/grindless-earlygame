@@ -194,7 +194,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0180](#adr-0180--reproduce-the-thermal-generator-through-an-honest-two-stage-subassembly) | Reproduce the Thermal Generator through an honest two-stage subassembly | Accepted bounded acquisition scope; implementation/proof pending |
 | [0181](#adr-0181--compare-one-generated-platform-shim-by-exact-self-name-equivalence) | Compare one generated platform shim by exact self-name equivalence | Source555dbe9 integrated; G4 managed201/authentic publication0 custody verified |
 | [0182](#adr-0182--expose-existing-wet-beneficiation-as-an-optional-t1-baseline-line) | Expose existing wet beneficiation as an optional T1 baseline line | Source738/338 integrated; Java/outputs/catalogue51 compatibility pending |
-| [0183](#adr-0183--version-known-native-catalogue-lineage-without-weakening-provenance) | Version known native catalogue lineage without weakening provenance | Accepted compatibility scope for51; implementation/proof pending |
+| [0183](#adr-0183--version-known-native-catalogue-lineage-without-weakening-provenance) | Version known native catalogue lineage without weakening provenance | Source99/07 integrated, focused host228 verified; Java/native/model proof pending |
 
 ---
 
@@ -8676,8 +8676,10 @@ its frozen271f386 alias; never retarget that executor or access player data.
 
 **Status.** Accepted bounded compatibility scope under ADR-0177/0178/0182,
 2026-10-22. Source738105d4 provides51 quests but cannot publish/update/start
-through the current46/50 guards. Implementation and qualification of this
-extension are pending; the frozen current50 plan window remains separate.
+through the current46/50 guards. Implementation of this extension is now
+normally integrated through99/07 with verified focused host
+228/29. Actual Java/native/model qualification remains pending; the completed
+current50 plan evidence remains separately bound to988.
 
 **Context.** Native catalogue content evolves while reference schema2, managed
 receipt/plan formats and file transaction semantics stay unchanged. Hardcoded

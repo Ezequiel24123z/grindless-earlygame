@@ -198,12 +198,16 @@ public final class VerifyFtbQuests {
         }
     }
 
-    private static void definitions(Map<String, CompoundTag> documents) {
+    private static void definitions(Map<String, CompoundTag> documents) throws java.io.IOException {
         equal("exactly the two native chapter filenames", Set.of("grindless_t0.snbt", "grindless_t1.snbt"),
                 documents.keySet());
         equal("chapter generation is deterministic", documents, FtbQuestDefinitions.chapters());
         equal("all 50 previous logical IDs and the one reward-free wet lesson", QUEST_CODES.keySet(),
                 QuestCatalogue.tasks().stream().map(QuestCatalogue.Task::id).collect(Collectors.toSet()));
+        equal("known lineage independently matches every fixed current logical ID", QUEST_CODES.keySet(),
+                FtbQuestDefinitionPublisher.knownLogicalIds(51));
+        equal("publisher current is the complete source-bound catalogue", 51,
+                FtbQuestDefinitionPublisher.currentQuestCount());
         equal("51 catalogue entries, without duplicate logical IDs", 51, QuestCatalogue.tasks().size());
         equal("exact 19 in-development T1 objectives", T1_IDS, QuestCatalogue.tasks().stream()
                 .filter(task -> QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T1)

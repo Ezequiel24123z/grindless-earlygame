@@ -15,6 +15,29 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate known native51 compatibility and its strict common-profile repair.**
+  Normal07c7cb8 preserves API99 over the separate381/wet merge: complete
+  source-bound46/50/51 identities, historical CLI, actual-current planner,
+  native integration and host receipt consumers, with unchanged schemas/
+  source-image/ownership/transaction guards. Focused PS228/29 actual green
+  is parent hash-verified. Coupled exact chapter/adapter51 checks and negatives
+  repair the real CI5-source guard mismatch without skipping it; Java/native/
+  normal output qualification remains pending, not a51 player candidate.
+- **Close G6 independent evidence without inventing a generated checkpoint.**
+  Parent verifies103 files/2574 inputs, source bundlef7f3fdb5, authentic50
+  reference3d8393e7 tied to original988/f8 and actual G5-after chapter hashes,
+  plus Quest/Claims391/Teaching1133/Assets and safe11:13:33Z leaseback.
+  No dependent writer, canonical recheck,29/38 runtime receipt or A6 exists.
+- **Preserve the exact wet-source common guard regression before normal writes.**
+  Exactfcfd CI39767021119/artifact12421176203 has environment/build0 and
+  behavior1 in five suites: the strict claim profile still has the old T1
+  chapter switch, and the adapter inventory expects50 instead of51.
+  Economy/T0/T1 abort before canonicalResult; this is not merely stale JSON.
+  New teaching1133 and independent common checks pass; Windows succeeds and
+  smoke is skipped. Duplicate39766619498 is cancelled, not passed.
+  G6 preserves authentic50 CLI/common greens but starts no dependent writer
+  and fabricates no A6. API99 source/PS228 is delivered separately; the source
+  owner closes the two coupled guards without loosening authority or G6 Sync.
 - **Qualify independent wet common/model work while API51 implementation continues.**
   Sole604 receives fixedfcfd6e2 G6/new root for changed common quest/teaching/
   asset checks and actual normal Guidance/Economy/T1 outputs/provenance.

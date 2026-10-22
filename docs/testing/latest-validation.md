@@ -564,6 +564,59 @@ native,51 backend, package, plan or target write. Preserve old988/f8/Cp50 for
 a first actual50 CLI8 reference without compilation if needed for the next
 managed50-to51 transition. No result is inferred; no old success is replayed.
 
+**Exactfcfd CI exposes a real prerequisite red before the writers.**
+Run39767021119/artifact12421176203 reports environment0/build0/behavior1.
+Five failed suites are Economy, SustainabilityAdapters, SustainabilityRegistry,
+SustainabilityT0 and T1Progression. The exact chapter-method source profile in
+questBookAccess still lacks wet_beneficiation; adapter inventory independently
+expects50 instead of51 (315passed/1failed). SourceBinding246/counterexample2063
+abort before canonicalResult. Do not label these only stale canonical data.
+T1Teaching1133 and other unaffected common checks pass, Windows succeeds and
+smoke is SKIPPED. Duplicate39766619498 remains CANCELLED, not green.
+
+Parent original SHA-256: source
+`56860bfb1b81c2025aa6669ed07a48035fae7c41444a41b4350a90a923b1ec1a`,
+build `a2c17c976edf717bebe2ee03f942f555bfc98a70ed512937ed5679dbd0dc9ce6`,
+behavior `aa4c39215d44d444c19317a7a8d32fdf8de2b7b8c99542cc116e06e90807e8ed`,
+status `c24fea08e3df7a2a941d7dd4f5c27561104a871fdab9146dd60cf7c4102299f3`.
+No dispatch/rerun/CI wait is used. G6 gets the original evidence and does not
+run any of the five known reds or dependent normal writers. It already has
+actual commonclasspath/javac/Quest/Claims/Teaching/Assets0 and authentic50 CLI8
+on original988/f8; all four canonical outputs remain untouched, no A6 exists.
+The executor's closure/custody is pending, not a source-switch permission.
+
+SourceAPI99 over normal381 is locally delivered with actual focused host
+228assertions/29fixtures; its new Java/native source and authority matcher
+are authored, not run. Parent review finds the exact remaining chapter literal
+and adapter count, assigns their strict minimal correction to the same source
+owner and preserves G6. No broad Contains, skipped counterexample, source-profile
+fallback or historical-green relabel is permitted.
+
+**G6 final parent verification, no A6:**103 custody files match
+`517fe076d7aa9bccca9fbd485b0a96747fdd4aecbf3e676dd6e732bea662823b`,
+2574 non-output inputs stay exact and source bundle
+`f7f3fdb5ad7997155ce88f74b4a19abd729d7fed00d25ad50d2b8f456b6945db`
+is26741bytes/exactfcfd. Actual old50 publication
+`3d8393e7b1a82b67bc7f20184a0a5a4b9f35961f5b0d2d180d8025bf6047487c`
+binds source/runtime988/originalf8/selectedb07 and decoded payloads equal real
+G5 plan464 after hashes; copied historical Definitions/Catalogue images match.
+Common/classes/javac, Quest/Claims391/Teaching1133/Assets pass. No dependent
+writer/canonical/new provenance receipt was started and no A6 was created.
+Fresh11:13:33.2105313Z cleanfcfd/Java0/locksfalse/no client commandline read
+and explicit leaseback are verified; no temporary cache guard was created.
+
+**Source99/07 normally composed, not a Java pass:** parent reviews publisher/
+planner/integration/host changes and authored lineage counterexamples. Focused
+host actual228/29 green
+`9bdc95233035f72f6c88b42d607bf41a6c07baf6f5f52015bebc935e1f4081be`
+and initial red
+`9e80978848719d52dea3186d9b3990d9215d30fdfd2e59a0c5a949daa4da64ee`
+are hash-verified. Profile follow-up static record
+`797fd7c354453bb3c379172b66b160e8a701399d2cb93f54f2bb87a89c1d0465`
+and exact chapter/inventory/negative deltas are reviewed, not runtime qualification.
+Known content/schema/source/loaded-image/ownership/paid/recovery guards remain;
+the preserved original CI source red still needs affected repaired execution.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

@@ -247,6 +247,11 @@ remain refusals, old tasks/rewards/tags stay exact, only new lessons are free.
 Keep schemas/ownership/stopped-target/backup/journal guards and existing focused
 Java/Test-PrismDev -Suite QuestDefinitions fixtures. No new engine, flag or
 active G5 source switch is authorized.
+Source99/07 now composes those API consumers and the exact chapter/inventory
+guard fix; source-only Java is still unexecuted. Host QuestDefinitions228/29 is
+actual/reused. G6 independently proved common checks and historical50 CLI but
+started no writer; next binding must execute repaired source profiles/normal
+outputs instead of treating the five original CI reds as stale data.
 The same existing ControlMatrixInputChecks.registered probe now checks the new
 core's actual Item class/registry ID, without another case or marker. This
 observation is pending execution, not supplied by synthetic lookup carriers.

@@ -249,6 +249,13 @@ These use the existing locks/verified backups/journal and never raw-rewrite
 TeamData/legacy receipts/progress/SavedData. Unknown edits, unsafe paths, failed
 backups or interrupted recovery remain visible refusals. Do not start an
 incomplete46 configuration under the new50 runtime; recover/retry explicitly.
+ADR-0183 source99/07 adds only known46/50/51 logical/native lineage: publication
+is the complete bound generator; historical46/50 data still comes from its own
+authentic receipt/classpath, not pruning a current51 document. Native integration
+and host receipt checks share the supported content versions, while wire
+reference2/receipt1/plan1 stay unchanged. Actual focused host228/29 passes;
+Java/native51 and normal projections remain unqualified until their fixed-source
+window. The G5 real50 transition is not relabeled as51.
 The Bash twin forwards the same host contract. Keep all actual private paths
 and operator receipts outside Git.
 

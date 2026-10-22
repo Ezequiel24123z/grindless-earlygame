@@ -519,10 +519,49 @@ with an absent named output and actual schema2/50 marker; no46/compiler replay.
 Source988 stays pinned for that receipt. Source/API changes stay out of the
 frozen alias until clean/custody/checkpoint/ownedJava0/locksfalse leaseback.
 
-| Category | Current qualification state: G4/G5 closed, independent G6 common proof assigned |
+**G6 dependent writers blocked by real exact-source CI, not stale outputs.**
+CI39767021119/artifact12421176203 identifies fcfd, env/build0 and behavior1.
+Five suites fail: Economy/Registry/T0/T1 share the exact questBookAccess profile
+whose QuestCatalogue.chapter literal lacks wet; Adapters has expected50/got51
+(315passed/1failed). New teaching1133 and other independent contracts pass;
+Windows succeeds, smoke is SKIPPED, duplicate39766619498 is CANCELLED.
+Parent preserves original behavioraa4c3921/builda2c17c97/source56860bfb.
+
+Sole604 reports actual G6 commonclasspath/javac/Quest/Claims/Teaching/Assets0,
+and FIRST authentic50 CLI8 on original988/f8 with payloads matching G5 after.
+No model writer/canonical stage started; the executor stops dependent work
+without replaying the five known reds or inventing A6. Sourcefcfd stays frozen
+while independent custody/leaseback closes. No source hotfix is authorized.
+API99e280c over normal381d9ab is delivered with actual focused PS228/29, not
+Java. It updates the native Integration profile but leaves the old chapter
+literal/objective count; ownercb273782 closes that exact coupled follow-up
+before qualification, retaining strict guard/counterexample semantics.
+
+**G6 CLOSED, independent results parent-verified:**103 custody files against
+517fe076 and2574 frozen inputs are exact; source bundlef7f3fdb5 is26741bytes/
+fcfd, not A6. Authentic reference50
+3d8393e7b1a82b67bc7f20184a0a5a4b9f35961f5b0d2d180d8025bf6047487c
+binds historical988/f8/b07 and both real G5 after payloads, with actual old
+Definitions/Catalogue images copied. Common/classes/javac and Quest/Claims391/
+Teaching1133/Assets really pass. No model writer, CheckOnly, canonical check,
+new writer-provenance receipt or A6 is claimed.
+Fresh explicit return11:13:33.2105313Z is cleanfcfd/Java0/locksfalse, client
+command lines not read; no cache init guard was created. No PC lease remains.
+
+**API99 and strict follow-up07 now normally integrated as source:** the parent
+reviews known46/50/51 exact sets, complete loaded-source producer, historical
+CLI compatibility, current destination, native setup and host consumers.
+Focused host PS228/29 green9bdc9523 and original red9e809788 are hash-verified;
+new Java/native execution is not supplied. Source07 adds only the actual wet
+chapter case/negative and51 inventory with independent old50 identities; all
+other claim-source guards remain exact. The original CI5 reds are preserved,
+not relabeled stale. A new source-bound window must prove the repaired profiles,
+new API and actual normal outputs before any51 delivery.
+
+| Category | Current qualification state: G4/G5 closed, G6 safely returned, API51 source integrated |
 | --- | --- |
-| COMPLETED | G3/A3 models/custody; G4 real legacy/native89/19markers/managed201/JDK34 and176-file custody; G5 actual configuration/fresh compiler/plan/apply/same-plan with87-file custody/2578 inputs/24 target files/16 protected files and safe leaseback; reviewed wet338 source |
-| BLOCKED | None for current50 engineering; source51 compatibility and its own source/projection qualification remain open |
+| COMPLETED | G3/A3, verified G4/G5 current50 outcomes; G6 authentic50/common independent passes/103-file custody and safe return; reviewed wet338/API99/profile07 source and actual focused host228 |
+| BLOCKED | Current50 is closed; source07 repairs the known common guard reds but new51 Java, loader and model/output qualification remain unexecuted |
 | NOT EXECUTED | Recovery (not needed), source51 Java/writers/compatibility qualification, launching the fictitious target, player update/client campaign/main/release or whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | Existing GUI/JEI/reward/appearance and longitudinal-campaign gates remain open |
 | NEEDS MY DECISION | None from the owner; bounded technical repair is delegated |
