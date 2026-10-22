@@ -26,6 +26,13 @@ Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitud
 release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
 revision8/PA-0007 task graph now control the queue.
 
+**Current operating mandate (ADR-0178):** continue independently after routine
+checkpoints and integrate each genuinely ready whole-tier candidate into the
+same longitudinal game. Escalate only serious blockers/urgent owner decisions.
+Keep stopped/owned-target, backup, copy-compatibility and recoverable update
+guards; never stop the player's game. Partial increments are not whole-tier
+readiness, and no public release/main merge or automatic acceptance follows.
+
 Next: execute the owner's continued-development instruction on isolated
 ad5b50d descendants. ADR-0176 adds an explicit minimum-capacity control-input
 role for the Wire Mill while retaining exact Matrix manufacturing/quest evidence.

@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 39,
+  "plan_revision": 40,
   "updated": "2026-10-22",
   "phase": "managed_FTB_update_and_explicit_control_capacity_development_after_closed_M_wave",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -30,7 +30,7 @@
   "active_development_wave": {
     "instruction": "owner_2026_10_22_continue_working_and_developing",
     "base": "ad5b50dd509b0261818101ff08e786750826161a",
-    "policies": ["ADR-0170", "ADR-0173", "ADR-0174", "ADR-0176", "ADR-0177"],
+    "policies": ["ADR-0170", "ADR-0173", "ADR-0174", "ADR-0176", "ADR-0177", "ADR-0178"],
     "status": "source_implementation_active_not_compiled_or_qualified",
     "managed_FTB_owner": "cb273782-4065-44e2-90a3-9c0c036367ce",
     "managed_FTB_scope": "explicit_stopped_hash_bound_known_owned_46_to50_definition_update_backup_partial_failure_recovery_no_world_or_paid_receipt_write_no_startup_overwrite",
@@ -43,8 +43,22 @@
     "later_proof_selection": "affected_contracts_real_owned_file_transition_registered_minimum_vs_exact_control_and_needed_normal_writers_not_green_M_Blueprint_pressure_replays",
     "not_in_scope": ["playable_chassis_kit_or_new_envelope_balance", "T0_instance_or_owner_world", "dependency_or_provider_changes", "PR_main_release_deployment", "whole_tier_acceptance"]
   },
+  "autonomous_tier_delivery": {
+    "policy": "ADR-0178",
+    "owner_instruction_date": "2026-10-22",
+    "continue_independently_after_routine_checkpoints": true,
+    "escalation": "serious_blocker_or_urgently_required_owner_decision_only",
+    "ready_complete_tier_updates_to_existing_longitudinal_game_authorized": true,
+    "tier_ready_requires": "coherent_whole_tier_content_progression_supply_polish_installable_pinned_candidate_changed_mechanism_proofs_and_forward_save_compatibility_not_partial_increment_or_build_only",
+    "deployment_requires": "owned_stopped_target_fresh_guards_verified_backup_applicable_copy_compatibility_managed_definition_update_recovery_no_original_world_replacement",
+    "running_game": "defer_deploy_keep_unrelated_development_moving_never_stop_or_restart_player",
+    "current_T1_ready": false,
+    "human_acceptance_or_campaign_completion_inferred": false,
+    "public_release_main_merge_or_new_paid_generation_authorized": false
+  },
   "owner_play_loop": {
     "policy": "ADR-0170",
+    "continuation_and_ready_tier_delivery_policy": "ADR-0178",
     "instruction_utc": "2026-10-21T16:44:38.642Z",
     "owner_authorized_intended_longitudinal_T0_start": true,
     "actual_world_start_observed": true,
@@ -56,7 +70,9 @@
     "installed_runtime_during_T1_work": "dd0b4bc93187fe172fd336bfa330987220bd7be4_new_owned_FTB_instance_original_F_preserved",
     "T0_fix_deployment_boundary": "only_after_owner_stops_owned_instance_applicable_backup_and_copy_compatibility_guards_no_agent_game_interruption",
     "human_acceptance_or_new_client_pass": "not_inferred",
-    "T1_deploy_release_main_merge_T2_activation": false,
+    "ready_tier_longitudinal_update_authorized": true,
+    "public_release_or_main_merge_authorized_by_continuation": false,
+    "tier_acceptance_or_finished_campaign_inferred": false,
     "new_generation_allowance": false
   },
   "ftb_questbook_blocker": {

@@ -130,6 +130,24 @@ do not rewrite old evidence or spent sound grants to rename their author.
 
 ## Session checklist
 
+**Current owner operating mandate (2026-10-22, ADR-0178):** work independently
+and keep the development/integration/qualification loop moving. Do not stop at
+a routine checkpoint or turn ordinary technical choices into owner approvals.
+Escalate only a serious blocker or an urgently required owner decision.
+Whenever a whole next tier is genuinely ready as a playable, qualified,
+save-compatible candidate, incorporate it into the existing longitudinal game
+so the owner can continue. This supersedes blanket development-only/no-later-tier-
+deployment holds, not readiness, save preservation or human acceptance rules.
+
+Partial factory increments, prototypes and a green source build are not a ready
+tier. Preserve the actual world's identity, paid progress and contents. Deliver
+through the owned stopped-instance path with fresh guards, verified backup,
+applicable copy-based compatibility proof and recoverable managed-file update.
+Never stop/restart the player's game to make an update convenient; a running
+game defers deployment, not unrelated development. No new public release/main
+merge, paid-generation allowance, credential change, automatic human acceptance
+or unsupported risky migration follows from this mandate.
+
 **Current owner design clarification (2026-10-21, ADR-0174):** tiers must grow
 exponentially in meaningful complexity, processing lines and content, not merely
 stack sizes or timers. T1 introduces the basic machine families, in the spirit

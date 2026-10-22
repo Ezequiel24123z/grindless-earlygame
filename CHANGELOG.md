@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Continue autonomously toward longitudinal tier deliveries (ADR-0178).**
+  The owner explicitly requests independent ongoing development and incorporation
+  of every genuinely ready whole tier into the existing game. Routine checkpoints
+  are not programme stop points; only serious blockers/urgent owner decisions
+  escalate. Preserve stopped-instance, backup, actual-world compatibility,
+  managed-definition recovery and honest human-acceptance boundaries. Running
+  gameplay defers deployment, never permits an agent restart. No partial
+  first-factory increment, public main/release or new generation budget is implied.
 - **Open the next bounded development wave without retargeting closed proofs.**
   ADR-0176 separates exact physical Matrix evidence from minimum controller
   capacity, selecting only the baseline Wire Mill operand for the new role.

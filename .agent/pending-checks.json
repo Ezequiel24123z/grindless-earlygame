@@ -8,6 +8,16 @@
   "pr_management_and_merge_authorized_when_ready": true,
   "authorization": "ADR0170 explicitly authorizes intended longitudinalT0 play and parallelT1 research/development; reported blockers take priority and finalT0feedback drivespolish. Client/save/campaign results, acceptance and release are not inferred.",
   "work_plan": ".agent/work-plan.json",
+  "autonomous_tier_delivery": {
+    "policy": "ADR-0178",
+    "continue_after_routine_checkpoints": true,
+    "whole_ready_tier_longitudinal_updates_authorized": true,
+    "current_T1_ready": false,
+    "guards": "complete_qualified_playable_candidate_preserved_actual_world_stopped_owned_target_verified_backup_copy_compatibility_and_recoverable_managed_config_update",
+    "no_player_interruption_or_inferred_human_acceptance": true,
+    "escalation": "serious_blocker_or_urgent_owner_decision",
+    "no_implicit_public_release_main_merge_or_paid_generation": true
+  },
   "current_PC_execution": {
     "assignment": "integrated-blueprint-native-20261021",
     "active": false,

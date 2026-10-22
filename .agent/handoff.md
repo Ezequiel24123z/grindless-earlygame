@@ -4,6 +4,16 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**Latest owner mandate (ADR-0178):** continue independently, without stopping
+at routine completed increments or requesting ordinary technical approval.
+Deliver each genuinely ready whole tier into the same longitudinal game through
+the guarded stopped/backup/compatibility/update path. Escalate only a serious
+blocker or an urgent owner decision. A running game defers deployment, not
+independent development; never stop/restart it. No partial increment becomes
+whole-T1 readiness or human acceptance, and no public main/release or new
+paid-generation budget follows. This supersedes old blanket no-T1-deploy holds
+only when the tier is actually ready and the operational guards pass.
+
 The owner requests continued development after the completed M/ad5b50d wave.
 Two isolated source lanes start at exactad5b50dd509b0261818101ff08e786750826161a:
 cb273782 owns an explicit stopped/hash-bound FTB46-to50 managed-definition
@@ -28,8 +38,10 @@ Use real supported FTB/package/file primitives, not another quest engine.
 Next integrate coherent local checkpoints and select only their changed proofs.
 Any heavy qualification needs a new sole-owner lease on an exact published
 source. Preserve all previous failures and successful source-bound evidence.
-No Prism/T0 update, game interruption, new paid service, PR/main/release or tier
-acceptance is implied. The completed prior wave below remains historical proof.
+These two partial increments alone authorize no immediate Prism/T0 update.
+After their qualification, continue the source-backed tier programme rather
+than treating their checkpoint as the end of the owner's request.
+The completed prior wave below remains historical proof.
 
 ## Final player handover — current authoritative state
 

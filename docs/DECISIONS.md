@@ -189,6 +189,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0175](#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts) | Carry optional absolute process pressure through existing contracts | Accepted engineering contract; model/native gates separate |
 | [0176](#adr-0176--distinguish-exact-matrix-evidence-from-minimum-controller-capacity) | Distinguish exact Matrix evidence from minimum controller capacity | Accepted engineering scope; implementation/proof pending |
 | [0177](#adr-0177--update-managed-native-quest-definitions-only-through-an-explicit-guarded-transition) | Update managed native quest definitions only through an explicit guarded transition | Accepted engineering scope; implementation/proof pending |
+| [0178](#adr-0178--continue-autonomously-and-deliver-ready-tiers-to-the-longitudinal-game) | Continue autonomously and deliver ready tiers to the longitudinal game | Accepted direct owner operating mandate |
 
 ---
 
@@ -8356,3 +8357,50 @@ full-preflight refusal, drift and partial-failure recovery; use native execution
 only for a newly uncovered loader/state property. Old native paid-history proofs
 remain reusable when their implementation/assumptions are unchanged. No blanket
 claim of crash atomicity, whole-T1 readiness, client acceptance or release follows.
+
+---
+
+## ADR-0178 — Continue autonomously and deliver ready tiers to the longitudinal game
+
+**Status.** Accepted direct owner operating mandate, 2026-10-22.
+
+**Context.** After requesting continued development, the owner explicitly
+clarifies that work should proceed independently, stopping only for a serious
+blocker or an urgently needed owner decision. Whenever a new tier is ready, it
+should be incorporated into the longitudinal game so play can continue.
+Stopping after each bounded engineering increment would not meet that direction.
+
+**Decision.** Keep the development, integration, risk-based qualification and
+delivery loop moving autonomously. Ordinary implementation choices, coherent
+checkpoints and new sole-owner validation assignments are coordinator decisions,
+not repetitive owner approvals. Escalate serious blockers or genuinely urgent
+owner-only decisions; a temporary resource wait or a running player game does
+not stop independent source work.
+
+When a whole next tier is genuinely ready as a coherent playable candidate,
+incorporate it into the existing longitudinal game. Readiness includes actual
+content/lines/family progression, supply and bootstrap/recovery, useful teaching
+and discovery, suitable polish, pinned installation and applicable changed-
+mechanism/forward-save qualification under ADR-0144/0174. A partial first factory,
+registered prototype, generated report or green compile is not a ready tier.
+Do not freeze/accept a tier or fabricate a completed campaign to justify delivery.
+
+Use the owned stopped-instance workflow, fresh ownership/resource guards,
+verified backup and applicable copy-based compatibility checks. Preserve the
+actual world identity, contents, existing paid quest progress and the original
+backup. Managed-definition updates follow ADR-0177; do not substitute a newly
+staged world, reset progress or overwrite raw native claim data. Verify installed
+runtime/pins and leave launcher/client interaction to the owner.
+
+If the player game is running, wait to deploy without stopping/restarting it.
+Continue unrelated development during that wait. An unknown or unsafe target,
+failed backup/compatibility/recovery or unreconciled source change blocks that
+delivery and must be reported honestly, not bypassed to preserve momentum.
+
+**Precedence and limits.** This later explicit mandate supersedes blanket
+development-only/no-later-tier-deployment holds for genuinely ready candidates.
+It does not waive technical/manual/save gates, authorize premature partial-tier
+updates, infer human acceptance, grant new paid/provider generation or credentials,
+or independently request a public release/main merge. Existing isolated lanes,
+single PC/cache owner and serial publisher rules remain. Preserve historical
+receipts and earlier authority labels; apply this mandate prospectively.

@@ -2262,6 +2262,14 @@ one.
 
 ## Implementation plan
 
+The owner's current execution mandate (ADR-0178) is continuous independent
+development, qualification and safe delivery: incorporate every genuinely ready
+whole tier into the same longitudinal game, not a fresh save. Routine checkpoints
+do not end that programme. Deploy only while the owned game is stopped, after
+verified backup/applicable copy-compatibility and managed-file guards; never
+interrupt play. Partial increments remain partial, and human acceptance/public
+release are separate. Escalate only serious blockers or urgent owner decisions.
+
 Historical completions below are source-scoped, not current-WIP acceptance. The active
 [work plan](.agent/work-plan.json) permits renewable implementation and production auditing
 to proceed together under the received Sol coordinator; historical Astra attribution
