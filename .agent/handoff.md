@@ -4,6 +4,15 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**PhaseB is unblocked on the actual published baselinecb2d30b.** Parent
+normally integrated reviewed selector438 with F1 and A8; exact immutable
+blobs/ancestry/trailers and the mechanical registry union are checked.
+Data58 receives the full exact SHAcb2d30be9639d66a0315efcc5f4949385710021d
+and explicit VerifyRecipes write permission. It must normally compose that
+revision into its PhaseA branch, preserve all selector tests and complete
+the exact six-plus-nine controller contract. No PC/JVM or normal-output
+permission is added; source/API/native qualification follows the final source.
+
 **Nine-controller data PhaseA is source-complete, not qualified:** normal
 ab3bd4d/exact0451122 parent/tree4ce1efad changes only ProcessGraph, Atlas/T1
 checks and the two owned documentation entries. Parent reviews the bounded

@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Release the shared controller check on a real integrated selector baseline.**
+  Publishedcb2d30b contains normally preserved438, F1 and A8. Data58 receives
+  that exact revision and sole VerifyRecipes write permission to finish
+  PhaseB, preserving all selector tests and normal source ancestry. No WIP
+  absorption, competing writer, source retarget or executed proof is implied.
 - **Normally compose the reviewed Assembler selector with F1 and A8.**
   Preserve the three source commits and all sixteen non-registry code/test/
   locale blobs exactly. The registry auto-merge retains both the F1 declaration
