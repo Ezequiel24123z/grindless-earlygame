@@ -25,6 +25,10 @@ entries below reference those records by id.
   fixtures derive the actual equal bills rather than fixing their group count; local
   non-JVM evidence cannot qualify Java, native behavior, appearance, the
   player's world or whole T1. No recipes, bills, dependencies or outputs change.
+  Recovered cb2d CI built the application but failed check compilation before
+  any suite: retain that red and split the overlong-request FriendlyByteBuf
+  writes instead of chaining through Netty's ByteBuf return type. The257
+  negative and decoder stay unchanged; actual compiler confirmation is pending.
 - **Choose explicit Assembler targets instead of repricing colliding recipes.**
   ADR-0185 selects a stable-ID, server-authoritative menu choice on the existing
   executor and transaction. Reuse bounded GT/Mekanism configuration/validation
