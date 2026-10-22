@@ -38,9 +38,10 @@
     "status": "new_source_development_no_pass_inferred_from_closed_M_wave",
     "owners": {
       "managed_FTB_definitions": "cb273782-4065-44e2-90a3-9c0c036367ce",
-      "explicit_control_capacity": "347a1c5b-1e99-4046-861c-85e5bcb3d045"
+      "explicit_control_capacity": "347a1c5b-1e99-4046-861c-85e5bcb3d045",
+      "automatic_retained_dies": "b2fd298b-4aa0-43aa-8153-1060f00256f6"
     },
-    "pending": ["implementation_and_coordinator_review", "focused_changed_contracts", "actual_hash_bound_definition_update_and_failure_recovery", "registered_minimum_vs_exact_control_input", "normal_projection_writers_if_changed"],
+    "pending": ["implementation_and_coordinator_review", "focused_changed_contracts", "actual_hash_bound_definition_update_and_failure_recovery", "registered_Relay_minimum_vs_exact_control_input_no_other_architecture_registered", "four_die_manual_material_parity_and_optional_line_acyclicity", "normal_projection_writers_if_changed"],
     "PC_owner": null,
     "PC_source_worker_access": false,
     "T0_world_client_deploy_or_acceptance": false,

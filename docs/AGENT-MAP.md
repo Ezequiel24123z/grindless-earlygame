@@ -131,6 +131,16 @@ do not special-case recipe IDs inside generic matching or alter canonical IDs.
 No existing byte-equal projection or native proof covers the changed semantics.
 Widening ingredient eligibility is not a chassis upgrade or permission to
 invent a new family envelope, recipe bill or paid-world migration.
+Only Relay `ControlMatrixItem` is registered at this checkpoint; native
+minimum/exact coverage is limited to actual RelayF1-F3, with other architectures
+covered by pure spec contracts. Do not register fictitious items for a test.
+
+The independent automatic-tooling lane owns only four existing die outputs in
+`ProcessGraph` and optional `T1Progression` selection. Derive exact material/
+output parity from `T1Recipes` plus shipped JSON. Manual dies seed forming;
+`tool_reproduction` depends on assembly, not the other way around. No new items,
+wear, recipe engine or first-F2 requirement. Normal writers must emit any changed
+canonical projections after integration, never a manual report edit.
 
 The owner's2026-10-21 instruction separately opens T1 development (ADR-0168/0169).
 Use [the first-factory plan](../plan/feature-t1-first-factory-1.md): live route

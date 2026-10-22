@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Automate existing retained tooling as the next T1 content lane.**
+  Assign four ordinary Assembler die-reproduction recipes using exact manual
+  material/output multisets, with an optional post-assembly line rather than
+  a bootstrap cycle or new first-F2 prerequisite. No new item, bill, wear or
+  executor is selected. Also retain the real control-proof boundary: only Relay
+  items are registered; other architectures receive pure contracts, not fake
+  native registrations. Source authoring is not compilation or execution.
 - **Continue autonomously toward longitudinal tier deliveries (ADR-0178).**
   The owner explicitly requests independent ongoing development and incorporation
   of every genuinely ready whole tier into the existing game. Routine checkpoints

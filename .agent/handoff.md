@@ -18,14 +18,21 @@ The owner requests continued development after the completed M/ad5b50d wave.
 Two isolated source lanes start at exactad5b50dd509b0261818101ff08e786750826161a:
 cb273782 owns an explicit stopped/hash-bound FTB46-to50 managed-definition
 update and recovery;347a1c5b owns explicit minimum-capacity control ingredients.
+Third source ownerb2fd298b starts at61fdf76 (same application baseline) and
+implements automatic reproduction of the four existing reusable Press dies
+through the ordinary Assembler, with exact manual material/output parity.
+Its optional post-assembly line must not create a forming/assembly cycle or a
+new first-F2 prerequisite; no new item, station or bill is authorized.
 The coordinator retains root architecture/docs/integration/publication.
-Neither source worker has a PC/cache/JVM grant and no new execution has passed.
+No source worker has a PC/cache/JVM grant and no new execution has passed.
 
 ADR-0176 selects only the existing Wire Mill's F1 control operand as a minimum
 capacity requirement. Existing exact factories, F2 Matrix predecessor, outputs
 and native quest/reward predicates stay exact. Reuse `canControl`; propagate the
 role honestly to viewers/audits. This is control substitution, not a playable
-chassis kit or a stronger Wire Mill. Current kinds already expose their full
+chassis kit or a stronger Wire Mill. Only Relay Matrix items are currently
+registered: native coverage is RelayF1-F3; cross-architecture contracts are pure,
+not a reason to register fake items. Current kinds already expose their full
 baseline envelopes; silently narrowing them to manufacture a mark ladder would
 risk existing machines and is not authorized by this wave.
 
@@ -38,7 +45,7 @@ Use real supported FTB/package/file primitives, not another quest engine.
 Next integrate coherent local checkpoints and select only their changed proofs.
 Any heavy qualification needs a new sole-owner lease on an exact published
 source. Preserve all previous failures and successful source-bound evidence.
-These two partial increments alone authorize no immediate Prism/T0 update.
+These partial increments alone authorize no immediate Prism/T0 update.
 After their qualification, continue the source-backed tier programme rather
 than treating their checkpoint as the end of the owner's request.
 The completed prior wave below remains historical proof.

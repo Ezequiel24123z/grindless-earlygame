@@ -8297,6 +8297,9 @@ where affected, audit authorities and exporters. Preserve canonical qualified
 resource identities; a human-readable minimum label is not a new catalogue ID.
 A canonical lower-rating supply remains one legitimate accepted input, not a
 claim that every alternate architecture has the same production route.
+Only Relay Matrix items are currently registered. Exercise RelayF1-F3 in real
+registered-item proofs and other architectures in pure spec contracts; do not
+introduce fake registrations or advertise those contracts as native coverage.
 
 **Reuse and alternatives.** Reuse the project's existing physical spec,
 ingredient selection and executor. The pinned GT exact-circuit versus capacity
