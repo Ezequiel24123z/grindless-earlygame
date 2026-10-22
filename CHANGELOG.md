@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve the real compile blocker while integrating factory source.**
+  New-root Sync423a passes; exact CI39728601139 then exposes missing list-equality
+  overloads in VerifyRecipes before any PC JVM.604195bd safely returns the lease
+  clean/Java0/locks0, retaining raw/closure and skipped native honestly.
+  Source4f3aae3 adds four exact-bill ordinary machine routes/optional reproduction,
+  not a tier pass; its analogous new test calls are assigned for coherent repair.
+  Preserve the managed-FTB stale-class provenance P2 independently from its
+  classpath/tool-fixture improvements. No owner-world or old diagnostic is touched.
 - **Assign actual control/die qualification without blocking separate source work.**
   Only604195bd receives the new fixed423a7c1 PC/cache lease for necessary
   compilation, changed contracts, NORMAL writers/CheckOnly and the existing

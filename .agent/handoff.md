@@ -29,26 +29,18 @@ Parent catches an Atlas unit-list versus slot-count oracle before JVM;5b359a5
 checks the actual ProcessRecipe groups and preserves the material assertion.
 The coordinator retains root architecture/docs/integration/publication.
 No source worker has a PC/cache/JVM grant and no new execution has passed.
-Qualification preparer604195bd reports READY on clean199c with no PC/private-
-inventory access. It now receives the NEW exclusive
-`control-role-qualification-20261022` grant on exact published
-423a7c1bac80fd23e1269500f5a558bb6c3cfbdb: necessary compilation, changed
-control/inspection/projection/die contracts, NORMAL writers/independent CheckOnly
-and one existing matrix-lifecycle for the newly unproved control interaction.
-Use the NEW isolated build inventory/root; preserve the oldM root and retained
-Blueprint diagnostic, since KEEP_WORLD does not prevent the harness's initial reset.
-Fresh guards/Sync/results are pending, not passes. Parent/all other workers
-make NO PC/cache action and no source Sync occurs under live stages/locks.
-FTB transition and future factory source stay separate; do not wait for them
-to qualify this fixed input or retarget their later changes into its proof.
-No T0/Prism/world/package/deploy or client action is granted.
-Run the native mechanism on clean423a before normal writers, then generate/check
-the four authorized outputs and refresh only needed resources. Preserve its
-exact tested JAR/source separately from later canonical-resource packaging;
-do not falsely claim a package or byte-identical post-writer JAR. The output
-checkpoint/bundle is parent-integrated after all JVMs/locks close.
-Reuse any genuinely equivalent already-executed new native proof, otherwise
-require19 real markers, harness/server0 and natural stop with raw/JAR custody.
+The new604195bd lease performs fresh admission/canonical Sync to clean
+423a7c1bac80fd23e1269500f5a558bb6c3cfbdb in the NEW isolated root, preserving
+oldM/its retained diagnostic and all Prism/world state. Before launching any
+JVM it recovers exact CI39728601139: VerifyRecipes922/929 call a nonexistent
+eq(String,List,List) overload. This is a real source compile red, not stale
+canonical data or an invoker. New native smoke is SKIPPED, not passed.
+At05:53:20.2894842Z the lease explicitly returns: detached/clean423a,
+owned/all-observed Java0, work/cache locksfalse, startedJVM0. Parent verifies
+closure8d96179a and raw00348af1; no PC Java/native/writer/A2 exists.
+All PC grants are closed. Source ownera18f81ea repairs exact-list assertions
+in both the old die and new factory suites without weakening them. New source
+and an exact published GO are required; do not resume the released grant.
 
 ADR-0176 selects only the existing Wire Mill's F1 control operand as a minimum
 capacity requirement. Existing exact factories, F2 Matrix predecessor, outputs
@@ -98,7 +90,14 @@ ADR-0179 fromd840714: ordinary Assembler reproduction of Pulverizer, Arc Furnace
 Press and Assembler with exact manual material bills and explicit F1+ control.
 Optional reproduction follows assembly; the manual first machines remain seeds.
 Thermal has five groups and stays out; no new intermediate/slots/bill or claim
-that all five machines are automated. This new source lane has no PC grant.
+that all five machines are automated. Checkpoint4f3aae3 now normally integrates
+that data, preservingf046's provenance guard. Expected209/84/266 and five
+named minimum inputs are source shapes, not passes; its analogous new list
+assertions are also being fixed before Java. This lane has no PC grant.
+Managed-FTBa7b820b adds explicit-instance/argument refusal and reports786/103
+real Windows tool assertions, but not Java/authentic old export. Independent
+review1ce4d3be identifies stale compiled classes passing origin-below-root;
+the source/runtime/binary linkage repair remains with its author.
 
 Next integrate coherent local checkpoints and select only their changed proofs.
 Any heavy qualification needs a new sole-owner lease on an exact published
@@ -130,9 +129,9 @@ overload fail before any compiler starts; preserve both. Direct native invocatio
 with FileStream locks then has actual javac0/scanner0. A silent compiler/Tee
 produces no stdout file; its successful exit and real scanner result are retained,
 not replayed to manufacture a log. Final copy0 and Inspect are separately closed.
-The prior FTB/M integrated-development leases are returned. The NEW604195bd
-fixed423a grant above is build/diagnostic only and does not include this T0
-delivery. The closure below makes no new T0 observation.
+The prior FTB/M and new604195bd grants are returned. The failed source gate
+above never starts a JVM or touches this T0 delivery. The closure below makes
+no new T0 observation.
 
 | Category | Final bounded T0 handover |
 | --- | --- |

@@ -78,6 +78,33 @@ qualification runs on clean423a before normal writer outputs dirty their four
 authorized paths. Keep native JAR/source and later generated-resource identities
 separate; no package or byte-identical post-writer artifact is inferred.
 
+**Actual closed423a attempt:** fresh new-root admission and canonical Sync return
+VerifiedDetached423a/exit0. Before any PC JVM, the executor recovers exact
+CI39728601139/verify119658185805: VerifyRecipes922/929 cannot compile
+eq(String,List,String-List) because there is no List overload. The actual raw
+diagnostic is `eq(String,List<String>,List<String>)`; this is source, not a
+stale canonical or transport error. Smoke is SKIPPED, not new native evidence.
+No JVM is started to rediscover that known failure. CI39729737025 was only
+observed in progress; no conclusion is inferred.
+
+Fresh05:53:20.2894842Z leaseback has detached clean423a, owned/all-observed
+Java0, both locksfalse, startedJVM0 and no old-root/Prism/world access.
+Parent verifies closure SHA-256
+`8d96179a91f2335724997e8cd923807e0ad5b693f6dac5e3a50e9205fd94d2e6`
+and original BOM-aware UTF-16LE CI raw SHA-256
+`00348af1934672733169169f5d745ed357bcf0e62f972ad9f36bfede4ad0f723`.
+No native/writer/CheckOnly/A2/bundle exists and no old proof is replayed.
+
+Source4f3aae3 now normally composes four additional exact-bill ordinary machine
+routes and optional factory reproduction. Expected209/84/266 and five named
+minimum inputs remain authored shapes. Its analogous newly added List
+assertions are included in the owner's compiler repair; full ordered/value
+equality and all material/role guards must remain, not `toString` or count-only.
+The separate managed-FTB review's stale-class/source/runtime provenance P2 is
+pending author repair even thougha7b820b reports786/103 real filesystem/tool
+assertions. No authenticdd0 publisher or SNBT JVM result is supplied by those
+synthetic-plan fixtures.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

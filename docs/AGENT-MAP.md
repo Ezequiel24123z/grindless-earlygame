@@ -153,11 +153,18 @@ output parity from `T1Recipes` plus shipped JSON. Manual dies seed forming;
 wear, recipe engine or first-F2 requirement. Normal writers must emit any changed
 canonical projections after integration, never a manual report edit.
 Source63142dd/5b359a5 now normally integrates the four rows through
-`automaticDieCrafts`, an explicit whitelist grouped from the live shaped
+the shaped-catalogue grouping helper, an explicit whitelist from the live
 catalogue. `VerifyRecipes` cross-checks shipped JSON; `VerifyAtlas` checks
 displayed units separately from physical ProcessRecipe input groups, and
 `VerifyT1Progression` keeps the new line optional/acyclic. Java and canonical
 writer results remain pending, not supplied by these authored checks.
+Source4f3aae3 extends that same helper as `automaticAssemblerCrafts` with
+exact-bill Pulverizer/Arc/Press/Assembler reproduction and an optional
+post-assembly line. Only those four new controller operands opt into minimumF1;
+old F2 predecessor/outputs/quest predicates stay exact. Thermal's five groups
+remain out. Current fixture shapes are209/84/266, not observed pass counts.
+Exact423a CI exposes missing List overloads in recipe assertions; the author
+must preserve ordered/full equality using existing boolean checks before Java.
 
 The owner's2026-10-21 instruction separately opens T1 development (ADR-0168/0169).
 Use [the first-factory plan](../plan/feature-t1-first-factory-1.md): live route
@@ -339,9 +346,9 @@ T2 and above are manufactured, never a crafting table
 - `research/ResearchLogic.java` and `machine/ResearchTerminalBlockEntity.java` — one physical
   Data Core calibration cycle. It must never write or read a global permission.
 
-`tools/checks/VerifyRecipes.java` now expects205 generated rows for its material fixture
+`tools/checks/VerifyRecipes.java` now expects209 generated rows for its material fixture
 and27 T1 shaped crafts; `VerifyBootstrap` retains its own source/catalogue guards.
-`VerifyAtlas` expects205 generated rows,80 Assembler rows and262 total handheld routes,
+`VerifyAtlas` expects209 generated rows,84 Assembler rows and266 total handheld routes,
 including both crafting catalogues, the shapeless core and physical calibration.
 These are fixture shapes, not native pass counts; runtime counts depend on installed material tags.
 Change every one of those numbers in the same commit as the graph. Recipe ids stay

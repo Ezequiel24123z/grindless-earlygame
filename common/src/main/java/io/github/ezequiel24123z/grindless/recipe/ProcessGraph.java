@@ -71,7 +71,7 @@ public final class ProcessGraph {
                 io.github.ezequiel24123z.grindless.source.SourceLogic.BENCH_TICKS, FluxTier.F0.nominal()));
         recipes.addAll(BootstrapAssembly.recipes(MachineFamily.ASSEMBLER,
                 io.github.ezequiel24123z.grindless.source.SourceLogic.INDUSTRIAL_ASSEMBLY_TICKS, FluxTier.F1.nominal()));
-        recipes.addAll(automaticDieCrafts());
+        recipes.addAll(automaticAssemblerCrafts());
         List<String> secondaryMaterials = eligibleSecondaries(materials);
         for (MaterialView material : materials) {
             String feed = feedTag(material);
@@ -220,8 +220,10 @@ public final class ProcessGraph {
         return "grindless:tailings/" + material;
     }
 
-    private static List<ProcessRecipe> automaticDieCrafts() {
-        List<String> selected = List.of("plate_die", "rod_die", "gear_die", "coil_die");
+    private static List<ProcessRecipe> automaticAssemblerCrafts() {
+        List<String> selected = List.of("plate_die", "rod_die", "gear_die", "coil_die",
+                "pulverizer", "arc_furnace", "press", "assembler");
+        List<String> minimumControlCrafts = List.of("pulverizer", "arc_furnace", "press", "assembler");
         List<ProcessRecipe> recipes = new ArrayList<>();
         for (T1Recipes.Shaped craft : T1Recipes.shaped()) {
             if (!selected.contains(craft.name())) {
@@ -240,11 +242,20 @@ public final class ProcessGraph {
                 }
             }
             if (grouped.size() > 4) {
-                throw new IllegalArgumentException("Automatic die craft exceeds four Assembler inputs: " + craft.name());
+                throw new IllegalArgumentException("Automatic Assembler craft exceeds four grouped inputs: "
+                        + craft.name());
+            }
+            if (minimumControlCrafts.contains(craft.name())
+                    && grouped.getOrDefault("item:" + FabricationLogic.RELAY_MATRIX, 0) != 1) {
+                throw new IllegalArgumentException("Machine reproduction requires one Relay Matrix: "
+                        + craft.name());
             }
             List<IngredientSpec> inputs = new ArrayList<>();
             grouped.forEach((ingredient, count) -> {
-                if (ingredient.startsWith("tag:")) {
+                if (minimumControlCrafts.contains(craft.name())
+                        && ingredient.equals("item:" + FabricationLogic.RELAY_MATRIX)) {
+                    inputs.add(IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, count));
+                } else if (ingredient.startsWith("tag:")) {
                     inputs.add(IngredientSpec.tag(ingredient.substring(4), count));
                 } else if (ingredient.startsWith("item:")) {
                     inputs.add(IngredientSpec.item(ingredient.substring(5), count));
@@ -264,7 +275,7 @@ public final class ProcessGraph {
         }
         if (recipes.size() != selected.size()
                 || recipes.stream().map(ProcessRecipe::id).distinct().count() != selected.size()) {
-            throw new IllegalStateException("The four selected Press die crafts must exist exactly once");
+            throw new IllegalStateException("The selected Assembler crafts must exist exactly once");
         }
         return List.copyOf(recipes);
     }

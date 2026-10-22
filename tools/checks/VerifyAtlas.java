@@ -1,5 +1,7 @@
 package io.github.ezequiel24123z.grindless.recipe;
 
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,12 +23,12 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 205, rows.size());
+        eq("atlas lists every generated recipe", 209, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
-        eq("the first assembler row is the intake", "assemble/atmospheric_intake",
+        eq("the first assembler row is the alphabetically first reproduced machine", "assemble/arc_furnace",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        // The 33 assemble/bootstrap/* projections supplement the 47 other Assembler routes.
-        eq("eighty reachable assembler crafts in this set", 80,
+        // The 33 assemble/bootstrap/* projections supplement the 51 other Assembler routes.
+        eq("eighty-four reachable assembler crafts in this set", 84,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
@@ -35,7 +37,7 @@ public final class VerifyAtlas {
                         && Double.isNaN(row.pressureHalfWidthMPa())));
         pressure();
         // The existing Flux Cell JSON now has the same catalogue/Atlas projection as other T1 crafts.
-        eq("atlas includes every machine, Bootstrap craft and calibration route", 262, allRows.size());
+        eq("atlas includes every machine, Bootstrap craft and calibration route", 266, allRows.size());
         yes("the retired Guide has no craft or machine route", allRows.stream().noneMatch(row ->
                 row.outputs().contains("item:grindless:field_guide")));
         for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {
@@ -119,6 +121,33 @@ public final class VerifyAtlas {
             eq(die + " uses the existing F1 draw", FabricationLogic.FU_PER_TICK, automatic.fuPerTick());
             yes(die + " is discoverable through ordinary output lookup",
                     ids(AtlasLogic.producing(recipes, "grindless:" + die)).equals(List.of("assemble/" + die)));
+        }
+        for (String machine : List.of("pulverizer", "arc_furnace", "press", "assembler")) {
+            AtlasLogic.Entry manual = route(allRows, "craft/" + machine);
+            AtlasLogic.Entry automatic = route(allRows, "assemble/" + machine);
+            ProcessRecipe automaticProcess = recipes.stream()
+                    .filter(recipe -> recipe.id().equals(automatic.id())).findFirst().orElseThrow();
+            eq(machine + " remains available from its crafting-table bootstrap", "CRAFTING_TABLE", manual.station());
+            eq(machine + " is reproduced by the existing Assembler", "ASSEMBLER", automatic.station());
+            eq(machine + " preserves every displayed input unit from its manual recipe",
+                    manual.inputs().size(), automatic.inputs().size());
+            yes(machine + " retains its exact manual Relay crafting input",
+                    manual.inputs().contains("item:grindless:relay_matrix"));
+            yes(machine + " fits the existing four Assembler input slots",
+                    automaticProcess.itemInputs().size() <= 4);
+            eq(machine + " uses exactly one minimum-F1 controller input",
+                    List.of(IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX,
+                            FluxTier.F1, 1)),
+                    automaticProcess.itemInputs().stream().filter(IngredientSpec::isMinimumControl).toList());
+            eq(machine + " displays its controller as minimum F1 capacity",
+                    1L, automatic.inputs().stream().filter(input -> input.endsWith(" [F1+]")).count());
+            yes(machine + " preserves the ordinary machine output", manual.outputs().equals(automatic.outputs()));
+            eq(machine + " uses the existing Assembler duration",
+                    FabricationLogic.ASSEMBLE_TICKS, automatic.durationTicks());
+            eq(machine + " uses the existing F1 draw", FabricationLogic.FU_PER_TICK, automatic.fuPerTick());
+            yes(machine + " is discoverable through ordinary output lookup",
+                    ids(AtlasLogic.producing(recipes, "grindless:" + machine))
+                            .equals(List.of("assemble/" + machine)));
         }
         yes("the detail pane distinguishes the bootstrap and Industrial outputs",
                 !AtlasLogic.describe(assembledRelay.outputs())

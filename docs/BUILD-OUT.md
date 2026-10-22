@@ -49,10 +49,13 @@ The four-die checkpoint63142dd plus Atlas slot-oracle correction5b359a5 is now
 normally integrated with control-role1ee2e73. Independent mechanism review and
 affected Java/writers/native remain pending. Qualifier604195bd reports local
 READY and now owns the NEW fixed423a `control-role-qualification-20261022`
-window for this changed mechanism/content. Fresh actual guards/Sync and results
-remain pending. Parent/other workers have no PC access. Managed-FTB and future
-factory source continue independently without retargeting this run; do not replay
-old Blueprint/pressure or per-die native tests.
+window initially for this changed mechanism/content. Fresh Sync passes, but the
+exact CI compile failure at two nonexistent List-equality overloads stops before
+all PC JVMs;604195bd returns clean/Java0/locks0. Repair that source and the new
+analogous4f3aae3 factory assertions, then publish a new exact GO. Source4f
+normally integrates ordinary factory reproduction while all actual contracts/
+writers/native remain unexecuted. Preserve the separate FTB publisher stale-class
+provenance finding; do not confuse tool-fixture greens with authentic publication.
 The control review's one P2 is source-repaired inf046923: include executed
 AuthorityAdapters bytecode as well as source. Real writer receipt verification
 remains required. Parallel source work now selects four ordinary machine
