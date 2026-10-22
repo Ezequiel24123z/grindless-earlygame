@@ -15,6 +15,21 @@ entries below reference those records by id.
 
 ### Added
 
+- **Check installed capital against paid physical units, not a type-wide stock ban.**
+  Preserved G13 report15 has one failing zero-free-stock oracle, not a stale
+  canonical or failed T0 gate. Its completed authorities record two manual
+  Clay Mixer, Hand Pump and Quern batches apiece; the separately emitted
+  writer10 predecessor conserves one installed plus one free unit of each.
+  Report15 has no custody dump, so those free balances are not attributed to it.
+  Compare actual guaranteed/player deliveries and completed physical net
+  batches with free, locked, installed and dedicated-part quantities; claimed
+  rewards are not counted twice as delivery credits. Reuse the existing
+  conservation helper and add R36 for an unfunded installed-unit withdrawal,
+  a separately paid spare, its single use and an exhausted two-unit request
+  retaining the real completed spare. Product sources, all43/98 T1 pins,
+  budgets, recipes, manual policy and the four normal payloads stay intact.
+  Changed checks are authored/source-reviewed only; original G13 successes
+  remain exact489 evidence, not revised-source execution, A10 or acceptance.
 - **Normally integrate the reviewed continuation-funding correction.**
   Preserve all four source/check blobs from f30a5f79/exactcb1e, with direct
   review of funding, active-route guards, selected producer refill, retained
