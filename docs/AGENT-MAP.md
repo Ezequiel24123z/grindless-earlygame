@@ -256,6 +256,21 @@ Source30/normal empty31 pins the newly changed outer registry parser in the
 same exporter/guards:29 sources/38 image expressions authored. The subject-only
 metadata mistake in30 is preserved and attributed by append, never rewritten.
 Require actual updated provenance later; old G3/G6 counts are not retargeted.
+
+### Authored default Matrix identity
+
+ADR-0184 assigns the next isolated model correction to existing
+`sustainability/AuthorityAdapters`, T0/T1 model consumers and their existing
+registry/adapter/progression checks. Reuse `matrix/ControlMatrixNbt` and the
+checked real architecture binding; common must not read a client/Forge
+registry. Preserve generic registration declarations, Resource equality/keys,
+explicit F2/higher identity, recipe batches and quest/reward semantics.
+No raw-to-F1 alias recipe or fictitious architecture is permitted. The T1
+default-identity gap may close only with actual producer agreement and updated
+direct source/class provenance. Finite T1 custody/renewability remain unproved.
+Implementation and a later source-bound model window are pending; frozen
+G7/code41df605 and all PC/player surfaces are outside this source lane.
+
 The same existing ControlMatrixInputChecks.registered probe now checks the new
 core's actual Item class/registry ID, without another case or marker. This
 observation is pending execution, not supplied by synthetic lookup carriers.

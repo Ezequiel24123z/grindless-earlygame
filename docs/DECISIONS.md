@@ -195,6 +195,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0181](#adr-0181--compare-one-generated-platform-shim-by-exact-self-name-equivalence) | Compare one generated platform shim by exact self-name equivalence | Source555dbe9 integrated; G4 managed201/authentic publication0 custody verified |
 | [0182](#adr-0182--expose-existing-wet-beneficiation-as-an-optional-t1-baseline-line) | Expose existing wet beneficiation as an optional T1 baseline line | Source738/338 integrated; Java/outputs/catalogue51 compatibility pending |
 | [0183](#adr-0183--version-known-native-catalogue-lineage-without-weakening-provenance) | Version known native catalogue lineage without weakening provenance | Source99/07 integrated, focused host228 verified; Java/native/model proof pending |
+| [0184](#adr-0184--project-authored-default-matrices-through-their-real-physical-rating) | Project authored default Matrices through their real physical rating | Accepted bounded model correction; implementation and qualification pending |
 
 ---
 
@@ -8724,3 +8725,66 @@ such, not authentic historical publication or played survival. Reuse unchanged
 transaction/native-paid mechanisms and G4/G5 evidence under the same inputs;
 select a new real runtime boundary only when its changed assumption requires it.
 Do not retarget the active current50 executor to this51 source.
+
+---
+
+## ADR-0184 — Project authored default Matrices through their real physical rating
+
+**Status.** Accepted bounded model-correctness scope under ADR-0135/0169/0178,
+2026-10-22. No implementation, new finite-establishment result or gameplay
+change is inferred. Develop independently of the frozen G7 qualifier.
+
+**Context.** The real registered Relay Matrix decodes an absent Rating through
+ControlMatrixNbt.load(RELAY, null) as F1. Manual and automatic F1 manufacture
+author untagged outputs, while the F2 recipe explicitly consumes F1. The audit
+currently projects those as different physical resources. Quest projection
+compensates in the opposite direction with a raw-resource special case, and
+T1Sustainability correctly discloses the resulting unresolved producer link.
+It is a model disagreement with existing runtime semantics, not a missing
+conversion recipe, free controller or permission.
+
+The repository already solves the display analogue: ResourceGuidanceClient
+uses the validated Matrix spec and the same NBT default when looking up a
+declaration. Reuse the common decoder and checked registration facts in the
+authority projection; do not import another identity/transaction engine or
+depend on client/loader registries in the common audit.
+
+**Decision.** Project authored physical default Matrix items at their actual
+decoded default rating through the existing authority adapters. Apply one
+consistent rule to real craft/process inputs and outputs, quest subjects and
+rewards, and their T0/T1 metadata consumers. Bind only an actual registered
+Matrix architecture; currently this permits the Relay default, not fabricated
+Integrated or other item IDs. Existing explicit F1/F2/higher ratings retain
+their exact identity. An explicit invalid Rating never becomes a default.
+
+Keep generic registration declarations distinct from authored physical stacks.
+Do not change Resource equality/key/serialization, invent a zero-cost alias or
+conversion route, add stock, rewrite a runtime recipe/NBT/claim, or broaden
+minimum-control substitution into exact-evidence matching. Ordinary items,
+tags, fluids, other registries and unsupported architecture IDs stay unchanged.
+Reuse an existing adapter seam rather than build a parallel normalized graph.
+
+The manual/automatic five-controller batch, five first-machine construction
+draws, source quantities, paid rewards and physical F2 output remain unchanged.
+Source-model consumers must agree on the corrected physical F1 identity
+without weakening the conditional T0 gate or hiding an unknown declaration.
+Update only the resolved default-identity disclosure and producer evidence;
+keep finite T1 establishment, net renewable closure, autonomy, native/client,
+whole-tier readiness and human acceptance explicitly unproved.
+
+**Proof.** Extend existing adapter/registry/T0/T1 contracts with the actual
+decoder/default, explicit-rating separation, non-Matrix/wrong-axis/unknown-ID
+counterexamples, unchanged material/output quantities, seed custody and no
+new route or reward. Pin newly used decoder/architecture sources and actual
+class images through existing provenance lists, not a generic transitive
+framework. Source-only checks are not Java or writer results. After G7 returns,
+qualify changed model mechanisms and normal projections on a new exact source;
+reuse unchanged FTB/native/machine proofs. Never retarget G7 or hand-edit
+canonical payloads to make the correction appear executed.
+
+**Rejected.** A synthetic raw-to-F1 recipe manufactures an authority that does
+not exist. Global Resource equality changes erase meaningful rating axes.
+Normalizing every Matrix-shaped name invents registrations. Merely deleting
+the limitation conceals the defect. A complete T1 reserve replay cannot be
+claimed by fixing one identity link; carrying prior-tier finite custody remains
+a separate unproved property of the existing establishment machinery.

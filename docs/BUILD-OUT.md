@@ -33,7 +33,18 @@ Keep stopped/owned-target, backup, copy-compatibility and recoverable update
 guards; never stop the player's game. Partial increments are not whole-tier
 readiness, and no public release/main merge or automatic acceptance follows.
 
-Next: execute the owner's continued-development instruction on isolated
+**Current next (2026-10-22):** sole604 qualifies complete source41df605 in G7:
+historical publisher ABI, repaired source profiles/API51, normal29/38
+projections, one new FTB setup-linkage boot and real managed50-to51 file
+transition in the stopped fictitious target only. A bounded local normal-data
+A7 may bind later stages; its actual SHA must be recorded. No new result or
+player delivery follows from the grant. In parallel, implement ADR-0184's
+default-F1 physical-authority correction on a separate isolated source lane,
+without PC/cache/JVM access, recipe/quest additions or a claimed finite T1
+replay. Read the active handoff for actual results/lease ownership.
+
+The following next-slice snapshots are historical, not live execution grants.
+Earlier next: execute the owner's continued-development instruction on isolated
 ad5b50d descendants. ADR-0176 adds an explicit minimum-capacity control-input
 role for the Wire Mill while retaining exact Matrix manufacturing/quest evidence.
 ADR-0177 adds a stopped/hash-bound managed FTB46-to50 definition update with

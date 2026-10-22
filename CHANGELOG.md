@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Select the real default-F1 authority correction while G7 qualifies51.**
+  ADR-0184 reuses the existing Matrix decoder and authority adapters to project
+  authored registered Relay defaults consistently with explicit F1 inputs.
+  Preserve generic declarations, exact higher ratings, material/seed quantities,
+  rewards and runtime data; no synthetic conversion, extra custody or global
+  identity rewrite. A separate isolated source lane may implement the correction
+  and existing contracts/provenance without PC/cache/JVM or G7 retargeting.
+  Implementation, Java and normal outputs are pending; finite T1 remains open.
 - **Assign the fully composed51 outcome without a paid-history replay.**
   Sole604 receives code41df605 G7/new root for new historical46/50 source-file
   ABI, repaired source guards/API Java and actual normal29/38 projections.

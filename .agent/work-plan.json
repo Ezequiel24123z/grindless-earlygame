@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 76,
+  "plan_revision": 77,
   "updated": "2026-10-22",
   "phase": "managed_FTB_update_and_explicit_control_capacity_development_after_closed_M_wave",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -50,11 +50,21 @@
     "current_plan_compilation": "one_normal_fresh_CURRENT_ApplicableSource_enclave_to_bind_real51_package_previous_actual50ref3d839_managedreceipt50_real_plan_apply_sameplan_noop_no_old5f_or_f8recompile",
     "closure_required": "all_actualsourcecoordinates_code41df_models41df_derivedA7_ifany_native_package_plan_actualApplicableSource_raw_exits_actual29_38images_data_and_packageJARhashes_realmanaged50to51_sameplan_files_mtimes_backups_protectedstate_A7bundle_onlyoutputs_ifany_ownhookremoved_Java0locks0_explicitreturn_no_player"
   },
+  "default_F1_identity_correction": {
+    "policy": "ADR-0184",
+    "status": "selected_source_implementation_and_qualification_pending",
+    "source_base": "b3ff33225b1665018098d1b63b075e56c7b1e9d2",
+    "owner_session": null,
+    "scope": "existing_authority_adapters_real_registered_defaultRelay_NBT_F1_consistent_physical_routes_quests_T0T1_model_consumers_existingtests_and_directprovenance_only",
+    "forbidden": "PC_cache_JVM_SSH_G7retarget_runtime_recipe_NBT_claim_quantity_changes_canonical_handedit_synthetic_alias_route_genericResource_identity_change_fictitious_architecture_finiteT1_acceptance",
+    "finite_T1_replay": "NOT_IMPLEMENTED_or_proven_by_identity_correction",
+    "qualification": "later_exact_source_changed_model_contracts_normal_writers_after_G7return_reuse_unchanged_nativeFTB_machine_proofs"
+  },
   "active_development_wave": {
     "instruction": "owner_2026_10_22_continue_working_and_developing",
     "base": "ad5b50dd509b0261818101ff08e786750826161a",
     "policies": ["ADR-0170", "ADR-0173", "ADR-0174", "ADR-0176", "ADR-0177", "ADR-0178"],
-    "status": "G4_G5_engineering_current50_closed_parent_verified_plan_apply_noop_custody_source51_wet738_provenance338_and_known_lineage_extension_source_work_not_yet_composed_or_qualified_no_PC_lease",
+    "status": "G4_G5current50closed_G6independentclosed_source41df_fully51composed_G7sole604qualificationactive_newresults_pending_defaultF1_model_source_correction_selected_separate_no_PC",
     "managed_FTB_owner": "cb273782-4065-44e2-90a3-9c0c036367ce",
     "managed_FTB_scope": "explicit_stopped_hash_bound_known_owned_46_to50_definition_update_backup_partial_failure_recovery_no_world_or_paid_receipt_write_no_startup_overwrite",
     "control_capacity_owner": "347a1c5b-1e99-4046-861c-85e5bcb3d045",

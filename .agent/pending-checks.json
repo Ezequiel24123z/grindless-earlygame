@@ -18,6 +18,13 @@
     "escalation": "serious_blocker_or_urgent_owner_decision",
     "no_implicit_public_release_main_merge_or_paid_generation": true
   },
+  "default_F1_identity_correction": {
+    "policy": "ADR-0184",
+    "status": "source_pending",
+    "scope": "registered_authored_defaultRelay_physicalF1_adapter_consistency_existing_T0T1_consumers_contracts_provenance",
+    "source_worker_PC_JVM_authorized": false,
+    "not_proved": "finiteT1_establishment_renewability_autonomy_gameplay_client_or_acceptance"
+  },
   "current_PC_execution": {
     "assignment": "wet-integrated-qualification-20261022",
     "active": true,
