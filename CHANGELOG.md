@@ -15,6 +15,16 @@ entries below reference those records by id.
 
 ### Added
 
+- **Receive the manual-boundary fixture source without a false runtime pass.**
+  B041/e960 supplies live component-selector/retired-work checks and actual
+  manual-recipe/Ingredient/crafting probe source, with19 expectations and two
+  intentionally renamed tool markers. Preserve all nine code/carrier blobs
+  and the original blank-separated-coauthor failure; normal doc appende960
+  corrects attribution without rewrite. Independent B-only review and A's
+  manual-data/serializer integration remain pending; no compiler/native/
+  writer/player result or old-proof relabeling follows.
+  Native Git trailer formatting resolves a false parent PS text-pipeline/
+  Unicode-sensitive refusal without a source repair or producer replay.
 - **Dispatch isolated source lanes for per-product manufacture.**
   Exact policy7f9 supplies recipe/ingredient A, selector/native-fixture B and
   same-task finite/teaching C with noncompeting files/shared interfaces.

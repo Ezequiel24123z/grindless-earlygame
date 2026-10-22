@@ -31,6 +31,27 @@ Idle app creation launches no competing CLI. Runtime tasks are sole writers;
 shared files/ownership and exact APIs are explicitly split, parent publishes.
 Normal local source commits and static checks are not Java/qualification.
 
+**B SOURCE delivered, not integrated/executed:** normal041022f7/exact7f9
+thene960c13b supplies10 paths/609 insertions259 deletions, treee27811ca.
+All nine code/carrier blobs remain exact041; e960 changes only the same
+changelog bullet. The original041 coauthor texts were blank-separated, so
+Git recognized only the last trailer; normal e960 preserves/discloses that
+failure and provides contiguous attribution, without rewriting history.
+Review582f2a82 checks B's actual fixture/native-crafting correctness conditional
+on A's still-pending data/serializer. Private ignored build/private handoff is
+20720 bytes/SHA46bf0837, parent size/hash verified. No compiler/model/native/
+writer or source absorption occurred. Parent's initial PS text-pipeline/
+Unicode comparison falsely rejects the final attribution append; native Git
+trailer formatting confirms exactly one coauthor for041 and both for e960.
+Only the read-only observer changes; the original source failure stays real.
+
+B keeps19 expectations:16 original Matrix markers plus aggregate, with only
+the final two now named MATRIX-ASSEMBLER-TOOL-BLOCKED/CONSUMED-ONCE.
+They observe permitted tool work, not automatic normal-machine production.
+Actual manual control is a new real RecipeManager/Ingredient/crafting
+settlement source probe. Its source is not G10 reexecution or GUI/wire/Survival/
+owner-save proof. A/C source and combined exact-source qualification remain.
+
 The shared pure API is recipe.ManufacturingPolicy.isManualFinalMachine(String).
 Manual shaped control uses type grindless:minimum_control/tier F1, actual
 registered stacks and the existing decoder/matcher. Official Forge API research
@@ -329,7 +350,7 @@ identity repairs invocation without altering Git configuration.
 
 | Category | Current integration boundary |
 | --- | --- |
-| COMPLETED | Historical G7/G8/G10/A7/A8/A9 preserved; generic custody source reviewed; owner ADR-0188/per-product methods published7f9; bounded official-API research qualified and three isolated noncompeting source lanes dispatched |
+| COMPLETED | Historical G7/G8/G10/A7/A8/A9 preserved; generic custody reviewed; ADR-0188/per-product policy published; official-API research qualified; B fixture SOURCE041/e960 delivered with original attribution error retained; B review/A/C source remain |
 | BLOCKED | None urgent; revised source/manual-control/fixture/progression implementation and qualification are prerequisites, not a new owner decision |
 | NOT EXECUTED | ADR-0188 recipe retirement/manual ingredient/integrated contracts and new native/model qualification; ADR-0187 Java/replay/writers; rendered/client-wire/owner-world/campaign/package/player deployment/main/release/whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |

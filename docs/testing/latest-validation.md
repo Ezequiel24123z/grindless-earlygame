@@ -1107,6 +1107,36 @@ The JSON/three owned lanes are unchanged; explicit array capture corrects
 only that read-only observer before link checking/Git staging. No source,
 compiler, native, writer or PC producer is replayed.
 
+**Lane B SOURCE intake, not a native result:** source041022f7/exact7f9 and
+normal documentation appende960c13b8f53e149e02ba67250eed4ebb13beb24
+contain10 paths/609 insertions259 deletions, finaltree
+e27811ca9b9b27d025e7222f01a50050df0a1eee. Parent inspects exact ancestry/
+scope/whitespace and the doc-only append; all nine code/carrier blobs stay
+the original041 source. First041 has both coauthor texts but a blank separator
+means Git recognizes only the last trailer. That failure remains; normal
+e960 discloses/corrects attribution without amend or history rewriting.
+
+Written tests use the existing Blueprint Tool/Deconstruction Planner bills,
+retired Washer/Press refusal/retained paid-work negatives and one real manual
+recipe/Ingredient/crafting settlement carrier. The19 expectations retain16
+original Matrix markers/aggregate and deliberately rename two final markers
+to permitted tool-backpressure/once-consumption meanings. Old G10 markers/
+logs are not relabeled. Unknown-ID decoding is not a newly constructed fake
+Matrix item after registry freeze.
+
+Independent B-only review582f2a82 is pending; A's actual recipe retirement/
+manual JSON/MOD-bus serializer is an explicit integration prerequisite, not
+a source execution pass. No Java/compiler/model/native/writer/PC result is
+supplied. The worker's HTTP404 auxiliary source lookup and original metadata
+failure remain disclosed. The ignored build/private handoff is20720 bytes/
+SHA25646bf083791604f17bd5658e1ece3f1651570e6543b72f901df99323a0657f004,
+parent size/hash verified without another code commit or producer replay.
+The first parent PS text-pipeline/Unicode comparison falsely rejects e960;
+Git's native trailer pretty-format confirms one recognized coauthor for041
+and both for e960. That observer recovery does not repair/rewrite the original
+source or retest the application. Parent does not publish an intentionally
+A-dependent fixture as a qualified standalone candidate.
+
 ### ADR-0187 source intake before actual finite qualification
 
 Normal source commits6c53b321/exactf5c2dde then

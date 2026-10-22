@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 110,
+  "plan_revision": 111,
   "updated": "2026-10-22",
   "phase": "manual_final_normal_machines_and_authored_per_product_manufacturing_modes",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -135,6 +135,18 @@
         "runtime_worker": "6921ada5-8c40-4102-abe3-2ddd38a6aba9",
         "app_session": "cbce0410-a39b-4a0a-8f22-048d0a656e64",
         "branch": "ezequiel24123z-fantastic-bassoon",
+        "status": "SOURCE_complete_private_commits_no_integration_or_Java_native_claim_A_dependency_pending",
+        "source_checkpoint": "e960c13b8f53e149e02ba67250eed4ebb13beb24",
+        "source_parent": "041022f7d9ed5a193edb432d2674b21e0162ae85",
+        "source_tree": "e27811ca9b9b27d025e7222f01a50050df0a1eee",
+        "code_checkpoint": "041022f7d9ed5a193edb432d2674b21e0162ae85",
+        "review_owner": "582f2a82-16ad-49b5-8055-11aa875df7a6",
+        "review_status": "PENDING_B_only_fixture_correctness_conditional_on_A_manual_data_and_serializer",
+        "carrier_change": "19expectations_16original_plusAggregate_retained_twoFinalNames_NOW_MATRIX_ASSEMBLER_TOOL_BLOCKED_and_CONSUMED_ONCE_not_auto_normal_machine_proof",
+        "metadata_exception": "041_both_coauthor_texts_blankseparated_onlylast_Gittrailer_recognized_preserved_e960_NORMAL_sameChangelog_bullet_append_correct_contiguous_trailers_all9codecarrierblobs_identical_no_rewrite",
+        "private_handoff": "source_worktree_build_private_adr0188_lane_b_handoff20720bytes_parentSHAverified_no_new_codecommit_or_producer",
+        "private_handoff_sha256": "46bf083791604f17bd5658e1ece3f1651570e6543b72f901df99323a0657f004",
+        "parent_observer": "PowerShell_textpipeline_Unicode_comparison_falsely_rejected_finaltrailer_append_nativeGit_pretty_trailers_confirms041_onlyCopilot_e960_both_no_Sourcechange_or_producerreplay",
         "scope": "VerifyLogic_Persistence_MachineUi_ControlMatrixInputChecks_existing_matrixcarrier_live_components_retired_work_negatives_manualingredient_probe"
       },
       "progression_finite_teaching": {
