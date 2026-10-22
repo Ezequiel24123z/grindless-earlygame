@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
+import io.github.ezequiel24123z.grindless.material.MaterialSnapshot;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuKind;
 import io.github.ezequiel24123z.grindless.process.ConditionBand;
 import io.github.ezequiel24123z.grindless.process.MachineEnvelopes;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Behaviour checks for generated ore-line, press and assembler recipes and the Voltaic-gated T1 crafts.
@@ -46,7 +48,8 @@ public final class VerifyRecipes {
 
     private static int failures = 0;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
+        indexedLookupBeforeBootstrap();
         graph();
         pressure();
         logic();
@@ -56,6 +59,59 @@ public final class VerifyRecipes {
                 ? "ALL RECIPE CHECKS PASSED"
                 : failures + " RECIPE CHECK(S) FAILED");
         System.exit(failures == 0 ? 0 : 1);
+    }
+
+    private static void indexedLookupBeforeBootstrap() throws ReflectiveOperationException {
+        ProcessLookup.Generation original = ProcessLookup.generation();
+        ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
+        List<ProcessRecipe> first = ProcessLookup.recipes();
+        yes("rebuilding before native bootstrap retains all four minimum-primary machine routes",
+                first.stream().filter(row -> !row.itemInputs().isEmpty()
+                                && row.itemInputs().get(0).isMinimumControl())
+                        .map(ProcessRecipe::id).collect(java.util.stream.Collectors.toSet()).equals(Set.of(
+                                "assemble/pulverizer", "assemble/arc_furnace", "assemble/press", "assemble/assembler")));
+        yes("a pure pre-bootstrap rebuild publishes a complete new generation",
+                original != ProcessLookup.generation());
+        ProcessLookup.Generation published = ProcessLookup.generation();
+        ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
+        yes("a repeated pre-bootstrap rebuild preserves the generated descriptors", first.equals(ProcessLookup.recipes()));
+        yes("a repeated pure rebuild still replaces the generation identity", published != ProcessLookup.generation());
+
+        List<IngredientSpec> wetItem = List.of(IngredientSpec.item("fixture:stock", 1),
+                IngredientSpec.fluid("minecraft:water", 250));
+        List<IngredientSpec> wetControl = List.of(
+                IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1),
+                IngredientSpec.fluid("minecraft:water", 250));
+        List<OutputSpec> output = List.of(OutputSpec.item("fixture:product", 1));
+        ProcessRecipe early = new ProcessRecipe("fixture/index/early", MachineFamily.ASSEMBLER,
+                wetItem, output, Double.NaN, null, 20, 1);
+        ProcessRecipe control = new ProcessRecipe("fixture/index/minimum", MachineFamily.ASSEMBLER,
+                wetControl, output, Double.NaN, null, 20, 1);
+        ProcessRecipe late = new ProcessRecipe("fixture/index/late", MachineFamily.ASSEMBLER,
+                List.of(IngredientSpec.item("fixture:stock", 1)), output, Double.NaN, null, 20, 1);
+        ProcessRecipe otherFamily = new ProcessRecipe("fixture/index/other_family", MachineFamily.PRESS,
+                wetControl, output, Double.NaN, null, 20, 1);
+        // Inspect only pure candidate descriptors; no fake item registration or global graph replacement.
+        Class<?> graphType = Class.forName(ProcessLookup.class.getName() + "$Graph");
+        var index = graphType.getDeclaredMethod("index", List.class);
+        var candidates = graphType.getDeclaredMethod("candidates", MachineFamily.class, List.class);
+        index.setAccessible(true);
+        candidates.setAccessible(true);
+        Object graph = index.invoke(null, List.of(early, control, late, otherFamily));
+        List<ProcessRecipe> expected = List.of(early, control, late);
+        yes("a nonempty ordinary item index cannot exclude minimum-control candidates for another ID",
+                expected.equals(candidates.invoke(graph, MachineFamily.ASSEMBLER, List.of("item:fixture:stock"))));
+        yes("item, fluid and role hits deduplicate in authoritative graph order",
+                expected.equals(candidates.invoke(graph, MachineFamily.ASSEMBLER,
+                        List.of("item:fixture:stock", "fluid:minecraft:water", "item:fixture:stock"))));
+        yes("candidate priority cannot depend on runtime tag/key enumeration order",
+                expected.equals(candidates.invoke(graph, MachineFamily.ASSEMBLER,
+                        List.of("fluid:minecraft:water", "item:fixture:stock"))));
+        yes("an empty index hit retains the existing complete family fallback",
+                expected.equals(candidates.invoke(graph, MachineFamily.ASSEMBLER, List.of("item:fixture:missing"))));
+        yes("minimum-primary candidates never cross machine families",
+                List.of(otherFamily).equals(candidates.invoke(graph, MachineFamily.PRESS,
+                        List.of("fluid:minecraft:water"))));
     }
 
     private static void graph() throws IOException {

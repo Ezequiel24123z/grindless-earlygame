@@ -68,6 +68,7 @@ public final class ControlMatrixInputChecks {
         try {
             checks.check(source.getLevel() == source.getServer().overworld(), "Use the actual Overworld");
             checks.registered();
+            checks.primaryControl();
             checks.capability(source.getLevel());
             Grindless.LOG.info("GRINDLESS_MATRIX_INPUT_NATIVE_PASS assertions={} scope=actual_registered_items_only",
                     checks.assertions);
@@ -76,6 +77,45 @@ public final class ControlMatrixInputChecks {
             Grindless.LOG.error("GRINDLESS_MATRIX_INPUT_NATIVE_FAIL assertions={}", checks.assertions, failure);
             throw failure;
         }
+    }
+
+    private void primaryControl() {
+        ProcessRecipe press = recipe("assemble/press");
+        check(press.itemInputs().get(0).isMinimumControl(), "The real Press reproduction has minimum control first");
+        ProcessRecipe predecessor = recipe("assemble/relay_matrix_f2");
+        check(!predecessor.itemInputs().get(0).isMinimumControl()
+                        && predecessor.itemInputs().get(0).id().equals(FabricationLogic.RELAY_MATRIX),
+                "A nonempty ordinary Relay item index competes with the minimum-primary role");
+        ControlMatrixItem relay = (ControlMatrixItem) ModItems.RELAY_MATRIX.get();
+        ItemStack[] inputs = new ItemStack[press.itemInputs().size()];
+        ItemStack high = relay.stackFor(FluxTier.F3, press.itemInputs().get(0).count());
+        inputs[0] = high;
+        for (int slot = 1; slot < inputs.length; slot++) {
+            IngredientSpec input = press.itemInputs().get(slot);
+            inputs[slot] = ProcessLookup.resolve(new OutputSpec(input.kind(), input.id(), input.count(), false))
+                    .orElseThrow();
+        }
+        check(!ProcessLookup.matches(predecessor.itemInputs().get(0), high),
+                "The existing exact F2 predecessor still rejects F3");
+        check(ProcessLookup.accepts(MachineFamily.ASSEMBLER, 0, high.copyWithCount(1)),
+                "Minimum-primary hopper admission accepts the first real F3 controller");
+        check(ProcessLookup.find(MachineFamily.ASSEMBLER, inputs).orElseThrow().id().equals(press.id()),
+                "A populated ordinary item index cannot hide the real F3 minimum-primary recipe");
+        inputs[0] = ItemStack.EMPTY;
+        check(ProcessLookup.find(MachineFamily.ASSEMBLER, inputs).filter(row -> row.id().equals(press.id())).isEmpty(),
+                "Missing primary control cannot match through the pure role index");
+        inputs[0] = new ItemStack(Items.PAPER, high.getCount());
+        inputs[0].setTag(high.getTag().copy());
+        check(ProcessLookup.find(MachineFamily.ASSEMBLER, inputs).filter(row -> row.id().equals(press.id())).isEmpty(),
+                "An ordinary item with copied F3 NBT cannot match the indexed minimum role");
+        inputs[0] = new ItemStack(relay, high.getCount());
+        inputs[0].getOrCreateTag().putString(ControlMatrixNbt.RATING, "3");
+        check(ProcessLookup.find(MachineFamily.ASSEMBLER, inputs).filter(row -> row.id().equals(press.id())).isEmpty(),
+                "Malformed primary Matrix NBT cannot match through the pure role index");
+        inputs[0] = high;
+        inputs[1] = inputs[1].copyWithCount(inputs[1].getCount() - 1);
+        check(ProcessLookup.find(MachineFamily.ASSEMBLER, inputs).filter(row -> row.id().equals(press.id())).isEmpty(),
+                "A minimum-primary index still requires the entire actual material batch");
     }
 
     private void registered() {
