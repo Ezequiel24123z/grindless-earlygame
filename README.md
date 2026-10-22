@@ -2410,6 +2410,7 @@ is preserved and integration/release gates still control acceptance.
 | 76 | **Physical default-F1 model identity** | ADR-0184 — source57/4ee and actual G831/41, changed authority/display fixtures, normal writers/independent checks/canonical proof and239 custody verified; normal A8dee preserves all four payload bytes. No runtime predicate/bill/seed/reward change, renderedGUI or finite-T1 acceptance |
 | 77 | **Reachable Assembler outputs** | ADR-0185 — sourcea89/30e/438/0ab plus reviewed014 harness repair normally composed with F1/A8/controller15. Original bb5 UI/NaN/AUTO reds stay red; new exact-source compiler/suite/native confirmation pending. No real packet/rendered/save-world or G7 acquisition pass inferred |
 | 78 | **Baseline process-family controllers** | ADR-0186 — sourceab3/304/ccfe normally composes nine explicit minimum-F1 fourth groups and exactfifteen-role contract while preserving old groups/time/FU/output/passive/Motor/seed/F2 and selector assertions. Direct bounded review is clear; Java/normal writers/native proof pending |
+| 79 | **Finite first-factory continuation** | ADR-0187 — extend the existing SustainabilityAudit/ConstructionReserve witness with conserved prior-tier custody, not another planner or manufactured entry kit. Source implementation/qualification pending; no finite T1, autonomy, whole-tier or saved-world pass |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than

@@ -198,6 +198,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0184](#adr-0184--project-authored-default-matrices-through-their-real-physical-rating) | Project authored default Matrices through their real physical rating | G8 actual31/41/changed contracts/normal A8/239 custody verified; not rendered or finite-T1 proof |
 | [0185](#adr-0185--choose-assembler-recipes-explicitly-without-repricing-or-losing-work) | Choose Assembler recipes explicitly without repricing or losing work | Sourcea89/30e/438 reviewed/normally composed with F1/A8; Java/native/UI proof pending |
 | [0186](#adr-0186--supply-physical-baseline-control-to-nine-existing-process-families) | Supply physical baseline control to nine existing process families | Sourceab3/304/ccfe normally composed; exactdata/15-role review clear, execution pending |
+| [0187](#adr-0187--continue-the-finite-first-factory-witness-with-conserved-t0-custody) | Continue the finite first-factory witness with conserved T0 custody | Accepted source scope; implementation and finite continuation proof pending |
 
 ---
 
@@ -8957,3 +8958,75 @@ composed. No per-recipe native matrix or FTB/catalogue replay follows.
 Canonical payloads require normal writers on the final source; never hand-edit
 them or reuse G8's old bill projection as this result. No finite T1 closure,
 runtime acquisition, whole-tier or human acceptance is inferred from data.
+
+---
+
+## ADR-0187 — Continue the finite first-factory witness with conserved T0 custody
+
+**Status.** Accepted bounded source scope under ADR-0131/0140/0174/0178,
+2026-10-22. G10 reports actual repaired Java, one native aggregate and normal
+model stages passing on a54; its final data/custody/leaseback remain separate.
+This decision authorizes an isolated source outcome, not another PC window,
+new gameplay, a completed finite replay or whole-T1 readiness.
+
+**Context and existing solution.** T1Sustainability honestly leaves finite
+establishment unproved. Its five-controller allocation and direct producer
+links are not an executable transition from the T0 base. ConstructionReserve
+already executes real batches, protects catalysts/installed structures,
+accounts for manual work and prevents a reward from funding its own claim.
+However, each current witness starts independently from terminals, and
+TierResult.retainedInventory exposes locked catalysts rather than all free
+stock, installed parts and claim history. Starting another independent witness
+or reconstructing five controllers from an exit count would not prove
+longitudinal material custody.
+
+**Decision.** Extend that same finite executor with an immutable, source-bound
+continuation of its completed state. Retain actual free stock, locked
+catalysts, installed machines and installation parts, claimed one-shot routes
+and consumed manual-work custody. Preserve the distinction between physical
+stock and cumulative delivery/accounting facts. Do not replenish bootstrap
+terminals, replay a paid reward, release an installed part as consumable stock
+or reset spent work at the tier boundary.
+
+Admit a continuation only from the applicable completed conditional T0
+witness under its stated authority and environmental assumptions. Reject
+missing, failed, unknown or mismatched proof state explicitly. This is an
+in-process audit witness, not a loadable world-save format, arbitrary caller
+inventory, generic receipt protocol or evidence that the player's inventory
+matches the model. Keep the current standalone T0 entry/replay contract and
+its existing findings intact.
+
+Use current T1Progression mandatory selections and live authority batches to
+establish the first factory, reproduce physical F1 supply and execute the
+real F2 exit. The inherited five-controller batch must fund construction only
+once; further controllers need actual reproduction. Preserve default-F1
+normalization, exact F2 operands/outputs, retained dies, optional branches,
+all material quantities, FU/time, recipes and runtime saves. Reuse the
+existing audit/reserve mechanism rather than invent another fixed-point
+engine or import a machine framework for an already implemented problem.
+
+Expose the finite result and its precise limits through T1Sustainability and
+the existing exporter. Report actual execution batches and blocking findings;
+do not replace hardcoded false with an unsupported true. Finite establishment,
+recursive renewable closure, continuous power/routing, night/restart recovery,
+the broader T1 family contract and human/world acceptance remain separate
+properties. A real model failure is a useful result, not authorization to
+invent stock, alter canonical classifications or rebalance gameplay.
+
+**Proof.** Extend existing audit/T1 checks for exact carry, spent-work and
+already-claimed preservation, installed/locked separation, five-controller
+allocation, actual reproduction before additional withdrawals and real F2
+production. Negative cases must reject missing/incompatible predecessor
+state, duplicate gifts/rewards, exhausted stock and fabricated goal stock.
+Keep T0 regressions and source/class provenance strict through existing
+exporter lists. Source/static checks are not Java or a successful replay.
+Later exact-source execution selects affected model proofs and normal
+writers; it does not repeat unchanged native/FTB mechanisms or retarget G10.
+
+**Rejected.** A new EntryProfile containing finished T0 machines/controllers
+would invent manual acquisition authorities and hide the transition cost.
+Adding synthetic terminals or a free conversion route duplicates custody.
+Re-running an independent T0 establishment inside T1 can replenish finite
+supplies and claims. A new planner duplicates the existing executor while
+still failing to preserve its actual state. A fixture or proposed report
+cannot supply accepted survival inventory or a saved-world compatibility pass.

@@ -284,6 +284,24 @@ Existing F1-only DTO/real-operand regressions and direct helper source/image
 guards are executed in G8's bound contracts, not a rendered-client or
 longitudinal gameplay pass.
 
+### Finite first-factory witness continuation
+
+ADR-0187 uses the existing `sustainability/SustainabilityAudit`,
+`ConstructionReserve` and `T1Sustainability` with the live
+`progression/T1Progression` selections. Carry a completed source-bound T0
+witness's free stock, retained catalysts, installed machines/parts, already
+claimed rewards and spent manual-work custody through the same finite
+executor. `TierResult.retainedInventory` currently exposes locked catalysts,
+not a complete carry state; do not manufacture the missing state from a report,
+five promised controllers or a new EntryProfile. A new tier must not reset
+bootstrap terminals, reclaim rewards or spend an installed/locked item twice.
+Keep default-F1 normalization and exact F2 identity unchanged. Extend existing
+audit/T1 contracts and explicit exporter source/image lists as needed; do not
+build another planner, native carrier or provenance framework. Genuine route
+or reserve failures stay visible and require coordinator review, not silently
+changed gameplay. This source-only scope does not retarget G10, hand-edit its
+four payloads, grant PC access or certify factory autonomy/whole T1/a world.
+
 ### Explicit Assembler recipe choice
 
 ADR-0185 corrects same-bill last-dry shadowing through existing

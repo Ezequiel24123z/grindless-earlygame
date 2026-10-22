@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Continue the finite first-factory boundary without replaying G10.**
+  The executor reports one actual clean-a54 native aggregate PASS with all19
+  expectations, natural save-stop and frozen JAR/inventory before subsequent
+  Gradle. Three normal writers, three independent CheckOnly processes and
+  three post-write canonical checks also exit0; A9/custody/leaseback remain
+  pending. ADR-0187 authorizes an independent source-only continuation of the
+  existing finite auditor, carrying actual T0 witness custody into T1 instead
+  of inventing another starter kit, replenishing claimed rewards or treating
+  a producer link as established stock. No new PC grant or tier delivery follows.
 - **Observe real repaired UI/Persistence execution before the one native gate.**
   G10 reports canonical Synca54, common/Forge/classpath0, toolsjavac0 and both
   repaired mains exit0, without invoker bootstrap. Source is clean/Java0/
