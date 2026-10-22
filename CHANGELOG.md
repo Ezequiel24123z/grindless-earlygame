@@ -15,6 +15,26 @@ entries below reference those records by id.
 
 ### Added
 
+- **Expose the coupled retired-Furnace/Bench paid-work boundary (ADR-0188).**
+  Follow the coordinator's provisional manual-final vanilla Furnace decision,
+  not an owner-confirmed answer. Extend existing Assembler refusal/retention
+  cases to `assemble/bootstrap/furnace`; add actual Bench BE/NBT contracts for
+  `bench/furnace` and already-retired `bench/quern`, partial/completed-fractional
+  work and legacy Recipe-only owner recovery. Derive a real competing
+  `bench/brick_block` bill rather than register a fake recipe or invent stock.
+  Preserve the old paid owner/amount through reopen and refuse that permitted
+  fallback without draw, completion, refund or store mutation. Inspection
+  identifies an unresolved production defect: `matchingRecipe` falls back to
+  another current row, then the non-Assembler `recipe` branch zeroes Progress
+  and replaces WorkRecipe, losing the retired balance. The new competing-Bench
+  assertions are expected red by inspection, not executed or weakened.
+  A narrow Bench orphaned-paid-work refusal before fallback, retaining the
+  existing Guide compatibility exception, needs separately owned runtime
+  repair; this test-only follow-up does not rewrite the executor. Preserve
+  e960/source041, original private handoff and all native nineteen-marker
+  meanings. Two-path/whitespace/lexical/source guards and 963 documentation
+  links pass, not the unexecuted retention behavior. No Java/native/model/
+  writer/PC/ref absorption or publication.
 - **Retarget lane-B selection/work and native crafting contracts (ADR-0188).**
   Use the real colliding Blueprint Tool/Deconstruction Planner routes, deriving
   grouped quantities and timing instead of keeping normal-machine fabrication

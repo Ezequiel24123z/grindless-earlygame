@@ -10,10 +10,12 @@ import io.github.ezequiel24123z.grindless.quest.QuestInventoryEvidence;
 import io.github.ezequiel24123z.grindless.quest.QuestProgress;
 import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
 import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
+import io.github.ezequiel24123z.grindless.recipe.LegacyGuideAssembly;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
 import io.github.ezequiel24123z.grindless.recipe.OutputSpec;
 import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
+import io.github.ezequiel24123z.grindless.source.SourceLogic;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuHost.SelectionIssue;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuHost.SelectionResult;
 import io.github.ezequiel24123z.grindless.material.MaterialSnapshot;
@@ -62,6 +64,8 @@ public final class VerifyPersistence {
 
     private static final String BLUEPRINT = "assemble/blueprint_tool";
     private static final String PLANNER = "assemble/deconstruction_planner";
+    private static final List<String> RETIRED_ASSEMBLER_TARGETS = List.of(
+            "assemble/chemical_washer", "assemble/press", "assemble/bootstrap/furnace");
     private static int failures;
 
     public static void main(String[] args) throws Exception {
@@ -76,6 +80,7 @@ public final class VerifyPersistence {
         questProgress();
         assemblerWorkNbt();
         assemblerMachineWork();
+        benchRetiredWork();
         System.out.println(failures == 0 ? "ALL PERSISTENCE CHECKS PASSED"
                 : failures + " PERSISTENCE CHECK(S) FAILED");
         System.exit(failures == 0 ? 0 : 1);
@@ -234,7 +239,7 @@ public final class VerifyPersistence {
         ProcessRecipe declaredPlanner = ProcessLookup.byId(MachineFamily.ASSEMBLER, PLANNER).orElseThrow();
         check("the BE fixture derives both permitted tool colliders from the actual identical declared bills",
                 declaredBlueprint.inputs().equals(declaredPlanner.inputs()));
-        for (String retired : List.of("assemble/chemical_washer", "assemble/press")) {
+        for (String retired : RETIRED_ASSEMBLER_TARGETS) {
             check("the actual current catalogue has retired normal-machine target " + retired,
                     ProcessLookup.byId(MachineFamily.ASSEMBLER, retired).isEmpty());
         }
@@ -292,7 +297,7 @@ public final class VerifyPersistence {
             state = machine.saveWithoutMetadata();
             state.putDouble("Progress", 12.875);
             machine.load(roundTrip(state));
-            CompoundTag stores = assemblerStores(machine);
+            CompoundTag stores = processStores(machine);
             for (int reopen = 0; reopen < 40; reopen++) {
                 check("switching back to a fractional owner remains available " + reopen,
                         change(machine, blueprint.id()) == SelectionResult.SELECTED);
@@ -302,7 +307,7 @@ public final class VerifyPersistence {
                 exact("the real BE restores Planner partial work exactly " + reopen, 12.875, machine.inspectionProgress());
                 machine.load(roundTrip(machine.saveWithoutMetadata()));
                 check("switch/reopen keeps inventory, fluids, energy, configuration and layout " + reopen,
-                        assemblerStores(machine).equals(stores));
+                        processStores(machine).equals(stores));
                 check("switch/reopen preserves the actual exposed store objects " + reopen,
                         machine.menuContainer() == inventory && machine.energy() == energy
                                 && machine.nativeStore() == fluids && machine.containerConfig() == config);
@@ -452,7 +457,7 @@ public final class VerifyPersistence {
     }
 
     private static void assemblerRetiredWork(ProcessRecipe blueprint, ProcessRecipe planner) throws Exception {
-        for (String retired : List.of("assemble/chemical_washer", "assemble/press")) {
+        for (String retired : RETIRED_ASSEMBLER_TARGETS) {
             ProcessMachineBlockEntity machine = assembler();
             supplyAssembler(machine);
             machine.energy().setStored(512);
@@ -463,7 +468,7 @@ public final class VerifyPersistence {
             double paid = 1600.375;
             state.putDouble("Progress", paid);
             machine.load(roundTrip(state));
-            CompoundTag stores = assemblerStores(machine);
+            CompoundTag stores = processStores(machine);
             for (int reopen = 0; reopen < 3; reopen++) {
                 check(retired + " explicitly refuses without falling back to a permitted same-bill tool",
                         resolve(machine) == null
@@ -480,7 +485,7 @@ public final class VerifyPersistence {
                 tick(machine, 100 + reopen);
                 exact(retired + " cannot spend, refund or complete old paid work", paid, machine.inspectionProgress());
                 check(retired + " does not draw Flux or change physical stores",
-                        assemblerStores(machine).equals(stores) && machine.getItem(4).isEmpty());
+                        processStores(machine).equals(stores) && machine.getItem(4).isEmpty());
                 machine.load(roundTrip(machine.saveWithoutMetadata()));
             }
             for (ProcessRecipe permitted : List.of(blueprint, planner)) {
@@ -553,7 +558,90 @@ public final class VerifyPersistence {
                         && legacy.getItem(4).is(Items.BRICK) && legacy.getItem(4).getCount() == 2);
     }
 
-    private static CompoundTag assemblerStores(ProcessMachineBlockEntity machine) {
+    /**
+     * Actual Bench BE/NBT plus the real retained brick-block row, not a fabricated production fixture.
+     * Expected RED by inspection until the non-Assembler orphaned-paid-work fallback is repaired:
+     * recipe() currently zeroes Progress and replaces WorkRecipe when another row matches.
+     */
+    private static void benchRetiredWork() throws Exception {
+        ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
+        ProcessRecipe permitted = ProcessLookup.byId(MachineFamily.ASSEMBLY_BENCH, "bench/brick_block").orElseThrow();
+        check("the Bench fallback witness is the actual retained vanilla brick-block basic",
+                permitted.itemOutputs().equals(List.of(OutputSpec.item("minecraft:bricks", 1)))
+                        && permitted.fluidInputs().isEmpty() && permitted.catalysts().isEmpty());
+        check("the existing retired Field Guide identity remains a separate compatibility exception",
+                LegacyGuideAssembly.retired(MachineFamily.ASSEMBLY_BENCH, "bench/field_guide"));
+        for (String retired : List.of("bench/furnace", "bench/quern")) {
+            check("the real current Bench catalogue retires normal processor " + retired,
+                    ProcessLookup.byId(MachineFamily.ASSEMBLY_BENCH, retired).isEmpty());
+            for (boolean legacyRecipeOnly : List.of(false, true)) {
+                for (double paid : List.of(0.34375, SourceLogic.BENCH_TICKS + 0.375)) {
+                    String context = retired + " paid=" + paid + " legacyRecipeOnly=" + legacyRecipeOnly;
+                    check(context + " cannot invent old-normal completion through the Guide exception",
+                            LegacyGuideAssembly.resume(MachineFamily.ASSEMBLY_BENCH, retired, paid).isEmpty());
+                    ProcessMachineBlockEntity bench = processMachine(ProcessMachineKind.ASSEMBLY_BENCH);
+                    bench.energy().setStored(bench.energy().getCapacity());
+                    CompoundTag saved = bench.saveWithoutMetadata();
+                    saved.putString("Recipe", retired);
+                    saved.putDouble("Progress", paid);
+                    if (legacyRecipeOnly) {
+                        saved.remove("WorkRecipe");
+                    } else {
+                        saved.putString("WorkRecipe", retired);
+                    }
+                    bench.load(roundTrip(saved));
+                    retainedBenchWork(bench, retired, paid, context + " load");
+                    CompoundTag stores = processStores(bench);
+                    for (int reopen = 0; reopen < 3; reopen++) {
+                        check(context + " has no executable batch with missing materials", resolve(bench) == null);
+                        tick(bench, 10 + reopen);
+                        retainedBenchWork(bench, retired, paid, context + " empty/reopen=" + reopen);
+                        check(context + " cannot draw, refund or alter stores while unavailable",
+                                processStores(bench).equals(stores));
+                        bench.load(roundTrip(bench.saveWithoutMetadata()));
+                    }
+
+                    // Supply exactly one genuine CURRENT basic bill, derived from the actual row.
+                    // The input-only lookup must match; the paid Bench must nevertheless refuse it.
+                    for (int slot = 0; slot < permitted.itemInputs().size(); slot++) {
+                        IngredientSpec input = permitted.itemInputs().get(slot);
+                        ItemStack physical = ProcessLookup.resolve(
+                                new OutputSpec(input.kind(), input.id(), input.count(), false)).orElseThrow();
+                        check(context + " uses the actual current material group " + slot,
+                                ProcessLookup.matches(input, physical));
+                        bench.setItem(slot, physical);
+                    }
+                    ProcessRecipe wouldMatch = automaticTarget(bench);
+                    check(context + " really offers a permitted competing batch, not an empty-lookup false positive",
+                            wouldMatch.id().equals(permitted.id()));
+                    stores = processStores(bench);
+                    for (int reopen = 0; reopen < 3; reopen++) {
+                        check(context + " unavailable paid Bench has no permitted-recipe fallback " + reopen,
+                                resolve(bench) == null);
+                        retainedBenchWork(bench, retired, paid, context + " after competing lookup=" + reopen);
+                        tick(bench, 100 + reopen);
+                        retainedBenchWork(bench, retired, paid, context + " after competing tick=" + reopen);
+                        check(context + " keeps inputs/output, Flux, fluids and configuration unchanged",
+                                processStores(bench).equals(stores));
+                        bench.load(roundTrip(bench.saveWithoutMetadata()));
+                        retainedBenchWork(bench, retired, paid, context + " competing binary reopen=" + reopen);
+                    }
+                }
+            }
+        }
+    }
+
+    private static void retainedBenchWork(ProcessMachineBlockEntity bench, String retired, double paid, String context) {
+        CompoundTag saved = bench.saveWithoutMetadata();
+        exact(context + " retains the exact paid balance", paid, bench.inspectionProgress());
+        exact(context + " retains the raw Progress double", paid, saved.getDouble("Progress"));
+        check(context + " retains the actual old WorkRecipe owner", saved.getString("WorkRecipe").equals(retired));
+        check(context + " is actual Bench state, not an invented Assembler selection/work queue",
+                bench.kind() == ProcessMachineKind.ASSEMBLY_BENCH && bench.recipeSelection().isEmpty()
+                        && !saved.contains(AssemblerWork.TARGET) && !saved.contains(AssemblerWork.SUSPENDED));
+    }
+
+    private static CompoundTag processStores(ProcessMachineBlockEntity machine) {
         CompoundTag stores = machine.saveWithoutMetadata();
         for (String key : List.of("Progress", "Recipe", "WorkRecipe", AssemblerWork.TARGET, AssemblerWork.SUSPENDED)) {
             stores.remove(key);
@@ -562,10 +650,14 @@ public final class VerifyPersistence {
     }
 
     private static ProcessMachineBlockEntity assembler() throws Exception {
+        return processMachine(ProcessMachineKind.ASSEMBLER);
+    }
+
+    private static ProcessMachineBlockEntity processMachine(ProcessMachineKind kind) throws Exception {
         Constructor<ProcessMachineBlockEntity> constructor = ProcessMachineBlockEntity.class.getDeclaredConstructor(
                 BlockEntityType.class, ProcessMachineKind.class, BlockPos.class, BlockState.class);
         constructor.setAccessible(true);
-        return constructor.newInstance(null, ProcessMachineKind.ASSEMBLER, BlockPos.ZERO, Blocks.STONE.defaultBlockState());
+        return constructor.newInstance(null, kind, BlockPos.ZERO, Blocks.STONE.defaultBlockState());
     }
 
     private static void supplyAssembler(ProcessMachineBlockEntity machine) {
