@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve actual G7 progress and expose a separate acquisition blocker.**
+  Executor reports new-publisher authentic46/50 ABI, repaired Registry1344/
+  Adapters323 CI reuse, full FTB backend and normal writers/checks0. Actual
+  A726e22945 has exact parent41df and only three normal payload changes;
+  Guidance is unchanged. Final custody/native/package/managed51 are pending.
+  Coordinator source tracing finds identical Assembler construction inputs
+  shadowed by last-dry lookup with no player recipe selector. Record this as
+  unproved Washer acquisition, not a failure of the independently useful G7
+  file outcome; investigate a separate existing-engine choice fix.
 - **Select the real default-F1 authority correction while G7 qualifies51.**
   ADR-0184 reuses the existing Matrix decoder and authority adapters to project
   authored registered Relay defaults consistently with explicit F1 inputs.

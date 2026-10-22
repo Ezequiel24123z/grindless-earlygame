@@ -639,6 +639,28 @@ Verified package/fresh current proof and actual managed50-to51 plan/apply/
 same-plan no-op target only the old owned fictional instance. No player/
 template/world operation or new execution result is inferred from this grant.
 
+**G7 partial execution reported; final parent custody pending.** Both new
+publisher historical CLI8 ABI runs report0 against original5f/CPP46 and
+f8/CPP50 before any Gradle. Exact41df CI39773265433/artifact12423716934
+has environment/build0 and only Economy/T1 canonical equalities red;
+Registry1344/0 and Adapters323/0 are reused, not replayed. Reported behavior
+SHA21bc53cb59b902527f01b7617c2a2249d881951c9e399b5b6b09496b8b0917e1.
+One default full FTB backend and normal writers/independent CheckOnly/
+three canonical rechecks report0, with actual29/38 provenance and unchanged
+CheckOnly bytes/mtimes. A726e22945a308a8635e8d3701ff3a3dec40a6175f has
+exact parent41df and only Economy/T1 JSON/Markdown changes; Guidance is equal.
+Bundle1956bytes/SHA325f5e33bd65802f5648aeb7acacd0b613aae5141834b901927bdec764dd2643
+is reported; parent import/verification is pending. Runtime ApplicableSource26e
+is distinct from writer source41df. Plain ready51 boot/real managed transition
+are still pending, not inferred from these results.
+
+**Separate source-detected acquisition limit:** the shared casing/motor/plate
+bills have several Assembler outputs, but ProcessLookup.find keeps the last
+compatible dry recipe and the current menu offers no target choice. This
+source finding is not a native reproduction. The G7 ready51 boot cannot prove
+Washer manufacture/operation; keep that uncertainty and its later targeted
+mechanism proof separate from catalogue/file lineage and human acceptance.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

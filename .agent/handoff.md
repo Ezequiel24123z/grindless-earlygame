@@ -4,6 +4,29 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**Latest G7 report, final custody not yet verified by the coordinator:** new
+publisher0cb passes both authentic historical CLI8 classpaths before Gradle.
+Exact41df CI39773265433/artifact12423716934 supplies Registry1344/0 and
+Adapters323/0; only Economy/T1 committed equalities are stale. Full existing
+FTB backend and normal writers/independent CheckOnly/three canonical checks
+report0, with actual29-source/38-image receipts. A7 is REAL
+26e22945a308a8635e8d3701ff3a3dec40a6175f, exact parent41df, only Economy
+JSON and T1 JSON/Markdown changed; Guidance stayed unchanged. Writer invocation
+is41df; clean runtime ApplicableSource is26e. Bundle325f5e33 is reported, not
+yet imported. One plain ready51 boot and subsequent package/plan/apply remain
+the admitted continuation, not completed results.
+
+**New source-detected whole-T1 blocker:** multiple Assembler constructors use
+the same casing1/motor2/plates4 inputs. ProcessLookup.find retains the last dry
+match; the machine/menu has no explicit target selection. A live selected
+Washer route or native-ready51 log therefore does not prove Survival acquisition
+or wet operation. Runtime reproduction/fix are pending. Read-only upstream
+recipe-selection research952d39a9 is active while the coordinator traces the
+existing menu/WorkRecipe/transaction contracts. Remedy in a separate source
+lane; do not alter G7, add an unrelated smoke or call its file outcome a factory
+pass. Physical controller completeness and genuine chassis work also remain
+outside that bounded file/definition outcome.
+
 **Current source/qualification split:** G7 sole604 owns the exact41df605
 qualification/new PC root; all fresh results remain pending. A separate
 ADR-0184 source owner77889597-58d8-46f1-8c68-d5ccb4e5a0a9 starts at1e642dc

@@ -18,6 +18,13 @@
     "escalation": "serious_blocker_or_urgent_owner_decision",
     "no_implicit_public_release_main_merge_or_paid_generation": true
   },
+  "assembler_recipe_choice": {
+    "status": "SOURCE_SHADOWING_no_runtime_repro_or_fix",
+    "impact": "sameingredient_Assembler_drylast_selection_does_not_prove_Washer_acquisition",
+    "research_agent": "952d39a9-312f-4afa-9f54-16e79930142c",
+    "new_source_and_changed_mechanism_qualification_required": true,
+    "G7_retarget_or_extra_smoke_authorized": false
+  },
   "default_F1_identity_correction": {
     "policy": "ADR-0184",
     "status": "isolated_source_implementation_active",
@@ -33,6 +40,9 @@
     "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
     "last_owner_session": "604195bd-6826-4299-89af-1dcf39545263",
     "source": "41df6052c2416f431f2e7dc579681602211b0042",
+    "writer_invocation_source": "41df6052c2416f431f2e7dc579681602211b0042",
+    "applicable_source_runtime": "26e22945a308a8635e8d3701ff3a3dec40a6175f",
+    "G7_A7_report_status": "reported_only3normaloutputs_parent41df_exact_CleanJava0locks0_bundle325f5e33_parent_custody_pending",
     "previous_G6_source": "fcfd6e2ed55b1db9768a6a454bd9a7a09ad904f8",
     "previous_G6_returned_utc": "2026-10-22T11:13:33.2105313Z",
     "previous_G5_source": "98874f6254aa10c91a77dcb9312a37dc1a7c7b50",
@@ -48,7 +58,7 @@
     "qualification_package_fictitious_target_plan_authorized": true,
     "real_PrismRoot_player_world_writes_authorized": false,
     "allowed_data_derivation": "only_normal_A7_exact_parent41df_allowed4_subset_after_actualwriters_CheckOnlycanonical_nonoutputinvariance_JVM0locks0_clean_commit_ActualDerivedSHA_for_followingpackage_boot_plan_no_othercode_source_or_alias_change",
-    "result": "NEW_G7_code41df605_all_new_execution_results_pending_no_source_only_or_previous50proof_labeled51",
+    "result": "IN_PROGRESS_hist_newAPI46_50_and_backend_normalmodels_reported0_actualA7_26e_native_linkage_package_plan_managed51_transition_finalcustody_pending",
     "returned": false,
     "returned_utc": null,
     "return_state": "NOT_OBSERVED_for_new_G7_window",

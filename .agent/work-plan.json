@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 78,
+  "plan_revision": 79,
   "updated": "2026-10-22",
   "phase": "managed_FTB_update_and_explicit_control_capacity_development_after_closed_M_wave",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -14,6 +14,11 @@
     "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
     "last_owner_session": "604195bd-6826-4299-89af-1dcf39545263",
     "source": "41df6052c2416f431f2e7dc579681602211b0042",
+    "writer_invocation_source": "41df6052c2416f431f2e7dc579681602211b0042",
+    "applicable_source_runtime": "26e22945a308a8635e8d3701ff3a3dec40a6175f",
+    "G7_A7_report_status": "executor_reported_exact_parent41df_only3normaloutputs_Economy_T1json_md_Guidance_unchanged_Java0locks0clean_parent_custody_pending",
+    "G7_A7_bundle_sha256": "325f5e33bd65802f5648aeb7acacd0b613aae5141834b901927bdec764dd2643",
+    "G7_partial_report": "historical_NEWpublisher0cb_CLI8_46_5f_and50_f8_REAL0_beforeGradle_originalrefs_semantically_equal_CI39773265433_artifact12423716934_Registry1344_Adapters323_reused_full_existing_FTBbackend0_normal3writers_independentCheckOnlybytesmtime_3canonical0_actual29sources38images_awaiting_parent_custody",
     "previous_G6_source": "fcfd6e2ed55b1db9768a6a454bd9a7a09ad904f8",
     "previous_G6_returned_utc": "2026-10-22T11:13:33.2105313Z",
     "previous_G5_source": "98874f6254aa10c91a77dcb9312a37dc1a7c7b50",
@@ -33,7 +38,7 @@
     "template_read_scope": "None_G5_reuses_existing_owned_fictitious_components_Java_and_pinned_JARs_no_real_Prism_template_or_world_options_progress_settings_access",
     "package_dependency_scope": "offline_existing_declared_pins_cached_existing_owned_fictitious_components_and_mods_Prepare0missing_no_new_download_dependency_or_provider",
     "process_privacy": "no_client_commandline_read_or_output_never_stop_player_defer_only_canonical_package_target_action_if_live_process_safety_cannot_be_established_privately_continue_other_admitted_work",
-    "result": "NEW_G7_fixed41df605_fully_composed51_source_profiles_API_provenance_unqualified_all_fresh_admission_Sync_repaired_checks_writer_loader_historicalABI_real51transition_results_pending",
+    "result": "IN_PROGRESS_executor_reports_histABI46_50_backend_and_normalmodels0_A7actual26e_loader_boot_and_package_realmanaged51_transition_and_finalcustody_pending",
     "awaiting_exact_published_GO": false,
     "returned": false,
     "returned_utc": null,
@@ -49,6 +54,17 @@
     "loader_boot": "ONE_existing_smoke_boot_ps1_direct_NEW_world_after_clean_ApplicableSource_SMOKE_QUEST_BACKENDftb_no_commands_datapacks_or_paidchecks_SMOKE_EXPECT_native_FTB_ready51_KEEPWORLD1_naturalstop_exit0_exactJARinventory_before_moreGradle_resolves_new_FML_known_lineage_helper_linkage",
     "current_plan_compilation": "one_normal_fresh_CURRENT_ApplicableSource_enclave_to_bind_real51_package_previous_actual50ref3d839_managedreceipt50_real_plan_apply_sameplan_noop_no_old5f_or_f8recompile",
     "closure_required": "all_actualsourcecoordinates_code41df_models41df_derivedA7_ifany_native_package_plan_actualApplicableSource_raw_exits_actual29_38images_data_and_packageJARhashes_realmanaged50to51_sameplan_files_mtimes_backups_protectedstate_A7bundle_onlyoutputs_ifany_ownhookremoved_Java0locks0_explicitreturn_no_player"
+  },
+  "assembler_recipe_choice": {
+    "status": "source_shadowing_identified_no_runtime_reproduction_or_fix_yet",
+    "source": "41df6052c2416f431f2e7dc579681602211b0042",
+    "evidence": "ProcessGraph_chemicalReactor_Washer_Cell_Intake_machineCraft_same3ingredients_ProcessLookup_find_returns_lastdry_ProcessMachineBlockEntity_matchingRecipe_and_menu_no_explicit_target",
+    "impact": "T1_catalogue_route_selection_and_ready51_log_do_NOT_prove_player_can_manufacture_Washer_or_other_shadowed_outputs",
+    "research_agent": "952d39a9-312f-4afa-9f54-16e79930142c",
+    "research_scope": "pinned_GT_Forge1201_recipe_selection_circuits_locking_source_fit_and_paidwork_limits_readonly",
+    "next": "bounded_existing_Assembler_stable_recipe_choice_server_authority_persistence_paidwork_preservation_no_new_bills_or_executor_after_precedent",
+    "G7_scope_change_authorized": false,
+    "PC_JVM_or_player_access": false
   },
   "default_F1_identity_correction": {
     "policy": "ADR-0184",
