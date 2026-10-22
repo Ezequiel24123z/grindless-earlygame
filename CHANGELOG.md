@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Assign only the remaining current50 plan boundary after verified G4 leaseback.**
+  Sole604 receives fixed98874f6 G5 in a new build-only root: CURRENT dry-run,
+  source-bound artifact materialization if required, canonical update of the
+  same owned fictitious target, fresh current plan and identical-plan no-op.
+  Preserve authentic46/referenceacdf and all real G4 native/JDK/legacy/model
+  successes without replay. No51 source, native reset, real template/player
+  access or result is inferred. All G5 observations remain pending.
 - **Close G4's real repaired mechanisms while preserving the current-plan red.**
   Parent verifies all176 custody files/2578 frozen inputs, actual native
   19/19/PASS1/FAIL0/89, managed201, JDK34/22EOL and authentic referenceacdf589e

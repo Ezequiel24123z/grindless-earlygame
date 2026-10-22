@@ -409,7 +409,27 @@ values with3 new keys. It is not integrated yet. It exposes the separate51
 whitelist in publisher/planner/startup/host receipt; source51 is not deployable
 until its versioned compatibility extension is composed and qualified.
 
-| Category | Current qualification state: G4 closed; current-plan fix integrated |
+**NEW G5 GO, no execution result:** only604195bd owns
+current-plan-consumption-20261022 on exact published
+98874f6254aa10c91a77dcb9312a37dc1a7c7b50 with the NEW inventoried build-only
+root. Preserve all G4/G3/M native roots/worlds/JARs. First run existing CURRENT
+prepareFtbQuestUpdate --dry-run without ftbDefinitionRoot: task actions must be
+SKIPPED; configuration success is not a compiler/plan pass.
+
+Then materialize only artifacts necessary for truthful new source/runtime/JAR
+binding, reuse the existing owned stopped fictional G4 target outside repos,
+and retain its two authentic46 chapter bytes through canonical package update.
+Existing target components/pinned JARs suffice: no real Prism/template read.
+Use authentic referenceacdf, the normal fresh CURRENT compiler receipt and real
+planner, then canonical apply and SAME-plan Unchanged with bytes/mtime/backup
+invariance. No pending journal currently exists; recovery only if a real one
+arises with its original plan. Do not force a runtime alias or relabel packageC
+as a new-source artifact. Native/JDK/legacy/model successes stay bound to G4/
+G3 and are reused; no new server/client or51 content enters this window.
+All admission/Sync/configuration/artifact/plan/apply observations remain pending.
+Keep privacy/resource/owner guards and return clean/Java0/locksfalse explicitly.
+
+| Category | Current qualification state: G4 verified closed, G5 assigned |
 | --- | --- |
 | COMPLETED | G3/A3 normal outputs and custody; actual G4 legacy reference/native89/19markers/managed201/JDK34/current package and fictitious deployment/seed; parent176-file custody/2578 inputs and safe leaseback; source686 configuration fix composed |
 | BLOCKED | CURRENT GradleBuild configuration/plan/apply has a real red; source686 is not runtime-qualified. Wet738 additionally needs explicit51 publisher/planner/startup/host compatibility |

@@ -491,6 +491,16 @@ configuration fix, so these actual native/JDK/legacy proofs remain reusable;
 only configuration/artifacts required by a new source/runtime binding and
 actual current plan/apply/no-op remain, not another complete G4 run.
 
+**New G5 assignment only:** sole604/fixed98874f6/new build-only inventory/root.
+The one-line configuration fix changes no gameplay Java/resources. Existing
+CURRENT --dry-run (no ftbDefinitionRoot) must prove correct task selection with
+all actions SKIPPED before real current compilation/plan. Any new package is
+required source-bound artifact production, not another native/JDK/legacy/model
+verification. Reuse existing owned fictitious target/referenceacdf, preserve
+authentic46 bytes, produce the actual fresh current plan, apply it and prove
+same-plan byte/mtime/backup-preserving no-op. No real template/player, native
+reset or51 code; all G5 observations remain unexecuted/unobserved.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the
