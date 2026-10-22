@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Observe the new ordinary component in the existing native mechanism run.**
+  Add one final-integration registration assertion for the Thermal core's real
+  Item class and declared registry ID inside the already-planned Matrix probe.
+  No extra marker, scenario, budget or gameplay behavior is added. Source-only
+  assertion/model checks remain distinct from the actual later Forge observation.
 - **Integrate honest two-stage Thermal reproduction as source.**
   Normal8cb82bf adds one ordinary registered core and two live Assembler rows:
   furnace/carbon/iron -> core, then core+cobble5+minimumF1 -> unchanged generator.

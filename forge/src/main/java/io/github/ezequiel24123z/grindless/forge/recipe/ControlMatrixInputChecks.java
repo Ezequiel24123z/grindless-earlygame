@@ -119,6 +119,11 @@ public final class ControlMatrixInputChecks {
     }
 
     private void registered() {
+        Item thermalCore = ModItems.THERMAL_GENERATOR_CORE.get();
+        check(thermalCore.getClass() == Item.class
+                        && BuiltInRegistries.ITEM.getKey(thermalCore).toString()
+                        .equals(FabricationLogic.THERMAL_GENERATOR_CORE),
+                "The ordinary Thermal core is bound to its declared real item registration");
         IngredientSpec minimum = IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 2);
         IngredientSpec f2 = IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F2, 2);
         IngredientSpec exact = new IngredientSpec(IngredientSpec.ITEM, FabricationLogic.RELAY_MATRIX, 2, 1);

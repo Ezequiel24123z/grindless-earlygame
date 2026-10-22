@@ -198,6 +198,9 @@ branch and correctly notices the independent a5 changes; the corrected guard
 checks the actual14-file thermal delta, preserving13 exact blobs plus the
 explicit two-sided VerifyRecipes merge. No source behavior or proof threshold
 is relaxed to conceal that overly broad guard failure.
+One final-integration assertion in the existing registered Matrix probe checks
+the ordinary Thermal core's real class and registry ID. It adds no new marker/
+scenario/budget and is not an observed native pass until that run completes.
 
 ## Final native FTB Prism and existing-game delivery
 

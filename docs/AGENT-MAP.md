@@ -203,6 +203,9 @@ renewable tier. VerifyRecipes/Atlas/T1/assets cover composed material/cost/
 slot/lookup/model invariants; vanilla-carrier lookup is not native registration.
 The merged test keeps pure-index checks BEFORE bootstrap; do not drop them to
 make thermal reflection tests run.
+The same existing ControlMatrixInputChecks.registered probe now checks the new
+core's actual Item class/registry ID, without another case or marker. This
+observation is pending execution, not supplied by synthetic lookup carriers.
 
 The owner's2026-10-21 instruction separately opens T1 development (ADR-0168/0169).
 Use [the first-factory plan](../plan/feature-t1-first-factory-1.md): live route
