@@ -192,7 +192,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0178](#adr-0178--continue-autonomously-and-deliver-ready-tiers-to-the-longitudinal-game) | Continue autonomously and deliver ready tiers to the longitudinal game | Accepted direct owner operating mandate |
 | [0179](#adr-0179--reproduce-four-slot-fit-first-factory-machines-without-repricing-bootstrap) | Reproduce four-slot-fit first-factory machines without repricing bootstrap | Accepted bounded acquisition scope; implementation/proof pending |
 | [0180](#adr-0180--reproduce-the-thermal-generator-through-an-honest-two-stage-subassembly) | Reproduce the Thermal Generator through an honest two-stage subassembly | Accepted bounded acquisition scope; implementation/proof pending |
-| [0181](#adr-0181--compare-one-generated-platform-shim-by-exact-self-name-equivalence) | Compare one generated platform shim by exact self-name equivalence | Source555dbe9 integrated; upstream/path corroborated, execution pending |
+| [0181](#adr-0181--compare-one-generated-platform-shim-by-exact-self-name-equivalence) | Compare one generated platform shim by exact self-name equivalence | Source555dbe9 integrated; G4 publication0 reported, final custody/negatives pending |
+| [0182](#adr-0182--expose-existing-wet-beneficiation-as-an-optional-t1-baseline-line) | Expose existing wet beneficiation as an optional T1 baseline line | Accepted bounded content scope; implementation/qualification pending |
 
 ---
 
@@ -8537,7 +8538,8 @@ or adapter observations, not repeated native cycles for ordinary content.
 2026-10-22. Upstream source independently corroborates the measured class
 structure and path-dependent name; two exact declared devlibs path strings
 produce both observed stamps without PC access or path-variant guessing.
-Source555dbe9 is normally integrated; corrected Java/publisher execution
+Source555dbe9 is normally integrated; G4 reports actual direct publisher0
+using the original receipt. Final reference custody and new Java negatives
 remain pending. The original G3 publication failure stays real;
 no player update or reference publication follows from this decision.
 
@@ -8612,3 +8614,56 @@ fixture is not that real export or managed-plan consumption.
 [181-package]: https://github.com/architectury/architectury-plugin/blob/3b9bbb8bbf2cd7507193a0ca447a80afc4f9039f/src/main/kotlin/dev/architectury/plugin/ArchitecturyPluginExtension.kt#L517-L539
 [181-forge]: https://github.com/architectury/architectury-plugin/blob/3b9bbb8bbf2cd7507193a0ca447a80afc4f9039f/src/main/kotlin/dev/architectury/plugin/ModLoader.kt#L65-L89
 [181-transformer]: https://github.com/architectury/architectury-transformer/blob/2698278e63d0afea4969b5fd6c96a68fb64432f2/src/main/java/dev/architectury/transformer/transformers/TransformExpectPlatform.java#L59-L87
+
+---
+
+## ADR-0182 — Expose existing wet beneficiation as an optional T1 baseline line
+
+**Status.** Accepted bounded content selection under the owner's ADR-0174/0178
+direction, 2026-10-22. Source implementation and qualification are pending.
+This adds a real basic processing branch beyond first-factory reproduction;
+it neither completes T1 nor deploys a partial tier.
+
+**Context.** First-factory power/forms/assembly now have actual source/model
+evidence, but that initial set is not the owner's complete T1 contract.
+The existing Chemical Washer already uses the default F1 ProcessMachineKind,
+held STIRRED conditions and ProcessLogic's F1 FU rate. Its real B2 batch
+consumes crushed feed and water, preserves washed primary feed and produces
+the pack-derived secondary ingot; B2-R1 consumes the washed feed. Older T2
+comments in the source inventory do not veto the later basic-family direction.
+
+This mechanism, Motor/Washer construction, slots, assets, fluid settlement and
+source-derived secondary ring already exist. No new engine or borrowed
+implementation is needed. Reuse ProcessGraph/ProcessLogic/secondaryOf and the
+shared progression/Atlas/quest/export seams rather than copying recipe values.
+
+**Decision.** Add optional line `wet_beneficiation` after assembly, selecting
+the existing `assemble/motor`, `assemble/chemical_washer`, `b2/iron`,
+`b2/copper`, `b2_r1/iron` and `b2_r1/copper` authorities. Preserve every existing
+recipe ID, ingredient, quantity, FU/t, duration, output and construction bill.
+In particular, do not add a controller or change a pending batch's bill merely
+because other newly selected assembly routes explicitly use minimum control.
+Existing F1 power/conditions must really support the selected branch.
+
+Add one concise reward-free optional native quest with stable logical ID
+`wet_beneficiation`, after the existing Assembler lesson, for acquiring the real
+Washer. Its goal must match that possession task; live JEI/Atlas teaching
+explains the water/washed/secondary/reduction chain without claiming possession
+proves operation or duplicating a long shopping list. Preserve all existing50
+quest/native/task/reward IDs and rewards, finite starter and paid-history fence.
+Do not add this branch to the initial F2 prerequisites or five-Matrix seed draw.
+
+Both output streams and water use remain explicit through actual recipe
+projection. Trace water/feed provenance honestly; optional selection is not a
+renewability, net-surplus or finite-establishment certificate. Do not relabel a
+secondary as discardable waste or invent its consumer. Basic family exposure is
+not an in-place chassis upgrade or permission to narrow a legacy envelope.
+
+**Proof and execution boundary.** Verify all six live route/Atlas identities,
+real F1/STIRRED applicability, optional acyclicity, unchanged mandatory/F2
+selection, old quest/reward/value invariance and the new short native lesson.
+Use existing projection/quest checks and later normal writers; no hand-edited
+canonical files or new fixture-as-gameplay authority. Reuse unchanged machine,
+fluid, save and native quest mechanisms; require runtime only for a concrete
+uncovered assumption. Source work stays isolated while G4 owns PC/cache and
+its frozen271f386 alias; never retarget that executor or access player data.

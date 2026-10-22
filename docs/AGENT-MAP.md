@@ -219,6 +219,14 @@ Do not trim other whitespace, suppress real content changes or fork the PS/SH
 wrappers; both invoke this Java writer. Existing VerifyApprovedMultitool covers
 the22 new no-op/count/mtime/real-update/missing-output assertions, not another
 runner or full native/generator replay. Its actual JDK execution remains pending.
+ADR-0182 selects the next isolated optional `wet_beneficiation` line through
+T1Progression, QuestCatalogue/QuestTeaching, concise locale/native FTB definition
+layout and their existing checks. Select existing assemble/motor,
+assemble/chemical_washer, b2/iron/copper and b2_r1/iron/copper authorities; no
+recipe/bill/engine/registration/save changes. Reuse actual default-F1/STIRRED
+Washer and both output streams. One new free acquisition lesson preserves all
+old50 IDs/rewards/values and cannot gate initial F2. No canonical hand edits or
+PC/cache/G4 alias access follows from source ownership.
 The same existing ControlMatrixInputChecks.registered probe now checks the new
 core's actual Item class/registry ID, without another case or marker. This
 observation is pending execution, not supplied by synthetic lookup carriers.

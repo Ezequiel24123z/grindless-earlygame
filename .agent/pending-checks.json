@@ -32,7 +32,7 @@
     "source_frozen_until_active_stages_and_locks_close": true,
     "qualification_package_fictitious_target_plan_authorized": true,
     "real_PrismRoot_player_world_writes_authorized": false,
-    "result": "NEW_G4_exact271f386_admission_Sync_and_all_results_pending_G3reds_and_successful_models_keep_original_source",
+    "result": "G4_actualSync0_clean271_legacyCLI8_actual0_alias_and_published46schema2_no_oldcompiler_replay_stageclosedJava0locks0_currentclasses_starting_other_results_and_custody_pending",
     "returned": false,
     "returned_utc": null,
     "return_state": "NOT_OBSERVED_for_new_G4_window",
@@ -75,6 +75,13 @@
     "PC_source_worker_access": false,
     "T0_world_client_deploy_or_acceptance": false,
     "evidence_reuse": "keep_source426_models_e260_contracts_M_Blueprint_native_and_independent_full_CI_bound_to_their_actual_sources_no_unrelated_replay"
+  },
+  "next_T1_wet_baseline": {
+    "policy": "ADR-0182",
+    "source_owner_session": null,
+    "status": "selected_optional_existing_wet_line_and_one_free_native_lesson_implementation_and_checks_pending",
+    "no_recipe_bill_engine_save_or_firstF2_change": true,
+    "no_PC_JVM_cache_player_or_G4_alias_access": true
   },
   "ftb_questbook_blocker": {
     "policy": "ADR-0171",

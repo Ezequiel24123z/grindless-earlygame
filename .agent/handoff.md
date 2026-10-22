@@ -356,11 +356,27 @@ reference/plan/custody evidence and explicit clean/ownedJava0/locksfalse return.
 Ordinary invoker/observer repairs stay in the assigned lane without success
 replays; app-source failures return exact evidence before any new source grant.
 
+**Actual G4 first result:**09:27:54Z sole604 reports Sync0/clean271 and the
+direct legacy CLI8 exits0 before any new Gradle. It reconsumes original5f/
+29bc/8a7a/runtime provenance, emits ARCHITECTURY_SELF_UTF8_ALIAS plus actual
+FTB_DEFINITIONS_PUBLISHED/schema2/46, and saves the new reference/hash apart.
+G3exit1 remains unchanged; no old compile/remap is repeated. That stage closes
+Java0/locksfalse, NOT the G4 lease. Necessary current-source classes are next;
+native/JDK/managed negatives/real plan and final reference custody remain pending.
+
+**Next isolated source content:** ADR-0182 selects optional wet beneficiation:
+reuse existing Motor/Washer and B2/B2-R1 iron/copper authorities, default F1/
+STIRRED applicability and source-derived water/secondary outputs. Add one
+concise free native Washer-acquisition lesson without claiming possession is
+operation. No recipe/bill/MK/save change or new first-F2/seed dependency.
+Implementation owner is not assigned yet. This opens source work only, not
+another PC/JVM/cache owner or a G4 source-alias update.
+
 | Category | Current qualification state: G3 closed, G4 assigned |
 | --- | --- |
 | COMPLETED | Actual compile/javac/managed44, normal writers/CheckOnly/canonical passes; normal A3 integration; parent-verified205-file custody/2573 inputs/4 images/5 Git blobs; exact EOL recovery and explicit safe leaseback; source957/5aa/555 repairs |
 | BLOCKED | Corrected native/legacy properties remain unproved; all source repairs are integrated, actual post-fix proofs remain separate from completed writer stages |
-| NOT EXECUTED | Corrected native/publisher and asset JDK fixture; real managed-plan consumption, new package/client/player update, whole-tier acceptance |
+| NOT EXECUTED | Corrected native/new Java negatives/asset JDK fixture; real managed-plan consumption and new package/player update, wet-line source implementation, whole-tier acceptance. Successful reference final custody remains pending |
 | NEEDS HUMAN VALIDATION | Existing GUI/JEI/reward/appearance and longitudinal-campaign gates remain open |
 | NEEDS MY DECISION | None from the owner; bounded technical repair is delegated |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |

@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 62,
+  "plan_revision": 63,
   "updated": "2026-10-22",
   "phase": "managed_FTB_update_and_explicit_control_capacity_development_after_closed_M_wave",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -27,7 +27,7 @@
     "template_read_scope": "existing_compatible_component_metadata_and_pinned_mod_JARs_only_no_world_options_progress_or_global_settings_copy",
     "package_dependency_scope": "offline_existing_declared_cached_dependencies_Prepare_must_report_zero_missing_before_Deploy_no_auto_install_or_new_pin",
     "process_privacy": "no_client_commandline_read_or_output_never_stop_player_defer_only_canonical_package_target_action_if_live_process_safety_cannot_be_established_privately_continue_other_admitted_work",
-    "result": "NEW_G4_GO_on_exact271f386_fresh_admission_Sync_all_new_observations_pending_NO_green_inferred_from_G3_source_or_models",
+    "result": "G4_actual_Sync0_clean271_legacy_directCLI8_actual0_alias_and_published_schema2_46_before_newGradle_original5f_reused_no_oldcompile_stageJava0_locksfalse_current_classes_starting_other_results_and_finalcustody_pending",
     "awaiting_exact_published_GO": false,
     "returned": false,
     "returned_utc": null,
@@ -107,6 +107,7 @@
     "legacy_G3_source_repair": "555dbe9_normally_integrated_parent_directreview_sealed_ClassFile_no_prefix_exclusion_no_new_compiler_recipe_init_unchanged_publisher_source_SHA0befca8313bf1166ddf8a7e7c264306f4093896b85995801d364448306d1ae43",
     "legacy_comparison_contract": "ADR0181_implemented555_exact_first_one_fixed_ClassFile52_flags0011_forge_getCurrentTarget_fingerprint_alias_hash64_only_module_UUID32_suffix_and_all_other_bytes_payloads_exact_Java_and_actual_corrected_publication_pending",
     "legacy_source_author_evidence": "parent_verified_handoffba017c86_byteanalysis2e0c13a7_mutants0e99a00a_pathsa5c9a0a8_156_nonJVM_checks_real_JAR_pair_139_fixedbyte_mutations_rejected_not_Java_execution_or_export",
+    "legacy_G4_actual": "sole604_boundary09_27_54Z_reports_CLI8_native0_before_any_newGradle_original5f_selected29bc_fresh8a7a_real_RuntimePackageProvenance_alias_marker_and_FTB_DEFINITIONS_PUBLISHED_schema2_46_refhash_saved_final_parent_custody_pending_stageJava0_locksfalse_not_G4leaseback",
     "legacy_self_representation_sha256": "0a84a9c64d4531a5942f7fab6de29d225f189424344d81b42e4642cb468923d6",
     "legacy_upstream_research": "3339e4ff_CLOSED_plugin3b9bbb8b_projectUUID32_and_SHA256_UTF8_inputJarPath_Forge_generator2698278e_MIT_no_import_release_commit_timestamp_correlation_not_attestation_author_local_exact2_declared_devlibs_paths_produce_e463_and1f18_no_PC_or_variant_guessing_parent_verified_raw_hash",
     "legacy_G3_proof_selection": "after_G3_close_corrected_publisher_should_reconsume_unchanged_authentic_compilation_receipt_and_JAR_if_binding_inputs_match_do_not_repeat_successful_compilers_merely_for_comparator_change_real_plan_consumption_still_separate",
@@ -122,6 +123,17 @@
     "source_workers_PC_JVM_or_shared_cache_authorized": false,
     "later_proof_selection": "affected_contracts_real_owned_file_transition_registered_minimum_vs_exact_control_and_needed_normal_writers_not_green_M_Blueprint_pressure_replays",
     "not_in_scope": ["playable_chassis_kit_or_new_envelope_balance", "T0_instance_or_owner_world", "dependency_or_provider_changes", "PR_main_release_or_player_deployment", "whole_tier_acceptance"]
+  },
+  "next_T1_wet_baseline": {
+    "policy": "ADR-0182",
+    "status": "accepted_bounded_source_scope_not_implemented_or_qualified",
+    "source_owner_session": null,
+    "scope": "optional_wet_beneficiation_after_assembly_existing_motor_washer_B2iron_copper_B2R1iron_copper_and_one_short_free_native_washer_acquisition_lesson_no_recipe_bill_engine_or_save_change",
+    "preserve": "all50_oldquest_native_task_reward_IDs_oldvalues_paid_fence_starter_firstF2_mandatory_graph_fiveMatrix_seed_and_actual_secondary_water_provenance",
+    "PC_JVM_cache_or_player_access_authorized": false,
+    "G4_source_alias_updates_authorized": false,
+    "canonical_outputs": "do_not_hand_edit_normal_writers_only_in_a_later_fixed_source_window",
+    "acceptance": "real_F1_STIRRED_applicability_6live_route_Atlas_bindings_optional_DAG_old50IDs_rewards_values_unchanged_new_concise_no_reward_task"
   },
   "autonomous_tier_delivery": {
     "policy": "ADR-0178",

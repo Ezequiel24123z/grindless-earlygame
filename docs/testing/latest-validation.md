@@ -429,6 +429,16 @@ authorized to bind that package. No player data, real Prism writes, server/
 client/reward fixture, acceptance or new budget. Fresh guards/Sync/results are
 unobserved; do not turn this grant or G3 source successes into a new proof.
 
+**Actual G4 initial boundary09:27:54Z:** sole604 reports clean271/Sync0, then
+direct corrected CLI8 actual exit0 before any new Gradle. Original5f receipt,
+selected29bc/fresh8a7a and package-derived legacy runtime are revalidated;
+no old compiler/remap runs again. ARCHITECTURY_SELF_UTF8_ALIAS and
+FTB_DEFINITIONS_PUBLISHED/schema2/46 really appear, with new reference/hash
+preserved separately. G3exit1 is not rewritten. Stage Java0/locksfalse is not
+G4 leaseback. Final raw/reference custody remains pending; current class
+preparation is beginning and other G4 properties have no reported result yet.
+ADR-0182's independent wet-line source scope adds no executed proof or G4 change.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

@@ -15,6 +15,18 @@ entries below reference those records by id.
 
 ### Added
 
+- **Select the existing wet-processing family as the next bounded T1 content lane.**
+  ADR-0182 chooses one optional live Motor/Washer/B2/B2-R1 line and concise
+  reward-free native lesson, not a new engine or altered construction bill.
+  Preserve F1/STIRRED behavior, actual water/secondary outputs, old50 IDs/
+  rewards and the first-F2/seed contract. Source implementation is pending;
+  G4 remains exclusively frozen271f386, with no new PC/player permission.
+- **Observe authentic legacy publication without replaying its compilation.**
+  Sole604 reports G4 Sync0/clean271, direct CLI8 actual0 before any new Gradle,
+  sealed-alias comparison and FTB_DEFINITIONS_PUBLISHED/schema2/46.
+  Original5f/29bc/8a7a/provenance are reused, G3exit1 preserved. The stage
+  closesJava0/locksfalse; reference/hash final custody and other G4 proofs
+  remain pending, not a returned lease or player update.
 - **Synchronize the T1 map with actual G3/A3 and the frozen G4 boundary.**
   Replace obsolete pending/manual-only follow-up descriptions with the real
   five-machine/die source, actual model/data/registry evidence and preserved
