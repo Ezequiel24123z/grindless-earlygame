@@ -364,19 +364,31 @@ G3exit1 remains unchanged; no old compile/remap is repeated. That stage closes
 Java0/locksfalse, NOT the G4 lease. Necessary current-source classes are next;
 native/JDK/managed negatives/real plan and final reference custody remain pending.
 
+**Actual G4 corrected native boundary09:34:20Z:** sole604 reports clean271/
+Java0/locksfalse, necessary classes0 and ONE canonical matrix-lifecycle0.
+All19 markers appear, aggregate PASS1/FAIL0 and natural save/stop. Server0 is
+derived from the harness's explicit checked exit, not an invented standalone
+receipt. Tested/staged/remapped JAR and inventory are frozen before another
+Gradle; the new native world stays only in its new root. Final parent custody
+remains pending. The actor continues only managed files/new negatives and the
+existing22-assertion EOL fixture, then real package/plan; no model/green replay.
+
 **Next isolated source content:** ADR-0182 selects optional wet beneficiation:
 reuse existing Motor/Washer and B2/B2-R1 iron/copper authorities, default F1/
 STIRRED applicability and source-derived water/secondary outputs. Add one
 concise free native Washer-acquisition lesson without claiming possession is
 operation. No recipe/bill/MK/save change or new first-F2/seed dependency.
-Implementation owner is not assigned yet. This opens source work only, not
-another PC/JVM/cache owner or a G4 source-alias update.
+Source ownerd35d3b04-9e9d-4c84-8f34-b4b150fb1b37 starts from exact
+e4cc108389ed0b58d15ed5c0678ecd27660aa103 in a new isolated source lane.
+This opens no PC/JVM/cache ownership or G4 source-alias update. The coordinator
+retains root docs/integration/publication; the worker returns a clean local
+checkpoint and authored-versus-executed proof boundaries.
 
 | Category | Current qualification state: G3 closed, G4 assigned |
 | --- | --- |
 | COMPLETED | Actual compile/javac/managed44, normal writers/CheckOnly/canonical passes; normal A3 integration; parent-verified205-file custody/2573 inputs/4 images/5 Git blobs; exact EOL recovery and explicit safe leaseback; source957/5aa/555 repairs |
-| BLOCKED | Corrected native/legacy properties remain unproved; all source repairs are integrated, actual post-fix proofs remain separate from completed writer stages |
-| NOT EXECUTED | Corrected native/new Java negatives/asset JDK fixture; real managed-plan consumption and new package/player update, wet-line source implementation, whole-tier acceptance. Successful reference final custody remains pending |
+| BLOCKED | None at the reported G4 legacy/native boundaries; remaining contracts, real plan and final reference/native custody are not yet qualified |
+| NOT EXECUTED | New Java negatives/asset JDK fixture and real managed-plan consumption/current qualification package; player update, wet-line source implementation and whole-tier acceptance. Successful reference/native final custody remains pending |
 | NEEDS HUMAN VALIDATION | Existing GUI/JEI/reward/appearance and longitudinal-campaign gates remain open |
 | NEEDS MY DECISION | None from the owner; bounded technical repair is delegated |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |

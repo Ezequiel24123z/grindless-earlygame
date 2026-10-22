@@ -439,6 +439,17 @@ G4 leaseback. Final raw/reference custody remains pending; current class
 preparation is beginning and other G4 properties have no reported result yet.
 ADR-0182's independent wet-line source scope adds no executed proof or G4 change.
 
+**Reported actual G4 corrected native09:34:20Z:** clean271, necessary classes0
+and one canonical matrix-lifecycle0. All19 markers are present, aggregate
+GRINDLESS_MATRIX_INPUT_NATIVE_PASS1/FAIL0, stop/save natural. Server0 follows
+the harness's explicit exit check; it is not claimed as an independently
+captured launcher receipt. The executor freezes tested/staged/remapped JAR and
+inventory before later Gradle and retains this world only in the NEW root.
+Parent final custody/hash verification remains pending. Exact-source CI's
+Matrix shard was still running/without artifact at the execution decision;
+no pass, polling wait or CI replay is inferred. Next are only new managed Java
+negatives/EOL JDK fixture and the separately authorized package/real plan.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

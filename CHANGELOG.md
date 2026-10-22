@@ -21,12 +21,20 @@ entries below reference those records by id.
   Preserve F1/STIRRED behavior, actual water/secondary outputs, old50 IDs/
   rewards and the first-F2/seed contract. Source implementation is pending;
   G4 remains exclusively frozen271f386, with no new PC/player permission.
+  New isolated source ownerd35d3b04 starts frome4cc108 with no JVM/cache,
+  generated-output, root-publication or player access.
 - **Observe authentic legacy publication without replaying its compilation.**
   Sole604 reports G4 Sync0/clean271, direct CLI8 actual0 before any new Gradle,
   sealed-alias comparison and FTB_DEFINITIONS_PUBLISHED/schema2/46.
   Original5f/29bc/8a7a/provenance are reused, G3exit1 preserved. The stage
   closesJava0/locksfalse; reference/hash final custody and other G4 proofs
   remain pending, not a returned lease or player update.
+- **Observe the corrected existing Matrix mechanism on fixed source.**
+  G4 reports necessary classes0 and one canonical matrix-lifecycle0 on271:
+  all19 markers, aggregate PASS1/FAIL0, natural save/stop and server0 from the
+  explicit harness check. Freeze tested/staged/remapped JAR and inventory
+  before subsequent Gradle; retain the new world in its new root. Parent
+  final custody/new managed-Java/EOL fixture/real plan remain pending.
 - **Synchronize the T1 map with actual G3/A3 and the frozen G4 boundary.**
   Replace obsolete pending/manual-only follow-up descriptions with the real
   five-machine/die source, actual model/data/registry evidence and preserved

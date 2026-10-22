@@ -32,7 +32,7 @@
     "source_frozen_until_active_stages_and_locks_close": true,
     "qualification_package_fictitious_target_plan_authorized": true,
     "real_PrismRoot_player_world_writes_authorized": false,
-    "result": "G4_actualSync0_clean271_legacyCLI8_actual0_alias_and_published46schema2_no_oldcompiler_replay_stageclosedJava0locks0_currentclasses_starting_other_results_and_custody_pending",
+    "result": "G4_actualSync0_legacyCLI8_0_original5f_classes0_one_matrix0_19markers_PASS1_FAIL0_server0_by_harness_naturalstop_JARinventory_frozen_managed_assetJDK_package_plan_and_finalcustody_pending",
     "returned": false,
     "returned_utc": null,
     "return_state": "NOT_OBSERVED_for_new_G4_window",
@@ -78,8 +78,9 @@
   },
   "next_T1_wet_baseline": {
     "policy": "ADR-0182",
-    "source_owner_session": null,
-    "status": "selected_optional_existing_wet_line_and_one_free_native_lesson_implementation_and_checks_pending",
+    "source_owner_session": "d35d3b04-9e9d-4c84-8f34-b4b150fb1b37",
+    "source_base": "e4cc108389ed0b58d15ed5c0678ecd27660aa103",
+    "status": "active_isolated_source_optional_existing_wet_line_and_free_native_lesson_qualification_pending",
     "no_recipe_bill_engine_save_or_firstF2_change": true,
     "no_PC_JVM_cache_player_or_G4_alias_access": true
   },

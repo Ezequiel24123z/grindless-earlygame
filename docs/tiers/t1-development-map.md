@@ -9,7 +9,8 @@ normal assets/projections and the five-output A3 checkpoint, now normally
 integrated with parent-verified custody. Its native carrier/legacy publisher
 failures remain real. G4 is separately assigned only to604195bd on frozen
 271f386 for the three source repairs and real isolated plan consumption;
-its results remain pending. Read the active handoff for PC ownership rather
+it reports first legacy/native exit0 while final custody and remaining JDK/
+real-plan proofs are pending. Read the active handoff for PC ownership rather
 than treating historical M/G3 leaseback as current permission. No T0/player
 action or complete-T1 readiness follows.
 [The implementation plan](../../plan/feature-t1-first-factory-1.md)
