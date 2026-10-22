@@ -111,7 +111,7 @@ public final class VerifySustainability {
                 VerifySustainability::executedClaimObjectiveScope, VerifySustainability::typedFindingTierScope,
                 VerifySustainability::outputOnlyFirstUseException, VerifySustainability::continuedCustody,
                 VerifySustainability::continuationRefusals, VerifySustainability::exhaustedContinuation,
-                VerifySustainability::manualCapital)) {
+                VerifySustainability::manualCapital, VerifySustainability::finiteFurnaceSubassembly)) {
             try {
                 fixture.run();
             } catch (Exception failure) {
@@ -237,6 +237,85 @@ public final class VerifySustainability {
                 .meta(SIDE, renewable("capital/operation")).root(SIDE);
         fixture.entryProfile = fixture.entryProfile.withBill(Map.of(RAW, raw), 0);
         return fixture;
+    }
+
+    private static void finiteFurnaceSubassembly() {
+        group("R33 finite capital may consume one manually funded Furnace without claiming automatic net core supply");
+        Resource furnace = new Resource(Kind.ITEM, "minecraft:furnace");
+        Resource finished = new Resource(Kind.ITEM, "grindless:thermal_generator");
+        Resource core = item("finite_capital_core");
+        String furnaceRoute = "fixture/manual_furnace";
+        String coreRoute = "fixture/optional_core";
+        String finalRoute = "fixture/manual_final";
+        for (long budget : List.of(2L, 1L)) {
+            // Invented model-contract batches only, NOT live Furnace/Thermal recipes or bills.
+            // The real vanilla authority and absence of added Matrix inputs are checked in T0.
+            Fixture fixture = gateFixture().seed(MACHINE, 1)
+                    .terminal("manual_core_feed", RAW, TerminalKind.MANUAL_WORLD, false, true)
+                    .meta(RAW, metadata(ResourceClass.BOOTSTRAP, null, null, List.of(), null, null, null, null));
+            fixture.add(new Route(furnaceRoute, Authority.CRAFTING_JSON, "fixture:not_a_live_furnace_bill", null,
+                    Map.of(SAFE, 1L), Map.of(), Map.of(furnace, 1L), Set.of(), 0, 0, Map.of(), Set.of(),
+                    false, true, false)).meta(furnace, metadata(ResourceClass.MANUAL_CAPITAL, null, furnaceRoute,
+                    List.of(), null, null, null, null)).root(furnace);
+            fixture.machines.put("CORE_FACILITY", new Machine("CORE_FACILITY", MACHINE, 0));
+            fixture.add(route(coreRoute, Map.of(furnace, 1L, RAW, 2L), Map.of(), Map.of(core, 1L), "CORE_FACILITY"))
+                    .policy(coreRoute, 1, true)
+                    .meta(core, new ResourceMetadata(ResourceClass.BOOTSTRAP, null, 1, null, coreRoute,
+                            List.of(), null, null, null, null));
+            fixture.add(new Route(finalRoute, Authority.CRAFTING_JSON, "fixture:not_a_live_thermal_bill", null,
+                    Map.of(core, 1L), Map.of(), Map.of(finished, 1L), Set.of(), 0, 0, Map.of(), Set.of(),
+                    false, true, false)).policy(finalRoute, 1, true)
+                    .meta(finished, new ResourceMetadata(ResourceClass.MANUAL_CAPITAL, null, 1, null, finalRoute,
+                            List.of(), null, null, null, null));
+            fixture.entryProfile = fixture.entryProfile.withBill(Map.of(RAW, budget), 0);
+            var predecessor = fixture.audit();
+            yes("the predecessor genuinely constructs its one manual Furnace; budget=" + budget,
+                    T0ConditionalGate.evaluate(predecessor).pass());
+            var before = predecessor.tiers().get(0).witnessState();
+            if (before == null) {
+                fail("the finite subassembly contract needs completed predecessor custody");
+                continue;
+            }
+            eq("the Furnace is manufactured once, not injected as a gift", 1L,
+                    before.establishmentBatches().get(furnaceRoute));
+            eq("the manually funded Furnace is physically present once", 1L, before.freeStock().get(furnace));
+            eq("finished Furnace stock is not a delivery/accounting credit", 0L,
+                    before.cumulativeDeliveries().getOrDefault(furnace, 0L));
+            var result = SustainabilityAudit.continueFinite(predecessor, fixture.annotations(),
+                    List.of(coreRoute, finalRoute), finalRoute);
+            yes("optional local core work is admitted without a broad renewable exception", result.admitted());
+            eq("only sufficient actual raw custody pays the finite capital subassembly", budget == 2, result.completed());
+            no("manual Furnace capital is not automatic item supply", predecessor.tiers().get(0).renewable().contains(furnace));
+            no("a machine-only core recipe is not automatic net core supply", predecessor.tiers().get(1).renewable().contains(core));
+            if (budget == 2) {
+                eq("the one actual Furnace is consumed exactly once", 0L, result.state().freeStock().getOrDefault(furnace, 0L));
+                eq("exactly one finite automatic core batch completes", 1L,
+                        result.state().establishmentBatches().get(coreRoute));
+                eq("the final capital batch is genuinely manufactured", 1L, result.exitProduction().executedBatches());
+                eq("the complete raw feed bill remains paid from the original profile", 2L,
+                        result.state().playerDeliveries().get(RAW));
+                no("finite capital construction is not misreported as a recurring-feed obligation",
+                        result.findings().stream().anyMatch(finding -> finding.rule().equals("finite_dependency")));
+            } else {
+                yes("a real missing raw-feed unit remains an explicit failure", result.findings().stream()
+                        .anyMatch(finding -> finding.rule().equals("entry_profile_insufficient")));
+                eq("an underfunded subassembly cannot invent finished capital", 0L, result.exitProduction().executedBatches());
+            }
+            conservation(before, result.state(), result.batches());
+
+            if (budget == 2) {
+                fixture.environment("renewable_core_feed", Map.of(RAW, 2L), null).meta(RAW, renewable("renewable_core_feed"));
+                fixture.entryProfile = fixture.entryProfile.withBill(Map.of(), 0);
+                fixture.policy(coreRoute, 0, false).meta(core, metadata(ResourceClass.BOOTSTRAP, null, coreRoute,
+                        List.of(), null, null, null, null)).root(core);
+                var recurring = fixture.audit();
+                yes("making the same core recurring exposes the manual Furnace deficit",
+                        findingAt(recurring, "finite_dependency", furnace.key(), "T0"));
+                no("renewable raw feed cannot launder the manual Furnace into automatic net core supply",
+                        renewable(recurring, core));
+                no("the recurring deficit cannot receive a conditional pass", T0ConditionalGate.evaluate(recurring).pass());
+            }
+        }
     }
 
     private static void continuedCustody() {

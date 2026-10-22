@@ -537,7 +537,7 @@
   "tooltip.grindless.resource.action.process_loss": "Process loss, not retained inventory",
   "tooltip.grindless.resource.uncertainty.item.grindless.slag": "The implemented ceramic/refractory_brick ARC_FURNACE consumer is a prototype with no accepted future use tier. Ordinary Item discard is allowed; no automatic disposal, recycling or numbered future plan is claimed.",
   "tooltip.grindless.resource.uncertainty.item.minecraft.flint": "Optional T0 side stock with no accepted T0 consumer. The implemented pulverizer craft and vanilla compatibility do not establish a first-use tier or a mandatory root.",
-  "tooltip.grindless.resource.uncertainty.item.grindless.thermal_generator_core": "Assembler component consumed by manual craft/thermal_generator_from_core. Automatic net supply and renewable establishment are unproved.",
+  "tooltip.grindless.resource.uncertainty.item.grindless.thermal_generator_core": "Assembler component consumed by manual craft/thermal_generator_from_core. Its Furnace input needs manual capital supply; an automatic core recipe is not automatic net renewable supply.",
   "tooltip.grindless.resource.uncertainty.environment.grindless.local_crank_actions": "Finite eligible batch-local startup actions, never portable ENERGY or renewable labour.",
   "tooltip.grindless.resource.player_scope": "Check the machine's power, supplies and site before relying on this route.",
   "tooltip.grindless.resource.player_unavailable": "Resource information is unavailable. Check the Atlas recipes; do not assume this supply is renewable.",

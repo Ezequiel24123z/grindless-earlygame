@@ -341,13 +341,13 @@ public final class VerifyT1Progression {
         equal("the existing exporter includes all six live wet authorities", 6,
                 wetDocument.getAsJsonArray("routes").size());
         equal("raw source hashes are not embedded in committed model data", false, document.has("authority_sha256"));
-        equal("finite quantity evidence cannot approve the open external Furnace policy boundary",
-                "OPEN_COORDINATOR_PRODUCT_BOUNDARY_NOT_AN_EXEMPTION",
+        equal("manual-only Furnace policy is attributed to the coordinator, not invented owner confirmation",
+                "MANUAL_ONLY_COORDINATOR_DECISION_NOT_OWNER_CONFIRMED",
                 document.get("external_furnace_policy").getAsString());
-        equal("the open boundary lists actual automatic Furnace authorities rather than inventing an exemption",
-                snapshot.routes().values().stream().filter(route -> route.automatable()
-                                && route.retainedOutputs().containsKey(item("minecraft:furnace")))
-                        .map(Route::id).toList(),
+        equal("the Furnace uses its actual existing manual authority, not a new recipe",
+                "vanilla/minecraft:furnace", document.get("external_furnace_manual_route").getAsString());
+        equal("the retired automatic Furnace projections do not survive as an exemption",
+                List.of(),
                 java.util.stream.StreamSupport.stream(
                                 document.getAsJsonArray("external_furnace_automatic_routes").spliterator(), false)
                         .map(element -> element.getAsString()).toList());
@@ -365,7 +365,6 @@ public final class VerifyT1Progression {
                 List.of("The finite conditional continuation does not certify recursive T1 renewable closure or the broader T1 family contract.",
                         "This finite witness chooses automatic recurring components where available; manual alternatives remain valid player choices. Complete recurrent input, power and routing closure is not proved.",
                         "Continuous factory power, nighttime/restart recovery, routing throughput and captured-gas handling need separate evidence.",
-                        "Inherited automatic Minecraft Furnace routes remain an open product boundary, not an approved component/infrastructure exemption.",
                         "Native client, Survival play, actual crafting and longitudinal save compatibility are not proved by this export."),
                 T1Sustainability.document(t0).get("unproved"));
         equal("every direct consumption/catalyst edge is exported", inputs.size(),
@@ -827,7 +826,7 @@ public final class VerifyT1Progression {
             manualNormalConstruction(snapshot.routes().get("craft/" + machine));
         }
         for (Route route : snapshot.routes().values()) {
-            equal("no live automatic producer can manufacture policy-classified Grindless normal machines: " + route.id(), false,
+            equal("no live automatic producer can manufacture policy-classified normal machines/processors: " + route.id(), false,
                     route.automatable() && route.retainedOutputs().keySet().stream()
                             .anyMatch(resource -> ManufacturingPolicy.isManualFinalMachine(resource.id())));
         }
@@ -857,6 +856,13 @@ public final class VerifyT1Progression {
         equal("the core has exactly its three physical source groups",
                 Set.of(item("minecraft:furnace"), new Resource(Kind.TAG, "grindless:carbon"),
                         new Resource(Kind.TAG, "forge:ingots/iron")), physicalInputs(core).keySet());
+        var furnaceCapital = t0.annotations().resources().get(item("minecraft:furnace"));
+        equal("core manufacture consumes manually supplied Furnace capital, not a renewable machine item",
+                SustainabilityAnnotations.ResourceClass.MANUAL_CAPITAL, furnaceCapital.resourceClass());
+        equal("the capital source is the actual unchanged manual vanilla authority",
+                "vanilla/minecraft:furnace", furnaceCapital.canonicalRoute());
+        equal("local machine-only core processing does not imply automatic net Furnace supply", false,
+                t0.tiers().get(0).renewable().contains(item("minecraft:furnace")));
         equal("the core never consumes a hidden Matrix", false,
                 physicalInputs(core).keySet().stream().anyMatch(resource -> resource.id().equals(FabricationLogic.RELAY_MATRIX)));
         Resource controller = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX, FluxTier.F1.ordinal(), "items");

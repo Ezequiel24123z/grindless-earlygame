@@ -30,9 +30,12 @@ entries below reference those records by id.
   policy/Kind dependency, not standalone compilation. Source/JSON/copy checks and
   963 links pass; an incorrect observer-only adapter path is preserved/corrected.
   Finished Ad686 is read-only source-inspected without composition: its API,
-  shaped-key projection and two policy image names match. Keep its inherited
-  automatic vanilla Furnace boundary explicitly open in the export; OTHER is
-  not a component/infrastructure exemption or universal manufacturing closure.
+  shaped-key projection and two policy image names match. The coordinator then
+  selects manual-only vanilla Furnace manufacture, not an owner-confirmed
+  Furnace preference. Resolve its actual `vanilla/minecraft:furnace` authority
+  without a new recipe/Matrix/bill; a manually funded Furnace may feed a finite
+  optional capital subassembly once, never unbounded automatic core supply.
+  Narrow contracts retain real material-deficit and conservation failures.
   No Java/model/native/writer, actual class hash or player-save result is claimed.
 - **Correct the manufacturing objective to manual final normal machines.**
   The owner explicitly rejects universal factory self-replication. ADR-0188

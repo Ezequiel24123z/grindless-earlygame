@@ -170,8 +170,14 @@ public final class T0Sustainability {
                 // Select the actual existing manual authority, never invent a construction bill.
                 String id = "craft/" + capital.id().substring(capital.id().indexOf(':') + 1);
                 Route craft = snapshot.routes().get(id);
+                if (craft == null || craft.automatable() || craft.oneShot()
+                        || !craft.retainedOutputs().containsKey(capital)) {
+                    // External capital can use its already allowlisted vanilla authority. In
+                    // particular the Furnace is vanilla/minecraft:furnace, not craft/furnace.
+                    craft = snapshot.routes().get("vanilla/" + capital.id());
+                }
                 String canonical = craft != null && !craft.automatable() && !craft.oneShot()
-                        && craft.retainedOutputs().containsKey(capital) ? id : null;
+                        && craft.retainedOutputs().containsKey(capital) ? craft.id() : null;
                 metadata.put(capital, new ResourceMetadata(ResourceClass.MANUAL_CAPITAL, null, 0, null,
                         canonical, List.of(), new Handling(Action.STORE, true, false, null, null), null, null, null));
             }
@@ -205,7 +211,7 @@ public final class T0Sustainability {
         metadata.put(item(FabricationLogic.THERMAL_GENERATOR_CORE), new ResourceMetadata(null, null, 1, null,
                 "assemble/thermal_generator_core", List.of(), new Handling(Action.STORE, true, false, null, null),
                 null, null, "Assembler component consumed by manual craft/thermal_generator_from_core. "
-                + "Automatic net supply and renewable establishment are unproved."));
+                + "Its Furnace input needs manual capital supply; an automatic core recipe is not automatic net renewable supply."));
         for (Terminal terminal : snapshot.terminals().values()) {
             if (terminal.kind() == TerminalKind.ENVIRONMENT && terminal.unlockTier() == 0
                     && Set.of("environment/water_source", "environment/geological_bed",

@@ -108,6 +108,18 @@ public final class VerifySustainabilityT0 {
             eq("each allowlisted construction has actual resolved recipe data: " + id, true, craft != null);
             eq("vanilla construction crafts stay manual: " + id, false, craft != null && craft.automatable());
         }
+        Resource furnace = new Resource(Kind.ITEM, "minecraft:furnace");
+        ResourceMetadata furnaceCapital = annotations.resources().get(furnace);
+        eq("the coordinator's external Furnace decision uses the existing manual vanilla authority",
+                "vanilla/minecraft:furnace", furnaceCapital.canonicalRoute());
+        eq("the vanilla Furnace is finite manual capital, not recurring automatic item supply",
+                ResourceClass.MANUAL_CAPITAL, furnaceCapital.resourceClass());
+        eq("no Matrix ingredient is added to the vanilla Furnace", false,
+                snapshot.routes().get(furnaceCapital.canonicalRoute()).inputs().keySet().stream()
+                .anyMatch(input -> input.id().equals("grindless:relay_matrix")));
+        eq("the old Bench Furnace constructor is absent", false, snapshot.routes().containsKey("bench/furnace"));
+        eq("the old Assembler Furnace constructor is absent", false,
+                snapshot.routes().containsKey("assemble/bootstrap/furnace"));
         for (Machine machine : annotations.machines().values()) {
             Resource capital = machine.construction();
             if (!io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy.isManualFinalMachine(capital.id())) {
