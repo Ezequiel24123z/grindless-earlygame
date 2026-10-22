@@ -1145,6 +1145,35 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
+**G11 assignment, NOT a result:** full reviewed normal composition
+f1b9cb3fd09efa663b2a62faa2219f0df4f4dd96 (parents eaa21be9/Bdc048,
+tree511dc375f5e80537e68683fa6b6b6cafd9032d6d) is the ONE actual compiler/
+native/writer source. Sole604 receives a new explicit manual-machine lease
+and candidate inventoryac48df0679ba7fb5203ac4568e31ebef333671b1d8516421ac325a946cc367cb.
+Grant documentation/alias references do not retarget G10 or become a tested
+source. New root is NOT observed or materialized by the coordinator.
+
+Fresh admission/canonical Sync precede required common/Forge/tool compilation,
+changed pure/actual contracts or annotated exact-CI reuse. Exactly one
+existing clean-source matrix-lifecycle resolves new ingredient registration/
+JSON-network/actual manual crafting and held legacy Bench work; capture real
+19 expectations/JAR/inventory/primary/exits/natural stop before any writer/
+later Gradle. No source patch/other-ref Sync or producer replay repairs an
+observer. Core/material/classification reds are never canonical-stale aliases.
+
+Normal writers and three independent checks/canonical refresh then supply
+actual sources/images and four payload byte/mtime invariance. Authored43/98
+is not an observation. Optional normal A10 may contain only the four existing
+payloads, exact parentf1b9 after actual passes/frozen other inputs/Java0/
+locksfalse/clean attribution/bundle; no worker push or runtime after data.
+Fresh final actual-source/Java/locks/own-guard/custody and explicit return
+remain required. No result/count/green or data child is invented at grant.
+
+No FTB/backend/paid/old ABI/compiler/JDK/Blueprint/assets or package/Prism/
+target/owner-save/player action is included; unchanged proofs remain at their
+real source. Source can develop elsewhere, but no competing PC/cache owner
+or mutation of the frozen execution input is authorized.
+
 **Complete manual-manufacturing source composition before execution:**
 parent normally composes A652968a2, C ab1e8ab0 and Bdc048034 in that order.
 Private merge76b19048 has parents0b1b8a15/A652; mergeeaa21be9 has

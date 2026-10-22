@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Assign one exact-source G11 manual-fabrication qualification.**
+  Sole604 receives reviewed completef1b9 on a new private root/inventoryac48:
+  fresh admission/Sync, necessary common/Forge/changed contracts and one
+  existing clean matrix native for real manual-control/held-Bench semantics
+  before normal writers, independent checks/canonical refresh and actual
+  source/image custody. Optional A10 is only four normal payloads/exactf1b9
+  parent after passes/closure; no worker publication/runtime after data.
+  Preserve old proofs and actual worlds; no result/admission/43-98 hashes,
+  package/Prism/owner update or acceptance follows merely from a GO.
 - **Normally compose the complete manual-manufacturing source.**
   Preserve A652's40, C ab1e's14 and B dc048's10 non-changelog blobs exactly
   through ordinary merges; only changelog conflicts, retaining every history.

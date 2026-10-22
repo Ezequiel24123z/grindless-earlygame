@@ -4,6 +4,39 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**NEW G11 GO, no observed result yet:** sole604/exact
+f1b9cb3fd09efa663b2a62faa2219f0df4f4dd96 on the NEW manual-machine root,
+private inventorySHAac48df06. Source includes exact reviewed A652/Cab1e/Bdc
+blobs; all scoped source verdicts are clear, not runtime proof. Fresh private
+admission/headroom/ownership and canonical Sync must precede producers.
+No other worker/parent may access PC/cache while this lease is active.
+The source alias stays exactf1b9; grant documentation is a different coordinate.
+
+Compile needed common+Forge/classes/classpath/tools and execute changed
+contracts or honest exact-source CI reuse. Do not mislabel mechanism/material/
+classification failure as stale canonical equality; known stale parity follows
+normal writers. Run exactly one existing clean-source matrix-lifecycle BEFORE
+writers for the new MOD-bus ingredient/RecipeManager/crafting settlement and
+real Bench held-work/cache/generation/reopen boundary. Capture tested/staged/
+remapped JAR/inventory/primary/exits/natural save-stop/new retained world before
+later Gradle. Existing19 expectations include the new final tool markers;
+launcher0 must retain its real captured/derived basis.
+
+Then normal Guidance/Economy/T1 writes, three independent CheckOnly JVMs with
+all four bytes/mtimes invariant, only needed guidance refresh, postcanonical
+checks and ACTUAL emitted/copied source/images (authored43/98 is not evidence).
+Only four existing canonical paths may change. Optional normal A10 has exact
+parentf1b9/both contiguous trailers/actual passes/frozen nonoutputs/Java0/
+locksfalse/clean local bundle, no push or runtime after data. Return full raw/
+input/image/native/model custody and fresh actual-final-SHA/own guard hash
+removal+absence/owned and all-observedJava0/locksfalse explicit leaseback.
+
+NO source hotfix/live other-ref Sync, producer replay to fix observers, FTB/
+paid/old CLI/compiler/ABI/JDK/Blueprint/assets/package/Prism/fictitious/player/
+owner-world action or new dependency/provider/generation. Reuse unchanged
+proofs at original sources. New root remains NOT observed/admitted until the
+executor actually reports it; no compiler/suite/native/finite/A10 claim yet.
+
 **Complete manual-manufacturing SOURCE is normally composed, not executed.**
 Normal A652/Cab1e/Bdc048 are integrated with exactly40/14/10 non-changelog
 blobs respectively; only changelog conflicts and every history is retained.
@@ -12,7 +45,8 @@ All four canonical files remain actual A9; no generated/app file is hand-edited.
 Publication is coherent combined WIP for required CI, not compiler/native/
 model proof. A/C/original B and same-reviewer582f's new Bench-runtime delta
 are now source-reviewed without significant issue within their exact scopes.
-No personal-PC source/lease is bound and no new producer runs.
+At that earlier source-composition boundary no personal-PC lease was bound.
+The new exact G11 assignment above supersedes only that execution hold.
 
 **B guard SOURCEdc048 is delivered.** Normal parent63f107a9/tree6d99b25a,
 four-file322 insertions17 deletions delta; private separate handoffSHA093e2d92
@@ -456,9 +490,9 @@ identity repairs invocation without altering Git configuration.
 
 | Category | Current integration boundary |
 | --- | --- |
-| COMPLETED | Historical proofs preserved; complete A652/Cab1e/Bdc048 source normally composed with exact40/14/10 blobs and A9 unchanged; A/C/original-B source reviews clear, new Bench guard source delivered |
-| BLOCKED | None known in reviewed source. Exact-source compiler/native/model qualification remains required; no urgent owner/credential decision or executed guard pass yet |
-| NOT EXECUTED | ADR-0188 recipe retirement/manual ingredient/integrated contracts and new native/model qualification; ADR-0187 Java/replay/writers; rendered/client-wire/owner-world/campaign/package/player deployment/main/release/whole-tier acceptance |
+| COMPLETED | Historical proofs preserved; full manual sourcef1b9 normally composed with exact40/14/10 blobs/A9; all scoped source reviews clear; one exact G11 assignment prepared/published |
+| BLOCKED | None known before actual admission; no urgent owner/credential decision |
+| NOT EXECUTED | G11 admission/Sync/compiler/suites/native/finite/model/writers/observed43-98/A10/final custody; rendered/client-wire/owner-world/campaign/package/player deployment/main/release/whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
 | NEEDS MY DECISION | None |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
