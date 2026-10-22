@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 124,
+  "plan_revision": 125,
   "updated": "2026-10-22",
   "phase": "manual_final_normal_machines_and_authored_per_product_manufacturing_modes",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -10,8 +10,8 @@
   "merge_ready_scope": "current_PR56_draft_no_auto_merge_required_graphical_gate_not_waived_no_new_main_or_release",
   "current_PC_execution": {
     "assignment": "manual-model-qualification-g12-20261022",
-    "active": true,
-    "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
+    "active": false,
+    "owner_session": null,
     "last_owner_session": "604195bd-6826-4299-89af-1dcf39545263",
     "source": "cb1e124173a8530e3faf205d53aeef90651c7187",
     "writer_invocation_source": "cb1e124173a8530e3faf205d53aeef90651c7187",
@@ -37,7 +37,23 @@
     "reuse": "G11_native1273_19_46custody_realcurrentruntime_proof_plus_unchanged_CIgreens_FTB_ABI_Blueprint_JDK_assets_NO_repeat_success_or_relabel_source",
     "prohibited": "NO_Forge_native_FTBbackend_paid_legacyCLI_compilerEnclave_ABI_JDKfixture_Blueprint_assets_package_Prism_target_world_dependency_provider_generation_or_live_source_change",
     "process_privacy": "freshresource_ownership_guards_NO_client_commandline_read_or_stop_restart_player_existingoffline_CPU2worker1Serial_settings",
-    "result": "G12_REAL_FINITE_FAIL_T1pureverify_before_output_Guidance_Economy_normalwrite0_PARTIAL2_PRESERVED_NO_CheckOnly_canonical_A10_actual43_98_LEASE_CLOSING_NOT_RETURNED",
+    "result": "G12_CLOSED_BLOCKED_T1finite_FAIL_PARTIAL2_PRESERVED_exactcb1e_DIRTY_RETURNED114custody_QAPENDING_NoCheckOnly_canonical_A10_or43_98",
+    "custody_QA_status": "PENDING251d081a_independent114file_failedmodel_partialoutputs_closure",
+    "custody_file_count": 114,
+    "custody_manifest_sha256": "24d84ed7c49245ff7c1d32b692a30f0ab2f05abacbcc807b3715af77fe9f4487",
+    "unchanged_nonoutput_inputs": 2595,
+    "final_readonly_sha256": "b70f88cdf464fe2b1ac6356621219431caa4191cab0b53a9013bd4cf38f66cb7",
+    "own_guard_sha256_removed": "f9ca2acbec4569bd4429752626af5b9aae2bc5ee7d7b039a6350e8b7d413547a",
+    "observed_checks_reported": "FactoryALLPASS0_Guidance29253_0_auditregressions670_0_R34_25_0_priorR29R33zero_NormalGuidance74_4973write0_Economy396_17write0_T1write1",
+    "partial_outputs": {
+      "guidance_bytes": 547812,
+      "guidance_sha256": "1293b77d08e2705259e24acd04e057e34828914579acd71f3963c19118ec9c53",
+      "economy_bytes": 172582,
+      "economy_sha256": "acbdf36c341cc4a10c15870a5771410dc6b1e75cb6ca1572984d551ec1985de9",
+      "T1_JSON_MD": "UNCHANGED_bytes_hash_mtime",
+      "original4": "existing_G10_local_payloads_match_exact_G12initial_hashes_READONLY_not_reconstructed",
+      "restore": "NONE_explicitly_preserved_in_root_and_capsule"
+    },
     "failed_model_boundary": {
       "source": "cb1e124173a8530e3faf205d53aeef90651c7187",
       "stage": "10-t1-write",
@@ -67,10 +83,10 @@
       "observer_correction": "inherited_footer_originals5_corrected_to_actual0_original_note_preserved_NO_reupload_or_producer_replay",
       "native": "NONE_reused_G11_atf1b9_after_bounded_metadata_and6tests_diff"
     },
-    "returned": false,
-    "returned_utc": null,
-    "return_state": "NOT_OBSERVED_G12",
-    "new_explicit_guarded_window_required": false,
+    "returned": true,
+    "returned_utc": "2026-10-22T21:34:03.4723711Z",
+    "return_state": "REPORTED_aftercustody_exactHEADcb1e_DIRTY_PARTIAL_onlyGuidanceEconomy_ownedallJava0_workcachelocksfalse_ownGuardremoved_absent_explicitreturn_NOT_live_reinspection",
+    "new_explicit_guarded_window_required": true,
     "closure_required": "failed_G12_exactHEADcb1e_DIRTY_PARTIAL_only2preserved_normaloutputs_before_after_hashmtime_otherinputs_and_T1unchanged_original_receipts_failure_raws_fullcustody_fresh_ownedallJava0_locksfalse_onlyownGuardhashremoved_absent_explicitreturn_NO_restore_or_A10"
   },
   "closed_G11_execution": {
@@ -243,7 +259,7 @@
   },
   "normal_machine_manufacturing": {
     "policy": "ADR-0188",
-    "status": "G11nativeonly_CLOSED_verified_repaired_sourcecb1e_normally_composed_G12MODELONLY_exactGO_NO_repairedJava_model_result_yet",
+    "status": "G11native_verified_G12_common_repairedcontracts_T0writers_pass_T1finite_FAIL_closed_DIRTY114custodyQA_pending_SOURCE_C_repair_active_NO_PClease",
     "vision": "GregTech_inspired_greater_complexity_content_futurism_NOT_universal_Factorio_selfreplication",
     "normal_final_manufacture_manual_only": true,
     "normal_operating_processes_automatable": true,
@@ -576,7 +592,7 @@
     "external_research": "bounded_inplace_upgrade_state_preservation_source_license_comparison_no_foreign_import",
     "external_research_result": "CLOSED_Mekanism96c7362_Forge1_20_1_MIT_concrete_ElectricMachine_Factory_value_copy_into_new_BE_not_same_object_GT_negative_bounded_no_direct_pipeline_import_existing_Grindless_chassis_reused",
     "shared_root_docs_and_publication": "coordinator_only_serial_integration",
-    "PC_lease": "manual_model_qualification_G12_ONLY604_exactcb1e_NEWmodelroot_inventory1b8_freshguards_allother_PC_forbidden",
+    "PC_lease": "G12_RETURNED_exactcb1e_DIRTY_PARTIAL_21_34_03Z_QA_pending_G13_LOCAL_PREPARATION_ONLY_NO_PCgrant_source_or_lease",
     "source_workers_PC_JVM_or_shared_cache_authorized": false,
     "later_proof_selection": "affected_contracts_real_owned_file_transition_registered_minimum_vs_exact_control_and_needed_normal_writers_not_green_M_Blueprint_pressure_replays",
     "not_in_scope": ["playable_chassis_kit_or_new_envelope_balance", "T0_instance_or_owner_world", "dependency_or_provider_changes", "PR_main_release_or_player_deployment", "whole_tier_acceptance"]

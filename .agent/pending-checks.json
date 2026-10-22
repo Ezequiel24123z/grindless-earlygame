@@ -20,7 +20,7 @@
   },
   "normal_machine_manufacturing": {
     "policy": "ADR-0188",
-    "status": "G11nativeonly_CLOSED46QAverified_repairedcb1e_composite_G12MODELONLY_granted_NO_repairedJava_model_orA10result",
+    "status": "G11native_verified_G12_repairedcontracts_T0writers_pass_T1finite_FAIL_closed_DIRTY114custodyQA_pending_sourceC_repair_NO_PClease_orA10",
     "normal_final_manual_only_operating_processes_automatable": true,
     "other_product_modes": ["MANUAL_ONLY", "MACHINE_ONLY", "BOTH"],
     "infrastructure_manual_and_machine_methods_per_product": true,
@@ -132,8 +132,8 @@
   },
   "current_PC_execution": {
     "assignment": "manual-model-qualification-g12-20261022",
-    "active": true,
-    "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
+    "active": false,
+    "owner_session": null,
     "source": "cb1e124173a8530e3faf205d53aeef90651c7187",
     "writer_invocation_source": "cb1e124173a8530e3faf205d53aeef90651c7187",
     "applicable_source_runtime": null,
@@ -149,7 +149,10 @@
     "allowed_data_derivation": "NORMALA10subset4_exactparentcb1e_actualpasses_frozenotherinputs_Java0locksfalse_contiguoustrailers_clean_localbundle_NOPUSH_RUNTIMEafterdata",
     "native": "NOT_AUTHORIZED_reuse_closedG11_f1b9_1273_19_46custody_unchanged_runtimebindings",
     "prohibition": "NO_FTB_Forge_native_oldCLI_compiler_ABI_JDKfixture_Blueprint_assets_package_Prism_target_ownerworld_deps_provider_sourcehotfix_or_waivedgate",
-    "result": "G12_REAL_T1finite_FAIL_after_GuidanceEconomy_write0_no_T1output_provenance_CheckOnly_canonical_A10_SOURCE_C_repair_active_PC_custody_closing",
+    "result": "G12_CLOSED_T1finite_FAIL_DIRTY_PARTIAL2_exactcb1e114custody_returned_QA_PENDING_sourceC_repair_active_NO_PCgrant_orA10",
+    "custody_QA_status": "PENDING251d081a_114files",
+    "custody_manifest_sha256": "24d84ed7c49245ff7c1d32b692a30f0ab2f05abacbcc807b3715af77fe9f4487",
+    "final_readonly_sha256": "b70f88cdf464fe2b1ac6356621219431caa4191cab0b53a9013bd4cf38f66cb7",
     "failure_stdout_sha256": "8524a44d3f3dffd70a66705d1452c1b108a424a89a8d9f71e5b32733fc71fac2",
     "failure_boundary": "craft/press_F2_unexecuted_stonecraftingtag_guarantees0_draw2_manualcrank_inheritedwork_unproven_unknown_mineral_biomass_energyFU_NOT_stale",
     "failure_closure_amendment": "DIRTY_PARTIAL_exactHEADcb1e_onlyGuidanceEconomy_preserved_NO_restore_reconstruct_checkout_A10_or_moreJVM_otherinputs_T1unchanged_freshguardJavalocksreturn_required",
@@ -158,10 +161,10 @@
     "foundation_custody": "PENDING_final_settled_evidence_review",
     "CI_originals_copied": 0,
     "CI_decision": "ONE_QUERY_two_runs_inprogress_no_CIpass_or_retry_inherited_originals5_footer_corrected_to0_without_reupload_replay",
-    "returned": false,
-    "returned_utc": null,
-    "return_state": "NOT_OBSERVED_G12",
-    "new_explicit_guarded_window_required": false
+    "returned": true,
+    "returned_utc": "2026-10-22T21:34:03.4723711Z",
+    "return_state": "REPORTED_aftercustody_cb1e_DIRTYexact2_ownedallJava0_workcachelocksfalse_ownGuardremoved_absent_explicitleaseback",
+    "new_explicit_guarded_window_required": true
   },
   "closed_G11_execution": {
     "assignment": "manual-machine-qualification-g11-20261022",
@@ -243,7 +246,7 @@
   },
   "active_development_wave": {
     "base": "ad5b50dd509b0261818101ff08e786750826161a",
-    "status": "G11native_CLOSEDverified_models_source_repairedcb1e_G12MODELONLY_only604_exactsource_no_results_yet",
+    "status": "G11native_CLOSEDverified_G12_repairedcontracts_T0writers_pass_finiteFAIL_returned_DIRTYpartial2_QA_pending_Csource_repair_NOactivePC",
     "earlier_source_fields": "historical_initial_wave_snapshots_not_current_failures_or_execution_grants_current_PC_execution_and_finite_T1_custody_continuation_govern",
     "owners": {
       "managed_FTB_definitions": "cb273782-4065-44e2-90a3-9c0c036367ce",
@@ -274,7 +277,7 @@
     "asset_EOL_checkpoint": "5aa56be_shared_Java_writer_twin_callers_actualG4_existingJDKfixture34_total_22new_EOL_pass_parent_raw_verified_no_normal_generator_replay",
     "normal_G3_outputs": "A3e1efe470_normal5outputs_integrated_parent_verified205files_2573inputs_4images_bothT1receipts_5Gitblobs_equal_writer_bytes_bundle3a9ac835_manifestde198742_normalwrite_check_Guidance74_5323_Economy416_17_T1794_canonical417_2908_0_797_G3_returned08_34_07Z",
     "qualification_preparer": "604195bd-6826-4299-89af-1dcf39545263_last_G10_executor_returned17_04_48Z_no_current_PC_grant",
-    "PC_owner": "604195bd-6826-4299-89af-1dcf39545263",
+    "PC_owner": null,
     "PC_source": "cb1e124173a8530e3faf205d53aeef90651c7187",
     "PC_source_worker_access": false,
     "T0_world_client_deploy_or_acceptance": false,

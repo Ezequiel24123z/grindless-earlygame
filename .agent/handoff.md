@@ -4,6 +4,28 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**G12 is CLOSED/BLOCKED and explicitly RETURNED, not model-green.**
+Fresh final readonly AFTER custody21:34:03.4723711Z records exactHEADcb1e,
+intentional cleanFALSE and only Guidance/Economy modified. Both actual
+partial payloads remain in place and in the114-file capsule; no restore,
+reconstruction, checkout or later producer occurred. T1JSON/MD bytes/mtimes
+and2595 other inputs stay unchanged. Owned-allJava0, work/cachelocksfalse
+and exact ownGuardf9ca2acb removal/absence close the exclusive lease.
+FinalrawSHAb70f88cd and manifest24d84ed7 bind the reported closure.
+Independent QA251d is checking these LOCAL settled artifacts; no new PC
+inspection or full-model pass follows from that review.
+
+Reported actual checks: FactoryALLPASS; Guidance29253/0; regressions670/0,
+R34=25/0 and priorR29-R33 green. Guidance74/4973 and Economy396/17 normal
+write0 precede the strict T1 failure below. Actual43/98, CheckOnly,
+postcanonicals and A10 do not exist. Existing original4 G10 payload copies
+match initial G12 hashes read-only; neither originals nor partials are reset.
+
+C1c9 continues the source-only repair. Executor604 may prepare a NEW G13
+inventory/plan LOCALLY ONLY, preserving this failed root and every old file.
+Source/grant/lease stay null; no CI/SSH/root inspection/JVM is authorized.
+One future exact-source GO must select the final scope and untouched root.
+
 **G12 real finite-T1 failure; source repair active, PC closing only.**
 Guidance/Economy normal writers exit0 after the repaired T0 gate. T1's
 10-t1-write exits1/wrapper1 in pureverify BEFORE output/provenance:
@@ -26,8 +48,8 @@ Guidance/Economy outputs in place. NO restore/reconstruction/checkout of
 those two files; final DIRTY-PARTIAL at exact HEADcb1e replaces clean.
 All other tracked inputs and T1JSON/MD stay unchanged. Preserve both produced
 and original hashes/mtimes and raw failure custody; no CheckOnly/canonical
-refresh/A10 or further JVM/producers. Only fresh settled-custody/guard removal/
-absence/Java0/locksfalse/explicit return remain. The lease is NOT returned yet.
+refresh/A10 or further JVM/producers. The recorded fresh guard/Java/lock closure and explicit return above now
+complete this failed-run preservation; they do not turn it into a model pass.
 
 | Disclosure | Current G12 failed-model boundary |
 | --- | --- |

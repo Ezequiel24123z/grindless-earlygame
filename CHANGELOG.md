@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Close G12 honestly with its two failed-run partial outputs intact.**
+  Preserve reported114-file custody,2595 unchanged non-output inputs and
+  unchanged T1 bytes/mtimes. Fresh21:34:03Z returns the lease on exactcb1e
+  deliberately dirty only in Guidance/Economy, with Java0/locksfalse/own
+  guard removed and no restore or later producer. Independent local custody
+  review and source repair continue; G13 preparation is local-only, not a
+  new execution grant or an accepted model.
 - **Preserve the real finite-T1 failure and partial G12 outputs.**
   Guidance/Economy writers pass the repaired T0 gate, but T1 pureverify
   stops before output on unexecuted manual Press/F2, unfunded stone-tag

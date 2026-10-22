@@ -1145,6 +1145,34 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
+**G12 failed-model closure reported; independent QA251d pending.** Capsule
+114/manifest24d84ed7c49245ff7c1d32b692a30f0ab2f05abacbcc807b3715af77fe9f4487
+preserves PC/SCP/local length+SHA parity,2595 unchanged non-output inputs
+and four actual-final payloads. Only Guidance547812 bytes/
+1293b77d08e2705259e24acd04e057e34828914579acd71f3963c19118ec9c53 and
+Economy172582 bytes/acbdf36c341cc4a10c15870a5771410dc6b1e75cb6ca1572984d551ec1985de9
+were generated; T1JSON/MD retain their original bytes and mtimes.
+Original four payloads already present in local G10 custody match exact
+G12 initial hashes read-only. No original or partial is reconstructed/reset.
+
+Fresh final readonly AFTER custody21:34:03.4723711Z records HEADcb1e,
+cleanFALSE intentionally, diff exactly the two normal output paths,
+owned-allJava0/work+cachelocksfalse/ownGuard absent. Guard
+f9ca2acbec4569bd4429752626af5b9aae2bc5ee7d7b039a6350e8b7d413547a was
+hash-checked/removed; final rawSHA
+b70f88cdf464fe2b1ac6356621219431caa4191cab0b53a9013bd4cf38f66cb7 binds
+the reported explicit return. This is a recorded snapshot, not current
+live-PC evidence. No further JVM/sourceSync/writer or restoration occurs.
+
+Reported actual counts are Guidance29253/0, regression670/0 including
+R34=25/0 and previousR29-R33, FactoryALLPASS, Guidance74/4973 write0 and
+Economy396/17 write0. T1 still fails before its output/provenance; no
+CheckOnly/postcanonical/actual43-98/A10 follows. The observer parser182 and
+inherited originals5 footer errors are retained and repaired only locally/
+read-only, with actual CI originals0 and no producer replay.
+Source-only repair and separate LOCAL G13 preparation can proceed; no new
+execution lease, source binding, root admission or player update is granted.
+
 **G12 real finite-continuation failure oncb1e, not stale equality.**
 Following repaired contracts and normal Guidance/Economy writes0,
 10-t1-write exits1/wrapper1 at VerifyT1Progression.finiteContinuation392,
