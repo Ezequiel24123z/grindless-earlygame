@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Assign actual control/die qualification without blocking separate source work.**
+  Only604195bd receives the new fixed423a7c1 PC/cache lease for necessary
+  compilation, changed contracts, NORMAL writers/CheckOnly and the existing
+  matrix-lifecycle's new control interaction. Fresh guard/Sync/stage results
+  remain pending, not passes. Parent/other workers have no PC access or live
+  source retarget. Managed-FTB/factory authoring proceeds independently; no
+  package, T0/Prism/world/client/deploy or unrelated green replay is granted.
 - **Close the control-provenance review finding and continue factory content.**
   Independent review finds the missing executed AuthorityAdapters bytecode hash.
   Normalf046923 adds that class and a focused source omission guard; observe

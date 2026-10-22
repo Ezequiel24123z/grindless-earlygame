@@ -48,9 +48,11 @@ do not narrow legacy machines or call control substitution a chassis upgrade.
 The four-die checkpoint63142dd plus Atlas slot-oracle correction5b359a5 is now
 normally integrated with control-role1ee2e73. Independent mechanism review and
 affected Java/writers/native remain pending. Qualifier604195bd reports local
-READY only, without a PC grant. Await the managed-FTB source/binding and finish
-review before the single fixed-source execution window; do not replay old
-Blueprint/pressure or per-die native tests.
+READY and now owns the NEW fixed423a `control-role-qualification-20261022`
+window for this changed mechanism/content. Fresh actual guards/Sync and results
+remain pending. Parent/other workers have no PC access. Managed-FTB and future
+factory source continue independently without retargeting this run; do not replay
+old Blueprint/pressure or per-die native tests.
 The control review's one P2 is source-repaired inf046923: include executed
 AuthorityAdapters bytecode as well as source. Real writer receipt verification
 remains required. Parallel source work now selects four ordinary machine

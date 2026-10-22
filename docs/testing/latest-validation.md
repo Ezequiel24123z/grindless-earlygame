@@ -59,6 +59,25 @@ Its final classpath follow-up and independent transition/recovery review1ce4d3be
 remain separate prerequisites. Parallel source ADR-0179 reproduction is not
 part of any already-proved candidate.
 
+New execution assignment, not a result: sole604195bd receives
+`control-role-qualification-20261022` on exact
+423a7c1bac80fd23e1269500f5a558bb6c3cfbdb. Fresh admission/Sync precede necessary
+common/Forge/classpath, changed Matrix/inspection/view/adapter/die contracts
+and NORMAL writer/independent CheckOnly. Require the actual new
+AuthorityAdapters executed-class entry. Recheck the affected canonical gates.
+The one native uncertainty is real registered minimum-control matching/handler
+admission/blocked-output/full-cycle consumption, not ordinary die data.
+Existing matrix-lifecycle now expects its16 unchanged markers plus
+GRINDLESS_MATRIX_INPUT_NATIVE_PASS, MATRIX-CONTROL-BLOCKED and
+MATRIX-CONTROL-CONSUMED-ONCE. No new native pass is recorded yet.
+No FTB transition/package/Prism/owner-world/client access is included; separate
+authoring can continue without Syncing or changing this frozen input.
+Use a new isolated root/inventory to preserve the previousM retained diagnostic;
+KEEP_WORLD alone does not prevent initial scenario reset. Native mechanism
+qualification runs on clean423a before normal writer outputs dirty their four
+authorized paths. Keep native JAR/source and later generated-resource identities
+separate; no package or byte-identical post-writer artifact is inferred.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

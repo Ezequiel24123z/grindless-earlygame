@@ -19,19 +19,20 @@
     "no_implicit_public_release_main_merge_or_paid_generation": true
   },
   "current_PC_execution": {
-    "assignment": "integrated-blueprint-native-20261021",
-    "active": false,
-    "owner_session": null,
+    "assignment": "control-role-qualification-20261022",
+    "active": true,
+    "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
     "last_owner_session": "2a93b168-b53c-4b4e-8bf3-48f4c715af22",
-    "source": "0a676fe2e76f5209233ce99ca6616b42e2b3f3c0",
-    "scope": "CLOSED_one_canonical_Blueprint_interaction_after_normal426_writer_boundary_no_T0_access",
+    "source": "423a7c1bac80fd23e1269500f5a558bb6c3cfbdb",
+    "scope": "necessary_common_Forge_changed_contracts_NORMAL_writers_CheckOnly_existing_matrix_lifecycle_new_control_boundary_only_no_FTB_T0_or_deploy",
     "other_workers_parent_PC_or_T0_access_authorized": false,
     "source_frozen_until_active_stages_and_locks_close": true,
-    "result": "PASS1182_one_marker_harness0_server0_natural_save_stop_parent_verified_all10files_and_receipt",
-    "returned": true,
-    "returned_utc": "2026-10-21T21:56:31.4465559Z",
-    "return_state": "cleanM_ownedJava0_workLockfalse_cacheLockfalse_no_owner_world_or_client_commandlines",
-    "new_explicit_guarded_window_required": true
+    "result": "GRANTED_NOT_EXECUTED_all_fresh_guards_Sync_JVM_receipts_pending",
+    "returned": false,
+    "returned_utc": null,
+    "return_state": "NOT_OBSERVED_for_new_window",
+    "previous_returned_lease": "integrated_blueprint_native_20261021_cleanM_Java0_locks0_2026_10_21_21_56_31Z_evidence_preserved",
+    "new_explicit_guarded_window_required": false
   },
   "active_development_wave": {
     "base": "ad5b50dd509b0261818101ff08e786750826161a",
@@ -49,7 +50,8 @@
     "FTB_review": "1ce4d3be_exact_ee4f504_pending_author_classpath_followup_not_yet_integrated",
     "factory_reproduction": "ADR0179_new_source_in_progress_not_part_of_qualified_whole_tier",
     "qualification_preparer": "604195bd-6826-4299-89af-1dcf39545263_READY_local_preparation_ONLY_no_PC_grant",
-    "PC_owner": null,
+    "PC_owner": "604195bd-6826-4299-89af-1dcf39545263",
+    "PC_source": "423a7c1bac80fd23e1269500f5a558bb6c3cfbdb",
     "PC_source_worker_access": false,
     "T0_world_client_deploy_or_acceptance": false,
     "evidence_reuse": "keep_source426_models_e260_contracts_M_Blueprint_native_and_independent_full_CI_bound_to_their_actual_sources_no_unrelated_replay"
