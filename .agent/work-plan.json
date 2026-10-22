@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 84,
+  "plan_revision": 85,
   "updated": "2026-10-22",
   "phase": "FTB51_engineering_and_T1_recipe_reachability_with_default_identity_correction",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -83,7 +83,9 @@
   },
   "default_F1_identity_correction": {
     "policy": "ADR-0184",
-    "status": "source57d38d6_delivered_parent_review_and_actual_qualification_pending",
+    "status": "source57d38d6_normally_integrated_in_this_checkpoint_review_clear_actual_qualification_pending",
+    "source_review": "4700edfc_immutable13file_diff_no_significant_issue_NO_JVM_or_writer_pass",
+    "source_integration": "exact11application_check_exporter_blobs_preserved_map_auto_union_changelog_only_conflict_keep_both_normal_a51_57_ancestry_no_amend_or_canonical_edit",
     "source_checkpoint": "57d38d6c836fb66e09415fe4fbc0e36ba4d99f71",
     "first_source_checkpoint": "a51c9d3d4610e1731e7e34f09024dcb5cb80c885",
     "authored_provenance_shape": "31sources_41images_not_executed_hashes",
@@ -100,7 +102,7 @@
     "instruction": "owner_2026_10_22_continue_working_and_developing",
     "base": "ad5b50dd509b0261818101ff08e786750826161a",
     "policies": ["ADR-0170", "ADR-0173", "ADR-0174", "ADR-0176", "ADR-0177", "ADR-0178"],
-    "status": "G7bounded_engineering_CLOSED339plusCI5_all4normalGitpayloads_exact_A7normalmerge_thischeckpoint_F1source57_review_clear_pendingintegration_selector0752active_NO_PC_lease",
+    "status": "G7CLOSED_d49ca60_preserves_A7_26e_normal3data_F1source57_normalintegration_thischeckpoint_review_clear_JVM_normal31_41_pending_selector0752active_NO_PC_lease",
     "managed_FTB_owner": "cb273782-4065-44e2-90a3-9c0c036367ce",
     "managed_FTB_scope": "explicit_stopped_hash_bound_known_owned_46_to50_definition_update_backup_partial_failure_recovery_no_world_or_paid_receipt_write_no_startup_overwrite",
     "control_capacity_owner": "347a1c5b-1e99-4046-861c-85e5bcb3d045",

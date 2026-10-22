@@ -30,7 +30,7 @@
   },
   "default_F1_identity_correction": {
     "policy": "ADR-0184",
-    "status": "source_delivered_parent_review_and_JVM_qualification_pending",
+    "status": "source_normally_integrated_review_clear_JVM31_41_and_normalwriters_pending",
     "source_checkpoint": "57d38d6c836fb66e09415fe4fbc0e36ba4d99f71",
     "authored_provenance_shape": "31sources_41images_NO_emittedhashes",
     "owner_session": "77889597-58d8-46f1-8c68-d5ccb4e5a0a9",

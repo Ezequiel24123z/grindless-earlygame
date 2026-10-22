@@ -23,7 +23,7 @@ identity repairs invocation without altering Git configuration.
 | --- | --- |
 | COMPLETED | Independent339-file plus original-CI5 G7 closure; A7 normal integration with exact ancestry/trailers/four payload bytes; source57d review finds no significant issue |
 | BLOCKED | Whole-T1 Assembler acquisition shadowing, finite establishment and genuine upgrades remain; selector source is active |
-| NOT EXECUTED | F1 source integration/Java/emitted31-41; new selector native/UI proof; player deployment, target launch, main/release and whole-tier acceptance |
+| NOT EXECUTED | F1 Java/emitted31-41/normal writers; new selector native/UI proof; player deployment, target launch, main/release and whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
 | NEEDS MY DECISION | None |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
@@ -40,13 +40,17 @@ manifest83edec28, plus the separately recovered original CI5, without any
 PC/JVM/replay. All execution grants are
 closed; a later exact-source window is required.
 
-**ADR-0184 source delivered, not yet integrated/Java-qualified:** normal
+**ADR-0184 source normally integrated, not Java-qualified:** normal
 a51c9d3 then57d38d6, base1e642dc, thirteen owned files, including the authorized
 display context. One pure ResourceGuidanceContext.canonicalSupply rule is
 shared by physical authority and authored display. Reported static103/111 and
 31-source/41-image list shape are not emitted provenance or rendered-client
 evidence. Independent thirteen-file review4700edfc finds no significant issue;
-normal integration and actual changed-model proof are pending.
+the normal merge preserves the eleven code/check/exporter blobs exactly.
+Only the changelog conflicts; both histories are retained and the route map
+auto-merges both owned seams. Actual changed-model31/41 proof remains pending.
+The existing normal A7 payloads are not hand-retargeted and can now be stale
+for this new source; regenerate them only through the later normal writers.
 
 **Historical G7 progress report before final custody:** new
 publisher0cb passes both authentic historical CLI8 classpaths before Gradle.

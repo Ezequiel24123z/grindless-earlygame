@@ -36,9 +36,9 @@ readiness, and no public release/main merge or automatic acceptance follows.
 **Current next (2026-10-22):** G7 is technically closed with verified339
 artifacts plus separately recovered original CI5, actual writer41df/normal
 A726e/29-source38-image provenance and real managed50-to51 idempotence in
-the stopped fictitious target. All PC/cache leases are returned. Normally
-integrate the exact A7 payloads, then reviewed ADR-0184 source57d including its
-coupled display context, and qualify only changed model contracts/normal
+the stopped fictitious target. All PC/cache leases are returned. A7 is normally
+integrated throughd49ca60, followed by reviewed ADR-0184 source57d with its
+coupled display context. Qualify only changed model contracts/normal
 projections under a new exact-source grant. Its authored31/41 list is not a
 writer receipt. Preserve all older failures and the player instance.
 Read the active handoff for actual results/lease ownership.

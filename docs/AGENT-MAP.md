@@ -259,17 +259,28 @@ Require actual updated provenance later; old G3/G6 counts are not retargeted.
 
 ### Authored default Matrix identity
 
-ADR-0184 assigns the next isolated model correction to existing
-`sustainability/AuthorityAdapters`, T0/T1 model consumers and their existing
-registry/adapter/progression checks. Reuse `matrix/ControlMatrixNbt` and the
-checked real architecture binding; common must not read a client/Forge
-registry. Preserve generic registration declarations, Resource equality/keys,
-explicit F2/higher identity, recipe batches and quest/reward semantics.
-No raw-to-F1 alias recipe or fictitious architecture is permitted. The T1
-default-identity gap may close only with actual producer agreement and updated
-direct source/class provenance. Finite T1 custody/renewability remain unproved.
-Implementation and a later source-bound model window are pending; frozen
-G7/code41df605 and all PC/player surfaces are outside this source lane.
+ADR-0184 projects authored default stacks through `AuthorityAdapters.physical`,
+delegating to the pure `ResourceGuidanceContext.canonicalSupply` rule also used
+by its authored `resource`/`operands` and `questSubject` display paths. These are
+canonical sufficient supply options, not new exact admission predicates for
+generic ITEM evidence/ingredients. The sole default binding is the actual Relay
+supplier/import profile checked by
+`VerifySustainabilityRegistry.addDeclarations`; `ControlMatrixNbt.load` owns the
+rating. Generic checked declarations stay raw; common reads no client/Forge
+registry and Resource equality/keys are unchanged. `T0Sustainability.annotations`
+uses the actual quest subject; `T1Sustainability.seedAllocation` and `inputs`
+share physical F1 and name only matching producer outputs. Existing adapter,
+registry, T0/T1 and guidance checks preserve exact F2/F3, minimum-vs-exact roles,
+five-controller custody, bills and rewards; unsupported axes/IDs cannot default.
+`T1Export` and existing source/image guards pin the decoder/architecture without
+synthetic routes or fictitious items. Finite T1 custody/renewability/autonomy
+remain unproved. Source is implemented, not Java/writer-qualified; a later exact
+model window remains pending. Frozen G7/code41df605 and PC/player surfaces stay
+outside this lane; canonical payloads await normal writers. The authorized
+authored-display follow-up uses no auditor, builders, I/O or live registry and
+keeps `ResourceGuidanceClient` presentation/physical validation unchanged.
+Existing F1-only DTO/real-operand regressions and direct helper source/image
+guards are authored, not an executed Java or integrated-display pass.
 
 ### Explicit Assembler recipe choice
 

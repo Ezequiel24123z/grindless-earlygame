@@ -174,7 +174,7 @@ public final class T0Sustainability {
             metadata.put(resource, new ResourceMetadata(ResourceClass.BOOTSTRAP, null, 0, null,
                     null, List.of(), null, null, null, null));
         }
-        Resource exit = item(QuestCatalogue.byId("relay").subject());
+        Resource exit = snapshot.objectives().get(QuestCatalogue.T0_COMPLETION).subject();
         metadata.put(exit, new ResourceMetadata(ResourceClass.BOOTSTRAP, null, 0, null,
                 "craft/relay_matrix", List.of(), null, null, null, null));
         metadata.put(item(FabricationLogic.THERMAL_GENERATOR_CORE), new ResourceMetadata(null, null, 1, null,

@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Normally integrate the reviewed physical default-F1 and authored-display correction.**
+  Preserve sourcea51/57 and all eleven application/check/exporter files exactly;
+  independent thirteen-file review finds no significant issue. The sole
+  changelog merge conflict keeps both histories, while the task map preserves
+  the separate Assembler lane. Canonical A7 outputs are not hand-retargeted:
+  actual31/41 provenance, Java contracts and normal writers still need a new
+  exact-source model window. No new PC/player permission or FTB replay follows.
 - **Verify G7 custody and recover, rather than replay, its omitted CI originals.**
   Independent QA verifies339/339 artifacts, actual29/38 images, both authentic
   historical references, normal payloads, native51/JAR/package/managed51/
@@ -61,6 +68,21 @@ entries below reference those records by id.
   shadowed by last-dry lookup with no player recipe selector. Record this as
   unproved Washer acquisition, not a failure of the independently useful G7
   file outcome; investigate a separate existing-engine choice fix.
+- **Align authored Relay defaults with their actual physical F1 identity.**
+  ADR-0184 shares ResourceGuidanceContext.canonicalSupply with
+  AuthorityAdapters.physical for craft/process/quest projections, T0/T1 metadata
+  and authored Atlas/quest display. The existing NBT decoder owns the rating;
+  the closed registration profile checks the real Relay supplier and imports.
+  Raw registry keys, explicit higher ratings, five-controller batches/draws,
+  bills, rewards and runtime data stay unchanged. Existing regressions and
+  direct source/class provenance cover the seam and reject identity/omission
+  counterexamples. This source-only correction does not carry finite T1 custody,
+  prove renewable closure/autonomy or update canonical outputs; Java/writers
+  and integration qualification need their own later source-bound window.
+  The authorized display follow-up fixes unrated descriptors and matrix_line's
+  canonical supply without turning generic ITEM evidence into exact F1.
+  Client presentation/stack validation stay untouched; display never calls an
+  auditor, builder, registry or I/O. Integrated display qualification is pending.
 - **Select the real default-F1 authority correction while G7 qualifies51.**
   ADR-0184 reuses the existing Matrix decoder and authority adapters to project
   authored registered Relay defaults consistently with explicit F1 inputs.

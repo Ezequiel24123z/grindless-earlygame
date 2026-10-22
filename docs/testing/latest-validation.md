@@ -705,6 +705,18 @@ A7's normal merge preserves the verified four payload bytes and three-file
 delta; no canonical output is edited to repair evidence. G7 engineering is
 closed within this scope, not ADR-0184/0185 or whole-T1/client readiness.
 
+**Default-F1 source integration, not a new pass:** normal sourcea51c9d3 then
+57d38d6 includes the explicit authored-display follow-up. Thirteen-file
+immutable review4700edfc finds no significant issue; parent normal integration
+preserves all eleven application/check/exporter blobs exactly. Only changelog
+conflicts, resolved by preserving both histories; the map keeps both source
+lanes. Static103/23-mutants and111/14-mutants plus authored31/41 are not Java
+or emitted provenance. Private handoffSHA5c083ce17738f22cce04296e1205f8a740cf5b67f4f888007869c8d585fdd6d6
+retains those evidence limits and the initial whitespace-observer abort.
+No normal generated payload is edited to make source57 look qualified; a new
+exact-source affected-model/writer window is required. G7/26e/native51 remains
+its earlier source-bound result, not the new default-identity/display proof.
+
 **G7 report12:21:13Z, still awaiting final custody/leaseback:** clean
 ApplicableSource26e/Java0/locksfalse; one direct plain FTB boot reports0,
 ready51/Done and natural save/stop, with tested JAR/inventory captured before

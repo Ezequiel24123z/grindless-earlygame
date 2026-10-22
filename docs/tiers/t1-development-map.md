@@ -5,7 +5,7 @@ Current G7 engineering is closed with339 custody plus recovered original CI5,
 actual writer41df/data26e/29-38 provenance and managed51 file idempotence.
 The fictitious26e/51 target stays stopped; Assembler target shadowing remains
 a separate real acquisition gap under ADR-0185. Reviewed default-F1/display
-source57d requires its own integration/Java/normal projection proof; authored
+source57d is normally integrated but requires Java/normal projection proof; authored
 31/41 is not emitted provenance. All old source/lease snapshots below retain
 their historical scope, not live permission or whole-T1 readiness.
 

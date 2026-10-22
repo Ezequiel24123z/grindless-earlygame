@@ -109,6 +109,21 @@ public final class VerifySustainabilityT0 {
             eq("vanilla construction crafts stay manual: " + id, false, craft != null && craft.automatable());
         }
         Resource exit = annotations.ledger().get(0).exitObjective();
+        Resource relayDeclaration = new Resource(Kind.ITEM, "grindless:relay_matrix");
+        eq("the T0 exit retains the exact physical F1 quest identity",
+                new Resource(Kind.ITEM, relayDeclaration.id(), 1, "items"), exit);
+        eq("the T0 exit metadata and quest use the same physical identity", exit,
+                snapshot.objectives().get("relay").subject());
+        eq("the manual exit produces the unchanged complete physical batch", Map.of(exit, 5L),
+                snapshot.routes().get("craft/relay_matrix").outputs());
+        eq("the Relay claim retains five physical F1 stacks as evidence", 5L,
+                snapshot.routes().get("quest/relay").catalysts().get(exit));
+        eq("physical T0 exit metadata stays finite bootstrap, not automatic supply", ResourceClass.BOOTSTRAP,
+                annotations.resources().get(exit).resourceClass());
+        eq("a generic declaration does not borrow the physical exit's metadata", false,
+                annotations.resources().containsKey(relayDeclaration));
+        eq("canonical inventory retains the separate generic declaration", true,
+                snapshot.resources().contains(relayDeclaration));
         eq("the manual Matrix is not a recurring product root", false, tier.recurring().contains(exit));
         eq("the manual Matrix is not renewable T0 production", false, tier.renewable().contains(exit));
         eq("the existing manual Matrix craft is unchanged", false,

@@ -5,8 +5,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceContext;
 import io.github.ezequiel24123z.grindless.material.MaterialForm;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
+import io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt;
+import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
 import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.recipe.BootstrapRecipes;
@@ -119,7 +122,7 @@ public final class AuthorityAdapters {
             tags.resolve(tag);
         }
         for (SupplyCatalogue.Entry entry : SupplyCatalogue.entries()) {
-            builder.resource(item("grindless:" + entry.itemName()));
+            builder.resource(new Resource(Kind.ITEM, "grindless:" + entry.itemName()));
         }
         List<ProcessRecipe> graph = ProcessGraph.generate(materialViews());
         for (ProcessRecipe recipe : graph) {
@@ -363,7 +366,8 @@ public final class AuthorityAdapters {
         for (Class<?> entry : List.of(ProcessGraph.class, SupplyCatalogue.class, BootstrapRecipes.class,
                 T1Recipes.class, QuestCatalogue.class, FluidLogic.class, ThermalLogic.class, SolarLogic.class,
                 SourceLogic.class, MaterialForm.class, FluxTier.class, IngredientSpec.class,
-                OutputSpec.class, ProcessRecipe.class, WorkshopStructure.class)) {
+                OutputSpec.class, ProcessRecipe.class, WorkshopStructure.class,
+                ControlMatrixNbt.class, MatrixArchitecture.class, ResourceGuidanceContext.class)) {
             pending.add(entry.getName());
         }
         // Read the physical claim-access authority as source without loading game classes.
@@ -435,7 +439,9 @@ public final class AuthorityAdapters {
         Set<String> pending = new TreeSet<>();
         for (Class<?> type : List.of(AuditFinding.class, AuditReports.class, AuthorityAdapters.class,
                 ConstructionReserve.class, DebtManifest.class, SustainabilityAnnotations.class,
-                SustainabilityAudit.class, SustainabilityModel.class, TagResolver.class)) {
+                SustainabilityAudit.class, SustainabilityModel.class, TagResolver.class,
+                ControlMatrixNbt.class, ControlMatrixSpec.class, MatrixArchitecture.class, FluxTier.class,
+                ResourceGuidanceContext.class)) {
             pending.add(type.getName().replace('.', '/') + ".class");
         }
         for (String check : List.of("VerifySustainability", "VerifySustainabilityAdapters",
@@ -693,7 +699,7 @@ public final class AuthorityAdapters {
         for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
             Resource subject = task.evidence() == QuestCatalogue.Evidence.DIMENSION
                     || task.evidence() == QuestCatalogue.Evidence.FREE ? null
-                    : new Resource(Kind.ITEM, task.subject(), questResourceRating(task), "items");
+                    : resource(IngredientSpec.ITEM, task.subject(), questResourceRating(task));
             String routeId = "quest/" + task.id();
             Set<String> prerequisites = Set.copyOf(QuestCatalogue.requirements(task));
             builder.objective(new Objective(task.id(), subject, task.count(), prerequisites,
@@ -728,15 +734,7 @@ public final class AuthorityAdapters {
     }
 
     private static int questResourceRating(QuestCatalogue.Task task) {
-        if (task.matrixRating() == null) {
-            return 0;
-        }
-        // Authored untagged Relay output has this native default; the exact physical check stays in conditions.
-        if (task.subject().equals("grindless:relay_matrix")
-                && task.matrixRating() == MatrixArchitecture.RELAY.firstFrontier()) {
-            return 0;
-        }
-        return task.matrixRating().ordinal();
+        return task.matrixRating() == null ? 0 : task.matrixRating().ordinal();
     }
 
     private static void readGenerators(List<ProcessRecipe> graph, Builder builder) {
@@ -779,11 +777,19 @@ public final class AuthorityAdapters {
     }
 
     private static Resource resource(String kind, String id, int rating) {
-        return new Resource(switch (kind) {
+        return physical(new Resource(switch (kind) {
             case IngredientSpec.TAG -> Kind.TAG;
             case IngredientSpec.FLUID -> Kind.FLUID;
             default -> Kind.ITEM;
-        }, id, rating, "items");
+        }, id, rating, "items"));
+    }
+
+    /**
+     * Shares the pure authored supply rule with display; registry declarations bypass this seam.
+     * Invalid explicit NBT is not an authored default and must be rejected by the actual stack decoder.
+     */
+    static Resource physical(Resource resource) {
+        return ResourceGuidanceContext.canonicalSupply(resource);
     }
 
     private static Resource qualified(String value) {
@@ -792,7 +798,7 @@ public final class AuthorityAdapters {
     }
 
     private static Resource item(String id) {
-        return new Resource(Kind.ITEM, id);
+        return resource(IngredientSpec.ITEM, id, 0);
     }
 
     private static void add(Map<Resource, Long> quantities, Resource resource, long amount) {
