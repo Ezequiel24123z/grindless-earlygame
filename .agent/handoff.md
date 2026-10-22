@@ -69,6 +69,16 @@ A d6867960/exact7f9/treeccf2a850 reports41 owned files, normal clean source,
 manual catalogue/control/policy/replication retirement and all allowed tool
 routes, no Java/native. It explicitly leaves old vanilla Furnace autoroutes
 open rather than claiming universal closure.
+Review9219e379 checks immutable originald686 while the narrow follow-up runs;
+it must not mistake that explicitly open boundary for a hidden completed pass.
+
+**A final source652968a2 is delivered, review still pending.** Normal parent
+d686/tree4b020c31, narrow6-file79 insertions23 deletions; combined41 files/
+1414 insertions599 deletions from7f9. Private separate handoff21067 bytes/
+SHA7f1120bc is parent size/hash verified. It now retires both vanilla Furnace
+autoroutes and keeps manual authority/materials/operations/other basics.
+No Java/native/model or new world action occurs. Review9219 receives only the
+finished narrow delta in addition to its original immutable review.
 
 The coordinator asks that exact boundary once; the owner is unavailable and
 delegates autonomous decisions. Coordinator chooses manual-only FINAL
@@ -80,6 +90,26 @@ C uses actual vanilla/minecraft:furnace authority and honest finite capital/
 manual-upstream core evidence; no claim of automatic net core supply.
 B covers retired Bench work and reports any concrete runtime-paid-work defect
 before editing an unowned engine. No speculative refund/completion/erasure.
+Its normal63f107a9/exacte960/tree60b08e08 writes actual Bench/Furnace
+retirement contracts, with separate private handoffSHAc00d5327 and original
+46bf intact. SOURCE inspection exposes actual existing fallback/adoption:
+matchingRecipe selects live bench/brick_block for orphaned positive Bench
+work; recipe then zeroes Progress/replaces WorkRecipe before power draw.
+This is a written expected-red case, NOT an executed Java/native failure.
+ADR-0189 authorizes B only the necessary shared read-only/cache/adoption
+guard in ProcessMachineBlockEntity. Preserve valid Guide compatibility,
+live/unpaid work, stores, paid fields and full work-prefix/rollback contracts.
+No extra ledger, save format, arbitrary refund or restored auto-machine row.
+Executor604 prepares a REVISED local-only future window: new manual-machine
+root, common+Forge/changed contracts and one clean-source existing matrix
+native for the genuinely new ingredient/recipe/settlement binding BEFORE
+normal writers, then independent/canonical/model/image custody. No GO or
+source binding is issued. Reuse unchanged FTB/ABI/Blueprint work, no package/
+Prism/player action or new per-recipe smoke.
+The revised private inventorySHAac48df06/planSHA02978044 are LOCAL ONLY.
+New root is NOT observed/admitted; source/grant/lease remain NULL and old
+1b8/472 preparation is byte-exact. Actual final code/guard review precedes
+one GO; no producer runs merely because a preparation file exists.
 
 C d4d1/ebb4a582/exact7f9/treea50fe515 supplies15 files/453 insertions129
 deletions, manual-capital annotations/strict recurring-feed negatives,
@@ -387,7 +417,7 @@ identity repairs invocation without altering Git configuration.
 | Category | Current integration boundary |
 | --- | --- |
 | COMPLETED | Historical proofs preserved; ADR-0188/per-product policy published; generic custody/B source reviews clear; initial A41/C15 source delivered with declared integration limits; coordinator resolves Furnace boundary conservatively and assigns narrow source follow-ups |
-| BLOCKED | None urgent; revised source/manual-control/fixture/progression implementation and qualification are prerequisites, not a new owner decision |
+| BLOCKED | Actual source inspection identifies orphaned positive Bench fallback clearing paid owner/progress; ADR-0189 guard repair and combined exact-source qualification are required. No urgent owner/credential decision |
 | NOT EXECUTED | ADR-0188 recipe retirement/manual ingredient/integrated contracts and new native/model qualification; ADR-0187 Java/replay/writers; rendered/client-wire/owner-world/campaign/package/player deployment/main/release/whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
 | NEEDS MY DECISION | None |

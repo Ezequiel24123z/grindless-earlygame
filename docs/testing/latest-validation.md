@@ -1145,6 +1145,41 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
+**Final A source and a real source-level retirement blocker:** normal
+652968a229691f732d4133cc4ff5d78962e0b24c/exactd686,
+tree4b020c31d727b7e2c91439fcbd8a9e3ef9504fc4, completes the narrow Furnace
+correction in6 files/79 insertions23 deletions. Combined from7f9 is41 files/
+1414 insertions599 deletions. Parent verifies separate private handoff21067
+bytes/SHA2567f1120bcfeadca8b04234576cd5bc3615fdb0735475389ce60b771e29a9939a6
+and the normal finished lineage/whitespace. Review9219 receives this actual
+narrow delta without re-reading unchanged original scope. No Java/native/
+model/writer execution is supplied.
+
+B's normal63f107a979455f5294be8fbdbc6c7a4555f91c9c/exacte960,
+tree60b08e088a75e17df7341f2b58c72c1edaa79666, changes only Persistence and
+its own changelog bullet. Separate handoffSHAc00d5327620904b5001facb203273be71d06f94d3da544e415bf69ea1b9103f3
+preserves old46bf. Tests use actual bench/brick_block materials as a competing
+current row and retired bench/furnace/quern owners, including legacy NBT and
+fractional paid balances. The expected failure is SOURCE inspection, not a
+new Java/Forge red: matchingRecipe's ordinary fallback feeds recipe(), which
+zeroes Progress/replaces WorkRecipe before draw. Parent reads that real
+runtime seam and the new typed contract.
+
+ADR-0189 authorizes B only the necessary ProcessMachineBlockEntity shared
+resolution/cache/adoption guard, plus live/unpaid/valid-Guide negatives and
+one representative existing aggregate. No save schema, second executor,
+arbitrary refund/old-normal completion, protected-prefix weakening or
+unrelated family change is authorized. Actual fixed-source execution/review
+remains required. A safe hold does not replace owner-world copy inspection.
+
+Revised G11 local preparation provides inventorySHA256
+ac48df0679ba7fb5203ac4568e31ebef333671b1d8516421ac325a946cc367cb
+and selectionSHA256029780444f1566edb635a188c9dffa4e64440c48cbd33e62da7591d1aacd4866.
+Only the proposed new root differs from working settings; no root admission/
+inspection/source binding/CI query/PC/JVM exists. Old1b8/472 files remain exact.
+The first real native will precede writers and capture its JAR/exit/inventory/
+save-stop basis; authored43/98 is still not observed source/class evidence.
+
 **Subsequent A/C SOURCE intake and Furnace boundary:** A reports normal
 d6867960/exact7f9/treeccf2a850,41 files and ordered blob-manifestSHA256
 999813d236a124194b77c3e086d649ea3cd42a0492ea7ad9fadf807aedd451f7,
@@ -1173,6 +1208,16 @@ the runtime-agent/session-tool namespace rejection, with read-only recovery.
 Parent's documentation patch applies three metadata files before failing at
 stale ADR context; actual partial state is inspected, and only remaining docs
 are completed. Neither failure repairs/replays an application producer.
+
+Review9219e379 starts on immutable original7f9-to-d686 A source while narrow
+Furnace follow-ups continue; it does not inspect a moving worktree or call the
+known open boundary a completed policy pass. Executor604 is separately asked
+to prepare a revised path LOCALLY ONLY: a new manual-machine root,
+common/Forge/tool contracts and exactly one existing matrix-lifecycle on clean
+final source for the new MOD-bus ingredient/RecipeManager/manual-settlement
+uncertainty before writers, then normal model/independent/canonical/image
+custody. Old common-model-only preparation remains frozen/historical.
+No new source, lease, PC/CI query/Sync/JVM or runtime result is bound or claimed.
 
 Normal source commits6c53b321/exactf5c2dde then
 `6b1917672f48eda7b5320ee4bc3733a2b474300a`, parent

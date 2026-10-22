@@ -15,6 +15,22 @@ entries below reference those records by id.
 
 ### Added
 
+- **Hold orphaned Bench ownership before retiring automatic constructors.**
+  A's finished652 source/41-file manifest and private handoff are delivered;
+  G11 local-only inventory/preparation remains unbound. B's real competing
+  Bench contract exposes by inspection a fallback that clears paid owner/
+  progress before power draw. ADR-0189 authorizes only the required resolver/
+  cache/adoption repair, preserving live/unpaid/Guide/other-family behavior,
+  stores and all protected work/rollback contracts. No expected-red source
+  case is mislabeled as an executed failure or green; actual guard review/
+  compilation/native/model qualification and owner-copy compatibility remain.
+- **Overlap immutable recipe review with revised local-only preparation.**
+  Review9219 checks original A d686 while narrow Furnace source corrections
+  run. The existing executor prepares one future manual-machine window:
+  common/Forge, affected contracts and an existing-carrier native for the new
+  ingredient/settlement boundary before normal model writers/checks/custody.
+  No exact source/lease is bound, no PC/CI-query/JVM executes, and unchanged
+  FTB/ABI/Blueprint/native assumptions are not redundantly replayed.
 - **Receive manual-capital source and resolve the explicit Furnace boundary.**
   Initial A d68641-file source and C d4d1/ebb15-file source are delivered,
   without Java/replay. C-only review finds no significant source issue;

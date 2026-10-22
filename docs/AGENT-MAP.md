@@ -290,6 +290,22 @@ normal writers/independent checks and observed images after one exact-source
 GO. Do not repeat unchanged G10/FTB proofs or touch player worlds to implement
 the policy; all four canonical files remain old A9 until actual normal writers.
 
+### Orphaned paid Assembly Bench work
+
+ADR-0189 is a narrow coupled retirement repair in
+`machine/ProcessMachineBlockEntity.recipe`/`matchingRecipe` and necessary cache
+adoption. Positive missing-owner Bench work cannot fall through to another
+live basic and erase/transfer Progress/WorkRecipe, including via inspection.
+Keep valid LegacyGuideAssembly recovery and current live/zero work intact.
+Reuse owner fields/unavailable status, not another ledger, save schema or
+arbitrary refund. B owns the guard and its existing persistence/native
+aggregate contracts; C owns any genuinely required localized status.
+Preserve other families, Assembler ownership, settlement and the entire
+work/workCycle physical-diagnosis/reentry contract. A owns source-profile
+changes only if a concrete necessary strict coupling is identified; no broad
+matcher/guard weakening. No actual runtime pass exists until exact-source
+compiler and one representative existing-carrier proof execute.
+
 ### Authored default Matrix identity
 
 ADR-0184 projects authored default stacks through `AuthorityAdapters.physical`,

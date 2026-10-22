@@ -200,6 +200,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0186](#adr-0186--supply-physical-baseline-control-to-nine-existing-process-families) | Supply physical baseline control to nine existing process families | G10 combined representative mechanism/normal A9/custody verified; no per-family runtime or whole-tier acceptance |
 | [0187](#adr-0187--continue-the-finite-first-factory-witness-with-conserved-t0-custody) | Continue the finite first-factory witness with conserved T0 custody | Generic source review clear; T1 authority revision under ADR-0188 and actual Java/replay pending |
 | [0188](#adr-0188--assemble-normal-machines-manually-and-author-manufacturing-modes-per-product) | Assemble normal machines manually and author manufacturing modes per product | Owner correction accepted; obsolete automatic-machine scope frozen, implementation pending |
+| [0189](#adr-0189--hold-orphaned-paid-bench-work-before-ordinary-recipe-fallback) | Hold orphaned paid Bench work before ordinary recipe fallback | Accepted narrow engineering repair; source implementation/execution pending |
 
 ---
 
@@ -9174,3 +9175,57 @@ authority without weakening physical control. Retain the reusable processing,
 selection, exact/minimum-control, settlement and custody mechanisms; their
 historical tests remain historical evidence, not approval of the retired
 product objective.
+
+---
+
+## ADR-0189 — Hold orphaned paid Bench work before ordinary recipe fallback
+
+**Status.** Accepted narrow correctness repair coupled to ADR-0188 retirement,
+2026-10-22. Source inspection plus a written expected-red contract identify the
+path; no Java/native failure or repaired runtime pass has been executed.
+This is not permission to restore automatic normal-machine recipes or change
+an actual owner's world.
+
+**Context.** An old Assembly Bench can retain positive Progress owned by a
+withdrawn bench/furnace or bench/quern recipe. The current matchingRecipe
+falls through to an unrelated permitted row such as bench/brick_block.
+recipe then zeroes progress and replaces WorkRecipe before drawing power.
+That silently discards already-paid work as a consequence of recipe retirement.
+Inspection can reach the same adoption path, so a tick-only check is insufficient.
+
+**Decision.** Hold unresolved positive paid Bench work fail-closed before
+ordinary lookup, cached return or new-owner adoption can erase/transfer it.
+Preserve its exact owner/credit and physical stores through inspection,
+cache/generation changes, ticks and binary reopen, including supported old
+Recipe-only ownership. Do not consume inputs, draw power, refund, clear,
+transfer or invent completion for the retired normal machine.
+
+Reuse the existing owner fields, resolver and unavailable-status mechanisms;
+add no job ledger, recipe registration, save schema or second executor.
+Keep current live Bench work and genuine zero/unpaid ordinary lookup functional.
+The existing valid LegacyGuideAssembly paid-guide exception remains exactly
+its own compatibility path; arbitrary unknown normal IDs must not complete a
+Guide, nor may a competitor consume that Guide's credit.
+
+Limit the runtime change to the necessary read-only resolution/cache/adoption
+seam in ProcessMachineBlockEntity. Preserve other families, Assembler's
+recipe-keyed work, settlement/rollback and the full work/workCycle reentry/
+physical-diagnosis contract. Use existing explicit blocked/unavailable
+presentation; any required new text is a small localized status, not a UI
+redesign or a success-shaped idle fallback.
+
+**Proof.** Existing typed persistence contracts use an actual retained
+bench/brick_block competitor and real Bench/NBT/store state, not an empty
+lookup false positive or fake registered recipe. Cover fractional/completed
+old work, supported legacy owner loading, inspection/cache/generation/reopen,
+no draw/stock change and live/unpaid/valid-Guide nonregression.
+One representative real Bench state joins the existing command-gated native
+aggregate for the new guard semantics; do not add a scenario/budget or run a
+per-retired-ID native matrix. Exact-source compiler/regressions/native/model
+custody remains required after review and normal composition.
+
+**Limits.** A safe hold is not a completed migration/recovery of the actual
+longitudinal save. Copy-based pre-deployment inspection must still identify
+affected real jobs and any necessary recovery decision. Do not silently
+delete the paid state merely to keep a machine productive. Historical source/
+native proofs remain bound to their original code and are not relabeled.

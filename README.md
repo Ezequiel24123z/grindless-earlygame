@@ -2439,6 +2439,7 @@ is preserved and integration/release gates still control acceptance.
 | 78 | **Baseline process-family controllers** | ADR-0186 — nine explicit minimum-F1 fourth groups/exactfifteen-role contract preserve old bills/FU/time/output/passive/Motor/seed/F2 and selector guards. G10 verifies combined representative native/normal models/A9/custody; no per-family runtime, real chassis upgrade or whole-tier claim |
 | 79 | **Finite first-factory continuation** | ADR-0187 — source6c53/6b19 composed with A9; generic custody/admission/conservation review8ef finds no significant issue, not Java/replay proof. Rebind T1 authorities to ADR-0188 before qualification; authored42/96 is not observed provenance. No autonomy/whole-tier/world pass |
 | 80 | **Manual normal-machine manufacture** | ADR-0188 — owner correction accepted: manual final machines, automated inputs/operations and eligible multiblock controllers. Retire obsolete automatic constructors and rebind manual catalogues, teaching, fixtures and finite proof; no new PC grant or implementation pass yet |
+| 81 | **Retired paid Bench ownership** | ADR-0189 — source inspection exposes ordinary fallback clearing old paid Bench work. Narrow resolution/cache/adoption hold is delegated; preserve stores/owner/credit/live work/Guide compatibility without a new ledger or invented refund. Actual fix qualification pending |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
