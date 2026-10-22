@@ -389,7 +389,8 @@ public final class VerifyT1Progression {
     private static void finiteContinuation(SustainabilityAudit.Result t0) {
         var finite = T1Sustainability.finiteWitness(t0);
         equal("the actual immutable conditional T0 predecessor is admitted", true, finite.admitted());
-        equal("the actual mandatory first-factory batches and physical F2 execute; findings=" + finite.findings(),
+        equal("the actual mandatory first-factory batches and physical F2 execute; findings=" + finite.findings()
+                        + "; state=" + T1Sustainability.finiteDiagnostics(t0, finite),
                 true, finite.completed());
         equal("no conservative execution finding is hidden", List.of(), finite.findings());
         var before = t0.tiers().get(0).witnessState();
@@ -398,6 +399,11 @@ public final class VerifyT1Progression {
         if (before == null || after == null) {
             return;
         }
+        var diagnostics = T1Sustainability.finiteDiagnostics(t0, finite);
+        equal("bounded diagnostics report the actual ending operation counter", after.operations(),
+                diagnostics.get("after_operations"));
+        equal("bounded diagnostics count only actual completed batches", finite.batches().size(),
+                diagnostics.get("completed_batches"));
         equal("the checkpoint is the actual issued predecessor", before, finite.predecessor());
         equal("no bootstrap source is loaded a second time", before.bootstrapSources(), after.bootstrapSources());
         equal("guaranteed delivery accounting remains unchanged", before.guaranteedDeliveries(), after.guaranteedDeliveries());

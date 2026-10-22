@@ -15,6 +15,20 @@ entries below reference those records by id.
 
 ### Added
 
+- **Finance conserved native circulation before T1 carrier withdrawals.**
+  Original G12cb1e passes T0/Guidance/Economy preparation but stops before T1
+  output with real Press/F2, alias-reserve, work-status and native-supply findings.
+  In continuation, fund net FU before admitting the consuming route so its paid
+  native circulation can execute that producer, and refill the installed selected
+  producer instead of substituting repeated small native gains. A fuel producer
+  consuming loop inventory is not independent startup supply. Preserve all stock,
+  seed/catalyst/installation/claim/work budgets, real deficits and manual policy.
+  Add a cold, batch-funded carrier/tag regression and a genuinely unfunded alias
+  negative; no fixture becomes gameplay. Bounded diagnostics expose actual steps,
+  completed batches, sparse physical balances and work status without zero defaults.
+  Existing R29-R34, actual F1/F2 bills and explicit source/image lists remain.
+  This source is not compiled or replayed here; original G12 raws/partial outputs
+  are retained and later execution requires a new reviewed coordinator grant.
 - **Close G11 native custody and normally integrate the finite-controller correction.**
   Independent QA verifies46/46 files,2599 frozen inputs, actual1273/19 native
   and JAR/exit/CI/guard relations through the fresh20:59:08Z return, without

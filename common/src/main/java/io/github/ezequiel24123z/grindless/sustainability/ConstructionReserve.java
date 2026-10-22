@@ -43,6 +43,7 @@ final class ConstructionReserve {
     private final Set<Resource> pending = new HashSet<>();
     private final Set<String> claimed = new HashSet<>();
     private final Set<String> pendingRoutes = new HashSet<>();
+    private final Set<String> fundingRoutes = new HashSet<>();
     private final Set<String> preparing = new HashSet<>();
     private final Set<String> circulating = new HashSet<>();
     private final List<AuditFinding> findings = new ArrayList<>();
@@ -558,7 +559,14 @@ final class ConstructionReserve {
             return true;
         }
         Route source = replenishing(resource);
-        return source != null && !members.contains(source.id()) || snapshot.terminals().values().stream()
+        boolean independent = source != null && !members.contains(source.id());
+        if (completedEntryRoute != null && independent) {
+            // A Thermal burning this loop's biomass is not independent startup FU, especially
+            // while it is already waiting for that biomass. Keep the paid native prefix in use.
+            independent = !pendingRoutes.contains(source.id()) && source.netInputs().keySet().stream()
+                    .noneMatch(input -> audit.has(internal, input));
+        }
+        return independent || snapshot.terminals().values().stream()
                 .anyMatch(terminal -> terminal.resource().equals(resource) && terminal.renewable());
     }
 
@@ -723,6 +731,22 @@ final class ConstructionReserve {
                 }
                 if (free(resource) >= amount) {
                     return true;
+                }
+            }
+            if (completedEntryRoute != null && profile != null && audit.has(renewable, resource)
+                    && route != null && selection.contains(route) && route.automatable()
+                    && audit.unlocked(route, tier) && !pendingRoutes.contains(route.id())
+                    && (route.family() == null || readyMachine != null && installed.contains(readyMachine.construction()))) {
+                long yield = audit.outputAmount(route, resource) - route.inputs().getOrDefault(resource, 0L);
+                if (yield > 0) {
+                    // Refill the actual selected producer's inputs, not just its already-free fuel.
+                    // The retained native loop may fund that input production without replacing
+                    // a selected Thermal batch with many tiny native net-FU gains.
+                    long missing = amount - free(resource);
+                    execute(route, 1 + (missing - 1) / yield);
+                    if (free(resource) >= amount) {
+                        return true;
+                    }
                 }
             }
             if (profile != null && audit.has(renewable, resource)) {
@@ -991,7 +1015,29 @@ final class ConstructionReserve {
         if (route.id().equals(completedEntryRoute)
                 || !audit.unlocked(route, tier) || audit.zeroInputUnjustified(route)
                 || !audit.environmentReady(route, available) || route.oneShot() && claimed.contains(route.id())
-                || !pendingRoutes.add(route.id())) {
+                || pendingRoutes.contains(route.id())) {
+            return false;
+        }
+        Long energy = route.inputs().get(ENERGY);
+        if (completedEntryRoute != null && circulating.isEmpty() && energy != null
+                && route.netInputs().containsKey(ENERGY) && free(ENERGY) < energy && audit.has(renewable, ENERGY)) {
+            // Finance net FU before this batch owns inputs or becomes an active route. A paid
+            // circulation may need this very producer to rebuild surplus FU before an external
+            // carrier withdrawal. Re-entering an already active/allocated batch is still refused.
+            if (!fundingRoutes.add(route.id())) {
+                unknown(route.retainedOutputs().keySet().iterator().next(),
+                        "Native energy funding is circular for " + route.id() + "; no batch or budget is invented.");
+                return false;
+            }
+            try {
+                if (!obtain(ENERGY, energy)) {
+                    return false;
+                }
+            } finally {
+                fundingRoutes.remove(route.id());
+            }
+        }
+        if (!pendingRoutes.add(route.id())) {
             return false;
         }
         Map<Resource, Long> allocated = new TreeMap<>();

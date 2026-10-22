@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
+import io.github.ezequiel24123z.grindless.progression.T1Progression;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.recipe.BootstrapRecipes;
 import io.github.ezequiel24123z.grindless.recipe.BootstrapProcesses;
@@ -112,7 +113,7 @@ public final class VerifySustainability {
                 VerifySustainability::outputOnlyFirstUseException, VerifySustainability::continuedCustody,
                 VerifySustainability::continuationRefusals, VerifySustainability::exhaustedContinuation,
                 VerifySustainability::manualCapital, VerifySustainability::finiteFurnaceSubassembly,
-                VerifySustainability::formedCapitalWithManualUpstream)) {
+                VerifySustainability::formedCapitalWithManualUpstream, VerifySustainability::continuedNativeFunding)) {
             try {
                 fixture.run();
             } catch (Exception failure) {
@@ -395,6 +396,170 @@ public final class VerifySustainability {
         fixture.add(route("fixture/formed_operation", Map.of(SAFE, 1L), Map.of(), Map.of(SIDE, 1L), "FORMED_OPERATION"))
                 .meta(SIDE, renewable("fixture/formed_operation")).root(SIDE);
         fixture.entryProfile = fixture.entryProfile.withBill(Map.of(RAW, budget), 0);
+        return fixture;
+    }
+
+    private static void continuedNativeFunding() {
+        group("R35 continuation finances carrier withdrawals from retained native circulation before route admission");
+        Snapshot live;
+        try {
+            live = AuthorityAdapters.live(Path.of(""));
+        } catch (IOException failure) {
+            throw new IllegalStateException("Cannot read the actual native source/fuel batches", failure);
+        }
+        Resource aggregate = new Resource(Kind.ITEM, SourceLogic.AGGREGATE);
+        Resource biomass = new Resource(Kind.ITEM, SourceLogic.BIOMASS);
+        Resource cobble = new Resource(Kind.ITEM, "minecraft:cobblestone");
+        Resource f1 = new Resource(Kind.ITEM, "grindless:relay_matrix", FluxTier.F1.ordinal(), "items");
+        Resource f2 = new Resource(Kind.ITEM, "grindless:relay_matrix", FluxTier.F2.ordinal(), "items");
+        Resource finiteTag = new Resource(Kind.TAG, "fixture:unfunded_stones");
+        for (boolean unfunded : List.of(false, true)) {
+            Fixture fixture = nativeFundingFixture(live, unfunded);
+            var predecessor = fixture.audit();
+            yes("the retained native seed is paid in a real completed T0 witness; unfunded=" + unfunded,
+                    T0ConditionalGate.evaluate(predecessor).pass());
+            var before = predecessor.tiers().get(0).witnessState();
+            if (before == null) {
+                fail("the continuation funding contract needs a complete predecessor");
+                continue;
+            }
+            // These are fixture assertions, NOT observations of G12's unreported balances.
+            eq("the completed drain leaves no free native FU", 0L, before.freeStock().get(ENERGY));
+            eq("the completed drain leaves no free aggregate", 0L, before.freeStock().get(aggregate));
+            eq("the completed drain leaves no free biomass", 0L, before.freeStock().get(biomass));
+            eq("the completed drain leaves no free stone member", 0L, before.freeStock().get(cobble));
+            long nativePrefix = live.routes().get("source/geological_aggregate").inputs().get(ENERGY)
+                    + live.routes().get("source/biomass").inputs().get(ENERGY);
+            eq("the real native prefix is retained, not released as free stock", nativePrefix,
+                    before.retainedCatalysts().get(ENERGY));
+            eq("the manual F1 exit actually produced its five physical controllers", 5L, before.freeStock().get(f1));
+            List<String> selected = List.of(T1Progression.POWER_ROUTE, "fixture/drain_selected_power",
+                    "fixture/manual_press", "fixture/reproduce_f1", "fixture/exact_f2");
+            var result = SustainabilityAudit.continueFinite(predecessor, fixture.annotations(), selected, "fixture/exact_f2");
+            yes("the completed source-bound predecessor is admitted", result.admitted());
+            eq("only a genuinely funded alias can establish the manual capital and frontier", !unfunded, result.completed());
+            var after = result.state();
+            if (after == null) {
+                fail("an admitted funding attempt must expose its actual partial custody");
+                continue;
+            }
+            Map<Resource, Long> prefixStock = physicalCustody(before);
+            boolean drained = false;
+            for (var batch : result.batches()) {
+                batch.consumed().forEach((resource, count) -> prefixStock.merge(resource, -count, Math::addExact));
+                batch.produced().forEach((resource, count) -> prefixStock.merge(resource, count, Math::addExact));
+                if (batch.route().equals("fixture/drain_selected_power")) {
+                    drained = true;
+                    break;
+                }
+            }
+            yes("the cold boundary is reached by actual completed fixture batches", drained);
+            eq("only the Quern's first input is free; native circulation FU remains retained",
+                    nativePrefix + live.routes().get("bootstrap/dry_aggregate").inputs().get(ENERGY),
+                    prefixStock.get(ENERGY));
+            eq("no free fuel masks the carrier-producer funding cycle", 0L, prefixStock.get(biomass));
+            eq("no free carrier masks the funding cycle", 0L, prefixStock.get(aggregate));
+            eq("no startup terminal is loaded a second time", before.bootstrapSources(), after.bootstrapSources());
+            eq("no conditional material provision is added", before.playerDeliveries(), after.playerDeliveries());
+            eq("no one-shot claim is reset", before.claimedRoutes(), after.claimedRoutes());
+            eq("no spent startup action is refunded or regranted", before.consumedManualActions(), after.consumedManualActions());
+            eq("the retained native prefix is restored after production", before.retainedCatalysts(), after.retainedCatalysts());
+            conservation(before, after, result.batches());
+            if (!unfunded) {
+                eq("continuation needs no new local-work high-water allowance",
+                        before.requiredManualActions(), after.requiredManualActions());
+                eq("the inherited finite work margin remains established", "conditional_established",
+                        result.manualWork().status());
+                yes("selected Thermal production is refuelled after its free biomass is exhausted",
+                        result.batches().stream().filter(batch -> batch.route().equals(T1Progression.POWER_ROUTE)).count() > 4);
+                no("the completed manual exit is never replayed as bootstrap", result.batches().stream()
+                        .anyMatch(batch -> batch.route().equals("fixture/manual_f1_exit")));
+                eq("the real physical F2 fixture batch executes", 1L, result.exitProduction().executedBatches());
+                eq("the frontier remains exactly rated F2", f2, result.exitProduction().resource());
+                eq("five replacement F1 fund one frontier withdrawal exactly", 4L, after.freeStock().get(f1));
+                no("successful source resolution does not retain a phantom tag budget deficit",
+                        result.findings().stream().anyMatch(finding -> finding.rule().equals("entry_profile_insufficient")));
+            } else {
+                yes("a genuinely missing alias member keeps its finite custody error", result.findings().stream()
+                        .anyMatch(finding -> finding.rule().equals("entry_profile_insufficient")
+                                && finding.subject().equals(finiteTag.key())));
+                eq("an unfunded tag cannot fabricate physical F2", 0L, result.exitProduction().executedBatches());
+                eq("failed manual construction restores the reserved five F1", 5L, after.freeStock().get(f1));
+            }
+        }
+    }
+
+    private static Fixture nativeFundingFixture(Snapshot live, boolean unfundedAlias) {
+        // The native source, dry processing and both fuels are actual authority batches.
+        // Drain/press/Matrix rows below are synthetic algorithm contracts, NOT gameplay bills.
+        Route geo = live.routes().get("source/geological_aggregate");
+        Route bio = live.routes().get("source/biomass");
+        Route nativeFuel = live.routes().get("fuel/biomass_dynamo/biomass");
+        Route dry = live.routes().get("bootstrap/dry_aggregate");
+        Route thermal = live.routes().get(T1Progression.POWER_ROUTE);
+        Resource aggregate = new Resource(Kind.ITEM, SourceLogic.AGGREGATE);
+        Resource biomass = new Resource(Kind.ITEM, SourceLogic.BIOMASS);
+        Resource cobble = new Resource(Kind.ITEM, "minecraft:cobblestone");
+        Resource blackstone = new Resource(Kind.ITEM, "minecraft:blackstone");
+        Resource stones = new Resource(Kind.TAG, "minecraft:stone_crafting_materials");
+        Resource finiteTag = new Resource(Kind.TAG, "fixture:unfunded_stones");
+        Resource f1 = new Resource(Kind.ITEM, "grindless:relay_matrix", FluxTier.F1.ordinal(), "items");
+        Resource f2 = new Resource(Kind.ITEM, "grindless:relay_matrix", FluxTier.F2.ordinal(), "items");
+        Resource press = new Resource(Kind.ITEM, "grindless:press");
+        long prefix = geo.inputs().get(ENERGY) + bio.inputs().get(ENERGY);
+        long nativeOutput = nativeFuel.retainedOutputs().get(ENERGY);
+        long nativeSurplus = nativeOutput - prefix;
+        long rootDemand = 2 * geo.inputs().get(ENERGY) + dry.inputs().get(ENERGY);
+        long extraFuel = 1 + (rootDemand - nativeSurplus - 1) / nativeOutput;
+        long exitEnergy = nativeSurplus + extraFuel * nativeOutput - rootDemand;
+        long exitBiomass = bio.retainedOutputs().get(biomass)
+                - (1 + extraFuel) * nativeFuel.inputs().get(biomass);
+        long thermalOutput = thermal.retainedOutputs().get(ENERGY);
+        long actions = 1 + (geo.inputs().get(ENERGY) - 1) / SourceLogic.MANUAL_CHARGE
+                + 1 + (bio.inputs().get(ENERGY) - 1) / SourceLogic.MANUAL_CHARGE;
+        Fixture fixture = productiveFixture(live, 0, true).seed(TOOL, 1);
+        Resource quern = new Resource(Kind.ITEM, "grindless:quern");
+        fixture.seed(quern, 1).add(dry).meta(cobble, renewable(dry.id()));
+        fixture.machines.put(dry.family(), new Machine(dry.family(), quern, 0));
+        fixture.builder.tag(stones, new TagResolution(Set.of(cobble, blackstone), true, Set.of(), List.of("fixture:stone_alias")));
+        fixture.builder.tag(finiteTag, new TagResolution(Set.of(blackstone), true, Set.of(), List.of("fixture:finite_alias")));
+        fixture.meta(stones, renewable(dry.id()))
+                .meta(blackstone, metadata(ResourceClass.BOOTSTRAP, null, null, List.of(), null, null, null, null))
+                .meta(finiteTag, new ResourceMetadata(ResourceClass.BOOTSTRAP, null, 1, null, null, List.of(), null, null, null, null))
+                .terminal("fixture/no_cobble_budget", cobble, TerminalKind.MANUAL_WORLD, false, true)
+                .terminal("fixture/no_blackstone_budget", blackstone, TerminalKind.MANUAL_WORLD, false, true);
+        fixture.add(new Route("fixture/manual_f1_exit", Authority.CRAFTING_JSON, "fixture:paid_native_drain", null,
+                Map.of(ENERGY, exitEnergy, aggregate, 1L, biomass, exitBiomass,
+                        cobble, dry.retainedOutputs().get(cobble)), Map.of(), Map.of(f1, 5L), Set.of(), 0, 0,
+                Map.of(), Set.of(), false, true, false))
+                .meta(f1, metadata(ResourceClass.BOOTSTRAP, null, "fixture/manual_f1_exit",
+                        List.of(), null, null, null, null));
+        fixture.exitObjective = f1;
+        fixture.requiredQuests.add("exit");
+        fixture.builder.objective(new Objective("exit", f1, 5, Set.of(), null, "fixture:manual_exit"));
+        fixture.workProfile(Map.of(), actions, Set.of(geo.family(), bio.family()));
+        Resource generator = item("selected_generator");
+        Resource assembler = item("selected_assembler");
+        fixture.seed(generator, 1).seed(assembler, 1).add(thermal).policy(thermal.id(), 1, false);
+        fixture.machines.put(thermal.family(), new Machine(thermal.family(), generator, 1));
+        fixture.machines.put("ASSEMBLER", new Machine("ASSEMBLER", assembler, 1));
+        fixture.machines.put("PRESS", new Machine("PRESS", press, 1));
+        fixture.add(route("fixture/drain_selected_power",
+                        Map.of(ENERGY, thermalOutput + nativeSurplus - dry.inputs().get(ENERGY),
+                                biomass, bio.retainedOutputs().get(biomass) - 2 * nativeFuel.inputs().get(biomass)),
+                        Map.of(), Map.of(item("paid_drain_marker"), 1L), null))
+                .policy("fixture/drain_selected_power", 1, false);
+        fixture.add(new Route("fixture/manual_press", Authority.CRAFTING_JSON, "fixture:not_a_live_press_bill", null,
+                Map.of(unfundedAlias ? finiteTag : stones, 2L, f1, 5L), Map.of(), Map.of(press, 1L), Set.of(),
+                0, 0, Map.of(), Set.of(), false, true, false)).policy("fixture/manual_press", 1, false)
+                .meta(press, new ResourceMetadata(ResourceClass.MANUAL_CAPITAL, null, 1, null, "fixture/manual_press",
+                        List.of(), null, null, null, null));
+        fixture.add(route("fixture/reproduce_f1", Map.of(SAFE, 1L, ENERGY, thermalOutput), Map.of(), Map.of(f1, 5L), "ASSEMBLER"))
+                .policy("fixture/reproduce_f1", 1, false);
+        fixture.add(route("fixture/exact_f2", Map.of(f1, 1L, stones, 1L, ENERGY, 4 * thermalOutput),
+                        Map.of(), Map.of(f2, 1L), "ASSEMBLER")).policy("fixture/exact_f2", 1, false)
+                .meta(f2, new ResourceMetadata(ResourceClass.BOOTSTRAP, null, 1, null, "fixture/exact_f2",
+                        List.of(), null, null, null, null));
         return fixture;
     }
 
