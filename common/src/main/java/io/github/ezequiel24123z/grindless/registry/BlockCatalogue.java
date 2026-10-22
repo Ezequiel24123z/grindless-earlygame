@@ -310,6 +310,7 @@ public final class BlockCatalogue {
 
     /** The item that renders as the bare casing cube. */
     public static final String CASING_ITEM = "machine_casing";
+    public static final String THERMAL_GENERATOR_CORE_ITEM = "thermal_generator_core";
 
     private BlockCatalogue() {
     }

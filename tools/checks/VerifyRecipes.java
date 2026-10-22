@@ -9,11 +9,24 @@ import io.github.ezequiel24123z.grindless.menu.MachineMenuKind;
 import io.github.ezequiel24123z.grindless.process.ConditionBand;
 import io.github.ezequiel24123z.grindless.process.MachineEnvelopes;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
+import net.minecraft.SharedConstants;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.Bootstrap;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +59,7 @@ public final class VerifyRecipes {
 
     private static int failures = 0;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         graph();
         pressure();
         logic();
@@ -58,7 +71,7 @@ public final class VerifyRecipes {
         System.exit(failures == 0 ? 0 : 1);
     }
 
-    private static void graph() throws IOException {
+    private static void graph() throws Exception {
         List<ProcessGraph.MaterialView> materials = List.of(
                 new ProcessGraph.MaterialView("iron", true, true, true, true, true, true, true, true, true),
                 new ProcessGraph.MaterialView("gold", true, false, false, true, true, true, true, true, false),
@@ -69,10 +82,12 @@ public final class VerifyRecipes {
         yes("no existing production recipe acquires a pressure requirement",
                 recipes.stream().noneMatch(ProcessRecipe::namesPressure));
         eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable sources, primitive assembly, glass, redstone, steel, silicon and Relay Matrix graph",
-                209, recipes.size());
+                211, recipes.size());
         c3Routes(recipes);
         legacyGuideWork(recipes);
         assemblerCrafts(recipes);
+        thermalGeneratorAssembly(recipes);
+        thermalInputSelection(recipes);
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -317,13 +332,13 @@ public final class VerifyRecipes {
                         IngredientSpec.item(FabricationLogic.COPPER_COIL, 2),
                         IngredientSpec.tag("forge:plates/iron", 4),
                         IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1))));
-        eq("only the four selected machine operands and the existing Wire Mill opt into minimum control", 5L,
+        eq("only the five selected machine operands and the existing Wire Mill opt into minimum control", 6L,
                 recipes.stream()
                 .flatMap(row -> java.util.stream.Stream.concat(row.inputs().stream(), row.catalysts().stream()))
                 .filter(IngredientSpec::isMinimumControl).count());
-        yes("minimum control stays limited to the five named recipe identities",
+        yes("minimum control stays limited to the six named recipe identities",
                 List.of("assemble/pulverizer", "assemble/arc_furnace", "assemble/press", "assemble/assembler",
-                        "assemble/wire_mill")
+                        "assemble/thermal_generator", "assemble/wire_mill")
                         .equals(recipes.stream()
                                 .filter(row -> row.inputs().stream().anyMatch(IngredientSpec::isMinimumControl))
                                 .map(ProcessRecipe::id).toList()));
@@ -935,7 +950,7 @@ public final class VerifyRecipes {
                         && row.itemOutputs().stream().anyMatch(output -> output.id().endsWith("_die")))
                 .map(row -> row.id().substring("assemble/".length())).toList();
         yes("only the explicitly selected Press dies have automatic routes", dieNames.equals(automaticDies));
-        yes("only the four explicitly selected first-factory machines have automatic routes", machineNames.equals(
+        yes("the four directly projected first-factory machines keep their automatic routes", machineNames.equals(
                 recipes.stream().filter(row -> machineNames.stream()
                                 .anyMatch(name -> row.id().equals("assemble/" + name)))
                         .map(row -> row.id().substring("assemble/".length())).toList()));
@@ -990,6 +1005,150 @@ public final class VerifyRecipes {
             int count = result.has("count") ? result.get("count").getAsInt() : 1;
             yes(id + " also matches the exact shipped JSON output multiset", automatic.outputs().equals(
                     List.of(OutputSpec.item(result.get("item").getAsString(), count))));
+        }
+    }
+
+    private static void thermalGeneratorAssembly(List<ProcessRecipe> recipes) throws IOException {
+        T1Recipes.Shaped craft = T1Recipes.shaped().stream()
+                .filter(row -> row.name().equals("thermal_generator")).findFirst().orElseThrow();
+        Map<String, Integer> manual = shapedInputs(craft.pattern(), craft.key());
+        eq("the unchanged manual Thermal craft has five distinct groups", 5, manual.size());
+        yes("the manual Thermal bill retains all nine physical units", manual.equals(Map.of(
+                T1Recipes.COBBLE, 5, T1Recipes.FURNACE, 1, T1Recipes.CARBON, 1,
+                T1Recipes.IRON, 1, T1Recipes.RELAY_MATRIX, 1)));
+        ProcessRecipe core = recipe(recipes, "assemble/thermal_generator_core");
+        ProcessRecipe finished = recipe(recipes, "assemble/thermal_generator");
+        Map<String, Integer> coreInputs = new LinkedHashMap<>();
+        for (String input : List.of(T1Recipes.FURNACE, T1Recipes.CARBON, T1Recipes.IRON)) {
+            coreInputs.put(input, manual.get(input));
+        }
+        Map<String, Integer> finalInputs = new LinkedHashMap<>();
+        finalInputs.put("item:" + FabricationLogic.THERMAL_GENERATOR_CORE, 1);
+        finalInputs.put(T1Recipes.COBBLE, manual.get(T1Recipes.COBBLE));
+        finalInputs.put(T1Recipes.RELAY_MATRIX, manual.get(T1Recipes.RELAY_MATRIX));
+        projection(recipes, MachineFamily.ASSEMBLER, core.id(), coreInputs,
+                FabricationLogic.THERMAL_GENERATOR_CORE, 1,
+                FabricationLogic.ASSEMBLE_TICKS, FabricationLogic.FU_PER_TICK);
+        projection(recipes, MachineFamily.ASSEMBLER, finished.id(), finalInputs, craft.result(), craft.resultCount(),
+                FabricationLogic.ASSEMBLE_TICKS, FabricationLogic.FU_PER_TICK);
+        yes("the core takes only furnace, carbon and iron in stable indexed order", core.inputs().equals(List.of(
+                IngredientSpec.item("minecraft:furnace", manual.get(T1Recipes.FURNACE)),
+                IngredientSpec.tag("grindless:carbon", manual.get(T1Recipes.CARBON)),
+                IngredientSpec.tag("forge:ingots/iron", manual.get(T1Recipes.IRON)))));
+        yes("the final operation takes core, cobblestone and exactly one minimum-F1 controller",
+                finished.inputs().equals(List.of(
+                        IngredientSpec.item(FabricationLogic.THERMAL_GENERATOR_CORE, 1),
+                        IngredientSpec.tag("minecraft:stone_crafting_materials", manual.get(T1Recipes.COBBLE)),
+                        IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1))));
+        for (ProcessRecipe stage : List.of(core, finished)) {
+            eq(stage.id() + " uses exactly three actual grouped input slots", 3, stage.itemInputs().size());
+            no(stage.id() + " introduces no fluid or hidden condition", !stage.fluidInputs().isEmpty()
+                    || !stage.fluidOutputs().isEmpty() || stage.namesTemperature() || stage.namesPressure()
+                    || stage.namesAtmosphere() || stage.namesAgitation() || stage.milestone() != null);
+            no(stage.id() + " has no Bench bootstrap bypass", recipes.stream()
+                    .filter(row -> row.family() == MachineFamily.ASSEMBLY_BENCH)
+                    .flatMap(row -> row.outputs().stream()).anyMatch(stage.outputs()::contains));
+        }
+        yes("the core has no Matrix, controller role or hidden duplicate", core.inputs().stream()
+                .allMatch(input -> input.matrixRating() == 0 && !input.id().equals(FabricationLogic.RELAY_MATRIX)));
+        yes("higher control stock never changes the ordinary Thermal output", finished.outputs().equals(
+                List.of(OutputSpec.item("grindless:thermal_generator", 1))));
+        Map<String, Integer> composed = new LinkedHashMap<>();
+        core.inputs().forEach(input -> composed.merge(input.qualified(), input.count(), Integer::sum));
+        finished.inputs().forEach(input -> composed.merge(input.qualified(), input.count(), Integer::sum));
+        yes("exactly one manufactured core cancels from the composed bill",
+                Integer.valueOf(1).equals(composed.remove("item:" + FabricationLogic.THERMAL_GENERATOR_CORE))
+                        && core.outputs().equals(List.of(OutputSpec.item(FabricationLogic.THERMAL_GENERATOR_CORE, 1))));
+        yes("cancelling only the one core preserves the exact complete manual multiset", manual.equals(composed));
+        JsonObject json = read("thermal_generator");
+        List<String> pattern = new ArrayList<>();
+        json.getAsJsonArray("pattern").forEach(row -> pattern.add(row.getAsString()));
+        Map<String, String> key = new LinkedHashMap<>();
+        json.getAsJsonObject("key").entrySet().forEach(entry -> {
+            JsonObject ingredient = entry.getValue().getAsJsonObject();
+            yes("manual Thermal JSON keeps ordinary material " + entry.getKey(),
+                    ingredient.size() == 1 && (ingredient.has("item") || ingredient.has("tag")));
+            String kind = ingredient.has("tag") ? "tag" : "item";
+            key.put(entry.getKey(), kind + ":" + ingredient.get(kind).getAsString());
+        });
+        yes("the Thermal catalogue and shipped JSON retain the same complete pattern", craft.pattern().equals(pattern));
+        yes("the Thermal catalogue and shipped JSON retain the same complete key", craft.key().equals(key));
+        yes("both operations compose to the exact shipped JSON material bill", composed.equals(shapedInputs(pattern, key)));
+        JsonObject result = json.getAsJsonObject("result");
+        yes("the output remains the ordinary unchanged manual JSON item without state",
+                result.size() == 1 && finished.outputs().equals(
+                        List.of(OutputSpec.item(result.get("item").getAsString(), 1))));
+        eq("Thermal reproduction pays two normal cycles, not one", 2 * FabricationLogic.ASSEMBLE_TICKS,
+                Math.addExact(core.durationTicks(), finished.durationTicks()));
+        eq("the composed Thermal cycle is forty seconds at full power", 800,
+                Math.addExact(core.durationTicks(), finished.durationTicks()));
+        long energy = Math.addExact(Math.multiplyExact((long) core.durationTicks(), core.fuPerTick()),
+                Math.multiplyExact((long) finished.durationTicks(), finished.fuPerTick()));
+        eq("the composed Thermal demand pays each normal operation", 25_600L, energy);
+        eq("every generated identity remains unique", (long) recipes.size(),
+                recipes.stream().map(ProcessRecipe::id).distinct().count());
+    }
+
+    /** Vanilla carriers test index/quantity selection, not mod registration or native Matrix admission. */
+    private static void thermalInputSelection(List<ProcessRecipe> recipes) throws Exception {
+        SharedConstants.tryDetectVersion();
+        Bootstrap.bootStrap();
+        Map<TagKey<Item>, List<Holder<Item>>> originalTags = new HashMap<>();
+        BuiltInRegistries.ITEM.getTags().forEach(tag ->
+                originalTags.put(tag.getFirst(), tag.getSecond().stream().toList()));
+        Map<TagKey<Item>, List<Holder<Item>>> tags = new HashMap<>(originalTags);
+        tags.put(TagKey.create(Registries.ITEM, new ResourceLocation("minecraft:stone_crafting_materials")),
+                List.of(BuiltInRegistries.ITEM.wrapAsHolder(Items.COBBLESTONE)));
+        tags.put(TagKey.create(Registries.ITEM, new ResourceLocation("grindless:carbon")),
+                List.of(BuiltInRegistries.ITEM.wrapAsHolder(Items.CHARCOAL)));
+        tags.put(TagKey.create(Registries.ITEM, new ResourceLocation("forge:ingots/iron")),
+                List.of(BuiltInRegistries.ITEM.wrapAsHolder(Items.IRON_INGOT)));
+        ProcessRecipe finished = recipe(recipes, "assemble/thermal_generator");
+        List<IngredientSpec> boundInputs = List.of(
+                IngredientSpec.item("minecraft:heart_of_the_sea", finished.itemInputs().get(0).count()),
+                finished.itemInputs().get(1),
+                IngredientSpec.item("minecraft:comparator", finished.itemInputs().get(2).count()));
+        ProcessRecipe bound = new ProcessRecipe(finished.id(), finished.family(), boundInputs, finished.outputs(),
+                finished.temperatureC(), finished.atmosphere(), finished.durationTicks(), finished.fuPerTick());
+        List<ProcessRecipe> indexed = new ArrayList<>(recipes);
+        indexed.set(indexed.indexOf(finished), bound);
+        Field graph = ProcessLookup.class.getDeclaredField("GRAPH");
+        graph.setAccessible(true);
+        Object original = graph.get(null);
+        Method index = original.getClass().getDeclaredMethod("index", List.class);
+        index.setAccessible(true);
+        try {
+            BuiltInRegistries.ITEM.bindTags(tags);
+            graph.set(null, index.invoke(null, indexed));
+            for (int stock : List.of(1, 64)) {
+                ItemStack[] core = {new ItemStack(Items.FURNACE, stock), new ItemStack(Items.CHARCOAL, stock),
+                        new ItemStack(Items.IRON_INGOT, stock), ItemStack.EMPTY};
+                eq("complete/bulk core stock selects the real furnace-first Thermal route: " + stock,
+                        "assemble/thermal_generator_core",
+                        ProcessLookup.find(MachineFamily.ASSEMBLER, core).orElseThrow().id());
+                core[2] = ItemStack.EMPTY;
+                no("a missing core material cannot select a generic alternative: " + stock,
+                        ProcessLookup.find(MachineFamily.ASSEMBLER, core).isPresent());
+                ItemStack[] finalStock = {new ItemStack(Items.HEART_OF_THE_SEA, stock),
+                        new ItemStack(Items.COBBLESTONE, Math.max(5, stock)), new ItemStack(Items.COMPARATOR, stock),
+                        ItemStack.EMPTY};
+                eq("complete/bulk final stock selects Thermal rather than generic cobblestone (carriers): " + stock,
+                        finished.id(), ProcessLookup.find(MachineFamily.ASSEMBLER, finalStock).orElseThrow().id());
+                finalStock[1].setCount(4);
+                no("insufficient cobblestone cannot start final Thermal (carriers): " + stock,
+                        ProcessLookup.find(MachineFamily.ASSEMBLER, finalStock).isPresent());
+                finalStock[1].setCount(Math.max(5, stock));
+                finalStock[2] = ItemStack.EMPTY;
+                no("bulk cobblestone never bypasses the required final controller group (carriers): " + stock,
+                        ProcessLookup.find(MachineFamily.ASSEMBLER, finalStock).isPresent());
+            }
+            eq("generic bulk cobblestone still selects the unchanged furnace construction route",
+                    "assemble/bootstrap/furnace", ProcessLookup.find(MachineFamily.ASSEMBLER, new ItemStack[]{
+                            new ItemStack(Items.COBBLESTONE, 64), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY})
+                            .orElseThrow().id());
+        } finally {
+            graph.set(null, original);
+            BuiltInRegistries.ITEM.bindTags(originalTags);
         }
     }
 

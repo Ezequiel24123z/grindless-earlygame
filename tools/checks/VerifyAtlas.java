@@ -23,12 +23,12 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 209, rows.size());
+        eq("atlas lists every generated recipe", 211, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the alphabetically first reproduced machine", "assemble/arc_furnace",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        // The 33 assemble/bootstrap/* projections supplement the 51 other Assembler routes.
-        eq("eighty-four reachable assembler crafts in this set", 84,
+        // The 33 assemble/bootstrap/* projections supplement the 53 other Assembler routes.
+        eq("eighty-six reachable assembler crafts in this set", 86,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
@@ -37,7 +37,7 @@ public final class VerifyAtlas {
                         && Double.isNaN(row.pressureHalfWidthMPa())));
         pressure();
         // The existing Flux Cell JSON now has the same catalogue/Atlas projection as other T1 crafts.
-        eq("atlas includes every machine, Bootstrap craft and calibration route", 266, allRows.size());
+        eq("atlas includes every machine, Bootstrap craft and calibration route", 268, allRows.size());
         yes("the retired Guide has no craft or machine route", allRows.stream().noneMatch(row ->
                 row.outputs().contains("item:grindless:field_guide")));
         for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {
@@ -149,6 +149,56 @@ public final class VerifyAtlas {
                     ids(AtlasLogic.producing(recipes, "grindless:" + machine))
                             .equals(List.of("assemble/" + machine)));
         }
+        AtlasLogic.Entry thermalManual = route(allRows, "craft/thermal_generator");
+        AtlasLogic.Entry thermalCore = route(allRows, "assemble/thermal_generator_core");
+        AtlasLogic.Entry thermalFinal = route(allRows, "assemble/thermal_generator");
+        eq("the Thermal core is made by the existing Assembler", "ASSEMBLER", thermalCore.station());
+        eq("the ordinary Thermal is finished by the existing Assembler", "ASSEMBLER", thermalFinal.station());
+        yes("the core displays exactly its furnace, carbon and iron", thermalCore.inputs().equals(List.of(
+                "item:minecraft:furnace", "tag:grindless:carbon", "tag:forge:ingots/iron")));
+        yes("the core is one ordinary discoverable component", thermalCore.outputs().equals(
+                List.of("item:" + FabricationLogic.THERMAL_GENERATOR_CORE)));
+        eq("the final Thermal displays seven physical units, not seven occupied slots", 7,
+                thermalFinal.inputs().size());
+        yes("only the final operation displays the one physical minimum-F1 controller",
+                thermalFinal.inputs().stream().filter(input -> input.endsWith(" [F1+]")).toList()
+                        .equals(List.of("item:grindless:relay_matrix [F1+]")));
+        List<String> composedThermalInputs = new java.util.ArrayList<>(thermalCore.inputs());
+        composedThermalInputs.addAll(thermalFinal.inputs());
+        yes("the displayed bill consumes exactly the single manufactured core",
+                composedThermalInputs.remove("item:" + FabricationLogic.THERMAL_GENERATOR_CORE)
+                        && !composedThermalInputs.contains("item:" + FabricationLogic.THERMAL_GENERATOR_CORE));
+        yes("the two visible steps compose to the full manual material multiset",
+                thermalManual.inputs().stream().sorted().toList().equals(composedThermalInputs.stream()
+                        .map(input -> input.equals("item:grindless:relay_matrix [F1+]")
+                                ? "item:grindless:relay_matrix" : input).sorted().toList()));
+        yes("the final output has no invented rating or chassis", thermalManual.outputs().equals(thermalFinal.outputs()));
+        for (AtlasLogic.Entry stage : List.of(thermalCore, thermalFinal)) {
+            ProcessRecipe process = recipes.stream().filter(row -> row.id().equals(stage.id())).findFirst().orElseThrow();
+            eq(stage.id() + " uses only three grouped Assembler slots", 3, process.itemInputs().size());
+            eq(stage.id() + " displays one normal Assembler cycle", FabricationLogic.ASSEMBLE_TICKS,
+                    stage.durationTicks());
+            eq(stage.id() + " displays the existing F1 draw", FabricationLogic.FU_PER_TICK, stage.fuPerTick());
+            yes(stage.id() + " adds no retained catalyst", stage.catalysts().isEmpty());
+        }
+        eq("both visible Thermal operations expose forty seconds of total work", 800,
+                thermalCore.durationTicks() + thermalFinal.durationTicks());
+        eq("both visible Thermal operations expose the full 25600 FU demand", 25_600L,
+                thermalCore.durationTicks() * thermalCore.fuPerTick()
+                        + thermalFinal.durationTicks() * thermalFinal.fuPerTick());
+        yes("the core is discoverable by ordinary production lookup",
+                ids(AtlasLogic.producing(recipes, FabricationLogic.THERMAL_GENERATOR_CORE))
+                        .equals(List.of("assemble/thermal_generator_core")));
+        yes("the core's actual consumer is discoverable",
+                ids(AtlasLogic.consuming(recipes, FabricationLogic.THERMAL_GENERATOR_CORE))
+                        .equals(List.of("assemble/thermal_generator")));
+        yes("the ordinary Thermal output discovers its automatic final step",
+                ids(AtlasLogic.producing(recipes, "grindless:thermal_generator"))
+                        .equals(List.of("assemble/thermal_generator")));
+        yes("a stronger Relay lookup discovers final Thermal without changing the core",
+                ids(AtlasLogic.consuming(recipes, "grindless:relay_matrix [F2]"))
+                        .contains("assemble/thermal_generator")
+                        && !thermalCore.inputs().contains("item:grindless:relay_matrix [F1+]"));
         yes("the detail pane distinguishes the bootstrap and Industrial outputs",
                 !AtlasLogic.describe(assembledRelay.outputs())
                         .equals(AtlasLogic.describe(industrialRelay.outputs())));

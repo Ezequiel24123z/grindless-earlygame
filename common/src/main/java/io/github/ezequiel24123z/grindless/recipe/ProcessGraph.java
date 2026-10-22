@@ -72,6 +72,7 @@ public final class ProcessGraph {
         recipes.addAll(BootstrapAssembly.recipes(MachineFamily.ASSEMBLER,
                 io.github.ezequiel24123z.grindless.source.SourceLogic.INDUSTRIAL_ASSEMBLY_TICKS, FluxTier.F1.nominal()));
         recipes.addAll(automaticAssemblerCrafts());
+        recipes.addAll(thermalGeneratorAssembly());
         List<String> secondaryMaterials = eligibleSecondaries(materials);
         for (MaterialView material : materials) {
             String feed = feedTag(material);
@@ -229,55 +230,82 @@ public final class ProcessGraph {
             if (!selected.contains(craft.name())) {
                 continue;
             }
-            Map<String, Integer> grouped = new LinkedHashMap<>();
-            for (String row : craft.pattern()) {
-                for (char symbol : row.toCharArray()) {
-                    if (symbol != ' ') {
-                        String ingredient = craft.key().get(String.valueOf(symbol));
-                        if (ingredient == null) {
-                            throw new IllegalArgumentException("Missing T1 crafting ingredient for " + craft.name());
-                        }
-                        grouped.merge(ingredient, 1, Integer::sum);
-                    }
-                }
-            }
-            if (grouped.size() > 4) {
-                throw new IllegalArgumentException("Automatic Assembler craft exceeds four grouped inputs: "
-                        + craft.name());
-            }
-            if (minimumControlCrafts.contains(craft.name())
-                    && grouped.getOrDefault("item:" + FabricationLogic.RELAY_MATRIX, 0) != 1) {
-                throw new IllegalArgumentException("Machine reproduction requires one Relay Matrix: "
-                        + craft.name());
-            }
-            List<IngredientSpec> inputs = new ArrayList<>();
-            grouped.forEach((ingredient, count) -> {
-                if (minimumControlCrafts.contains(craft.name())
-                        && ingredient.equals("item:" + FabricationLogic.RELAY_MATRIX)) {
-                    inputs.add(IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, count));
-                } else if (ingredient.startsWith("tag:")) {
-                    inputs.add(IngredientSpec.tag(ingredient.substring(4), count));
-                } else if (ingredient.startsWith("item:")) {
-                    inputs.add(IngredientSpec.item(ingredient.substring(5), count));
-                } else {
-                    throw new IllegalArgumentException("Unknown T1 crafting ingredient: " + ingredient);
-                }
-            });
-            recipes.add(new ProcessRecipe(
-                    "assemble/" + craft.name(),
-                    MachineFamily.ASSEMBLER,
-                    inputs,
-                    List.of(OutputSpec.item(craft.result(), craft.resultCount())),
-                    Double.NaN,
-                    null,
-                    FabricationLogic.ASSEMBLE_TICKS,
-                    FabricationLogic.FU_PER_TICK));
+            recipes.add(assemblerCraft(craft.name(), groupedCraftInputs(craft), craft.result(),
+                    craft.resultCount(), minimumControlCrafts.contains(craft.name())));
         }
         if (recipes.size() != selected.size()
                 || recipes.stream().map(ProcessRecipe::id).distinct().count() != selected.size()) {
             throw new IllegalStateException("The selected Assembler crafts must exist exactly once");
         }
         return List.copyOf(recipes);
+    }
+
+    private static Map<String, Integer> groupedCraftInputs(T1Recipes.Shaped craft) {
+        Map<String, Integer> grouped = new LinkedHashMap<>();
+        for (String row : craft.pattern()) {
+            for (char symbol : row.toCharArray()) {
+                if (symbol != ' ') {
+                    String ingredient = craft.key().get(String.valueOf(symbol));
+                    if (ingredient == null) {
+                        throw new IllegalArgumentException("Missing T1 crafting ingredient for " + craft.name());
+                    }
+                    grouped.merge(ingredient, 1, Integer::sum);
+                }
+            }
+        }
+        return grouped;
+    }
+
+    private static List<ProcessRecipe> thermalGeneratorAssembly() {
+        T1Recipes.Shaped craft = T1Recipes.shaped().stream()
+                .filter(row -> row.name().equals("thermal_generator")).findFirst()
+                .orElseThrow(() -> new IllegalStateException("Thermal Generator assembly requires its manual source craft"));
+        Map<String, Integer> remaining = groupedCraftInputs(craft);
+        Map<String, Integer> core = new LinkedHashMap<>();
+        // Furnace-first/core-first indexing keeps bulk cobblestone from selecting a primitive craft.
+        for (String ingredient : List.of(T1Recipes.FURNACE, T1Recipes.CARBON, T1Recipes.IRON)) {
+            Integer count = remaining.remove(ingredient);
+            if (count == null) {
+                throw new IllegalStateException("Thermal Generator core is missing its manual ingredient: " + ingredient);
+            }
+            core.put(ingredient, count);
+        }
+        if (remaining.size() != 2 || !remaining.containsKey(T1Recipes.COBBLE)
+                || remaining.getOrDefault(T1Recipes.RELAY_MATRIX, 0) != 1
+                || !craft.result().equals("grindless:thermal_generator") || craft.resultCount() != 1) {
+            throw new IllegalStateException("Thermal Generator assembly must partition its complete manual bill");
+        }
+        Map<String, Integer> finished = new LinkedHashMap<>();
+        finished.put("item:" + FabricationLogic.THERMAL_GENERATOR_CORE, 1);
+        finished.putAll(remaining);
+        return List.of(
+                assemblerCraft("thermal_generator_core", core, FabricationLogic.THERMAL_GENERATOR_CORE, 1, false),
+                assemblerCraft(craft.name(), finished, craft.result(), craft.resultCount(), true));
+    }
+
+    private static ProcessRecipe assemblerCraft(String name, Map<String, Integer> grouped,
+                                               String output, int outputCount, boolean minimumControl) {
+        if (grouped.size() > 4) {
+            throw new IllegalArgumentException("Automatic Assembler craft exceeds four grouped inputs: " + name);
+        }
+        if (minimumControl && grouped.getOrDefault(T1Recipes.RELAY_MATRIX, 0) != 1) {
+            throw new IllegalArgumentException("Machine reproduction requires one Relay Matrix: " + name);
+        }
+        List<IngredientSpec> inputs = new ArrayList<>();
+        grouped.forEach((ingredient, count) -> {
+            if (minimumControl && ingredient.equals(T1Recipes.RELAY_MATRIX)) {
+                inputs.add(IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, count));
+            } else if (ingredient.startsWith("tag:")) {
+                inputs.add(IngredientSpec.tag(ingredient.substring(4), count));
+            } else if (ingredient.startsWith("item:")) {
+                inputs.add(IngredientSpec.item(ingredient.substring(5), count));
+            } else {
+                throw new IllegalArgumentException("Unknown T1 crafting ingredient: " + ingredient);
+            }
+        });
+        return new ProcessRecipe("assemble/" + name, MachineFamily.ASSEMBLER, inputs,
+                List.of(OutputSpec.item(output, outputCount)), Double.NaN, null,
+                FabricationLogic.ASSEMBLE_TICKS, FabricationLogic.FU_PER_TICK);
     }
 
     public static String oxideTag(String material) {
