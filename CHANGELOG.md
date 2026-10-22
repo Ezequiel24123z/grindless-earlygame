@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Resume qualification on a new exact source after the real compile repair.**
+  Only604195bd receives `control-factory-qualification-20261022` on85e9078,
+  including four-machine reproduction and9b's exact-list fixes. Preserve the
+  failed423a CI/Sync-only receipt and safe leaseback; do not replay that red.
+  Fresh guards/Sync/compiler/native/writer results remain pending. Same new
+  isolated root, no old diagnostic/Prism/world access, no extra native per
+  machine and no live-source retarget by parent/other workers.
 - **Repair all affected ordered-list contract calls without weakening them.**
   Normal9b9c619 uses the existing boolean assertion helper and complete List.equals
   in Recipe/Atlas die and machine checks. Preserve order, exact roles/materials,

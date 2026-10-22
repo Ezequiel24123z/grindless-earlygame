@@ -44,6 +44,18 @@ with full ordered/value `.equals`, without weakening them. Actual compiler
 confirmation and a new exact published GO are still required; do not resume
 the released grant or relabel the old423a failure.
 
+**Latest NEW grant:** only604195bd receives
+`control-factory-qualification-20261022` on exact published
+85e9078e1c03d05f32ca76fe46dad5ad13e16647. It includes4f factory content and
+the9b compiler-oracle repair; all actual new results are pending. Use the same
+new isolated inventory/root after fresh clean/lock/resource admission, not the
+oldM diagnostic or Prism. Parent/all other workers have NO PC access.
+Compile required classes/contracts, run the one new Matrix mechanism on the
+clean source before NORMAL writers, then independent CheckOnly/canonical gates.
+Expected209/84/266 and five minimum-control rows are data, not extra native
+runs. Verify the real adapter bytecode hash. All input/source changes wait for
+zero owned JVMs/locks and another exact GO; FTB provenance repair stays separate.
+
 ADR-0176 selects only the existing Wire Mill's F1 control operand as a minimum
 capacity requirement. Existing exact factories, F2 Matrix predecessor, outputs
 and native quest/reward predicates stay exact. Reuse `canControl`; propagate the
@@ -131,9 +143,9 @@ overload fail before any compiler starts; preserve both. Direct native invocatio
 with FileStream locks then has actual javac0/scanner0. A silent compiler/Tee
 produces no stdout file; its successful exit and real scanner result are retained,
 not replayed to manufacture a log. Final copy0 and Inspect are separately closed.
-The prior FTB/M and new604195bd grants are returned. The failed source gate
-above never starts a JVM or touches this T0 delivery. The closure below makes
-no new T0 observation.
+Prior FTB/M and423a grants are returned; the NEW fixed85e grant above is build/
+diagnostic only. Neither the failed source gate nor the new grant includes this
+T0 delivery. The closure below makes no new T0 observation.
 
 | Category | Final bounded T0 handover |
 | --- | --- |

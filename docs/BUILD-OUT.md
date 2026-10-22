@@ -57,6 +57,10 @@ and obtain actual compiler confirmation. Source4f
 normally integrates ordinary factory reproduction while all actual contracts/
 writers/native remain unexecuted. Preserve the separate FTB publisher stale-class
 provenance finding; do not confuse tool-fixture greens with authentic publication.
+The new exact85e9078 GO now assigns only604195bd the
+`control-factory-qualification-20261022` window. Re-admit/Sync the isolated root
+fresh, prove the changed mechanism once and generate actual normal outputs.
+No source switch or parent/other-worker PC access occurs under that lease.
 The control review's one P2 is source-repaired inf046923: include executed
 AuthorityAdapters bytecode as well as source. Real writer receipt verification
 remains required. Parallel source work now selects four ordinary machine

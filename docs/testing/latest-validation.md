@@ -112,6 +112,17 @@ delta directly; no compiler/native/writer pass is inferred until execution on
 a newly published exact source. The released423a attempt stays failed/skipped
 in its actual scope.
 
+New exact qualification assignment: only604195bd receives
+`control-factory-qualification-20261022`, source
+85e9078e1c03d05f32ca76fe46dad5ad13e16647. This is the normally integrated
+four-machine content plus ordered-list repair, not a replay or retarget of423a.
+All new fresh-guard/Sync/compiler/runtime/writer results remain pending. Use
+the same new isolated root, native before writer output changes, then NORMAL
+writers/independent CheckOnly/canonical rechecks and actual class provenance.
+Data shapes209/84/266 and five named minimum roles need content contracts,
+not a native smoke per machine. FTB/class-binding work remains outside this
+lease; parent/other workers have no concurrent PC access.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the
