@@ -575,7 +575,8 @@ public final class VerifySustainabilityRegistry {
                     return switch (task.id()) {
                         case "thermal", "pylon", "scanner", "terrestrial", "pulverizer", "furnace", "press",
                                 "assembler", "matrix_line", "glass", "logistics", "kiln", "factory_world",
-                                "industrial_matrix", "first_grid", "forming_dies", "copper_coil", "flux_cell" -> Chapter.T1;
+                                "industrial_matrix", "first_grid", "forming_dies", "copper_coil", "flux_cell",
+                                "wet_beneficiation" -> Chapter.T1;
                         default -> Chapter.T0;
                     };
                 }
@@ -2107,6 +2108,8 @@ public final class VerifySustainabilityRegistry {
                 "QuestLogic", "if (!QuestCatalogue.unlocked(QuestCatalogue.chapter(task), claimed))", "if (false)");
         rejectQuest(root, sources, "the chapter gate cannot be rebound to an unrelated item claim",
                 "QuestCatalogue", "T0_COMPLETION = \"relay\"", "T0_COMPLETION = \"multitool\"");
+        rejectQuest(root, sources, "the reviewed wet objective cannot leave the exact T1 chapter profile",
+                "QuestCatalogue", "\"wet_beneficiation\" -> Chapter.T1;", "\"unreviewed_wet\" -> Chapter.T1;");
         rejectQuest(root, sources, "T1 cannot be unlocked merely by opening a menu",
                 "QuestCatalogue", "chapter == Chapter.T0 || claimed.contains(T0_COMPLETION)", "true");
         rejectQuest(root, sources, "projected T1 prerequisites must retain the actual T0 anchor",
