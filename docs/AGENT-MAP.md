@@ -135,9 +135,13 @@ fingerprint self-hash64 pair, preserving module/hash32/suffix and all other
 names/payloads/bytes. No prefix exclusion or general normalization. Upstream
 source and exact declared path hashes corroborate the stamp/template.
 Normal555dbe9 implements this rule/logging and existing Java negatives; corrected
-Java/export execution remains pending, with no binary build-attestation claim.
+G4 Java201/exportacdf0 is parent-verified, with no binary build-attestation claim.
 Reconsume the real original compiler receipt if its bindings are unchanged;
 do not build old classes again merely to test comparison code.
+CURRENT GradleBuild has its own tasks List. Source686181e qualifies both
+dependsOn lookups with project.tasks to repair the real G4 pre-compile task
+creation failure. Only that branch's dry-run/configuration and actual fresh
+current plan/apply/no-op need new proof; no native/JDK/legacy/model replay.
 
 ### Exact Matrix identity versus control capacity
 
@@ -218,7 +222,7 @@ UTF8 bytes/mtime for CRLF/LF-equivalent text while returning one logical output.
 Do not trim other whitespace, suppress real content changes or fork the PS/SH
 wrappers; both invoke this Java writer. Existing VerifyApprovedMultitool covers
 the22 new no-op/count/mtime/real-update/missing-output assertions, not another
-runner or full native/generator replay. Its actual JDK execution remains pending.
+runner or full native/generator replay. Actual G4 JDK34/22EOL is verified.
 ADR-0182 selects the next isolated optional `wet_beneficiation` line through
 T1Progression, QuestCatalogue/QuestTeaching, concise locale/native FTB definition
 layout and their existing checks. Select existing assemble/motor,

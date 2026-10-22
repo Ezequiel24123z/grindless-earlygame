@@ -384,16 +384,41 @@ This opens no PC/JVM/cache ownership or G4 source-alias update. The coordinator
 retains root docs/integration/publication; the worker returns a clean local
 checkpoint and authored-versus-executed proof boundaries.
 
-| Category | Current qualification state: G3 closed, G4 assigned |
+**G4 CLOSED, corrected proofs now parent-verified:** all176 custody files/
+2578 inputs, native19/19/PASS1/FAIL0/89/natural save, managed201 and existing
+asset JDK34/22EOL are actual. Native/tested/staged/remapped/package JAR is
+e9d1a23e; package0490f701 embeds it with source/runtime271. Authentic schema2/
+46 referenceacdf589e binds original5f/29bc and both real chapter bytes.
+No legacy compile, native, modelwriter or successful package build is replayed.
+Safe explicit leaseback09:47:57.8479522Z is clean271/Java0/locksfalse with
+the exact temporary offline guard removed/absent. No PC lease remains active.
+
+The one remaining real50-plan failure is CURRENT GradleBuild task creation
+(tasks resolves ArrayList, named(remapJar), forge/build.gradle255), before any
+current compiler/receipt/plan/apply. Source686181e now normally integrates the
+one-line project.tasks qualification. Its actual --dry-run/plan/apply are not
+run. Reuse all unchanged G4 Java/native/reference proofs; the next window needs
+only current configuration, any artifact materialization required by truthful
+new source/runtime binding, actual plan/apply/same-plan no-op. No legacy/native/
+asset/model replay. The fictitious16-file target is unchanged post-seed, no
+pending transaction, deliberately50 runtime plus46 definitions: DO NOT START.
+
+Wet source738105d4 is delivered locally (143 static/30 independent static QA,
+not Java), preserving old50 fields/order/native IDs/positions and865 locale
+values with3 new keys. It is not integrated yet. It exposes the separate51
+whitelist in publisher/planner/startup/host receipt; source51 is not deployable
+until its versioned compatibility extension is composed and qualified.
+
+| Category | Current qualification state: G4 closed; current-plan fix integrated |
 | --- | --- |
-| COMPLETED | Actual compile/javac/managed44, normal writers/CheckOnly/canonical passes; normal A3 integration; parent-verified205-file custody/2573 inputs/4 images/5 Git blobs; exact EOL recovery and explicit safe leaseback; source957/5aa/555 repairs |
-| BLOCKED | None at the reported G4 legacy/native boundaries; remaining contracts, real plan and final reference/native custody are not yet qualified |
-| NOT EXECUTED | New Java negatives/asset JDK fixture and real managed-plan consumption/current qualification package; player update, wet-line source implementation and whole-tier acceptance. Successful reference/native final custody remains pending |
+| COMPLETED | G3/A3 normal outputs and custody; actual G4 legacy reference/native89/19markers/managed201/JDK34/current package and fictitious deployment/seed; parent176-file custody/2578 inputs and safe leaseback; source686 configuration fix composed |
+| BLOCKED | CURRENT GradleBuild configuration/plan/apply has a real red; source686 is not runtime-qualified. Wet738 additionally needs explicit51 publisher/planner/startup/host compatibility |
+| NOT EXECUTED | Fixed CURRENT dry-run/fresh compiler/plan/apply/same-plan/recovery; wet Java/writers/compatibility51; player update, client campaign and whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | Existing GUI/JEI/reward/appearance and longitudinal-campaign gates remain open |
 | NEEDS MY DECISION | None from the owner; bounded technical repair is delegated |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
 | COST / BILLING RISK | None new; no generation/provider/dependency installation authorized |
-| DEPLOYED STATE | Unchanged dd0/JAR29bc/ZIP79ce player delivery; no T1 source, old backup or diagnostic is deployed over the actual game |
+| DEPLOYED STATE | Playerdd0/JAR29bc/ZIP79ce and original/backup/G3/M unchanged. Only the stopped fictitious target has C271 runtime50 plus authentic46 definitions; never launch it pending valid update |
 
 Next integrate coherent local checkpoints and select only their changed proofs.
 Any heavy qualification needs a new sole-owner lease on an exact published

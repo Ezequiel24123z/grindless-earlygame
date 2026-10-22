@@ -15,6 +15,17 @@ entries below reference those records by id.
 
 ### Added
 
+- **Close G4's real repaired mechanisms while preserving the current-plan red.**
+  Parent verifies all176 custody files/2578 frozen inputs, actual native
+  19/19/PASS1/FAIL0/89, managed201, JDK34/22EOL and authentic referenceacdf589e
+  without legacy compilation replay. Verified package0490f701 embeds the same
+  testede9d1a23e runtime. Canonical fictitious Prepare/Deploy has0 missing/
+  downloads; its16 files/mtimes remain post-seed unchanged, no pending journal.
+  Current plan fails during task creation before any fresh current compiler/
+  plan/apply. Normal686181e qualifies both GradleBuild Project.tasks lookups
+  in one line; actual dry-run/plan/apply remain pending. Fresh clean271/
+  Java0/locksfalse leaseback09:47:57Z and exact offline-guard cleanup are verified.
+  Never start the qualification-only50-runtime/46-definition target.
 - **Select the existing wet-processing family as the next bounded T1 content lane.**
   ADR-0182 chooses one optional live Motor/Washer/B2/B2-R1 line and concise
   reward-free native lesson, not a new engine or altered construction bill.

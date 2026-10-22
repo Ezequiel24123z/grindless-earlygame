@@ -450,6 +450,47 @@ Matrix shard was still running/without artifact at the execution decision;
 no pass, polling wait or CI replay is inferred. Next are only new managed Java
 negatives/EOL JDK fixture and the separately authorized package/real plan.
 
+**G4 final custody closes the repaired mechanisms, not current planning.**
+Parent verifies all176 files against manifest
+`fa48d8504e39ed663ca131d6260ba0a32aed359ab32c1b69c94528e62caefec7`,
+2578 before/after source inputs, and source bundle
+`3c71d97fbf21210b2127145b316bc9ca664ed66d93e391f6e5ad857bf2f14a55`
+(14526bytes, exact271). Original primary independently has all19 markers once,
+PASS1/FAIL0/89 and natural save/stop. Tested/staged/remapped/package runtime
+is `e9d1a23ed7fe87e2bc50e2eca2785498201bb7a9d011e0aa8ed960fcbe447623`
+(2,474,744bytes). Server0 remains explicitly based on the canonical harness check.
+Actual managed201 includes sealed-shim/stale regressions; JDK34 includes22 EOL
+assertions. No successful generator/model/old native is replayed.
+
+Authentic reference
+`acdf589e0a2d94523d2b9cc2f951db199fae95c750397bdcc5ea11a01fd9367c`
+is parent-verified schema2/46/DD0/runtimeDD0/JAR29bc/compiler5f, including both
+encoded chapter byte hashes. Legacy compilers do not run again. Current package
+`0490f701ac695c57f8f3f499dceb2ca5457b154e6b3c995e2fe5469e41882d9a`
+(2,033,930bytes) embeds that exact tested JAR and source/runtime271 provenance.
+Canonical Prepare0 missing/Deploy0 downloads creates real ownership only in
+the explicitly fictitious target. Its16 file bytes/mtimes remain post-seed
+unchanged; the two chapters equal the authentic46 publication, with no pending
+journal. It remains deliberately NON-STARTABLE:50 runtime plus46 definitions.
+
+**Remaining real red:** prepareFtbQuestUpdate09:40:53.2392946Z to
+09:41:03.1530548Z, exit1/wrapper1. CURRENT GradleBuild configuration resolves
+`tasks` to its task-name ArrayList, causing named(remapJar) at forge/build.gradle255
+to fail BEFORE any current JavaCompile/remap/receipt/plan. Raw stdout
+`4510573d038f076b1c309dc9ef34c890e49632a3e4ec64d0fb65baf9299926bb`,
+stderr `7d63220fefdb9b0516fceda658ef0d4f2d187ff75e1b083aa77b92004ed97d6e`.
+Normal686181e changes only that line's two dependencies to project.tasks.named;
+actual current --dry-run and plan/apply are still unexecuted. The original
+package observer's Git-name-shadow failure is preserved; build07 was not replayed.
+
+Fresh closure09:47:57.8479522Z is clean271/all-observed-ownedJava0/locksfalse,
+client_commandlines_read=false. Exact owned offline guard is removed/absent;
+no persistent configuration/auth change or process kill remains. G4 lease is
+explicitly returned. Gameplay Java/resources stay unchanged by the one-line
+configuration fix, so these actual native/JDK/legacy proofs remain reusable;
+only configuration/artifacts required by a new source/runtime binding and
+actual current plan/apply/no-op remain, not another complete G4 run.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the
