@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 77,
+  "plan_revision": 78,
   "updated": "2026-10-22",
   "phase": "managed_FTB_update_and_explicit_control_capacity_development_after_closed_M_wave",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -52,9 +52,9 @@
   },
   "default_F1_identity_correction": {
     "policy": "ADR-0184",
-    "status": "selected_source_implementation_and_qualification_pending",
-    "source_base": "b3ff33225b1665018098d1b63b075e56c7b1e9d2",
-    "owner_session": null,
+    "status": "isolated_source_implementation_active_actual_qualification_pending",
+    "source_base": "1e642dc83a1a824cd627ada8250c5b48afd9cbd4",
+    "owner_session": "77889597-58d8-46f1-8c68-d5ccb4e5a0a9",
     "scope": "existing_authority_adapters_real_registered_defaultRelay_NBT_F1_consistent_physical_routes_quests_T0T1_model_consumers_existingtests_and_directprovenance_only",
     "forbidden": "PC_cache_JVM_SSH_G7retarget_runtime_recipe_NBT_claim_quantity_changes_canonical_handedit_synthetic_alias_route_genericResource_identity_change_fictitious_architecture_finiteT1_acceptance",
     "finite_T1_replay": "NOT_IMPLEMENTED_or_proven_by_identity_correction",

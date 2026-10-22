@@ -6,7 +6,8 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 **Current source/qualification split:** G7 sole604 owns the exact41df605
 qualification/new PC root; all fresh results remain pending. A separate
-ADR-0184 source lane now corrects the real default-F1 projection disagreement
+ADR-0184 source owner77889597-58d8-46f1-8c68-d5ccb4e5a0a9 starts at1e642dc
+to correct the real default-F1 projection disagreement
 using the existing decoder/authority adapters and checked registration, with
 no PC/cache/JVM/SSH or G7 retarget. Preserve generic declarations, exact higher
 ratings, all source quantities/seed draws and paid state. No synthetic

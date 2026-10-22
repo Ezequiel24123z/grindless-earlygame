@@ -20,7 +20,9 @@
   },
   "default_F1_identity_correction": {
     "policy": "ADR-0184",
-    "status": "source_pending",
+    "status": "isolated_source_implementation_active",
+    "owner_session": "77889597-58d8-46f1-8c68-d5ccb4e5a0a9",
+    "source_base": "1e642dc83a1a824cd627ada8250c5b48afd9cbd4",
     "scope": "registered_authored_defaultRelay_physicalF1_adapter_consistency_existing_T0T1_consumers_contracts_provenance",
     "source_worker_PC_JVM_authorized": false,
     "not_proved": "finiteT1_establishment_renewability_autonomy_gameplay_client_or_acceptance"

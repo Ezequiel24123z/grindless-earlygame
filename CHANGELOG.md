@@ -22,6 +22,8 @@ entries below reference those records by id.
   rewards and runtime data; no synthetic conversion, extra custody or global
   identity rewrite. A separate isolated source lane may implement the correction
   and existing contracts/provenance without PC/cache/JVM or G7 retargeting.
+  Isolated Sol6.1Max owner77889597 starts from1e642dc; coordinator retains
+  integration/publication and all G7 execution remains exclusively604.
   Implementation, Java and normal outputs are pending; finite T1 remains open.
 - **Assign the fully composed51 outcome without a paid-history replay.**
   Sole604 receives code41df605 G7/new root for new historical46/50 source-file
