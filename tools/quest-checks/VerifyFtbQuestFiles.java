@@ -127,6 +127,37 @@ public final class VerifyFtbQuestFiles {
         refuses(() -> FtbQuestUpdatePlanner.prepare(instance, encode(badHash), destination), "modified reference payload refuses");
         String duplicate = new String(encode(reference), StandardCharsets.UTF_8).replaceFirst("\\{", "{\"schemaVersion\":1,");
         refuses(() -> FtbQuestUpdatePlanner.prepare(instance, duplicate.getBytes(StandardCharsets.UTF_8), destination), "duplicate provenance keys refuse");
+        refuses(() -> FtbQuestUpdatePlanner.prepare(instance, new byte[0], destination), "missing reference is never inferred from chapter names");
+        Map<String, CompoundTag> changedContract = new LinkedHashMap<>();
+        previous.forEach((name, document) -> changedContract.put(name, document.copy()));
+        String thermal = FtbQuestDefinitions.code(FtbQuestDefinitions.questId("thermal"));
+        String multitool = FtbQuestDefinitions.code(FtbQuestDefinitions.questId("multitool"));
+        for (CompoundTag document : changedContract.values()) {
+            for (Tag value : document.getList("quests", Tag.TAG_COMPOUND)) {
+                CompoundTag quest = (CompoundTag) value;
+                if (quest.getString("id").equals(thermal)) {
+                    quest.getList("tasks", Tag.TAG_COMPOUND).getCompound(0).putLong("count", 99);
+                }
+            }
+        }
+        JsonObject changedTask = definitionSet(changedContract, FtbQuestUpdatePlanner.LEGACY_SOURCE,
+                FtbQuestUpdatePlanner.LEGACY_SOURCE, FtbQuestUpdatePlanner.LEGACY_JAR);
+        refuses(() -> FtbQuestUpdatePlanner.prepare(instance, encode(changedTask), destination),
+                "retained task contract cannot change even under a selected reference", "retained logical/task/reward");
+        changedContract.clear();
+        previous.forEach((name, document) -> changedContract.put(name, document.copy()));
+        for (CompoundTag document : changedContract.values()) {
+            for (Tag value : document.getList("quests", Tag.TAG_COMPOUND)) {
+                CompoundTag quest = (CompoundTag) value;
+                if (quest.getString("id").equals(multitool)) {
+                    quest.getList("rewards", Tag.TAG_COMPOUND).getCompound(0).putInt("count", 99);
+                }
+            }
+        }
+        JsonObject changedReward = definitionSet(changedContract, FtbQuestUpdatePlanner.LEGACY_SOURCE,
+                FtbQuestUpdatePlanner.LEGACY_SOURCE, FtbQuestUpdatePlanner.LEGACY_JAR);
+        refuses(() -> FtbQuestUpdatePlanner.prepare(instance, encode(changedReward), destination),
+                "paid reward contract cannot change even under a selected reference", "retained logical/task/reward");
         Path ownerPath = instance.resolve(".grindless-dev-owner.json");
         byte[] originalOwner = Files.readAllBytes(ownerPath);
         Files.delete(ownerPath);
@@ -189,9 +220,16 @@ public final class VerifyFtbQuestFiles {
     }
 
     private static void refuses(Checked body, String label) throws Exception {
+        refuses(body, label, null);
+    }
+
+    private static void refuses(Checked body, String label, String message) throws Exception {
         try {
             body.run();
         } catch (IOException expected) {
+            if (message != null && !expected.getMessage().contains(message)) {
+                throw new AssertionError(label + ": wrong refusal: " + expected.getMessage(), expected);
+            }
             assertions++;
             return;
         }

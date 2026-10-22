@@ -148,6 +148,9 @@ public final class FtbQuestDefinitionPublisher {
     }
 
     static void checkPath(Path path) throws IOException {
+        if (path.toAbsolutePath().getRoot().toString().startsWith("\\\\")) {
+            throw new IOException("Publisher paths must be local, not UNC/network shares");
+        }
         for (Path current = path.toAbsolutePath(); current != null; current = current.getParent()) {
             if (Files.isSymbolicLink(current)) {
                 throw new IOException("Publisher paths must not traverse symlinks");

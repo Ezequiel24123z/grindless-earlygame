@@ -258,8 +258,9 @@ tasks.register("publishFtbQuestDefinitions", JavaExec) {
         classpath = files(provider {
             def sourceRoot = rootProject.file(legacyRoot.get())
             def descriptor = new File(sourceRoot, "forge/build/checks/sustainability-pack-classpath.json")
-            if (!descriptor.isFile()) {
-                throw new GradleException("Prepare the pinned checkout with :forge:classes :forge:writeSustainabilityPackClasspath :forge:extractQuestCheckLibraries first.")
+            def commonClasspath = new File(sourceRoot, "common/build/checks/runtime-classpath.txt")
+            if (!descriptor.isFile() || !commonClasspath.isFile()) {
+                throw new GradleException("Prepare the pinned checkout with :forge:classes :common:writeCheckClasspath :forge:extractQuestCheckLibraries first.")
             }
             def recorded = new groovy.json.JsonSlurper().parse(descriptor)
             if (recorded.schema_version != 1 || recorded.gradle_configuration != "forge:compileClasspath" ||
@@ -271,7 +272,11 @@ tasks.register("publishFtbQuestDefinitions", JavaExec) {
                 if (!directory.isDirectory()) { throw new GradleException("Missing pinned generator classes: $it") }
                 directory
             }
-            classes + ["forge/build/resources/main", "common/build/resources/main"].collect { new File(sourceRoot, it) } +
+            def vanillaFirst = commonClasspath.getText("UTF-8").split(java.util.regex.Pattern.quote(File.pathSeparator))
+                    .findAll { !it.isBlank() }.collect { new File(it) }
+            if (vanillaFirst.isEmpty()) { throw new GradleException("Empty pinned common runtime classpath.") }
+            // Match verifyFtbQuestBackend: vanilla common Bootstrap precedes patched Forge classes.
+            vanillaFirst + classes + ["forge/build/resources/main", "common/build/resources/main"].collect { new File(sourceRoot, it) } +
                     recorded.classpath.collect { new File(it) } +
                     fileTree(new File(sourceRoot, "forge/build/quest-checks/libraries")) { include "*.jar" }.files
         })
@@ -279,7 +284,8 @@ tasks.register("publishFtbQuestDefinitions", JavaExec) {
         dependsOn tasks.named("classes"), tasks.named("extractQuestCheckLibraries"),
                 tasks.named("verifyFtbPublisherArtifacts"), tasks.named("remapJar")
         classpath = files(project(":common").sourceSets.main.runtimeClasspath,
-                sourceSets.main.runtimeClasspath, fileTree(layout.buildDirectory.dir("quest-checks/libraries")) { include "*.jar" })
+                sourceSets.main.output, sourceSets.main.compileClasspath,
+                fileTree(layout.buildDirectory.dir("quest-checks/libraries")) { include "*.jar" })
         mainClass.set("io.github.ezequiel24123z.grindless.forge.quest.FtbQuestDefinitionPublisher")
     }
     workingDir rootProject.projectDir
@@ -306,7 +312,8 @@ tasks.register("prepareFtbQuestUpdate", JavaExec) {
     dependsOn tasks.named("classes"), tasks.named("extractQuestCheckLibraries"),
             tasks.named("verifyFtbPublisherArtifacts"), tasks.named("remapJar")
     classpath = files(project(":common").sourceSets.main.runtimeClasspath,
-            sourceSets.main.runtimeClasspath, fileTree(layout.buildDirectory.dir("quest-checks/libraries")) { include "*.jar" })
+            sourceSets.main.output, sourceSets.main.compileClasspath,
+            fileTree(layout.buildDirectory.dir("quest-checks/libraries")) { include "*.jar" })
     mainClass.set("io.github.ezequiel24123z.grindless.forge.quest.FtbQuestUpdatePlanner")
     workingDir rootProject.projectDir
     maxHeapSize = "512m"

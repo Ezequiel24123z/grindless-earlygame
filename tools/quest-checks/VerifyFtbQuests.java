@@ -153,6 +153,7 @@ public final class VerifyFtbQuests {
         try {
             SharedConstants.tryDetectVersion();
             Bootstrap.bootStrap();
+            VerifyFtbQuestFiles.main(new String[0]);
             Map<String, CompoundTag> documents = FtbQuestDefinitions.chapters();
             definitions(documents);
             matrixParser();
