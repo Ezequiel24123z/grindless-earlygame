@@ -288,19 +288,23 @@ longitudinal gameplay pass.
 
 ADR-0187 uses the existing `sustainability/SustainabilityAudit`,
 `ConstructionReserve` and `T1Sustainability` with the live
-`progression/T1Progression` selections. Carry a completed source-bound T0
-witness's free stock, retained catalysts, installed machines/parts, already
-claimed rewards and spent manual-work custody through the same finite
-executor. `TierResult.retainedInventory` currently exposes locked catalysts,
-not a complete carry state; do not manufacture the missing state from a report,
-five promised controllers or a new EntryProfile. A new tier must not reset
-bootstrap terminals, reclaim rewards or spend an installed/locked item twice.
-Keep default-F1 normalization and exact F2 identity unchanged. Extend existing
-audit/T1 contracts and explicit exporter source/image lists as needed; do not
-build another planner, native carrier or provenance framework. Genuine route
-or reserve failures stay visible and require coordinator review, not silently
-changed gameplay. This source-only scope does not retarget G10, hand-edit its
-four payloads, grant PC access or certify factory autonomy/whole T1/a world.
+`progression/T1Progression` selections. `TierResult.witnessState` is issued only
+after the actual conditional T0 gate; its private constructor binds complete
+physical custody to the exact authorities, source identities, assumptions and
+evaluated evidence. `retainedInventory` still means locked catalysts, never
+complete carry. `continueFinite` copies free stock, locked catalysts, installed
+machines/parts, claimed one-shots, cumulative delivery accounting and spent
+manual-work/operation custody without loading terminals or resetting entry.
+Selected first-machine batches install their actual controllers; replenishment
+uses ready selected producers, the original T0 supply, then real construction,
+never a repeated manual T0 exit. Exact F1 reproduction precedes further control
+withdrawals and the real F2 batch cannot be replaced by stock. The existing
+T1 export exposes before/after axes, completed physical batches and blocking
+findings; separate renewable/autonomy/whole-tier/world limits remain. Extend
+existing typed checks and explicit source/image lists, not another planner or
+receipt framework. Genuine gaps require coordinator review, not new gameplay.
+This is source-only, not executed Java/model qualification; G10, four canonical
+payloads, PC access, player saves and paid history remain untouched.
 
 ### Explicit Assembler recipe choice
 

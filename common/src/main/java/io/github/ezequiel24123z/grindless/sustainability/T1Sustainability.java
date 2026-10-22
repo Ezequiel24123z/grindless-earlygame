@@ -3,17 +3,22 @@ package io.github.ezequiel24123z.grindless.sustainability;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
+import io.github.ezequiel24123z.grindless.machine.GeneratorKind;
+import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.progression.T1Progression;
 import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import static io.github.ezequiel24123z.grindless.sustainability.SustainabilityAnnotations.*;
 import static io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.*;
 
 /**
@@ -102,6 +107,54 @@ public final class T1Sustainability {
         return new SeedAllocation(output, draw, Math.subtractExact(output, draw), draws);
     }
 
+    /** The existing executor consumes actual T0 custody, not seed arithmetic or a new entry profile. */
+    public static SustainabilityAudit.FiniteResult finiteWitness(SustainabilityAudit.Result t0) {
+        SustainabilityAudit.FiniteResult refusal = SustainabilityAudit.predecessorRefusal(t0);
+        if (refusal != null) {
+            return refusal;
+        }
+        // The teaching order is already dependency ordered. Optional branches are not establishment obligations.
+        Set<String> selected = new LinkedHashSet<>();
+        T1Progression.lines().stream().filter(T1Progression.Line::mandatory)
+                .forEach(line -> selected.addAll(line.routeIds()));
+        return SustainabilityAudit.continueFinite(t0, finiteAnnotations(t0, selected),
+                List.copyOf(selected), T1Progression.EXIT_ROUTE);
+    }
+
+    /** Only selected execution bindings are added; T0 classifications, entry, loops and ledger stay exact. */
+    private static SustainabilityAnnotations finiteAnnotations(SustainabilityAudit.Result t0, Set<String> selected) {
+        SustainabilityAnnotations original = t0.annotations();
+        Map<String, RoutePolicy> policies = new TreeMap<>(original.routes());
+        for (String id : selected) {
+            RoutePolicy prior = policies.get(id);
+            if (prior == null || prior.unlockTier() == null) {
+                policies.put(id, new RoutePolicy(1, false,
+                        prior == null ? Set.of() : prior.environmentalSources(),
+                        prior == null ? Map.of() : prior.outputRoles()));
+            }
+        }
+        Map<String, Machine> machines = new TreeMap<>(original.machines());
+        for (ProcessMachineKind kind : List.of(ProcessMachineKind.PULVERIZER, ProcessMachineKind.ARC_FURNACE,
+                ProcessMachineKind.PRESS, ProcessMachineKind.ASSEMBLER)) {
+            String name = kind.name().toLowerCase(Locale.ROOT);
+            Route craft = require(t0.authorities(), "craft/" + name);
+            Resource block = item("grindless:" + name);
+            if (!craft.retainedOutputs().equals(Map.of(block, 1L))) {
+                throw new IllegalArgumentException("The selected machine craft no longer constructs " + kind.family());
+            }
+            machines.putIfAbsent(kind.family().name(), new Machine(kind.family().name(), block, kind.tier().ordinal()));
+        }
+        Route power = require(t0.authorities(), T1Progression.POWER_ROUTE);
+        Resource generator = item("grindless:" + GeneratorKind.THERMAL.id());
+        if (!require(t0.authorities(), "craft/" + GeneratorKind.THERMAL.id())
+                .retainedOutputs().equals(Map.of(generator, 1L))) {
+            throw new IllegalArgumentException("The selected Thermal construction no longer matches its actual kind");
+        }
+        machines.putIfAbsent(power.family(), new Machine(power.family(), generator, GeneratorKind.THERMAL.tier().ordinal()));
+        return new SustainabilityAnnotations(original.resources(), policies, machines, original.loops(),
+                original.plans(), original.ledger());
+    }
+
     /** Deterministic generated data; no source commit, timestamp or private execution path is embedded. */
     public static Map<String, Object> document(SustainabilityAudit.Result t0) {
         T0ConditionalGate.Gate gate = T0ConditionalGate.evaluate(t0);
@@ -110,6 +163,7 @@ public final class T1Sustainability {
                     + gate.unmetObligations());
         }
         Snapshot snapshot = t0.authorities();
+        SustainabilityAudit.FiniteResult finite = finiteWitness(t0);
         Map<String, List<Route>> selected = selectedRoutes(snapshot);
         SeedAllocation allocation = seedAllocation(snapshot);
         List<Object> lines = new ArrayList<>();
@@ -133,20 +187,21 @@ public final class T1Sustainability {
         var witness = t0.tiers().get(0);
         var plan = t0.annotations().ledger().get(0);
         Map<String, Object> document = row(
-                "schema_version", 1,
-                "scope", "bounded_first_factory_authority_and_T0_boundary_projection",
+                "schema_version", 2,
+                "scope", "bounded_first_factory_authorities_and_conserved_conditional_finite_execution",
                 "authority_snapshot_sha256", AuditReports.snapshotHash(snapshot),
                 "provenance_scope", "Normalized evaluated authority facts here; raw sources/classes/revision in build/t1/provenance.json",
                 "quantity_authority", "Live ProcessGraph/catalogues and shipped JSON, never this generated document",
                 "t1_accepted", false,
                 "t1_renewable_closure_proven", false,
-                "t1_finite_establishment_replayed", false,
+                "t1_finite_establishment_replayed", finite.completed(),
                 "global_optimum_claimed", false,
                 "entry_route", T1Progression.ENTRY_ROUTE,
                 "reproduction_route", T1Progression.REPRODUCTION_ROUTE,
                 "exit_route", T1Progression.EXIT_ROUTE,
                 "lines", lines,
                 "mandatory_input_evidence", inputEvidence,
+                "finite_execution", finiteDocument(finite),
                 "seed_allocation", row("batch_output", allocation.batchOutput(),
                         "construction_draw", allocation.constructionDraw(), "remaining", allocation.remaining(),
                         "machine_draws", allocation.machineDraws(),
@@ -164,10 +219,12 @@ public final class T1Sustainability {
                         "exit_production", witness.exitProduction(),
                         "retained_construction_and_catalysts", quantities(witness.retainedInventory()),
                         "finite_reserves", witness.reserves(),
-                        "scope", "Existing SustainabilityAudit/ConstructionReserve finite replay, not a T1 replay"),
+                        "scope", "Existing SustainabilityAudit/ConstructionReserve conditional predecessor; not player inventory"),
                 "side_streams", sideStreams(t0),
                 "unproved", List.of(
-                        "Prior-tier finite custody has not been carried through a complete T1 ConstructionReserve replay.",
+                        finite.completed()
+                                ? "The finite conditional continuation does not certify recursive T1 renewable closure or the broader T1 family contract."
+                                : "The finite conditional continuation is blocked; inspect its actual completed batches and findings.",
                         "Automatic casing and Flux Cell recipes require the established Assembler; complete recurrent input, power and routing closure is not proved.",
                         "Continuous factory power, nighttime/restart recovery, routing throughput and captured-gas handling need separate evidence.",
                         "Native client, Survival play, actual crafting and longitudinal save compatibility are not proved by this export."));
@@ -189,8 +246,8 @@ public final class T1Sustainability {
                 .append("Normalized authority snapshot SHA-256: `").append(AuditReports.snapshotHash(snapshot)).append("`.\n\n")
                 .append("Raw source/class fingerprints and invoking revision are recorded separately ")
                 .append("in `build/t1/provenance.json`; checkout line endings do not become recipe data.\n\n")
-                .append("This is live catalogue data plus the existing conditional T0 audit. ")
-                .append("It is not T1 acceptance, a T1 construction replay, renewable closure, ")
+                .append("This is live catalogue data plus a conserved finite continuation of the conditional T0 audit. ")
+                .append("It is not T1 acceptance, recursive renewable closure, ")
                 .append("an optimum, elapsed playtime or native/client evidence.\n\n")
                 .append("The actual manual seed batch produces **").append(seed.batchOutput())
                 .append("** controllers; mandatory first-machine crafts draw **").append(seed.constructionDraw())
@@ -217,6 +274,15 @@ public final class T1Sustainability {
                         .append(" |\n");
             }
         }
+        SustainabilityAudit.FiniteResult finite = finiteWitness(t0);
+        text.append("\n## Conserved finite execution\n\n")
+                .append("Status: **").append(finite.status()).append("**. Completed authority batches: **")
+                .append(finite.batches().size()).append("**. No terminal, reward, installed part or work budget ")
+                .append("is reset. The JSON exposes before/after custody, exact physical batch withdrawals/outputs ")
+                .append("and all blocking findings; these are in-process model facts, not a Survival inventory.\n\n");
+        for (AuditFinding finding : finite.findings()) {
+            text.append("- `").append(finding.fingerprint()).append("`: ").append(finding.message()).append("\n");
+        }
         text.append("\n## Supply and proof boundaries\n\n")
                 .append("The JSON records every mandatory consumed/catalytic edge separately. ")
                 .append("`T0_AUDITED_RENEWABLE` means the existing conditional audit proves that ")
@@ -226,8 +292,8 @@ public final class T1Sustainability {
                 .append("Minimum-control roles are separate route conditions; their exact-rated audit ")
                 .append("input is one valid canonical supply option, not an exhaustive alternatives catalogue. ")
                 .append("Authored Relay defaults and explicit F1 operands now share the existing ")
-                .append("NBT decoder's physical F1 identity; generic registration declarations stay separate. No complete T1 ")
-                .append("custody/construction replay is claimed. The first Assembler uses a finite ")
+                .append("NBT decoder's physical F1 identity; generic registration declarations stay separate. The finite ")
+                .append("execution above is conditional, not a whole-T1 or world proof. The first Assembler uses a finite ")
                 .append("manual casing seed from the forming line; automatic casing production only ")
                 .append("starts after that Assembler exists. Existing manual casing and Flux Cell ")
                 .append("crafts remain bootstrap/compatibility alternatives. Their Assembler routes ")
@@ -282,6 +348,38 @@ public final class T1Sustainability {
                         : "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF";
         return new InputEvidence(route.id(), resource, amount, catalyst,
                 status, producers);
+    }
+
+    private static Map<String, Object> finiteDocument(SustainabilityAudit.FiniteResult finite) {
+        List<Object> batches = new ArrayList<>();
+        for (SustainabilityAudit.ExecutedBatch batch : finite.batches()) {
+            batches.add(row("route", batch.route(), "consumed_physical", quantities(batch.consumed()),
+                    "produced_retained", quantities(batch.produced()), "local_work_actions", batch.manualActions()));
+        }
+        return row("admitted", finite.admitted(), "completed", finite.completed(), "status", finite.status(),
+                "predecessor", custodyDocument(finite.predecessor()), "final_state", custodyDocument(finite.state()),
+                "batches", batches, "cumulative_reserves", finite.reserves(), "manual_work", finite.manualWork(),
+                "exit_production", finite.exitProduction(), "findings", finite.findings(),
+                "scope", "Source-bound in-process conditional proof; not loadable save data, player custody, "
+                        + "renewable closure, continuous power/routing or whole-tier acceptance.");
+    }
+
+    private static Map<String, Object> custodyDocument(SustainabilityAudit.WitnessState state) {
+        if (state == null) {
+            return null;
+        }
+        Map<String, Object> parts = new TreeMap<>();
+        state.installationParts().forEach((family, resources) -> parts.put(family, quantities(resources)));
+        return row("tier", state.tier(), "free_stock", quantities(state.freeStock()),
+                "retained_catalysts", quantities(state.retainedCatalysts()),
+                "installed_machines", state.installedMachines().stream().map(Resource::key).toList(),
+                "installation_parts", parts, "claimed_one_shot_routes", state.claimedRoutes(),
+                "bootstrap_sources", state.bootstrapSources(), "guaranteed_deliveries", quantities(state.guaranteedDeliveries()),
+                "player_deliveries", quantities(state.playerDeliveries()), "reward_deliveries", quantities(state.rewardDeliveries()),
+                "cumulative_deliveries_not_stock", quantities(state.cumulativeDeliveries()),
+                "peak_draw", quantities(state.peakDraw()), "consumed_manual_actions", state.consumedManualActions(),
+                "required_manual_actions", state.requiredManualActions(), "operations", state.operations(),
+                "cumulative_completed_batches", state.establishmentBatches());
     }
 
     private static boolean sameSupply(Snapshot snapshot, Resource output, Resource wanted) {

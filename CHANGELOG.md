@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Carry conserved T0 custody through the existing finite first-factory executor (ADR-0187).**
+  Source-only implementation issues immutable, authority/assumption-bound in-process
+  checkpoints after the actual conditional T0 gate, preserving free stock, locked
+  catalysts, installed controllers/parts, one-shot deliveries and spent local work.
+  The selected mandatory T1 batches use that same executor, with actual physical F1
+  reproduction and F2 production rather than a manufactured entry kit or replayed
+  bootstrap. Export exact custody/batches/findings separately from renewable closure,
+  continuous operation, whole-T1 and world acceptance. Typed regressions/provenance
+  updates follow in this source lane; no Java, writer, native or gameplay pass is claimed.
 - **Continue the finite first-factory boundary without replaying G10.**
   The executor reports one actual clean-a54 native aggregate PASS with all19
   expectations, natural save-stop and frozen JAR/inventory before subsequent
