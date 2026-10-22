@@ -921,6 +921,21 @@ not replayed or treated as stale, and neither pass nor acceptance is assumed.
 No tools check/model/writer/canonical/tracked output/A9 or target action.
 Source repairs continue isolated; source/alias staybb5 through this lease.
 
+**Native-only2e203c89 was superseded before dispatch, not executed.**
+Source014e35d9e69d8c100a95669003c051aaa2dd50f8 arrived while that grant was
+being published; no GO was sent to604 and no host/native activity or new
+observation is claimed. Parent reviews and normally preserves the exact two
+suite blobs from014/exact0ab parent plus its original changelog disclosure.
+UI moves wire after all pure/index/source contracts and bootstraps real vanilla
+only after pure packet negatives, immediately before ItemStack snapshots.
+NaN remains malformed/unspendable and is compared via typed canonical vanilla
+SNBT after real binary reopen; no global equality or production change.
+Legacy AUTO derives expected lookup from current physical inputs/fluids,
+separates actual stable ID and exact zero-credit diagnostics, and retains the
+old partial-balance check. All three failures are source-repaired, not yet
+Java/runtime-confirmed. ReceiptSHA2595aa886d078ad6b4a94646971f0f00b31073915715a0bb337de1ff9ba7af1c
+records scope/tree/trailers; another exact combined qualification is required.
+
 **G7 report12:21:13Z, still awaiting final custody/leaseback:** clean
 ApplicableSource26e/Java0/locksfalse; one direct plain FTB boot reports0,
 ready51/Done and natural save/stop, with tested JAR/inventory captured before

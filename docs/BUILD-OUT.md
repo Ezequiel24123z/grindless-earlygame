@@ -46,7 +46,8 @@ ADR-0185 explicit Assembler recipe-choice source is now normally composed
 with F1/A8 after independent review. ADR-0186's serialized shared recipe
 sourceccfe is complete and normally composed. Exactbb5 CI confirms the0ab
 tool-javac repair but exposes UI preview bootstrap and two Persistence
-NaN/AUTO oracle failures. Repair those exact source boundaries, then qualify the combined
+NaN/AUTO oracle failures. Reviewed source014 now repairs those harness
+boundaries; qualify the repaired combined
 changed selection/work/persistence mechanism on a new exact source.
 It must preserve paid/fractional work and saved stores.
 Use the bounded mature-mod reference and existing menu/transaction, not a

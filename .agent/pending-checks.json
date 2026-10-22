@@ -60,8 +60,8 @@
   },
   "current_PC_execution": {
     "assignment": "assembler-native-discriminator-20261022",
-    "active": true,
-    "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
+    "active": false,
+    "owner_session": null,
     "last_owner_session": "604195bd-6826-4299-89af-1dcf39545263",
     "source": "bb5f137b945277c04fd4042b43d121ad3552c2ff",
     "writer_invocation_source": null,
@@ -86,15 +86,15 @@
     "qualification_package_fictitious_target_plan_authorized": false,
     "real_PrismRoot_player_world_writes_authorized": false,
     "allowed_data_derivation": "None_NATIVE_ONLY_no_tracked_outputs_or_sourcecommit",
-    "result": "NEW_NATIVE_ONLY_DISCRIMINATOR_RESULTS_PENDING_JavaHarnessSourceReds_stayBLOCKED",
-    "returned": false,
+    "result": "nativeOnly2e203c89_withdrawn_predispatch_NO_GO_or_PCactivity_014_sourcefixarrived_nextCombinedGrant_required",
+    "returned": true,
     "returned_utc": null,
-    "return_state": "NOT_OBSERVED_for_new_native_only_window",
+    "return_state": "withdrawn_preDispatch_not_runtime_leaseback_no_newhostobservation",
     "normal_data_checkpoint": "dee1a2ae4f90a95b4c941570358571e4597e3c37",
     "previous_85e_attempt": "CI39733641733_main_toolcompile0_actual_regressions_Sync_only_noPCJVM_safe_return06_35_57Z_closure8363ad93",
     "previous_423a_attempt": "Sync0_real_CI_compile_red_no_PC_JVM_safe_return05_53_20Z_closure8d96179a_raw00348af1_preserved",
     "previous_returned_lease": "integrated_blueprint_native_20261021_cleanM_Java0_locks0_2026_10_21_21_56_31Z_evidence_preserved",
-    "new_explicit_guarded_window_required": false
+    "new_explicit_guarded_window_required": true
   },
   "active_development_wave": {
     "base": "ad5b50dd509b0261818101ff08e786750826161a",

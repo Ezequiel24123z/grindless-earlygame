@@ -4,7 +4,19 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
-**NEW independent native-only discriminator, not resumed G9/model acceptance.**
+**Harness source014 is ready; native-only2e was withdrawn BEFORE dispatch.**
+The repair arrived during the native-only grant publication, before any GO
+was sent to604. Thus no native/host action or new observation is attributed to
+that superseded grant. Parent normally composes exact014/exact0ab parent:
+UI pure/index/source contracts and pure packet negatives precede real vanilla
+bootstrap only for ItemStack-bearing snapshots; malformed NaN remains
+unavailable/unspendable with vanilla typed canonical SNBT comparison; legacy
+AUTO derives currentFind from real inputs/fluids and tests identity/zero
+borrowed credit separately. Only the two suites and their changelog change;
+production and fifteen-role data stay exact. Source review is clear, but
+compiler/Java/native confirmation requires a new combined exact binding.
+
+**Historical independent native-only discriminator, never dispatched.**
 Sole604/exactbb5/new inventory root previously proved absent receives one
 canonical existing matrix-lifecycle. The exact main/Forge build already
 passes; Java UI preview bootstrap and NaN/AUTO oracles remain real failed
@@ -191,7 +203,7 @@ identity repairs invocation without altering Git configuration.
 | Category | Current integration boundary |
 | --- | --- |
 | COMPLETED | Verified G7/A7/G8/A8; selector/controller/fix source integrated; bb5 actual tool-javac confirms0ab; G9 ten-file original/unused-closure custody verified |
-| BLOCKED | UI native-preview bootstrap and NaN/AUTO Persistence oracles need source diagnosis/repair; combined runtime, finite establishment and genuine upgrades remain |
+| BLOCKED | Source014 repairs UI/NaN/AUTO harness authorship, but new compiler/suite/native confirmation, finite establishment and genuine upgrades remain |
 | NOT EXECUTED | G9 Sync/PC suites/native/writers/A9, final selector/UI/controller proof; player deployment, target launch, main/release and whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
 | NEEDS MY DECISION | None |

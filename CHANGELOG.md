@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Compose the minimal bb5 harness repair and avoid an unnecessary old-source native run.**
+  Normal014/exact0ab changes only UI/Persistence and their original changelog
+  bullet: real vanilla bootstrap after pure/index/wire negatives, typed
+  canonical SNBT for malformed NaN, actual lookup-derived AUTO and separate
+  exact zero-credit diagnosis. All cases/invalid-state refusals remain.
+  The repair arrived before native-only2e was dispatched, so that grant is
+  withdrawn without PC/native activity; qualify the repaired combined source
+  instead. Original failures stay preserved; no new runtime pass is inferred.
 - **Use one independent native discriminator while source harness repairs continue.**
   After G9's verified unused return, sole604 gets a new native-only lease on
   unchangedbb5/new root. Actual main/Forge build0 already exists; standalone
@@ -188,6 +196,17 @@ entries below reference those records by id.
   any suite: retain that red and split the overlong-request FriendlyByteBuf
   writes instead of chaining through Netty's ByteBuf return type. The257
   negative and decoder stay unchanged; actual compiler confirmation is pending.
+  Later bb5 CI confirms check compilation and starts suites, exposing a
+  separate unbootstrapped ItemStack failure. Keep every pure/index/source
+  contract before the wire fragment, then bootstrap real vanilla registries
+  only for item-bearing snapshots. Preserve the original red; execution of
+  this harness-only repair remains pending.
+  That same original also identifies two Persistence oracle failures:
+  compare native canonical SNBT rather than NaN-sensitive tag equality, and
+  derive legacy AUTO from current live
+  inputs/fluids instead of fixing Reactor as the last row. Keep malformed
+  no-execution checks and separate target/zero-credit diagnostics; no
+  production loss or new runtime pass is inferred.
 - **Choose explicit Assembler targets instead of repricing colliding recipes.**
   ADR-0185 selects a stable-ID, server-authoritative menu choice on the existing
   executor and transaction. Reuse bounded GT/Mekanism configuration/validation
