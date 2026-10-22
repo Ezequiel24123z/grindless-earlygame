@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Repair all affected ordered-list contract calls without weakening them.**
+  Normal9b9c619 uses the existing boolean assertion helper and complete List.equals
+  in Recipe/Atlas die and machine checks. Preserve order, exact roles/materials,
+  counts and the original423a CI red; no generic fallback, string comparison or
+  count-only success replaces the contracts. Actual Java confirmation and a
+  newly pinned qualification GO remain pending.
 - **Preserve the real compile blocker while integrating factory source.**
   New-root Sync423a passes; exact CI39728601139 then exposes missing list-equality
   overloads in VerifyRecipes before any PC JVM.604195bd safely returns the lease

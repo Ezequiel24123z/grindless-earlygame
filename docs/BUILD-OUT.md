@@ -51,8 +51,9 @@ affected Java/writers/native remain pending. Qualifier604195bd reports local
 READY and now owns the NEW fixed423a `control-role-qualification-20261022`
 window initially for this changed mechanism/content. Fresh Sync passes, but the
 exact CI compile failure at two nonexistent List-equality overloads stops before
-all PC JVMs;604195bd returns clean/Java0/locks0. Repair that source and the new
-analogous4f3aae3 factory assertions, then publish a new exact GO. Source4f
+all PC JVMs;604195bd returns clean/Java0/locks0. Source9b9c619 repairs old/new
+Recipe/Atlas list calls with precise boolean equality; publish a new exact GO
+and obtain actual compiler confirmation. Source4f
 normally integrates ordinary factory reproduction while all actual contracts/
 writers/native remain unexecuted. Preserve the separate FTB publisher stale-class
 provenance finding; do not confuse tool-fixture greens with authentic publication.

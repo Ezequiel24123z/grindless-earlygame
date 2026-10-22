@@ -164,7 +164,8 @@ post-assembly line. Only those four new controller operands opt into minimumF1;
 old F2 predecessor/outputs/quest predicates stay exact. Thermal's five groups
 remain out. Current fixture shapes are209/84/266, not observed pass counts.
 Exact423a CI exposes missing List overloads in recipe assertions; the author
-must preserve ordered/full equality using existing boolean checks before Java.
+repairs them in9b9c619 with ordered/full `.equals` and the existing boolean
+helper. Actual compiler confirmation remains pending; do not weaken the guards.
 
 The owner's2026-10-21 instruction separately opens T1 development (ADR-0168/0169).
 Use [the first-factory plan](../plan/feature-t1-first-factory-1.md): live route

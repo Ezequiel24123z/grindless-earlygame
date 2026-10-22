@@ -321,11 +321,12 @@ public final class VerifyRecipes {
                 recipes.stream()
                 .flatMap(row -> java.util.stream.Stream.concat(row.inputs().stream(), row.catalysts().stream()))
                 .filter(IngredientSpec::isMinimumControl).count());
-        eq("minimum control stays limited to the five named recipe identities",
+        yes("minimum control stays limited to the five named recipe identities",
                 List.of("assemble/pulverizer", "assemble/arc_furnace", "assemble/press", "assemble/assembler",
-                        "assemble/wire_mill"),
-                recipes.stream().filter(row -> row.inputs().stream().anyMatch(IngredientSpec::isMinimumControl))
-                        .map(ProcessRecipe::id).toList());
+                        "assemble/wire_mill")
+                        .equals(recipes.stream()
+                                .filter(row -> row.inputs().stream().anyMatch(IngredientSpec::isMinimumControl))
+                                .map(ProcessRecipe::id).toList()));
         eq("the minimum role preserves the canonical baseline Matrix ID", "item:grindless:relay_matrix",
                 mill.itemInputs().get(3).qualified());
         JsonObject serialized = new com.google.gson.Gson().toJsonTree(mill.itemInputs().get(3)).getAsJsonObject();
@@ -926,18 +927,18 @@ public final class VerifyRecipes {
     private static void assemblerCrafts(List<ProcessRecipe> recipes) throws IOException {
         List<String> dieNames = List.of("plate_die", "rod_die", "gear_die", "coil_die");
         List<String> machineNames = List.of("pulverizer", "arc_furnace", "press", "assembler");
-        eq("the four existing manual Press dies are the only authored die crafts",
-                dieNames, T1Recipes.shaped().stream().filter(craft -> craft.name().endsWith("_die"))
-                        .map(T1Recipes.Shaped::name).toList());
+        yes("the four existing manual Press dies are the only authored die crafts",
+                dieNames.equals(T1Recipes.shaped().stream().filter(craft -> craft.name().endsWith("_die"))
+                        .map(T1Recipes.Shaped::name).toList()));
         List<String> automaticDies = recipes.stream()
                 .filter(row -> row.id().startsWith("assemble/")
                         && row.itemOutputs().stream().anyMatch(output -> output.id().endsWith("_die")))
                 .map(row -> row.id().substring("assemble/".length())).toList();
-        eq("only the explicitly selected Press dies have automatic routes", dieNames, automaticDies);
-        eq("only the four explicitly selected first-factory machines have automatic routes", machineNames,
+        yes("only the explicitly selected Press dies have automatic routes", dieNames.equals(automaticDies));
+        yes("only the four explicitly selected first-factory machines have automatic routes", machineNames.equals(
                 recipes.stream().filter(row -> machineNames.stream()
                                 .anyMatch(name -> row.id().equals("assemble/" + name)))
-                        .map(row -> row.id().substring("assemble/".length())).toList());
+                        .map(row -> row.id().substring("assemble/".length())).toList()));
 
         for (String name : List.of("machine_casing", "flux_cell", "plate_die", "rod_die", "gear_die", "coil_die",
                 "pulverizer", "arc_furnace", "press", "assembler")) {
@@ -958,11 +959,10 @@ public final class VerifyRecipes {
                     || automatic.namesAtmosphere() || automatic.namesAgitation() || automatic.milestone() != null);
             List<IngredientSpec> minimumControlInputs = automatic.itemInputs().stream()
                     .filter(IngredientSpec::isMinimumControl).toList();
-            eq(id + " selects only its explicit minimum-control Relay operand",
-                    requiresMinimumControl
+            yes(id + " selects only its explicit minimum-control Relay operand",
+                    (requiresMinimumControl
                             ? List.of(IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1))
-                            : List.of(),
-                    minimumControlInputs);
+                            : List.<IngredientSpec>of()).equals(minimumControlInputs));
             yes(id + " keeps all other material operands exact",
                     automatic.itemInputs().stream().filter(input -> !input.isMinimumControl())
                             .allMatch(input -> input.matrixRole() == IngredientSpec.MatrixRole.EXACT));

@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 47,
+  "plan_revision": 48,
   "updated": "2026-10-22",
   "phase": "managed_FTB_update_and_explicit_control_capacity_development_after_closed_M_wave",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -56,7 +56,7 @@
     "factory_reproduction_scope": "ADR0179_four_existing_four_group_fit_pulverizer_arc_furnace_press_assembler_manual_material_parity_explicit_F1_minimum_control_optional_after_assembly_no_new_item_or_reprice",
     "factory_reproduction_source": "4f3aae3b8e1770c97627ee260975b15079db0c48_normally_integrated_source_not_Java_qualified",
     "factory_reproduction_fixture_shape": "209graph_84Assembler_266allAtlas_and5named_minimum_control_rows_authored_not_executed",
-    "oracle_compile_repair_owner": "a18f81ea_missing_eq_List_overloads_old_die_and_new_factory_checks_exact_equality_preserved_no_guard_weakening",
+    "oracle_compile_repair_owner": "a18f81ea_9b9c619e0defda703cadfc1ca2a3ec4f9659fd7c_normally_integrated_all_new_List_eq_calls_use_existing_yes_and_ordered_full_equals_no_guard_weakening_JVM_confirmation_pending",
     "thermal_reproduction": "five_distinct_groups_out_of_scope_manual_seed_retained_no_claim_all_five_automated",
     "managed_FTB_preview": "ee4f504_authored_actual_WinPS153_20_focused_and773_103_full_tool_fixtures_no_JVM_authentic_dd0_export_yet_author_classpath_followup_pending",
     "managed_FTB_review": "1ce4d3be_closed_oneP2_missing_source_class_runtime_binding_stale_classes_below_clean_dd0_are_not_authentic_author_repair_pending_no_JVM_claim",

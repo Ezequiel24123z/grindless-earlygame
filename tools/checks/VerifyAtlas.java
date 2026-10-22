@@ -135,10 +135,10 @@ public final class VerifyAtlas {
                     manual.inputs().contains("item:grindless:relay_matrix"));
             yes(machine + " fits the existing four Assembler input slots",
                     automaticProcess.itemInputs().size() <= 4);
-            eq(machine + " uses exactly one minimum-F1 controller input",
-                    List.of(IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX,
-                            FluxTier.F1, 1)),
-                    automaticProcess.itemInputs().stream().filter(IngredientSpec::isMinimumControl).toList());
+            yes(machine + " uses exactly one minimum-F1 controller input",
+                    List.of(IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1))
+                            .equals(automaticProcess.itemInputs().stream()
+                                    .filter(IngredientSpec::isMinimumControl).toList()));
             eq(machine + " displays its controller as minimum F1 capacity",
                     1L, automatic.inputs().stream().filter(input -> input.endsWith(" [F1+]")).count());
             yes(machine + " preserves the ordinary machine output", manual.outputs().equals(automatic.outputs()));

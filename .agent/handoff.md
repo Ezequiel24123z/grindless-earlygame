@@ -38,9 +38,11 @@ canonical data or an invoker. New native smoke is SKIPPED, not passed.
 At05:53:20.2894842Z the lease explicitly returns: detached/clean423a,
 owned/all-observed Java0, work/cache locksfalse, startedJVM0. Parent verifies
 closure8d96179a and raw00348af1; no PC Java/native/writer/A2 exists.
-All PC grants are closed. Source ownera18f81ea repairs exact-list assertions
-in both the old die and new factory suites without weakening them. New source
-and an exact published GO are required; do not resume the released grant.
+All PC grants are closed. Source ownera18f81ea supplies9b9c619, normally
+integrated: all affected old die/new factory lists use the existing `yes` helper
+with full ordered/value `.equals`, without weakening them. Actual compiler
+confirmation and a new exact published GO are still required; do not resume
+the released grant or relabel the old423a failure.
 
 ADR-0176 selects only the existing Wire Mill's F1 control operand as a minimum
 capacity requirement. Existing exact factories, F2 Matrix predecessor, outputs
@@ -93,7 +95,7 @@ Thermal has five groups and stays out; no new intermediate/slots/bill or claim
 that all five machines are automated. Checkpoint4f3aae3 now normally integrates
 that data, preservingf046's provenance guard. Expected209/84/266 and five
 named minimum inputs are source shapes, not passes; its analogous new list
-assertions are also being fixed before Java. This lane has no PC grant.
+assertions are source-fixed in9b9c619 before Java. This lane has no PC grant.
 Managed-FTBa7b820b adds explicit-instance/argument refusal and reports786/103
 real Windows tool assertions, but not Java/authentic old export. Independent
 review1ce4d3be identifies stale compiled classes passing origin-below-root;

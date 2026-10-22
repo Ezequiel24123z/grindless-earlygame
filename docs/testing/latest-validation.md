@@ -80,8 +80,8 @@ separate; no package or byte-identical post-writer artifact is inferred.
 
 **Actual closed423a attempt:** fresh new-root admission and canonical Sync return
 VerifiedDetached423a/exit0. Before any PC JVM, the executor recovers exact
-CI39728601139/verify119658185805: VerifyRecipes922/929 cannot compile
-eq(String,List,String-List) because there is no List overload. The actual raw
+CI39728601139/verify119658185805: VerifyRecipes922/929 cannot compile its
+new ordered-list assertions because there is no List overload. The actual raw
 diagnostic is `eq(String,List<String>,List<String>)`; this is source, not a
 stale canonical or transport error. Smoke is SKIPPED, not new native evidence.
 No JVM is started to rediscover that known failure. CI39729737025 was only
@@ -104,6 +104,13 @@ The separate managed-FTB review's stale-class/source/runtime provenance P2 is
 pending author repair even thougha7b820b reports786/103 real filesystem/tool
 assertions. No authenticdd0 publisher or SNBT JVM result is supplied by those
 synthetic-plan fixtures.
+
+Normal source follow-up9b9c619 fixes the affected Recipe/Atlas calls through the
+existing boolean helper with full ordered/value List.equals. It preserves all
+expected data/roles and scalar overloads. Parent reviews that narrow source
+delta directly; no compiler/native/writer pass is inferred until execution on
+a newly published exact source. The released423a attempt stays failed/skipped
+in its actual scope.
 
 ## Final native FTB Prism and existing-game delivery
 
