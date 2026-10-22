@@ -221,11 +221,19 @@ public final class VerifyPersistence {
     /** Runs the actual BE without Forge registration, using explicitly labelled vanilla carrier rows. */
     private static void assemblerMachineWork() throws Exception {
         ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
-        List<IngredientSpec> bill = List.of(IngredientSpec.item("minecraft:quartz", 1),
-                IngredientSpec.item("minecraft:copper_ingot", 2), IngredientSpec.item("minecraft:iron_ingot", 4));
-        ProcessRecipe washer = new ProcessRecipe("assemble/chemical_washer", MachineFamily.ASSEMBLER, bill,
+        ProcessRecipe declaredWasher = ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/chemical_washer").orElseThrow();
+        ProcessRecipe declaredReactor = ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/chemical_reactor").orElseThrow();
+        check("the BE fixture derives both colliders from the actual identical declared bills",
+                declaredWasher.inputs().equals(declaredReactor.inputs()));
+        List<String> carrierIds = List.of("minecraft:quartz", "minecraft:copper_ingot",
+                "minecraft:iron_ingot", "minecraft:redstone");
+        List<IngredientSpec> bill = new ArrayList<>();
+        for (int slot = 0; slot < declaredWasher.itemInputs().size(); slot++) {
+            bill.add(IngredientSpec.item(carrierIds.get(slot), declaredWasher.itemInputs().get(slot).count()));
+        }
+        ProcessRecipe washer = new ProcessRecipe(declaredWasher.id(), MachineFamily.ASSEMBLER, bill,
                 List.of(OutputSpec.item("minecraft:clay_ball", 1)), Double.NaN, null, 160, 32);
-        ProcessRecipe reactor = new ProcessRecipe("assemble/chemical_reactor", MachineFamily.ASSEMBLER, bill,
+        ProcessRecipe reactor = new ProcessRecipe(declaredReactor.id(), MachineFamily.ASSEMBLER, bill,
                 List.of(OutputSpec.item("minecraft:brick", 1)), Double.NaN, null, 160, 32);
         Field graph = ProcessLookup.class.getDeclaredField("GRAPH");
         graph.setAccessible(true);
@@ -261,7 +269,7 @@ public final class VerifyPersistence {
                     machine.getItem(4).is(Items.CLAY_BALL) && machine.getItem(4).getCount() == 1);
             check("actual completion debits one paid tick once", machine.energy().getStored() == 480);
             check("actual completion consumes the existing exact grouped bill once",
-                    machine.getItem(0).isEmpty() && machine.getItem(1).isEmpty() && machine.getItem(2).isEmpty());
+                    java.util.stream.IntStream.range(0, bill.size()).allMatch(slot -> machine.getItem(slot).isEmpty()));
             change(machine, reactor.id());
             state = machine.saveWithoutMetadata();
             state.putDouble("Progress", 12.875);
@@ -423,6 +431,7 @@ public final class VerifyPersistence {
     private static void assemblerLegacyInventory(ProcessRecipe washer, ProcessRecipe reactor) throws Exception {
         ProcessMachineBlockEntity legacy = assembler();
         supplyAssembler(legacy);
+        legacy.setItem(3, ItemStack.EMPTY);
         CompoundTag tag = legacy.saveWithoutMetadata();
         tag.putString("Recipe", washer.id());
         tag.remove("WorkRecipe");
@@ -438,13 +447,22 @@ public final class VerifyPersistence {
         check("legacy Recipe fallback retains the exact old paid owner",
                 legacy.saveWithoutMetadata().getString("WorkRecipe").equals(washer.id())
                         && legacy.inspectionProgress() == 11.34375);
+        if (washer.itemInputs().size() > 3) {
+            check("old inventory layout cannot invent a newly required fourth ingredient", resolve(legacy) == null);
+            IngredientSpec required = washer.itemInputs().get(3);
+            legacy.setItem(3, ProcessLookup.resolve(
+                    new OutputSpec(required.kind(), required.id(), required.count(), false)).orElseThrow());
+        }
         check("legacy AUTO preserves last-dry selection without giving it someone else's work",
                 resolve(legacy) == reactor && legacy.inspectionProgress() == 0.0);
         change(legacy, washer.id());
         exact("the legacy partial balance remains reachable after AUTO chooses another row", 11.34375,
                 legacy.inspectionProgress());
         check("migration and selection never mutate the old output's count or slot",
-                legacy.getItem(3).isEmpty() && legacy.getItem(4).is(Items.BRICK) && legacy.getItem(4).getCount() == 2);
+                (washer.itemInputs().size() > 3
+                        ? ProcessLookup.matches(washer.itemInputs().get(3), legacy.getItem(3))
+                        : legacy.getItem(3).isEmpty())
+                        && legacy.getItem(4).is(Items.BRICK) && legacy.getItem(4).getCount() == 2);
     }
 
     private static CompoundTag assemblerStores(ProcessMachineBlockEntity machine) {
@@ -463,9 +481,12 @@ public final class VerifyPersistence {
     }
 
     private static void supplyAssembler(ProcessMachineBlockEntity machine) {
-        machine.setItem(0, new ItemStack(Items.QUARTZ));
-        machine.setItem(1, new ItemStack(Items.COPPER_INGOT, 2));
-        machine.setItem(2, new ItemStack(Items.IRON_INGOT, 4));
+        ProcessRecipe recipe = ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/chemical_washer").orElseThrow();
+        for (int slot = 0; slot < recipe.itemInputs().size(); slot++) {
+            IngredientSpec input = recipe.itemInputs().get(slot);
+            machine.setItem(slot, ProcessLookup.resolve(
+                    new OutputSpec(input.kind(), input.id(), input.count(), false)).orElseThrow());
+        }
     }
 
     private static SelectionResult change(ProcessMachineBlockEntity machine, String id) throws Exception {

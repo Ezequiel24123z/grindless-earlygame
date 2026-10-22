@@ -21,7 +21,8 @@ entries below reference those records by id.
   menu/opening/catalogue validation. A native searchable output picker
   extends only the Assembler; AUTO, other layouts, stores and rollback stay
   intact. Existing contract/native-fixture cases are authored, including the
-  strictly coupled work-entry AST profile and refusal mutations; local
+  strictly coupled work-entry AST profile and refusal mutations. Collider
+  fixtures derive the actual equal bills rather than fixing their group count; local
   non-JVM evidence cannot qualify Java, native behavior, appearance, the
   player's world or whole T1. No recipes, bills, dependencies or outputs change.
 - **Choose explicit Assembler targets instead of repricing colliding recipes.**

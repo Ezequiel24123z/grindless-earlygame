@@ -345,8 +345,9 @@ public final class ControlMatrixInputChecks {
                     selected.itemOutputs().get(0).id()));
             check(machine.getItem(4).is(expected) && machine.getItem(4).getCount() == 1,
                     "The real BE manufactures exactly the selected registered output, not dry-last");
-            check(machine.getItem(0).isEmpty() && machine.getItem(1).isEmpty() && machine.getItem(2).isEmpty(),
-                    "The real completion transaction consumes exactly casing1, motor2 and plates4");
+            for (int slot = 0; slot < selected.itemInputs().size(); slot++) {
+                check(machine.getItem(slot).isEmpty(), "The real completion consumes declared input group " + slot);
+            }
             check(machine.inspectionProgress() == 0.0, "An exact full cycle has no duplicated work");
             machine.setItem(4, ItemStack.EMPTY);
         }

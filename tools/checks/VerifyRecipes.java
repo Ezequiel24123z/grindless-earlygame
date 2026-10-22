@@ -147,9 +147,11 @@ public final class VerifyRecipes {
         yes("real Washer, Reactor and Cell are distinct IDs with the same unchanged bill",
                 washer.inputs().equals(reactor.inputs()) && washer.inputs().equals(cell.inputs())
                         && !washer.outputs().equals(reactor.outputs()) && !washer.outputs().equals(cell.outputs()));
-        yes("the same bill remains casing1, motor2 and plates4",
-                washer.itemInputs().equals(List.of(IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
-                        IngredientSpec.item(FabricationLogic.MOTOR, 2), IngredientSpec.tag("forge:plates/iron", 4))));
+        yes("the same bill retains its casing1, motor2 and plates4 prefix without fixing its total group count",
+                washer.itemInputs().size() >= 3
+                        && washer.itemInputs().subList(0, 3).equals(List.of(
+                                IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                                IngredientSpec.item(FabricationLogic.MOTOR, 2), IngredientSpec.tag("forge:plates/iron", 4))));
         no("exact ID lookup never borrows another family",
                 ProcessLookup.byId(MachineFamily.CHEMICAL_WASHER, washer.id()).isPresent());
         no("unknown saved IDs do not acquire another current identity",
@@ -157,8 +159,17 @@ public final class VerifyRecipes {
 
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
-        List<IngredientSpec> carriers = List.of(IngredientSpec.item("minecraft:quartz", 1),
-                IngredientSpec.item("minecraft:copper_ingot", 2), IngredientSpec.item("minecraft:iron_ingot", 4));
+        List<String> carrierIds = List.of("minecraft:quartz", "minecraft:copper_ingot",
+                "minecraft:iron_ingot", "minecraft:redstone");
+        List<Item> carrierItems = List.of(Items.QUARTZ, Items.COPPER_INGOT, Items.IRON_INGOT, Items.REDSTONE);
+        List<IngredientSpec> carriers = new ArrayList<>();
+        ItemStack[] inputs = new ItemStack[MachineMenuKind.ASSEMBLER.inputs()];
+        java.util.Arrays.fill(inputs, ItemStack.EMPTY);
+        for (int slot = 0; slot < washer.itemInputs().size(); slot++) {
+            int count = washer.itemInputs().get(slot).count();
+            carriers.add(IngredientSpec.item(carrierIds.get(slot), count));
+            inputs[slot] = new ItemStack(carrierItems.get(slot), count);
+        }
         ProcessRecipe boundWasher = new ProcessRecipe(washer.id(), washer.family(), carriers, washer.outputs(),
                 washer.temperatureC(), washer.atmosphere(), washer.durationTicks(), washer.fuPerTick());
         ProcessRecipe boundReactor = new ProcessRecipe(reactor.id(), reactor.family(), carriers, reactor.outputs(),
@@ -170,8 +181,6 @@ public final class VerifyRecipes {
         wetInputs.add(IngredientSpec.fluid("grindless:oxygen", 100));
         ProcessRecipe wet = new ProcessRecipe("check/selected_wet", MachineFamily.ASSEMBLER, wetInputs,
                 washer.outputs(), Double.NaN, null, 20, 32);
-        ItemStack[] inputs = {new ItemStack(Items.QUARTZ), new ItemStack(Items.COPPER_INGOT, 2),
-                new ItemStack(Items.IRON_INGOT, 4), ItemStack.EMPTY};
         Field graph = ProcessLookup.class.getDeclaredField("GRAPH");
         graph.setAccessible(true);
         Object original = graph.get(null);
@@ -192,20 +201,29 @@ public final class VerifyRecipes {
             no("an explicit foreign target never falls back to a matching dry row",
                     ProcessLookup.findSelected(MachineFamily.ASSEMBLER, foreign.id(), inputs,
                             FluidState.EMPTY, List.of()).isPresent());
-            inputs[2].setCount(3);
+            inputs[2].setCount(carriers.get(2).count() - 1);
             no("the explicit target still needs the entire real bill's plate count (carriers)",
                     ProcessLookup.findSelected(MachineFamily.ASSEMBLER, boundWasher.id(), inputs,
                             FluidState.EMPTY, List.of()).isPresent());
-            inputs[2] = new ItemStack(Items.IRON_INGOT, 4);
-            inputs[1] = new ItemStack(Items.PAPER, 2);
+            inputs[2] = new ItemStack(Items.IRON_INGOT, carriers.get(2).count());
+            inputs[1] = new ItemStack(Items.PAPER, carriers.get(1).count());
             no("equal counts of the wrong physical item cannot start the selected target",
                     ProcessLookup.findSelected(MachineFamily.ASSEMBLER, boundWasher.id(), inputs,
                             FluidState.EMPTY, List.of()).isPresent());
-            inputs[1] = new ItemStack(Items.COPPER_INGOT, 2);
-            inputs[3] = new ItemStack(Items.REDSTONE, 64);
-            yes("explicit targeting preserves the incumbent surplus-slot matching contract",
-                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, boundWasher.id(), inputs,
-                            FluidState.EMPTY, List.of()).isPresent());
+            inputs[1] = new ItemStack(Items.COPPER_INGOT, carriers.get(1).count());
+            if (carriers.size() < inputs.length) {
+                inputs[carriers.size()] = new ItemStack(Items.REDSTONE, 64);
+                yes("explicit targeting preserves actual surplus-slot matching when the declared bill leaves a slot",
+                        ProcessLookup.findSelected(MachineFamily.ASSEMBLER, boundWasher.id(), inputs,
+                                FluidState.EMPTY, List.of()).isPresent());
+            } else {
+                ItemStack required = inputs[inputs.length - 1];
+                inputs[inputs.length - 1] = ItemStack.EMPTY;
+                no("a full-width selected bill cannot omit its last real declared group",
+                        ProcessLookup.findSelected(MachineFamily.ASSEMBLER, boundWasher.id(), inputs,
+                                FluidState.EMPTY, List.of()).isPresent());
+                inputs[inputs.length - 1] = required;
+            }
             no("a selected wet mechanism requires primary fluid",
                     ProcessLookup.findSelected(MachineFamily.ASSEMBLER, wet.id(), inputs,
                             FluidState.EMPTY, List.of(FluidState.of("grindless:oxygen", 100))).isPresent());

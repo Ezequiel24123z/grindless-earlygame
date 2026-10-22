@@ -292,7 +292,10 @@ the 176x204 body and physical slots. Malformed work is retained fail-closed;
 packet count admission is bounded by the actual payload, not a paid-job cap
 that could strand fractional work alongside unavailable old recipe IDs.
 Existing logic/lookup/persistence/UI checks and the existing Matrix fixture
-own the changed proof. The coupled Registry work-entry contract checks the
+own the changed proof. Same-bill fixtures derive group counts/quantities from
+the actual equal ProcessRecipe bills instead of assuming three groups forever;
+they do not change production data or certify a newly proposed operand.
+The coupled Registry work-entry contract checks the
 entire AST-normalized reentry/finally wrapper and physical-diagnosis prefix;
 its negative mutations must still reject bypassed guards and premature work.
 Java/native/rendered/world qualification is not a source or non-JVM-static result.
