@@ -37,6 +37,10 @@ entries below reference those records by id.
   owner-save migration, player update or publication is included. Scoped
   whitespace/lexical/source/carrier guards and 963 documentation links pass;
   Java compilation, contract execution and native qualification are not run.
+  Preserve source checkpoint041022f7 and its original attribution-format
+  failure: both coauthor texts exist, but a blank separator makes Git parse
+  only the final trailer. A normal documentation-only follow-up records both
+  attributions contiguously; no amend, rewritten history or changed Java blob.
 - **Correct the manufacturing objective to manual final normal machines.**
   The owner explicitly rejects universal factory self-replication. ADR-0188
   supersedes automatic complete-normal-machine fabrication, not automated
