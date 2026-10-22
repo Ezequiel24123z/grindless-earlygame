@@ -323,9 +323,42 @@ The next sole-owner window must preserve the old G3 native world and isolate
 its new native root; a real file-plan target must be outside every checkout
 because canonical Prism rejects overlapping repository/instance paths.
 
-| Category | Current G3 checkpoint, not a completed wave |
+**NEW G4 GO, not a result:** only604195bd owns
+corrected-boundary-qualification-20261022 on exact published
+271f3862182ac522ecf7cac3fde000dd1f099cce. Use the NEW explicitly inventoried
+corrected-build root; do not retarget/reset the returned G3/A3 root or its
+initial-reset-sensitive diagnostic. All new admission/Sync/execution observations
+remain pending. Parent/other workers have no PC/cache access under this grant.
+
+Close only changed properties: necessary classes, one existing corrected
+matrix-lifecycle, the new managed comparator negatives through the existing
+selector, and the existing asset JDK fixture. Reuse exact G3 model/asset/data
+and unchanged CI proofs; no normal generator/writer, paid-FTB, Blueprint or
+per-recipe native replay. Genuine old-reference publication uses direct CLI8
+and the untouched5f911a77 compiler receipt/output, not another old GradleBuild.
+
+Also authorize the remaining actual plan-consumption outcome: one verified
+current package, canonical Prepare/Deploy to a new owned stopped fictional
+instance under a separate validation instances root OUTSIDE all repositories,
+fresh current-source planner receipt/plan, apply and identical-plan Unchanged.
+One normal fresh current-source compile enclave needed by that planner is
+distinct from the forbidden legacy compiler replay. Require cached declared
+dependencies/zero missing at Prepare; no new dependency/provider install.
+Read only compatible template component metadata/pinned JARs, never copy the
+player's world/options/progress. Keep real installed protected files/runtime
+unchanged across definition apply/no-op. No server/client or synthetic paid-
+history fixture proves this file wiring. No real PrismRoot/player write.
+Do not inspect/print client command lines or stop/restart the player; defer only
+an unsafe/resource-blocked action and continue independent admitted stages.
+
+Freeze the source/integration alias; preserve exact failures, settled raw/JAR/
+reference/plan/custody evidence and explicit clean/ownedJava0/locksfalse return.
+Ordinary invoker/observer repairs stay in the assigned lane without success
+replays; app-source failures return exact evidence before any new source grant.
+
+| Category | Current qualification state: G3 closed, G4 assigned |
 | --- | --- |
-| COMPLETED | Actual compile/javac/managed44, normal writers/CheckOnly/canonical passes; normal A3 integration; parent-verified205-file custody/2573 inputs/4 images/5 Git blobs; exact EOL recovery and explicit safe leaseback; source957/5aa repairs |
+| COMPLETED | Actual compile/javac/managed44, normal writers/CheckOnly/canonical passes; normal A3 integration; parent-verified205-file custody/2573 inputs/4 images/5 Git blobs; exact EOL recovery and explicit safe leaseback; source957/5aa/555 repairs |
 | BLOCKED | Corrected native/legacy properties remain unproved; all source repairs are integrated, actual post-fix proofs remain separate from completed writer stages |
 | NOT EXECUTED | Corrected native/publisher and asset JDK fixture; real managed-plan consumption, new package/client/player update, whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | Existing GUI/JEI/reward/appearance and longitudinal-campaign gates remain open |

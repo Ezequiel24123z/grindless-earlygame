@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Assign corrected-boundary qualification on a new isolated source surface.**
+  Only604195bd receives fixed271f386 G4 for the corrected Matrix interaction,
+  new managed comparator Java and existing asset JDK fixture. Reconsume original
+  legacy5f receipt through CLI8, never replay its successful compilers. Separately
+  authorize one current package and canonical owned/stopped fictional target
+  outside every checkout, fresh actual plan and identical-plan no-op. Preserve
+  G3/A3/M diagnostics, player state and unchanged model/CI proofs. Fresh guards/
+  Sync/results remain pending; no real Prism/player deployment or tier pass.
 - **Integrate the sealed Architectury self-name comparator without compiler replay.**
   Normal555dbe9 changes only the publisher and existing Java checks under
   ADR-0181. Exact payload comparison remains first; a single fixed-template

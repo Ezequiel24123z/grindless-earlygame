@@ -416,6 +416,19 @@ Only the existing CLI8 on original5f911a77 may close the actual legacy export
 without repeating successful compilers. Native957, asset5aa and this source
 repair are now composed; actual corrected native/JDK/export/plan remain pending.
 
+**New G4 assignment only:** sole604195bd/fixed271f386, new isolated corrected
+root and explicit private inventory. Required actual boundaries are the one
+corrected Matrix mechanism, new managed comparator Java and existing asset JDK
+fixture; preserve/reuse G3 unchanged inputs/contracts/models. Old legacy CLI8
+must reconsume authentic5f receipt, not repeat its compilers. New scope includes
+a current verified package and real canonical Prepare/Deploy/planner/apply/no-op
+in an explicitly fictional owned stopped target outside all repository roots,
+with pinned cached dependencies/read-only template metadata/JARs only.
+The existing planner's one fresh CURRENT-source compilation is separately
+authorized to bind that package. No player data, real Prism writes, server/
+client/reward fixture, acceptance or new budget. Fresh guards/Sync/results are
+unobserved; do not turn this grant or G3 source successes into a new proof.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the
