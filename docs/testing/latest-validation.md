@@ -1145,6 +1145,56 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
+**G13 returned with343-file custody; independent QA546 pending.** Manifest
+a97bbbda8233b27a6ca4e1384847cec55f2954d107aa16ff268fd1d2e87726e3
+binds reported PC/SCP/local parity,2595 unchanged other inputs, actual
+43 sources/98 images per write/check with196 copied images and three
+independent checks preserving all four payload bytes/hashes/mtimes.
+All four normal payloads are complete but remain unaccepted because of
+the later invariant failure; DIRTY-PARTIAL does not mean truncated files.
+
+Fresh final readonly22:45:59.6833885Z records exact489, only four allowed
+mutations, owned/allJava0/workcachelocksfalse and guard removal/absence.
+Final stdoutSHA0458acb45906dba990d2daaf2c72c84cede09c1f3e2927dc7b65f94fbfe67be0
+and nonempty CLIXML progress-stderrad84dd75 have named local originals.
+GuardSHA b76afae33587d98eedf78e0279b18b3d03277628ef01b52fc902e775f4110cd9
+is preserved. Exit0 is only tool199 history, not a separate final receipt.
+The lease is explicitly returned; no more producer/PC operation is implied.
+
+Reported regression721/0 includes R35=51/0. T1write/check1650/0 yields
+admitted/completedtrue,564 batches, operations1174 to2096, manual178 to178
+under budget665/margin487. That writer's predecessor separately contains
+installed/free1 clay_mixer, hand_pump and quern; it is not a dump of process15.
+The saved T0 report has gate.pass=true but no serialized witness. Preserve
+this distinction while C diagnoses the all-installed/free-zero predicate.
+G13's single CI decision is in-progress plus cancelled, zero success/reuse.
+No postT1/A10 or source-independent global pass follows.
+
+**G13 new postcanonical boundary, not a repeat of the G12 failure.**
+Exact489 reports common/tool/audit-R35 runner0, all three normal writers and
+three independent CheckOnly0, live Press/F1/F2 pureverify0 and actual43/98
+source/image write/check emission/copy/hash agreement. PostEconomy14=0.
+PostT0Canonical15 exits1/wrapper1 with2825 passed/one failed:
+`installed construction is not also free stock: expectedtrue gotfalse`;
+reported exception stack is VerifySustainabilityT0.main270.
+No stale-parity failure is reported. No stage16/postT1 or A10 executes.
+
+Original stdoutSHA
+93f4d7cb426effaa804863f0a2281789e379e36a5575709f85a0cfd6ce32c498
+and stderrSHAc667fed6461a34d97fc5644e665d3dba0c94b140724db91076274694302b36ca
+are preserved with the receipt. Already-emitted T0 JSON
+a26172239f6a1c872e66f4c59ee3d6dfe9eb8c87afd37eaf3bd6b66b55c67b04
+and Markdown6f9d166d3df290eed9c4f446d4f452b3fa8ca8d9c36667280e41d6b81a5a5403
+are recovered without a new producer. The first assertion identifies no
+resource/quantity; only real custody can distinguish double counting from
+a separately funded same-type spare. No diagnosis or test waiver is inferred.
+
+C1c9 owns that source-only trace. The isolated root retains all four normal
+outputs DIRTY, with no restoration or A10. Custody/return is pending.
+Successful producer/provenance evidence remains bound to489; a future
+oracle-only correction may reuse it after dependency equivalence is proved,
+not silently retarget it or rerun producers by habit.
+
 **New G13 model-only assignment.** Exact merged source
 489bf01fb382a907c184f6172e6c1027dcf248e9/tree8f0ee498c3e5a9ec5c045535d78a368dc7443951
 normally preserves all four reviewed f30 code/check blobs. Sole604 receives

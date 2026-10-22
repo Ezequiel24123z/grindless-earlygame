@@ -15,6 +15,20 @@ entries below reference those records by id.
 
 ### Added
 
+- **Close G13 with four complete writer outputs and one unresolved invariant.**
+  Preserve reported343-file/source/image/check custody and the actual finite
+  result without equating it to full qualification. Fresh22:45:59Z returns
+  the lease at exact489/DIRTY4/Java0/locksfalse/own guard absent. Distinguish
+  the separate writer predecessor from the T0 report that lacks a witness
+  dump. Source-only oracle review and local G14 preparation continue; no
+  automatic writer replay, restoration, A10 or player update is authorized.
+- **Preserve G13's successful finite proof and distinct post-T0 failure.**
+  Exact489 reports live Press/F1/F2, normal writers/independent checks and
+  actual43/98 provenance passing, then postT0 fails one installed/free-stock
+  invariant after2825 successes. Preserve all four outputs and original
+  state/receipts; route the precise source-only diagnosis without assuming
+  double spending, waiving the check, restoring stock or replaying producers.
+  PostT1/A10 remain unexecuted and the isolated lease closes honestly dirty.
 - **Grant only changed continuation/model proofs to G13.**
   Sole604/exact489 uses a new unobserved root after fresh guards/Sync.
   Qualify paid native funding/refill and physical Press/F1/F2 through

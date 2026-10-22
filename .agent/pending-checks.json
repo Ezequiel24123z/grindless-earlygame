@@ -20,7 +20,7 @@
   },
   "normal_machine_manufacturing": {
     "policy": "ADR-0188",
-    "status": "G11native_verified_G12finiteFAIL_closed114verified_f30_repair_composed489_G13MODELONLY_granted_NO_new_model_orA10",
+    "status": "G13_livefinite_models43_98_pass_postT0invariantFAIL_closed343QA_pending_Csource_review_NO_PClease_orA10",
     "normal_final_manual_only_operating_processes_automatable": true,
     "other_product_modes": ["MANUAL_ONLY", "MACHINE_ONLY", "BOTH"],
     "infrastructure_manual_and_machine_methods_per_product": true,
@@ -132,8 +132,8 @@
   },
   "current_PC_execution": {
     "assignment": "continued-funding-qualification-g13-20261022",
-    "active": true,
-    "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
+    "active": false,
+    "owner_session": null,
     "source": "489bf01fb382a907c184f6172e6c1027dcf248e9",
     "writer_invocation_source": "489bf01fb382a907c184f6172e6c1027dcf248e9",
     "applicable_source_runtime": null,
@@ -147,11 +147,17 @@
     "reuse": "unchanged_G11native_f1b9_G12Factory_Guidancefixture_FTB_ABI_Blueprint_assets_NO_replay",
     "failure_policy": "preserve_actualpartial_outputs_DIRTYexactsubset_NO_restore_reconstruct_checkout_more_producers_stock_budget_gate_waiver_or_live_hotfix",
     "allowed_data_derivation": "NORMALA10_onlyfullpasses_exactparent489_four_existing_outputsubset_frozenothers_Java0locksfalse_contiguoustrailers_cleanbundle_NOPUSH_RUNTIMEafterdata",
-    "result": "GRANTED_NOT_OBSERVED_NO_G13_execution_pass_or_A10",
-    "returned": false,
-    "returned_utc": null,
-    "return_state": "NOT_OBSERVED_G13",
-    "new_explicit_guarded_window_required": false
+    "result": "G13_CLOSED_livefinite_3writers_3checks43_98_reportedPASS_postEcon0_postT0invariantFAIL2825_1_DIRTY4_RETURNED343_QApending_NO_postT1_orA10",
+    "custody_QA_status": "PENDING546093c5_343files_actualprovenance_normaloutputs_failure_finalclosure",
+    "custody_manifest_sha256": "a97bbbda8233b27a6ca4e1384847cec55f2954d107aa16ff268fd1d2e87726e3",
+    "final_readonly_sha256": "0458acb45906dba990d2daaf2c72c84cede09c1f3e2927dc7b65f94fbfe67be0",
+    "first_failure_sha256": "93f4d7cb426effaa804863f0a2281789e379e36a5575709f85a0cfd6ce32c498",
+    "source_repair_owner": "1c9a6363-a0ee-49cd-ba2b-ff5ea30661b7",
+    "invariant_review": "compare_real_installed_free_and_funded_custody_before_concluding_doublecount_or_false_oracle_NO_stock_reset_or_weakened_test",
+    "returned": true,
+    "returned_utc": "2026-10-22T22:45:59.6833885Z",
+    "return_state": "REPORTED_aftercustody_HEAD489_DIRTYexact4_Java0_workcachelocksfalse_ownGuardremoved_absent_explicitleaseback",
+    "new_explicit_guarded_window_required": true
   },
   "closed_G12_execution": {
     "assignment": "manual-model-qualification-g12-20261022",
@@ -280,7 +286,7 @@
   },
   "active_development_wave": {
     "base": "ad5b50dd509b0261818101ff08e786750826161a",
-    "status": "G11native_G12closure_verified_f30_repair_composed489_G13MODELONLY_sole604_granted_NO_result",
+    "status": "G13_livefinite_writer_checks_pass_POSTT0invariantFAIL_returned_DIRTY4_343QA_pending_Csource_review_NO_PClease",
     "earlier_source_fields": "historical_initial_wave_snapshots_not_current_failures_or_execution_grants_current_PC_execution_and_finite_T1_custody_continuation_govern",
     "owners": {
       "managed_FTB_definitions": "cb273782-4065-44e2-90a3-9c0c036367ce",
@@ -311,7 +317,7 @@
     "asset_EOL_checkpoint": "5aa56be_shared_Java_writer_twin_callers_actualG4_existingJDKfixture34_total_22new_EOL_pass_parent_raw_verified_no_normal_generator_replay",
     "normal_G3_outputs": "A3e1efe470_normal5outputs_integrated_parent_verified205files_2573inputs_4images_bothT1receipts_5Gitblobs_equal_writer_bytes_bundle3a9ac835_manifestde198742_normalwrite_check_Guidance74_5323_Economy416_17_T1794_canonical417_2908_0_797_G3_returned08_34_07Z",
     "qualification_preparer": "604195bd-6826-4299-89af-1dcf39545263_last_G10_executor_returned17_04_48Z_no_current_PC_grant",
-    "PC_owner": "604195bd-6826-4299-89af-1dcf39545263",
+    "PC_owner": null,
     "PC_source": "489bf01fb382a907c184f6172e6c1027dcf248e9",
     "PC_source_worker_access": false,
     "T0_world_client_deploy_or_acceptance": false,

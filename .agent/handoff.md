@@ -4,6 +4,56 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**G13 lease is explicitly returned; all four completed writer outputs remain
+DIRTY and unaccepted because postT0 failed.** Fresh postcustody readonly
+22:45:59.6833885Z records exact489/only4 allowed mutations/Java0/locksfalse/
+ownGuardb76afae3 removed and absent. Capsule343/manifesta97bbbda and2595
+unchanged non-output inputs are reported; independent QA546 is running.
+Final stdout0458acb4 and nonempty progress-stderrad84dd75 have explicit local
+pointers. Final exit0 is tool199 history, not a separate invented receipt.
+
+Actual reported regression721/0 includes R35=51/0. T1 write/check1650/0
+produces a completed564-batch witness, operations1174 to2096, spent manual
+actions178 unchanged under budget665/margin487. Writer10's separate
+predecessor has installed and free1 for clay_mixer/hand_pump/quern.
+This is NOT the missing witness dump from failing postT0 process15.
+The latter's saved audit report contains gate.pass=true but no witness_state.
+C has exact closed report/state paths to distinguish a funded spare from
+double counting without rerunning a producer or waiving conservation.
+
+No postT1/A10 exists. G14 preparation is LOCAL ONLY on a new candidate root,
+without a source/grant/lease. Do not automatically repeat successful writers:
+first review the actual source delta and prove any proposed reuse.
+
+| Disclosure | Current G13 closure |
+| --- | --- |
+| COMPLETED | Live finite Press/F1/F2, three writers/checks and43/98 provenance reported; original success/failure custody preserved and lease returned |
+| BLOCKED | PostT0 installed/free-stock invariant needs an exact-state, source-backed correction |
+| NOT EXECUTED | PostT1, A10, any new grant or player update |
+| NEEDS HUMAN VALIDATION | Client/Survival/save/campaign acceptance remains separate |
+| NEEDS MY DECISION | None from the owner; source correction and proof-reuse selection remain delegated/coordinator work |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | None new |
+| DEPLOYED STATE | Player instance/world unchanged; isolated489 root retains four complete normal outputs DIRTY |
+
+**G13 passes the live finite continuation, but a later T0 invariant blocks
+completion.** On exact489, executor reports common/tools/R35runner0,
+three normal writers/three independent CheckOnly0, actual Press/F1/F2
+pureverify0 and actual43/98 write/check emissions/copies/hash equality.
+PostEconomy14 passes. PostT0Canonical15 has2825 passes/one failure:
+`installed construction is not also free stock: expectedtrue gotfalse`.
+This is not stale equality or the previous G12 failure. First output names
+no resource/amount; do not infer double spending or waive the invariant.
+
+Source owner C1c9 investigates the exact predicate and already-emitted T0
+state from489, source-only. StdoutSHA93f4d7cb and T0 JSONa2617223/MD6f9d166d
+remain original evidence. Preserve all four actual normal outputs and their
+successful write/check/provenance receipts. No stage16/postT1, A10, restore,
+new JVM or source hotfix: only custody/fresh guard/Java/locks/return remains.
+The lease was subsequently returned as recorded above. If a strict oracle-only fix is sufficient,
+select next proof by actual dependency equivalence rather than repeating
+these successful producers; no such reuse or new GO is authorized yet.
+
 **G13 MODEL-ONLY GO, not a result.** Sole604/exact source
 489bf01fb382a907c184f6172e6c1027dcf248e9, inventory59274f4a/preparation795d130e.
 Use a NEW previously unobserved custody-carry root after fresh admission and
