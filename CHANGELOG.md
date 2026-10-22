@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Bound the next gas-line candidate by its actual source energy ledger.**
+  Electrolysis's6400FU batch yields2000mB hydrogen; the existing400ticks per
+  1000mB/F1 burn projects25600FU before routing overhead. Preserve this
+  source-level concern and the old hydrogen-like-CO rule, not a claimed native
+  loop or new balance decision. Do not canonize a gas/energy extension merely
+  from registered recipes; no recipe, mandatory biomass or G9 source changes.
 - **Assign the combined selector/controller mechanism qualification on repaired source.**
   Sole604 receives G9/exactbb5/new full root after verified G8 return.
   Confirm the tool compile repair and changed Java/AST/recipe/view/persistence

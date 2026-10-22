@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 98,
+  "plan_revision": 99,
   "updated": "2026-10-22",
   "phase": "FTB51_engineering_and_T1_recipe_reachability_with_default_identity_correction",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -79,6 +79,13 @@
     "native_limit": "existing_menu_player_carrier_native_state_and_codecs_NOT_rendered_GUI_or_actual_client_wireDelivery_no_ownerworld_or_wholeT1_claim",
     "current_plan_compilation": "None_G9_no_FTBcompiler_plan_package_Prism_target_Inspect_or_apply",
     "closure_required": "actual_newjavac_Source0abconfirmation_selectedcontracts_or_exactCI_original5_ONEcanonical_native_newcases_aggregatePASS_and_exitbasis_JARinventory_snapshotted_before_moreGradle_NORMAL4payloads_CheckOnlycanonical_and_observedprovenance_frozeninputmanifest_actualA9bundle_ifchanged_ownGuardhash_removed_absent_Java0locksfalse_explicitreturn_NOtarget"
+  },
+  "gas_line_candidate_boundary": {
+    "status": "source_energy_concern_not_accepted_expansion_or_native_loop",
+    "source": "ProcessLogic_electrolysis200ticks32FU_2000mBH2_FluidLogic_burn400ticks_per1000mB_ThermalGasBuffer_ignites1000mB_F1nom32",
+    "nominal_FU": "6400input_25600output_before_routing_not_executed_balance",
+    "next": "explicit_source_balance_and_route_scope_before_any_gas_lesson_or_canonical_energy_claim",
+    "G9_or_mandatory_biomass_change_authorized": false
   },
   "baseline_family_control_gap": {
     "status": "sourceccfe_complete_reviewed_fourdata_blobs_normalcomposition_thischeckpoint_combined_JVM_native_pending",

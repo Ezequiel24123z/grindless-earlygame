@@ -182,6 +182,22 @@ this inventory into a manufacturing/runtime pass.
 The [external reference record](../design/t1-external-references.md) supplies
 proven patterns and their limits, not another catalogue or automatic gameplay approval.
 
+### Gas-line candidate energy boundary
+
+Do not promote the existing gas prototype to a new accepted T1 energy loop
+merely because its constructors and selector now exist. Source ProcessLogic
+declares water electrolysis as200ticks at32FU/t for2000mB retained hydrogen,
+or6400FU per batch. FluidLogic.burnTicks currently returns400ticks for each
+1000mB hydrogen, and ThermalGeneratorBlockEntity.GasBuffer.ignite consumes that
+1000mB batch while the F1 generator produces32FU/t: the two hydrogen batches
+have nominal25600FU output before routing overhead. The old ADR-0077/process
+description explicitly treats hydrogen like CO; it is not a newly balanced
+energy-storage contract. This is a source-level positive-energy concern,
+not an executed closed-loop or full routing proof. Select no gas lesson,
+canonical fuel route or new number from this inventory alone; resolve the
+actual balance/route scope explicitly before accepting that expansion.
+Current mandatory biomass power and frozen G9 are unchanged.
+
 ## Progression and construction boundaries
 
 The first five F1 matrices serve power, milling, heat, forming and assembly.
