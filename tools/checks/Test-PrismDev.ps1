@@ -5,7 +5,7 @@ Git write, Gradle cache, account or save is accessed. Only OS/Git/download/trans
 boundaries are substituted in-process; the production CLI exposes no bypass flags.
 #>
 [CmdletBinding()]
-param([string]$RepositoryRoot)
+param([string]$RepositoryRoot, [ValidateSet('All', 'QuestDefinitions')][string]$Suite = 'All')
 
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version 2.0
@@ -239,6 +239,318 @@ function Invoke-Fixture($Fixture, [string]$Action = 'Deploy', [hashtable]$Change
     return Invoke-PrismDev @arguments
 }
 
+function New-FixtureQuestPlan($Fixture, [switch]$Managed, [switch]$TwoChanged) {
+    # Synthetic chapter bytes exercise the production filesystem transaction, not native loading.
+    $chapters = Join-Path $Fixture.Target 'minecraft/config/ftbquests/quests/chapters'
+    $files = @()
+    foreach ($tier in @(0, 1)) {
+        $filename = "grindless_t$tier.snbt"
+        $oldCount = @(32, 14)[$tier]
+        $newCount = @(32, 18)[$tier]
+        $versions = @()
+        foreach ($count in @($oldCount, $newCount)) {
+            $quests = @(0..($count - 1) | ForEach-Object {
+                $id = '{0:X16}' -f (100 * ($tier + 1) + $_)
+                $task = '{0:X16}' -f (1000 * ($tier + 1) + $_)
+                '{id:"' + $id + '",tasks:[{id:"' + $task + '",type:"ftbquests:checkmark"}],rewards:[]}'
+            })
+            $versions += ,([Text.Encoding]::UTF8.GetBytes(('{id:"' + ('{0:X16}' -f ($tier + 1)) +
+                '",quests:[' + ($quests -join ',') + "]}`n")))
+        }
+        if ($TwoChanged -and $tier -eq 0) {
+            $versions[1] = [Text.Encoding]::UTF8.GetBytes(([Text.Encoding]::UTF8.GetString($versions[1]) + "`n"))
+        }
+        $path = Join-Path $chapters $filename
+        [IO.Directory]::CreateDirectory($chapters) | Out-Null
+        [IO.File]::WriteAllBytes($path, $versions[0])
+        $files += [ordered]@{ fileName = $filename; beforeSha256 = (Get-PrismBytesHash $versions[0])
+            beforeBytes = $versions[0].Length; afterSha256 = (Get-PrismBytesHash $versions[1])
+            afterBytes = $versions[1].Length; contentsBase64 = [Convert]::ToBase64String($versions[1]) }
+    }
+    Write-FixtureText (Join-Path $chapters 'foreign.snbt') '{id:"0000000000007777",quests:[]}'
+    foreach ($relative in @('minecraft/saves/reference/ftbquests/team.snbt',
+            'minecraft/saves/reference/data/grindless_quests.dat', 'minecraft/config/ftbquests/quests/data.snbt',
+            'minecraft/options.txt')) {
+        Write-FixtureText (Join-Path $Fixture.Target $relative) ('UNCHANGED SYNTHETIC SENTINEL ' + $relative)
+    }
+    $state = Get-PrismOwnedState $Fixture.Target $Fixture.InstanceId
+    $receipt = [ordered]@{ schemaVersion = 1; tool = 'grindless-ftb-definitions'
+        instanceId = $Fixture.InstanceId; ownershipId = $state.Owner.ownershipId
+        sourceRevision = $Fixture.Source; runtimeSourceRevision = $Fixture.Source
+        grindlessSha256 = $state.Receipt.grindless.sha256; questCount = 50
+        files = @($files | ForEach-Object {
+            [ordered]@{ fileName = $_.fileName; bytes = $_.afterBytes; sha256 = $_.afterSha256 }
+        }) }
+    $previousReceipt = $null
+    if ($Managed) {
+        $oldReceipt = (ConvertTo-Json $receipt -Depth 30) | ConvertFrom-Json
+        $oldReceipt.questCount = 46
+        foreach ($file in $oldReceipt.files) {
+            $oldFile = @($files | Where-Object { $_.fileName -ceq $file.fileName })[0]
+            $file.bytes = $oldFile.beforeBytes; $file.sha256 = $oldFile.beforeSha256
+        }
+        $previousReceipt = Join-Path $Fixture.Target 'minecraft/config/ftbquests/.grindless-definitions.json'
+        Write-FixtureJson $previousReceipt $oldReceipt
+    }
+    $plan = [ordered]@{ schemaVersion = 1; tool = 'grindless-ftb-definition-update'
+        sourceRevision = $Fixture.Source; runtimeSourceRevision = $Fixture.Source
+        grindlessSha256 = $state.Receipt.grindless.sha256
+        instanceId = $Fixture.InstanceId; ownershipId = $state.Owner.ownershipId; target = $Fixture.Target
+        ownerSha256 = (Get-PrismHash (Join-Path $Fixture.Target $script:PrismDevOwnerFile))
+        deploymentSha256 = (Get-PrismHash (Join-Path $Fixture.Target $script:PrismDevReceiptFile))
+        previousReceiptSha256 = $(if ($previousReceipt) { Get-PrismHash $previousReceipt } else { $null })
+        previousDefinitionsSha256 = ('a' * 64)
+        chapters = @(Get-ChildItem -LiteralPath $chapters -File | Sort-Object Name | ForEach-Object {
+            [ordered]@{ fileName = $_.Name; bytes = $_.Length; sha256 = (Get-PrismHash $_.FullName) }
+        })
+        files = $files; receipt = $receipt }
+    $path = Join-Path $Fixture.Home 'native-preflight-plan.json'
+    Write-FixtureJson $path $plan
+    return [pscustomobject]@{ Path = $path; Sha256 = (Get-PrismHash $path); Plan = $plan; Chapters = $chapters }
+}
+
+function Invoke-FixtureQuestUpdate($Fixture, $Plan, [string]$Action = 'UpdateQuestDefinitions') {
+    return Invoke-Fixture $Fixture $Action @{ QuestUpdatePlan = $Plan.Path; QuestUpdateSha256 = $Plan.Sha256 }
+}
+
+function Save-FixtureQuestPlan($Plan) {
+    Write-FixtureJson $Plan.Path $Plan.Plan
+    $Plan.Sha256 = Get-PrismHash $Plan.Path
+}
+
+function Test-PrismQuestDefinitionTransactions {
+    $previousFixture = $script:CurrentFixture
+    try {
+        $f = New-Fixture
+        $null = Invoke-Fixture $f
+        $plan = New-FixtureQuestPlan $f -Managed
+        $world = Get-FixtureSnapshot (Join-Path $f.Target 'minecraft/saves')
+        $data = Get-PrismHash (Join-Path $f.Target 'minecraft/config/ftbquests/quests/data.snbt')
+        $options = Get-PrismHash (Join-Path $f.Target 'minecraft/options.txt')
+        $owner = Get-PrismHash (Join-Path $f.Target $script:PrismDevOwnerFile)
+        $deployment = Get-PrismHash (Join-Path $f.Target $script:PrismDevReceiptFile)
+        $oldReceipt = $plan.Plan.previousReceiptSha256
+        $result = Invoke-FixtureQuestUpdate $f $plan
+        Assert-Test ($result.Outcome -ceq 'DefinitionsUpdated') 'Managed46-to50 transaction succeeds'
+        Assert-Test ((Get-PrismHash (Join-Path $f.Target ($result.Backup + '/plan.json'))) -ceq $plan.Sha256) 'Original verified plan survives outside disposable build output'
+        Assert-Test ((Get-PrismHash (Join-Path $f.Target ($result.Backup + '/previous-receipt.json'))) -ceq $oldReceipt) 'Original definition ownership backup is byte-verified'
+        Assert-Test ((Read-PrismJson (Join-Path $f.Target $script:PrismQuestReceiptFile)).questCount -eq 50) 'Only completed publication receives the50 ownership receipt'
+        foreach ($file in $plan.Plan.files) {
+            Assert-Test ((Get-PrismHash (Join-Path $plan.Chapters $file.fileName)) -ceq $file.afterSha256) "Complete managed after bytes: $($file.fileName)"
+            Assert-Test ((Get-PrismHash (Join-Path $f.Target ($result.Backup + '/before-' + $file.fileName))) -ceq $file.beforeSha256) "Verified original chapter backup: $($file.fileName)"
+        }
+        Assert-Test ((Get-FixtureSnapshot (Join-Path $f.Target 'minecraft/saves')) -ceq $world) 'All native/team/legacy save bytes and timestamps are preserved'
+        Assert-Test ((Get-PrismHash (Join-Path $f.Target 'minecraft/config/ftbquests/quests/data.snbt')) -ceq $data) 'Global native quest settings are never rewritten'
+        Assert-Test ((Get-PrismHash (Join-Path $f.Target 'minecraft/options.txt')) -ceq $options) 'Player options are never rewritten'
+        Assert-Test ((Get-PrismHash (Join-Path $f.Target $script:PrismDevOwnerFile)) -ceq $owner) 'Instance ownership marker is never rewritten'
+        Assert-Test ((Get-PrismHash (Join-Path $f.Target $script:PrismDevReceiptFile)) -ceq $deployment) 'Runtime deployment receipt is never rewritten'
+        $stable = Get-FixtureSnapshot $f.Target
+        Assert-Test ((Invoke-FixtureQuestUpdate $f $plan).Outcome -ceq 'Unchanged') 'Managed repeated update is an explicit no-op'
+        Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'Managed no-op changes no file, backup, receipt or timestamp'
+
+        foreach ($name in @('grindless_t0.snbt', 'grindless_t1.snbt', 'foreign.snbt')) {
+            $f = New-Fixture
+            $null = Invoke-Fixture $f
+            $plan = New-FixtureQuestPlan $f -Managed -TwoChanged
+            Write-FixtureText (Join-Path $plan.Chapters $name) '{ user_edits: "preserve even malformed/unknown bytes"'
+            $stable = Get-FixtureSnapshot $f.Target
+            Assert-Refused { Invoke-FixtureQuestUpdate $f $plan } 'drifted or were edited' "Changed chapter $name"
+            Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'Whole two-file preflight refuses before any mutation'
+            Assert-Test (-not [IO.Directory]::Exists((Join-Path $f.Target '.grindless-dev-backups'))) 'Refused preflight creates no backups'
+            Assert-Test (-not [IO.File]::Exists((Join-Path $f.Instances ('.' + $f.InstanceId + '.grindless-deploy.lock')))) 'Refused preflight creates no deployment lock'
+        }
+        foreach ($mutation in @('version', 'string-version', 'fractional-size', 'payload', 'collision', 'ownership', 'snapshot', 'hash')) {
+            $f = New-Fixture
+            $null = Invoke-Fixture $f
+            $plan = New-FixtureQuestPlan $f -Managed
+            $message = ''
+            switch ($mutation) {
+                'version' { $plan.Plan.schemaVersion = 2; $message = 'Unknown native definition plan version' }
+                'string-version' { $plan.Plan.schemaVersion = '1'; $message = 'Unknown native definition plan version' }
+                'fractional-size' { $plan.Plan.files[0].afterBytes = 10.5; $message = 'hash or size' }
+                'payload' { $plan.Plan.files[1].contentsBase64 = [Convert]::ToBase64String([byte[]]@(0, 1)); $message = 'payload hash mismatch' }
+                'collision' { $plan.Plan.files[1].fileName = $plan.Plan.files[0].fileName; $message = 'filenames differs' }
+                'ownership' { $plan.Plan.ownershipId = 'f' * 32; $message = 'target ownership' }
+                'snapshot' {
+                    @($plan.Plan.chapters | Where-Object { $_.fileName -ceq 'grindless_t0.snbt' })[0].sha256 = 'b' * 64
+                    $message = 'preflight snapshot'
+                }
+                'hash' { $message = 'plan SHA256' }
+            }
+            if ($mutation -ne 'hash') { Save-FixtureQuestPlan $plan } else { $plan.Sha256 = 'b' * 64 }
+            $stable = Get-FixtureSnapshot $f.Target
+            Assert-Refused { Invoke-FixtureQuestUpdate $f $plan } $message "Malformed managed plan $mutation"
+            Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'Bad plan preserves every target byte/timestamp'
+        }
+        $f = New-Fixture
+        $null = Invoke-Fixture $f
+        $plan = New-FixtureQuestPlan $f
+        $f.Source = '2' * 40
+        New-FixtureZip $f ([Text.Encoding]::UTF8.GetBytes('synthetic50 runtime must be installed before chapter update'))
+        $package = Read-PrismPackage $f.Root $f.Zip (Get-PrismContract $f.Root) $f.Source
+        $plan.Plan.sourceRevision = $f.Source
+        $plan.Plan.runtimeSourceRevision = $f.Source
+        $plan.Plan.grindlessSha256 = $package.JarSha256
+        $plan.Plan.receipt.sourceRevision = $f.Source
+        $plan.Plan.receipt.runtimeSourceRevision = $f.Source
+        $plan.Plan.receipt.grindlessSha256 = $package.JarSha256
+        Save-FixtureQuestPlan $plan
+        $stable = Get-FixtureSnapshot $f.Target
+        Assert-Refused { Invoke-FixtureQuestUpdate $f $plan } 'Deploy the verified current package while stopped' 'Never publish50 chapters under an old46 runtime'
+        Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'Runtime sequencing refusal does not touch definitions or deploy anything'
+
+        $f = New-Fixture
+        $null = Invoke-Fixture $f
+        $plan = New-FixtureQuestPlan $f -Managed
+        Write-FixtureText (Join-Path $plan.Chapters 'new-foreign.snbt') '{id:"0000000000008888",quests:[]}'
+        $stable = Get-FixtureSnapshot $f.Target
+        Assert-Refused { Invoke-FixtureQuestUpdate $f $plan } 'inventory drifted' 'Chapter added after native preflight'
+        Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'Additional native chapter is preserved'
+        $f.Processes = @([pscustomobject]@{ Name = 'javaw.exe'; ExecutablePath = $f.Java
+            CommandLine = ('javaw --gameDir "' + $f.Target + '\minecraft" --accessToken TOKEN_DO_NOT_PRINT') })
+        Assert-Refused { Invoke-FixtureQuestUpdate $f $plan } 'is running' 'Running target refuses definition mutation'
+        Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'Stopped-target refusal preserves all bytes'
+
+        $f = New-Fixture
+        $null = Invoke-Fixture $f
+        $plan = New-FixtureQuestPlan $f -Managed -TwoChanged
+        function Write-PrismNewBytes([string]$Path, [byte[]]$Bytes) {
+            & $script:OriginalByteWriter $Path $Bytes
+            if ([IO.Path]::GetFileName($Path) -ceq 'before-grindless_t1.snbt') {
+                [IO.File]::AppendAllText($Path, 'INJECTED BACKUP CORRUPTION')
+            }
+        }
+        Assert-Refused { Invoke-FixtureQuestUpdate $f $plan } 'backup/staging verification failed' 'Corrupted backup refuses before replacement'
+        Set-Item Function:\Write-PrismNewBytes $script:OriginalByteWriter
+        foreach ($file in $plan.Plan.files) {
+            Assert-Test ((Get-PrismHash (Join-Path $plan.Chapters $file.fileName)) -ceq $file.beforeSha256) 'Bad backup never touches installed chapters'
+        }
+        Assert-Test (-not [IO.File]::Exists((Join-Path $f.Target $script:PrismQuestPendingFile))) 'No transaction journal is published for unverified backups'
+
+        foreach ($afterReplacement in @($false, $true)) {
+            $f = New-Fixture
+            $null = Invoke-Fixture $f
+            $plan = New-FixtureQuestPlan $f -Managed -TwoChanged
+            $script:QuestFaulted = $false
+            $script:QuestThrowAfter = $afterReplacement
+            function Set-PrismReplacement([string]$Source, [string]$Destination) {
+                $name = [IO.Path]::GetFileName($Destination)
+                if (-not $script:QuestFaulted -and
+                    (($script:QuestThrowAfter -and $name -ceq 'grindless_t0.snbt') -or
+                     (-not $script:QuestThrowAfter -and $name -ceq 'grindless_t1.snbt'))) {
+                    $script:QuestFaulted = $true
+                    if ($script:QuestThrowAfter) { & $script:OriginalReplacement $Source $Destination }
+                    throw 'Injected partial chapter replacement failure.'
+                }
+                & $script:OriginalReplacement $Source $Destination
+            }
+            Assert-Refused { Invoke-FixtureQuestUpdate $f $plan } 'original chapters and ownership receipt were restored' "Actual partial failure after-replacement=$afterReplacement"
+            Set-Item Function:\Set-PrismReplacement $script:OriginalReplacement
+            foreach ($file in $plan.Plan.files) {
+                Assert-Test ((Get-PrismHash (Join-Path $plan.Chapters $file.fileName)) -ceq $file.beforeSha256) 'Verified rollback restores every original chapter byte'
+            }
+            Assert-Test ((Get-PrismHash (Join-Path $f.Target $script:PrismQuestReceiptFile)) -ceq $plan.Plan.previousReceiptSha256) 'Rollback cannot publish a success-shaped ownership receipt'
+            Assert-Test (-not [IO.File]::Exists((Join-Path $f.Target $script:PrismQuestPendingFile))) 'Only verified recovery clears its journal'
+            Assert-Test ((Invoke-FixtureQuestUpdate $f $plan).Outcome -ceq 'DefinitionsUpdated') 'Explicit retry after rollback succeeds'
+        }
+
+        $f = New-Fixture
+        $null = Invoke-Fixture $f
+        $plan = New-FixtureQuestPlan $f -Managed -TwoChanged
+        $script:QuestFaulted = $false
+        function Set-PrismReplacement([string]$Source, [string]$Destination) {
+            & $script:OriginalReplacement $Source $Destination
+            if (-not $script:QuestFaulted -and [IO.Path]::GetFileName($Destination) -ceq '.grindless-definitions.json') {
+                $script:QuestFaulted = $true
+                throw 'Injected failure after ownership receipt replacement.'
+            }
+        }
+        Assert-Refused { Invoke-FixtureQuestUpdate $f $plan } 'original chapters and ownership receipt were restored' 'Failure after receipt commit is not a false success'
+        Set-Item Function:\Set-PrismReplacement $script:OriginalReplacement
+        foreach ($file in $plan.Plan.files) {
+            Assert-Test ((Get-PrismHash (Join-Path $plan.Chapters $file.fileName)) -ceq $file.beforeSha256) 'Post-receipt rollback restores original definition bytes'
+        }
+        Assert-Test ((Get-PrismHash (Join-Path $f.Target $script:PrismQuestReceiptFile)) -ceq $plan.Plan.previousReceiptSha256) 'Post-receipt rollback restores original ownership bytes'
+
+        $f = New-Fixture
+        $null = Invoke-Fixture $f
+        $plan = New-FixtureQuestPlan $f -Managed -TwoChanged
+        $script:QuestReplaceCalls = 0
+        function Set-PrismReplacement([string]$Source, [string]$Destination) {
+            $script:QuestReplaceCalls++
+            if ($script:QuestReplaceCalls -gt 1) { throw 'Injected update AND recovery failure.' }
+            & $script:OriginalReplacement $Source $Destination
+        }
+        Assert-Refused { Invoke-FixtureQuestUpdate $f $plan } 'recovery is incomplete' 'Failed rollback remains visible'
+        Set-Item Function:\Set-PrismReplacement $script:OriginalReplacement
+        $journal = Join-Path $f.Target $script:PrismQuestPendingFile
+        Assert-Test ([IO.File]::Exists($journal)) 'Interrupted/failed recovery retains its durable pending journal'
+        Assert-Refused { Invoke-Fixture $f 'Inspect' } 'incomplete native definition update' 'Inspect cannot hide a partial definition state'
+        Assert-Refused { Invoke-Fixture $f } 'incomplete native definition update' 'Runtime deployment cannot bypass a partial definition state'
+        Assert-Refused { Invoke-FixtureQuestUpdate $f $plan } 'incomplete native definition update' 'Repeated apply cannot relabel interrupted work as success'
+        $t0 = Join-Path $plan.Chapters 'grindless_t0.snbt'
+        $originalPartial = [IO.File]::ReadAllBytes($t0)
+        Write-FixtureText $t0 'FOREIGN EDIT DURING INTERRUPTION'
+        $stable = Get-FixtureSnapshot $f.Target
+        Assert-Refused { Invoke-FixtureQuestUpdate $f $plan 'RecoverQuestDefinitions' } 'drifted or were edited' 'Recovery refuses foreign edits before any mutation'
+        Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'Foreign edit and all recovery evidence remain intact'
+        [IO.File]::WriteAllBytes($t0, $originalPartial)
+        $interrupted = Read-PrismJson $journal
+        $backupT1 = Join-Path $f.Target ($interrupted.backup + '/before-grindless_t1.snbt')
+        $originalBackup = [IO.File]::ReadAllBytes($backupT1)
+        [IO.File]::AppendAllText($backupT1, 'CORRUPTED BACKUP')
+        $stable = Get-FixtureSnapshot $f.Target
+        Assert-Refused { Invoke-FixtureQuestUpdate $f $plan 'RecoverQuestDefinitions' } 'backup verification failed' 'Recovery verifies every backup before touching any chapter'
+        Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'Bad recovery backup cannot partially restore the first chapter'
+        [IO.File]::WriteAllBytes($backupT1, $originalBackup)
+        $backupPlan = Join-Path $f.Target ($interrupted.backup + '/plan.json')
+        $originalPlan = [IO.File]::ReadAllBytes($backupPlan)
+        [IO.File]::AppendAllText($backupPlan, 'CORRUPTED PLAN')
+        Assert-Refused { Invoke-FixtureQuestUpdate $f $plan 'RecoverQuestDefinitions' } 'plan backup verification failed' 'Recovery refuses changed original plan bytes'
+        [IO.File]::WriteAllBytes($backupPlan, $originalPlan)
+        $lock = Join-Path $f.Instances ('.' + $f.InstanceId + '.grindless-deploy.lock')
+        Write-FixtureText $lock 'FOREIGN LOCK'
+        Assert-Refused { Invoke-FixtureQuestUpdate $f $plan 'RecoverQuestDefinitions' } 'Foreign deployment lock' 'Recovery never adopts a foreign lock'
+        Assert-Test ([IO.File]::ReadAllText($lock) -ceq 'FOREIGN LOCK') 'Foreign lock remains byte-identical after refusal'
+        [IO.File]::Delete($lock)
+        Write-FixtureText $lock ('grindless-ftb-definition-update:' + $plan.Sha256)
+        $active = [IO.File]::Open($lock, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::None)
+        try {
+            Assert-Refused { Invoke-FixtureQuestUpdate $f $plan 'RecoverQuestDefinitions' } 'active or uninspectable' 'Even a matching plan lock cannot bypass an active writer'
+            Assert-Test ([IO.File]::Exists($journal) -and [IO.File]::Exists($lock)) 'Active recovery lock and pending journal remain present'
+        } finally { $active.Dispose() }
+        $result = Invoke-FixtureQuestUpdate $f $plan 'RecoverQuestDefinitions'
+        Assert-Test ($result.Outcome -ceq 'DefinitionsRestored') 'Explicit recovery admits only its matching stale lock and verified backups'
+        foreach ($file in $plan.Plan.files) {
+            Assert-Test ((Get-PrismHash (Join-Path $plan.Chapters $file.fileName)) -ceq $file.beforeSha256) 'Recovery restores interrupted chapter bytes'
+        }
+        Assert-Test (-not [IO.File]::Exists($journal) -and -not [IO.File]::Exists($lock)) 'Completed recovery removes only its own journal/lock'
+
+        $f = New-Fixture
+        $null = Invoke-Fixture $f
+        $plan = New-FixtureQuestPlan $f
+        $outside = Join-Path $f.Home 'outside-definitions'
+        Write-FixtureText (Join-Path $outside 'sentinel.txt') 'NO LINK FOLLOWING'
+        $link = Join-Path $plan.Chapters 'unsafe.snbt'
+        New-Item -ItemType Junction -Path $link -Target $outside | Out-Null
+        $script:Junctions += $link
+        Assert-Refused { Invoke-FixtureQuestUpdate $f $plan } 'Reparse' 'Real chapter junction refuses managed update'
+        Assert-Test ([IO.File]::ReadAllText((Join-Path $outside 'sentinel.txt')) -ceq 'NO LINK FOLLOWING') 'Linked destination is preserved'
+        [IO.Directory]::Delete($link)
+        $script:Junctions = @($script:Junctions | Where-Object { $_ -cne $link })
+        Assert-Test ((Invoke-FixtureQuestUpdate $f $plan).Outcome -ceq 'DefinitionsUpdated') 'Explicit verified no-receipt reference plan can establish minimal ownership'
+        $stable = Get-FixtureSnapshot $f.Target
+        Assert-Test ((Invoke-FixtureQuestUpdate $f $plan).Outcome -ceq 'Unchanged') 'No-receipt transition is idempotent after its first managed receipt'
+        Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'No-receipt repeat does not create additional backups'
+        Write-Output 'PASS: native definition filesystem46-to50, two-file preflight, verified backups, rollback/recovery, drift/ownership/link refusals and no-op.'
+        Write-Output 'These synthetic plan/byte fixtures do not execute the Java SNBT publisher, native loader, player import or saved-world migration.'
+    } finally {
+        Set-Item Function:\Set-PrismReplacement $script:OriginalReplacement
+        Set-Item Function:\Write-PrismNewBytes $script:OriginalByteWriter
+        $script:CurrentFixture = $previousFixture
+    }
+}
+
 function Invoke-PcWorkflowTransport([string]$Target, $Packet) {
     $script:CapturedSshTarget = $Target
     $script:CapturedPacket = $Packet
@@ -347,6 +659,12 @@ try {
     Assert-Test ($allFunctions.Count -eq $topFunctions.Count) 'All native helpers are top-level, never nested in package verification'
     Assert-Test (@($nativeAst.EndBlock.Statements | Where-Object { $_ -is [Management.Automation.Language.IfStatementAst] }).Count -eq 1) 'Sole native entrypoint is top-level'
 
+    if ($Suite -eq 'QuestDefinitions') {
+        $script:CurrentFixture = $null
+        Test-PrismQuestDefinitionTransactions
+        Write-Output ("FTB DEFINITION FILESYSTEM CHECKS PASSED: " + $script:Assertions + " assertions; " + $script:Cases + " isolated fixtures.")
+        return
+    }
     $f = New-Fixture
     $contract = Get-PrismContract $f.Root
     Assert-Test ($contract.Dependencies.Count -eq 9 -and $contract.Manifest.files.Count -eq 9) `
@@ -425,6 +743,25 @@ try {
     Assert-Test ((Get-FixtureSnapshot (Join-Path $f.Target 'minecraft/mods/.index')) -ceq $indexBefore) 'Update preserves non-loadable Prism index sidecars byte-for-byte'
     Assert-Test ((Get-FixtureSnapshot $f.Template) -ceq $templateBefore) 'Updates never mutate old instance'
     Assert-Test ($newReceipt.packStatus -ceq 'restricted-playable-profile-not-rc') 'Deployment is not RC acceptance'
+
+    $questPlan = New-FixtureQuestPlan $f
+    $savedWorld = Get-FixtureSnapshot (Join-Path $f.Target 'minecraft/saves')
+    $foreignHash = Get-PrismHash (Join-Path $questPlan.Chapters 'foreign.snbt')
+    $beforeDefinitionReceipt = Get-PrismHash (Join-Path $f.Target $script:PrismDevReceiptFile)
+    $result = Invoke-FixtureQuestUpdate $f $questPlan
+    Assert-Test ($result.Outcome -ceq 'DefinitionsUpdated') 'Explicit native46-to50 chapter update succeeds'
+    foreach ($file in $questPlan.Plan.files) {
+        Assert-Test ((Get-PrismHash (Join-Path $questPlan.Chapters $file.fileName)) -ceq $file.afterSha256) `
+            "Managed update publishes complete bytes for $($file.fileName)"
+        Assert-Test ((Get-PrismHash (Join-Path $f.Target ($result.Backup + '/before-' + $file.fileName))) -ceq $file.beforeSha256) `
+            "Managed update retains verified original bytes for $($file.fileName)"
+    }
+    Assert-Test ((Get-FixtureSnapshot (Join-Path $f.Target 'minecraft/saves')) -ceq $savedWorld) 'Native team data and legacy paid-history bytes are untouched'
+    Assert-Test ((Get-PrismHash (Join-Path $questPlan.Chapters 'foreign.snbt')) -ceq $foreignHash) 'Foreign chapter bytes are untouched'
+    Assert-Test ((Get-PrismHash (Join-Path $f.Target $script:PrismDevReceiptFile)) -ceq $beforeDefinitionReceipt) 'Definition-only update never changes runtime deployment receipt'
+    $afterQuestUpdate = Get-FixtureSnapshot $f.Target
+    Assert-Test ((Invoke-FixtureQuestUpdate $f $questPlan).Outcome -ceq 'Unchanged') 'Repeated managed definition update is a no-op'
+    Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $afterQuestUpdate) 'Repeated definition update preserves every byte and timestamp'
 
     # Failure between jar replacement and receipt commit rolls back the old runtime.
     $stable = Get-PrismHash (Join-Path $f.Target $script:PrismDevReceiptFile)
@@ -999,6 +1336,7 @@ param($Action,$Root,$InstancesRoot,$InstanceId,$ExpectedRevision,$TemplateInstan
     Assert-Test ($result.Action -ceq 'Build') 'Remote Build never inspects Prism/template/target existence'
     Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $playerBefore) 'Remote Build keeps the playing instance unchanged'
     Write-Output 'PASS: private config, fixed stdin SSH transport, exact detached Sync and literal native dispatch.'
+    Test-PrismQuestDefinitionTransactions
     Write-Output ("ALL PRISM/PC WORKFLOW CHECKS PASSED: " + $script:Assertions + " assertions; " + $script:Cases + " isolated fixtures.")
     Write-Output 'No JVM, network, SSH, real Git writes, launcher, cache or player instance was used.'
 } finally {

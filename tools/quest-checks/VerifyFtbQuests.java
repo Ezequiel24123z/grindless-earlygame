@@ -143,6 +143,13 @@ public final class VerifyFtbQuests {
     }
 
     public static void main(String[] args) throws Exception {
+        if (args.length == 1 && args[0].equals("--managed-files-only")) {
+            VerifyFtbQuestFiles.main(new String[0]);
+            return;
+        }
+        if (args.length != 0) {
+            throw new IllegalArgumentException("Expected no arguments or --managed-files-only");
+        }
         try {
             SharedConstants.tryDetectVersion();
             Bootstrap.bootStrap();

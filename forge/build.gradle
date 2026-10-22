@@ -246,6 +246,86 @@ tasks.register("verifyFtbQuestBackend", JavaExec) {
     jvmArgs "-XX:ActiveProcessorCount=2"
 }
 
+// A legacy export runs this publisher's source file against the actual pinned checkout's
+// existing classes/libraries. It never reconstructs the old catalogue from current data.
+tasks.register("publishFtbQuestDefinitions", JavaExec) {
+    group = "build"
+    description = "Publishes source/runtime/hash-bound native chapters, including an authentic pinned legacy checkout."
+    def legacyRoot = providers.gradleProperty("ftbDefinitionRoot")
+    def producer = file("src/main/java/io/github/ezequiel24123z/grindless/forge/quest/FtbQuestDefinitionPublisher.java")
+    if (legacyRoot.isPresent()) {
+        mainClass.set(producer.absolutePath)
+        classpath = files(provider {
+            def sourceRoot = rootProject.file(legacyRoot.get())
+            def descriptor = new File(sourceRoot, "forge/build/checks/sustainability-pack-classpath.json")
+            if (!descriptor.isFile()) {
+                throw new GradleException("Prepare the pinned checkout with :forge:classes :forge:writeSustainabilityPackClasspath :forge:extractQuestCheckLibraries first.")
+            }
+            def recorded = new groovy.json.JsonSlurper().parse(descriptor)
+            if (recorded.schema_version != 1 || recorded.gradle_configuration != "forge:compileClasspath" ||
+                    !(recorded.classpath instanceof List) || recorded.classpath.isEmpty()) {
+                throw new GradleException("Invalid pinned publisher classpath descriptor.")
+            }
+            def classes = ["forge/build/classes/java/main", "common/build/classes/java/main"].collect {
+                def directory = new File(sourceRoot, it)
+                if (!directory.isDirectory()) { throw new GradleException("Missing pinned generator classes: $it") }
+                directory
+            }
+            classes + ["forge/build/resources/main", "common/build/resources/main"].collect { new File(sourceRoot, it) } +
+                    recorded.classpath.collect { new File(it) } +
+                    fileTree(new File(sourceRoot, "forge/build/quest-checks/libraries")) { include "*.jar" }.files
+        })
+    } else {
+        dependsOn tasks.named("classes"), tasks.named("extractQuestCheckLibraries"),
+                tasks.named("verifyFtbPublisherArtifacts"), tasks.named("remapJar")
+        classpath = files(project(":common").sourceSets.main.runtimeClasspath,
+                sourceSets.main.runtimeClasspath, fileTree(layout.buildDirectory.dir("quest-checks/libraries")) { include "*.jar" })
+        mainClass.set("io.github.ezequiel24123z.grindless.forge.quest.FtbQuestDefinitionPublisher")
+    }
+    workingDir rootProject.projectDir
+    maxHeapSize = "512m"
+    jvmArgs "-XX:ActiveProcessorCount=2"
+    doFirst {
+        def source = providers.gradleProperty("ftbDefinitionSourceRevision").get()
+        def runtime = providers.gradleProperty("ftbDefinitionRuntimeRevision").getOrElse(source)
+        def sourceRoot = legacyRoot.isPresent() ? rootProject.file(legacyRoot.get()) : rootProject.projectDir
+        def jar = legacyRoot.isPresent() ? rootProject.file(providers.gradleProperty("ftbDefinitionJar").get()) :
+                tasks.named("remapJar").get().archiveFile.get().asFile
+        def digest = legacyRoot.isPresent() ? providers.gradleProperty("ftbDefinitionJarSha256").get() :
+                java.security.MessageDigest.getInstance("SHA-256").digest(jar.bytes).encodeHex().toString()
+        def output = providers.gradleProperty("ftbDefinitionOutput").isPresent() ?
+                rootProject.file(providers.gradleProperty("ftbDefinitionOutput").get()) :
+                new File(sourceRoot, "forge/build/ftb-definitions/definitions-${source}.json")
+        setArgs([sourceRoot.absolutePath, source, runtime, jar.absolutePath, digest, output.absolutePath])
+    }
+}
+
+tasks.register("prepareFtbQuestUpdate", JavaExec) {
+    group = "build"
+    description = "Native-SNBT preflight for an explicit stopped-target definition update; never writes the instance."
+    dependsOn tasks.named("classes"), tasks.named("extractQuestCheckLibraries"),
+            tasks.named("verifyFtbPublisherArtifacts"), tasks.named("remapJar")
+    classpath = files(project(":common").sourceSets.main.runtimeClasspath,
+            sourceSets.main.runtimeClasspath, fileTree(layout.buildDirectory.dir("quest-checks/libraries")) { include "*.jar" })
+    mainClass.set("io.github.ezequiel24123z.grindless.forge.quest.FtbQuestUpdatePlanner")
+    workingDir rootProject.projectDir
+    maxHeapSize = "512m"
+    jvmArgs "-XX:ActiveProcessorCount=2"
+    doFirst {
+        def source = providers.gradleProperty("ftbDefinitionSourceRevision").get()
+        def runtime = providers.gradleProperty("ftbDefinitionRuntimeRevision").getOrElse(source)
+        def jar = tasks.named("remapJar").get().archiveFile.get().asFile
+        def digest = java.security.MessageDigest.getInstance("SHA-256").digest(jar.bytes).encodeHex().toString()
+        def previous = rootProject.file(providers.gradleProperty("ftbPreviousDefinitions").get())
+        def instance = rootProject.file(providers.gradleProperty("ftbDefinitionInstance").get())
+        def output = providers.gradleProperty("ftbDefinitionOutput").isPresent() ?
+                rootProject.file(providers.gradleProperty("ftbDefinitionOutput").get()) :
+                layout.buildDirectory.file("ftb-definitions/update-${source}.json").get().asFile
+        setArgs([rootProject.projectDir.absolutePath, source, runtime, jar.absolutePath, digest, instance.absolutePath,
+                 previous.absolutePath, providers.gradleProperty("ftbPreviousDefinitionsSha256").get(), output.absolutePath])
+    }
+}
+
 tasks.register("verifyFtbPublisherArtifacts") {
     group = "verification"
     description = "Matches the four resolved FTB publisher jars to the independently verified release bytes."
