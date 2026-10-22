@@ -252,7 +252,7 @@ def ftbCompilationTask = tasks.register("compileFtbQuestDefinitionSource", Gradl
     group = "build"
     description = "Compiles/remaps the exact source in fresh isolated outputs and emits its verified binary receipt."
     if (!providers.gradleProperty("ftbDefinitionRoot").isPresent()) {
-        dependsOn tasks.named("remapJar"), tasks.named("verifyFtbPublisherArtifacts")
+        dependsOn project.tasks.named("remapJar"), project.tasks.named("verifyFtbPublisherArtifacts")
     }
     doFirst {
         def source = providers.gradleProperty("ftbDefinitionSourceRevision").get()
