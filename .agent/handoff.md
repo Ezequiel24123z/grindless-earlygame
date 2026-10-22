@@ -501,7 +501,25 @@ projections and the separate51 compatibility lane remain pending. Do not run
 the still50-only publisher/planner/startup/host consumers as a qualified51
 candidate or deploy it; current50 G4/G5 proofs retain their historical sources.
 
-| Category | Current qualification state: G4/G5 current50 outcome verified closed |
+**NEW G6 common-only GO:** only604/fixedfcfd6e2/new inventoried wet root.
+The unproved properties are new wet F1/STIRRED/slot/water/secondary applicability,
+common quest/claim/teaching invariance and actual normal projections with28
+source/37 executed image expressions. Run needed common classes, changed
+Quest/Claims/T1Teaching/Assets checks, normal three writers, independent
+CheckOnly and canonical rechecks. The allowed tracked set is ONLY Guidance,
+Economy and T1 JSON/Markdown; GENERATED.md stays unchanged. Normal writers
+precede stale canonical equality checks; never hand-author an output.
+
+The51 publisher/planner/integration/host lane is still coding separately.
+Do not execute/bypass those unsupported guards, build a51 package, boot a
+server or touch the fictitious/player target in this window. Preserve/reuse
+all old native/JDK/transaction mechanisms. A first authentic50 reference may
+use existing CLI8/originalG5f8/classes/source988/selectedb07 before new Gradle,
+with an absent named output and actual schema2/50 marker; no46/compiler replay.
+Source988 stays pinned for that receipt. Source/API changes stay out of the
+frozen alias until clean/custody/checkpoint/ownedJava0/locksfalse leaseback.
+
+| Category | Current qualification state: G4/G5 closed, independent G6 common proof assigned |
 | --- | --- |
 | COMPLETED | G3/A3 models/custody; G4 real legacy/native89/19markers/managed201/JDK34 and176-file custody; G5 actual configuration/fresh compiler/plan/apply/same-plan with87-file custody/2578 inputs/24 target files/16 protected files and safe leaseback; reviewed wet338 source |
 | BLOCKED | None for current50 engineering; source51 compatibility and its own source/projection qualification remain open |

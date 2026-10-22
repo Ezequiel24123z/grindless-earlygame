@@ -555,6 +555,15 @@ model replay occurs. The fictional target is now coherent988/50/50, not a
 played candidate. Retain its old source988/f8 classpath/output for later
 authentic50 source-file publication; any51 source uses a new isolated root.
 
+**G6 assignment only, independent of API51 coding:** fixedfcfd6e2/sole604/new
+wet common build root. New selectors/quest records/conditions and expanded
+writer provenance need actual common JVM/normal output evidence. Scope is
+changed common checks, normal Guidance/Economy/T1 writers/independent checks/
+canonical rechecks and four generated payloads only. No asset generator,
+native,51 backend, package, plan or target write. Preserve old988/f8/Cp50 for
+a first actual50 CLI8 reference without compilation if needed for the next
+managed50-to51 transition. No result is inferred; no old success is replayed.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Qualify independent wet common/model work while API51 implementation continues.**
+  Sole604 receives fixedfcfd6e2 G6/new root for changed common quest/teaching/
+  asset checks and actual normal Guidance/Economy/T1 outputs/provenance.
+  Only four canonical outputs may change; no GENERATED.md/native/package/
+  target/backend51 action. Preserve old988/f8 and optionally publish its
+  authentic50 reference through existing CLI8 before new Gradle, without
+  recompiling. All new results remain pending; old G4/G5 successes are reused.
 - **Integrate optional wet processing and its concrete writer provenance as source.**
   Normal338db24d preserves738105d4: six existing Motor/Washer/B2/B2-R1 routes,
   one free native acquisition lesson and3 new locale keys, without a bill/
