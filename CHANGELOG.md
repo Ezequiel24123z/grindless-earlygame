@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Open the next bounded development wave without retargeting closed proofs.**
+  ADR-0176 separates exact physical Matrix evidence from minimum controller
+  capacity, selecting only the baseline Wire Mill operand for the new role.
+  ADR-0177 specifies an explicit stopped/hash-bound managed FTB46-to50
+  definition update with preserved paid data, edit refusal, backup and recovery.
+  Two isolated source owners start atad5b50d; no implementation/Java/native
+  pass or PC grant is inferred. Keep real chassis kits/legacy capability
+  migration separate and leave the delivered T0 instance/worlds unchanged.
 - **Close the integrated engineering wave with actual Blueprint interaction.**
   Published M0a676fe normally merges e260 and normal-output checkpointA85069.
   One canonical Forge `blueprint-interaction` run passes1,182 assertions with

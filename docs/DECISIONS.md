@@ -187,6 +187,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0173](#adr-0173--develop-later-tiers-in-parallel-with-protected-t0-play) | Develop later tiers in parallel with protected T0 play | Accepted |
 | [0174](#adr-0174--grow-tier-complexity-around-basic-machine-families-from-t1) | Grow tier complexity around basic machine families from T1 | Accepted |
 | [0175](#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts) | Carry optional absolute process pressure through existing contracts | Accepted engineering contract; model/native gates separate |
+| [0176](#adr-0176--distinguish-exact-matrix-evidence-from-minimum-controller-capacity) | Distinguish exact Matrix evidence from minimum controller capacity | Accepted engineering scope; implementation/proof pending |
+| [0177](#adr-0177--update-managed-native-quest-definitions-only-through-an-explicit-guarded-transition) | Update managed native quest definitions only through an explicit guarded transition | Accepted engineering scope; implementation/proof pending |
 
 ---
 
@@ -8263,3 +8265,94 @@ records those distinct sources, exact-M full CI success and the duplicate
 DRILL-OK observation failure without concealing it. All PC/cache leases are
 returned. No production pressure recipe, native/client pressure presentation,
 actual save compatibility or human acceptance is inferred from this contract.
+
+---
+
+## ADR-0176 — Distinguish exact Matrix evidence from minimum controller capacity
+
+**Status.** Accepted coordinator engineering scope under the owner's continued
+development instruction and ADR-0173/0174, 2026-10-22. Implementation and changed
+proofs are pending; no recipe balance, playable chassis upgrade or deployment
+is accepted by this record.
+
+**Context.** README permits a higher physical Matrix to replace lower controller
+capacity. `ControlMatrixSpec.canControl` already expresses that across legitimate
+architectures, but `IngredientSpec.matrix` / `ProcessLookup.sameItem` require an
+exact item/rating. The F2 predecessor, explicit output and native exact-F1 quest
+are different roles and must not silently become minimum-capacity tests.
+
+**Decision.** Introduce an explicit typed minimum-control input alongside the
+existing exact contract. Preserve old constructor/factory semantics, count rules
+and exact item/rating identities. Only the existing `assemble/wire_mill` F1
+control operand selects the minimum role in this increment. Leave the F2 Matrix
+predecessor, all outputs and quest/reward evidence exact.
+
+Validate genuine `ControlMatrixItem` data through the existing strict NBT/spec
+mechanism and `canControl`. Wrong/ordinary items, lower/invalid ratings, malformed
+or spoofed data cannot satisfy the role. Hopper admission may ignore batch count;
+execution/consumption still requires and debits the real full batch.
+Propagate the distinction consistently through Atlas/JEI, inspection/teaching
+where affected, audit authorities and exporters. Preserve canonical qualified
+resource identities; a human-readable minimum label is not a new catalogue ID.
+A canonical lower-rating supply remains one legitimate accepted input, not a
+claim that every alternate architecture has the same production route.
+
+**Reuse and alternatives.** Reuse the project's existing physical spec,
+ingredient selection and executor. The pinned GT exact-circuit versus capacity
+precedent supports explicit roles, not importing GT's ingredient/voltage engine
+or globally relaxing equality. A recipe-ID special case would hide semantics
+from viewers/audits. Replacing exact quest predicates would break progression
+evidence. A new higher ingredient bill producing the same block is not a real
+chassis upgrade.
+
+**Limits.** Actual in-place family upgrades remain a separate shared-state
+implementation. Current processor kinds expose their existing full envelopes;
+silently narrowing them to construct an apparent mark ladder risks legacy
+capability/save behavior. Do not invent new kit bills or envelope numbers here.
+The closed426/e260/M proofs retain their sources; run focused changed-role,
+projection and registered-item proofs, not an unrelated Blueprint/pressure replay.
+
+---
+
+## ADR-0177 — Update managed native quest definitions only through an explicit guarded transition
+
+**Status.** Accepted coordinator engineering scope under ADR-0171/0173 and the
+owner's continued development instruction, 2026-10-22. Implementation and real
+file-transition/recovery qualification are pending; no player instance update
+is authorized.
+
+**Context.** The installed native baseline has46 logical quests; current source
+has50 with four reward-free lessons. `FtbQuestFiles.ensure/preflight` deliberately
+refuses existing chapters missing required IDs and otherwise preserves compatible
+user files. Normal startup must not become an implicit overwrite merely because
+the source adds definitions.
+
+**Decision.** Provide an explicit stopped-target, hash-bound managed-definition
+update through the existing production publisher/deployment/file mechanisms.
+Retain append-only/fail-closed startup. Management must derive from verifiable
+known source/version/hash ownership, never filenames, ID counts or an agent's
+guess. Unknown or edited/malformed/unsafe files are refused before mutation;
+an existing unreceipted baseline needs demonstrated known provenance or refusal,
+not silent adoption.
+
+Complete preflight for the entire owned definition set before writing.
+Preserve and verify previous bytes/metadata in a bounded backup, stage new
+known bytes and record an interrupted/partial operation explicitly. Failure
+recovery must not overwrite foreign concurrent changes or return success while
+the transition is incomplete. Repeated successful update is a no-op. Existing
+compatible user-file preservation is not replaced by unconditional byte management.
+
+All historical logical/native quest/task/reward IDs stay stable. Definitions
+may add the four reward-free lessons, not infer their completion or mint a new
+starter. Native team/progress/claim SavedData, owner worlds and the legacy-paid
+minting fence are never rewritten by this file transition. Reuse supported FTB
+and ordinary safe-file/package primitives, with existing Windows/shell twins.
+
+**Rejected alternatives and proof.** Startup overwrite, accepting a filename as
+ownership, raw progress replacement and ignoring user edits all violate the
+save/paid-state contract. A private one-off migration script does not deliver
+the repeatable production boundary. Verify actual filesystem46-to50/idempotence,
+full-preflight refusal, drift and partial-failure recovery; use native execution
+only for a newly uncovered loader/state property. Old native paid-history proofs
+remain reusable when their implementation/assumptions are unchanged. No blanket
+claim of crash atomicity, whole-T1 readiness, client acceptance or release follows.

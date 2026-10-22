@@ -115,6 +115,22 @@ quest/task IDs. Preserve that fail-closed rule: integrating50 source quests is
 not proof that an installed46-definition configuration can update. A later
 managed-file hash/backup migration must retain old IDs/native paid state and
 refuse unknown edits; no raw world rewrite or relaxed preflight.
+ADR-0177 now assigns that explicit production update to source ownercb273782
+fromad5b50d. Reuse `FtbQuestFiles`, the native definition publisher and existing
+Prism guarded-file/update patterns; no PC access or pass follows from authorship.
+
+### Exact Matrix identity versus control capacity
+
+ADR-0176 assigns source owner347a1c5b the typed input-role extension through
+`recipe/IngredientSpec`, `ProcessLookup`, `AtlasLogic`, Forge JEI and the
+sustainability/export adapters. Keep old exact constructor/factory semantics,
+output identity, F2 predecessor and native exact-F1 quest filters. A named
+minimum-control role reuses strict `ControlMatrixNbt` and `ControlMatrixSpec.canControl`
+across legitimate architectures. Select only `assemble/wire_mill` initially;
+do not special-case recipe IDs inside generic matching or alter canonical IDs.
+No existing byte-equal projection or native proof covers the changed semantics.
+Widening ingredient eligibility is not a chassis upgrade or permission to
+invent a new family envelope, recipe bill or paid-world migration.
 
 The owner's2026-10-21 instruction separately opens T1 development (ADR-0168/0169).
 Use [the first-factory plan](../plan/feature-t1-first-factory-1.md): live route

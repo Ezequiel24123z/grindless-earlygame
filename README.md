@@ -1440,6 +1440,13 @@ Old routes remain valid. New architectures trade greater infrastructure for lowe
 larger batches or higher throughput. A higher-rated matrix can substitute for a lower one,
 but is rarely economical.
 
+The next implementation separates minimum **controller capacity** from exact
+**manufacturing evidence** (ADR-0176). Only an explicitly declared minimum input
+may use a stronger legitimate Matrix; existing exact predecessor/output and
+quest/reward predicates do not become inequalities. Using costlier control
+stock in a baseline machine does not upgrade that machine. This new role is
+under development, not supplied by the completed M Blueprint proof.
+
 | Tier | Theme | Braided progression and signature scale |
 | --- | --- | --- |
 | **T0 — Bootstrap** | Escape velocity | A connected workshop and mod-owned geological/biological source base culminate in physical calibration and the manual five-F1-Matrix exit. |
@@ -2369,6 +2376,8 @@ is preserved and integration/release gates still control acceptance.
 | 66 | **Basic families and growing tier complexity** | ADR-0174 — F1 Wire Mill and optional four-route forming do not gate firstF2. Exact CI contracts and actual426 normal Guidance/Economy/T1 writers, independent CheckOnly and three former red suites pass; four exact outputs merge asA85069 ancestry. No MK2, whole-T1, matcher/storage change or installed update |
 | 67 | **Optional process-pressure contract** | [ADR-0175](docs/DECISIONS.md#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts) — optional absolute optimum/half-width, existing evaluator, consistent Atlas/audit/inspection/JEI and strict schema1/2. Actual compilation/contracts and normal model gates pass; no new production pressure recipe, client observation or tier acceptance |
 | 68 | **Bounded Blueprint preflight** | Source4550+d073 qualified on exact M0a676fe: new Blueprint/Planner contracts and one real Forge capture/stamp/refusal/refund interaction pass1,182 assertions, harness/server0 and natural save/stop. Relocated BE stock is protected and permissions are checked per target. [Source-bound evidence and both CI outcomes](docs/testing/latest-validation.md#integrated-development-source); no drones/global rollback/client acceptance or installed update |
+| 69 | **Explicit controller capacity** | ADR-0176 — in development fromad5b50d: named minimum-control input for the existing Wire Mill, strict exact predecessor/output/quest evidence preserved. Reuse physical Matrix validation and shared process/view/audit authorities; no chassis kit, envelope rebalance, new pass or T0 deployment |
+| 70 | **Managed native quest-definition updates** | ADR-0177 — in development: explicit stopped/hash-bound46-to50 file update, known ownership, full preflight/backups and visible failure recovery. Preserve startup refusal, user edits, old IDs and paid world data; no update or migration pass has been executed |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than

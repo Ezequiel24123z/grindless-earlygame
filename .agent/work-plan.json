@@ -1,9 +1,9 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 38,
-  "updated": "2026-10-21",
-  "phase": "native_FTB_T0_delivered_bounded_development_wave_qualified_not_tier_acceptance",
+  "plan_revision": 39,
+  "updated": "2026-10-22",
+  "phase": "managed_FTB_update_and_explicit_control_capacity_development_after_closed_M_wave",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
   "tier_accepted": false,
   "merge_ready": false,
@@ -26,6 +26,22 @@
     "return_state": "cleanM_ownedJava0_allObservedJava0_workLockfalse_cacheLockfalse_no_client_commandlines_or_owner_world_access",
     "new_explicit_guarded_window_required": true,
     "source_updates": "documentation_only_closure_does_not_retarget_actual_M_runtime_or_426_model_provenance"
+  },
+  "active_development_wave": {
+    "instruction": "owner_2026_10_22_continue_working_and_developing",
+    "base": "ad5b50dd509b0261818101ff08e786750826161a",
+    "policies": ["ADR-0170", "ADR-0173", "ADR-0174", "ADR-0176", "ADR-0177"],
+    "status": "source_implementation_active_not_compiled_or_qualified",
+    "managed_FTB_owner": "cb273782-4065-44e2-90a3-9c0c036367ce",
+    "managed_FTB_scope": "explicit_stopped_hash_bound_known_owned_46_to50_definition_update_backup_partial_failure_recovery_no_world_or_paid_receipt_write_no_startup_overwrite",
+    "control_capacity_owner": "347a1c5b-1e99-4046-861c-85e5bcb3d045",
+    "control_capacity_scope": "explicit_minimum_control_ingredient_only_WireMill_operand_reuse_canControl_exact_old_contracts_F2_predecessor_and_quests_unchanged_all_projections_honest",
+    "external_research": "bounded_inplace_upgrade_state_preservation_source_license_comparison_no_foreign_import",
+    "shared_root_docs_and_publication": "coordinator_only_serial_integration",
+    "PC_lease": null,
+    "source_workers_PC_JVM_or_shared_cache_authorized": false,
+    "later_proof_selection": "affected_contracts_real_owned_file_transition_registered_minimum_vs_exact_control_and_needed_normal_writers_not_green_M_Blueprint_pressure_replays",
+    "not_in_scope": ["playable_chassis_kit_or_new_envelope_balance", "T0_instance_or_owner_world", "dependency_or_provider_changes", "PR_main_release_deployment", "whole_tier_acceptance"]
   },
   "owner_play_loop": {
     "policy": "ADR-0170",

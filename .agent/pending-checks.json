@@ -23,6 +23,19 @@
     "return_state": "cleanM_ownedJava0_workLockfalse_cacheLockfalse_no_owner_world_or_client_commandlines",
     "new_explicit_guarded_window_required": true
   },
+  "active_development_wave": {
+    "base": "ad5b50dd509b0261818101ff08e786750826161a",
+    "status": "new_source_development_no_pass_inferred_from_closed_M_wave",
+    "owners": {
+      "managed_FTB_definitions": "cb273782-4065-44e2-90a3-9c0c036367ce",
+      "explicit_control_capacity": "347a1c5b-1e99-4046-861c-85e5bcb3d045"
+    },
+    "pending": ["implementation_and_coordinator_review", "focused_changed_contracts", "actual_hash_bound_definition_update_and_failure_recovery", "registered_minimum_vs_exact_control_input", "normal_projection_writers_if_changed"],
+    "PC_owner": null,
+    "PC_source_worker_access": false,
+    "T0_world_client_deploy_or_acceptance": false,
+    "evidence_reuse": "keep_source426_models_e260_contracts_M_Blueprint_native_and_independent_full_CI_bound_to_their_actual_sources_no_unrelated_replay"
+  },
   "ftb_questbook_blocker": {
     "policy": "ADR-0171",
     "backend_owner": "ac50334e-0ce4-4f67-bebf-581ac3318185",

@@ -1,6 +1,35 @@
 # Active orchestration handoff
 
-Updated: 2026-10-21. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0 ACCEPTANCE OPEN**.
+Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0 ACCEPTANCE OPEN**.
+
+## Active continuation — managed definitions and physical control
+
+The owner requests continued development after the completed M/ad5b50d wave.
+Two isolated source lanes start at exactad5b50dd509b0261818101ff08e786750826161a:
+cb273782 owns an explicit stopped/hash-bound FTB46-to50 managed-definition
+update and recovery;347a1c5b owns explicit minimum-capacity control ingredients.
+The coordinator retains root architecture/docs/integration/publication.
+Neither source worker has a PC/cache/JVM grant and no new execution has passed.
+
+ADR-0176 selects only the existing Wire Mill's F1 control operand as a minimum
+capacity requirement. Existing exact factories, F2 Matrix predecessor, outputs
+and native quest/reward predicates stay exact. Reuse `canControl`; propagate the
+role honestly to viewers/audits. This is control substitution, not a playable
+chassis kit or a stronger Wire Mill. Current kinds already expose their full
+baseline envelopes; silently narrowing them to manufacture a mark ladder would
+risk existing machines and is not authorized by this wave.
+
+ADR-0177 preserves append-only/fail-closed startup while adding an explicit
+managed-file transition with known hash ownership, full preflight, backups and
+visible partial-failure recovery. Names alone do not prove management.
+Never rewrite native team/progress/paid SavedData or the owner world.
+Use real supported FTB/package/file primitives, not another quest engine.
+
+Next integrate coherent local checkpoints and select only their changed proofs.
+Any heavy qualification needs a new sole-owner lease on an exact published
+source. Preserve all previous failures and successful source-bound evidence.
+No Prism/T0 update, game interruption, new paid service, PR/main/release or tier
+acceptance is implied. The completed prior wave below remains historical proof.
 
 ## Final player handover — current authoritative state
 

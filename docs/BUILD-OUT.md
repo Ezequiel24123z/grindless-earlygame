@@ -26,7 +26,17 @@ Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitud
 release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
 revision8/PA-0007 task graph now control the queue.
 
-Next: the protected native FTB handover under ADR-0171 is technically complete:
+Next: execute the owner's continued-development instruction on isolated
+ad5b50d descendants. ADR-0176 adds an explicit minimum-capacity control-input
+role for the Wire Mill while retaining exact Matrix manufacturing/quest evidence.
+ADR-0177 adds a stopped/hash-bound managed FTB46-to50 definition update with
+backups, edit refusal and recovery, without changing append-only startup or paid
+world data. Separate source owners are named in the active handoff; no PC/JVM
+grant or executed pass exists for this new wave. Integrate, then qualify only
+the newly changed boundaries. Real chassis kits/envelope balance stay separate;
+do not narrow legacy machines or call control substitution a chassis upgrade.
+
+The protected native FTB handover under ADR-0171 is technically complete:
 Grindless-T0-FTB-Dev has exactdd0/29bc/79ce and the pristine existing-world/options
 copy. Actual save-clone load/save and metadata-only retired-ID inspection pass;
 the original/backup remain intact. Let the owner continue play, collect blocking
