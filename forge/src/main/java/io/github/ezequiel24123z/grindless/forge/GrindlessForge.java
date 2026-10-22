@@ -6,6 +6,7 @@ import io.github.ezequiel24123z.grindless.material.MaterialRegistry;
 import io.github.ezequiel24123z.grindless.material.RegistryTagView;
 import io.github.ezequiel24123z.grindless.forge.quest.FtbQuestIntegration;
 import io.github.ezequiel24123z.grindless.forge.overlay.MachineInspectionOverlay;
+import io.github.ezequiel24123z.grindless.forge.recipe.MinimumControlIngredient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -26,6 +27,7 @@ public final class GrindlessForge {
     public GrindlessForge() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         EventBuses.registerModEventBus(Grindless.MOD_ID, bus);
+        bus.addListener(MinimumControlIngredient::register);
         Grindless.init();
         MachineInspectionOverlay.init(bus);
         if (ModList.get().isLoaded("ftbquests")) {

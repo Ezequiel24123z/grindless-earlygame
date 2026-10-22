@@ -9,7 +9,7 @@
     "G": { "item": "minecraft:glass" },
     "C": { "tag": "forge:ingots/copper" },
     "R": { "item": "minecraft:redstone" },
-    "M": { "item": "grindless:relay_matrix" }
+    "M": { "type": "grindless:minimum_control", "tier": "F1" }
   },
   "result": { "item": "grindless:factory_portal" }
 }

@@ -15,6 +15,29 @@ entries below reference those records by id.
 
 ### Added
 
+- **Implement manual final normal-machine manufacture (ADR-0188), source only.**
+  Classify actual standalone machines separately from formed workshops/Ground Array
+  and passive transport/storage; retire ordinary and primitive automatic normal
+  constructors and refuse normal replication patterns without deleting saved data.
+  Preserve component/tool/controller/infrastructure methods, operating recipes,
+  exact F2 manufacture, first-five manual identities/bills and raw Thermal bootstrap.
+  Add faithful manual normal counterparts and a core-consuming Thermal alternative;
+  disambiguate actual shapes, including the old Extractor/Arc and Extractor/Plate Die
+  collisions, without changing materials. A small MOD-bus Forge ingredient delegates
+  real registered/default/higher/malformed Matrix admission to the existing matcher;
+  strict pure metadata and Atlas/audit projections retain minimum-control semantics
+  and actual Relay supply, not imaginary architectures or upgraded output blocks.
+  Extend the existing recipe/Atlas/adapter/registry contracts without weakening
+  physical, selector or closed-profile negatives. Java tests are WRITTEN, NOT RUN.
+  Source/data checks cover 44 exact catalogue/JSON shapes, all 2,850 shipped shaped
+  pairs under local declared domains and 34 unchanged operation/component bodies;
+  full canonical-tag overlap, compilation, models and representative native proof
+  remain unexecuted. The first inline pattern observer falsely reported collisions
+  because it omitted ordinary-item domains; its corrected data-only check passes.
+  Report the concrete remaining boundary: the older automatic vanilla Furnace
+  primitive projections are retained pending the coordinator's external-product
+  decision, not silently reclassified as infrastructure or a component exception.
+  No PC lease, generated canonical edit, save/player change or qualification claim.
 - **Correct the manufacturing objective to manual final normal machines.**
   The owner explicitly rejects universal factory self-replication. ADR-0188
   supersedes automatic complete-normal-machine fabrication, not automated

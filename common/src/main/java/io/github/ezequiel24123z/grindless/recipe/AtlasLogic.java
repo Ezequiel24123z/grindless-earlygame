@@ -192,7 +192,7 @@ public final class AtlasLogic {
                 if (ingredient == null) {
                     throw new IllegalArgumentException("missing crafting key " + symbol + " in " + name);
                 }
-                inputs.add(ingredient);
+                inputs.add(rated(IngredientSpec.crafting(ingredient)));
             }
         }
         return List.copyOf(inputs);

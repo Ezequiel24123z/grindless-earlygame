@@ -15,9 +15,9 @@ import java.util.Optional;
  * ADR-0065, ADR-0074, ADR-0075).
  *
  * <p>Ore line: B0×R1, dry B1×R1, wet B1, roast, R2 reduce. Forming: Press recipes keyed by die.
- * Fabrication: Assembler recipes that manufacture the base T1 Wire Mill alongside the
- * Industrial-era Pylon MK2, motor, Chemical Reactor and Chemical Washer, with no
- * crafting-table JSON (ADR-0073, ADR-0074, ADR-0075, ADR-0076). Contact: SO₂ → SO₃ →
+ * Fabrication: automatic components, tools, eligible controllers and infrastructure.
+ * Normal machines have manual final assembly in T1Recipes/shaped JSON (ADR-0188).
+ * Contact: SO₂ → SO₃ →
  * sulfuric acid, plus pickle. Wash: eight crushed and water become washed crushed plus the
  * next metal. Gases: water splits to hydrogen and oxygen; free air yields oxygen; hydrogen
  * and oxygen recombine to water (ADR-0077).
@@ -72,7 +72,7 @@ public final class ProcessGraph {
         recipes.addAll(BootstrapAssembly.recipes(MachineFamily.ASSEMBLER,
                 io.github.ezequiel24123z.grindless.source.SourceLogic.INDUSTRIAL_ASSEMBLY_TICKS, FluxTier.F1.nominal()));
         recipes.addAll(automaticAssemblerCrafts());
-        recipes.addAll(thermalGeneratorAssembly());
+        recipes.add(thermalGeneratorCore());
         List<String> secondaryMaterials = eligibleSecondaries(materials);
         for (MaterialView material : materials) {
             String feed = feedTag(material);
@@ -137,45 +137,29 @@ public final class ProcessGraph {
         recipes.add(relayMatrix());
         recipes.add(industrialRelayMatrix());
         recipes.add(pylonMk2());
-        recipes.add(wireMill());
         recipes.add(motor());
         recipes.add(contactOxidation());
         recipes.add(contactAbsorption());
         recipes.add(pickleIron());
-        recipes.add(chemicalReactor());
-        recipes.add(chemicalWasher());
         recipes.add(waterElectrolysis());
         recipes.add(recombineWater());
         recipes.add(airOxygen());
-        recipes.add(electrolysisCell());
-        recipes.add(atmosphericIntake());
-        recipes.add(fluidWell());
-        recipes.add(inductionFurnace());
-        recipes.add(caster());
         recipes.add(ingotMould());
         recipes.add(plateMould());
         recipes.add(surfactant());
-        recipes.add(flotationCell());
         recipes.add(magneticSeparator());
-        recipes.add(solarArray());
-        recipes.add(boiler());
-        recipes.add(condenser());
         recipes.add(pressurePipe());
-        recipes.add(electricPump());
         recipes.add(industrialTank());
         recipes.add(fluidManipulator());
         recipes.add(fluxBelt());
         recipes.add(stackManipulator());
         recipes.add(filterManipulator());
         recipes.add(signalCable());
-        recipes.add(logicController());
         recipes.add(redstoneInterface());
         recipes.add(fluxDrill());
         recipes.add(drillCell());
         recipes.add(blueprintTool());
         recipes.add(deconstructionPlanner());
-        recipes.add(patternScanner());
-        recipes.add(deconstructor());
         recipes.add(machineCraft("assemble/flux_exosuit_helmet", FabricationLogic.FLUX_EXOSUIT_HELMET));
         recipes.add(machineCraft("assemble/flux_exosuit_chestplate", FabricationLogic.FLUX_EXOSUIT_CHESTPLATE));
         recipes.add(machineCraft("assemble/flux_exosuit_leggings", FabricationLogic.FLUX_EXOSUIT_LEGGINGS));
@@ -191,6 +175,14 @@ public final class ProcessGraph {
         recipes.add(metallurgicalSilicon());
         recipes.add(synthesiseRedstone());
         recipes.add(zoneRefining());
+        for (ProcessRecipe recipe : recipes) {
+            for (OutputSpec output : recipe.outputs()) {
+                if (IngredientSpec.ITEM.equals(output.kind())
+                        && ManufacturingPolicy.isManualFinalMachine(output.id())) {
+                    throw new IllegalStateException("Automatic final normal-machine output: " + recipe.id());
+                }
+            }
+        }
         return List.copyOf(recipes);
     }
 
@@ -222,16 +214,14 @@ public final class ProcessGraph {
     }
 
     private static List<ProcessRecipe> automaticAssemblerCrafts() {
-        List<String> selected = List.of("plate_die", "rod_die", "gear_die", "coil_die",
-                "pulverizer", "arc_furnace", "press", "assembler");
-        List<String> minimumControlCrafts = List.of("pulverizer", "arc_furnace", "press", "assembler");
+        List<String> selected = List.of("plate_die", "rod_die", "gear_die", "coil_die");
         List<ProcessRecipe> recipes = new ArrayList<>();
         for (T1Recipes.Shaped craft : T1Recipes.shaped()) {
             if (!selected.contains(craft.name())) {
                 continue;
             }
             recipes.add(assemblerCraft(craft.name(), groupedCraftInputs(craft), craft.result(),
-                    craft.resultCount(), minimumControlCrafts.contains(craft.name())));
+                    craft.resultCount()));
         }
         if (recipes.size() != selected.size()
                 || recipes.stream().map(ProcessRecipe::id).distinct().count() != selected.size()) {
@@ -256,7 +246,7 @@ public final class ProcessGraph {
         return grouped;
     }
 
-    private static List<ProcessRecipe> thermalGeneratorAssembly() {
+    private static ProcessRecipe thermalGeneratorCore() {
         T1Recipes.Shaped craft = T1Recipes.shaped().stream()
                 .filter(row -> row.name().equals("thermal_generator")).findFirst()
                 .orElseThrow(() -> new IllegalStateException("Thermal Generator assembly requires its manual source craft"));
@@ -271,31 +261,24 @@ public final class ProcessGraph {
             core.put(ingredient, count);
         }
         if (remaining.size() != 2 || !remaining.containsKey(T1Recipes.COBBLE)
-                || remaining.getOrDefault(T1Recipes.RELAY_MATRIX, 0) != 1
+                || remaining.getOrDefault(T1Recipes.MINIMUM_F1, 0) != 1
                 || !craft.result().equals("grindless:thermal_generator") || craft.resultCount() != 1) {
-            throw new IllegalStateException("Thermal Generator assembly must partition its complete manual bill");
+            throw new IllegalStateException("Thermal Generator core must partition the complete manual bill");
         }
-        Map<String, Integer> finished = new LinkedHashMap<>();
-        finished.put("item:" + FabricationLogic.THERMAL_GENERATOR_CORE, 1);
-        finished.putAll(remaining);
-        return List.of(
-                assemblerCraft("thermal_generator_core", core, FabricationLogic.THERMAL_GENERATOR_CORE, 1, false),
-                assemblerCraft(craft.name(), finished, craft.result(), craft.resultCount(), true));
+        return assemblerCraft("thermal_generator_core", core, FabricationLogic.THERMAL_GENERATOR_CORE, 1);
     }
 
     private static ProcessRecipe assemblerCraft(String name, Map<String, Integer> grouped,
-                                               String output, int outputCount, boolean minimumControl) {
+                                               String output, int outputCount) {
         if (grouped.size() > 4) {
             throw new IllegalArgumentException("Automatic Assembler craft exceeds four grouped inputs: " + name);
         }
-        if (minimumControl && grouped.getOrDefault(T1Recipes.RELAY_MATRIX, 0) != 1) {
-            throw new IllegalArgumentException("Machine reproduction requires one Relay Matrix: " + name);
+        if (ManufacturingPolicy.isManualFinalMachine(output)) {
+            throw new IllegalArgumentException("Normal machines require manual final assembly: " + name);
         }
         List<IngredientSpec> inputs = new ArrayList<>();
         grouped.forEach((ingredient, count) -> {
-            if (minimumControl && ingredient.equals(T1Recipes.RELAY_MATRIX)) {
-                inputs.add(IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, count));
-            } else if (ingredient.startsWith("tag:")) {
+            if (ingredient.startsWith("tag:")) {
                 inputs.add(IngredientSpec.tag(ingredient.substring(4), count));
             } else if (ingredient.startsWith("item:")) {
                 inputs.add(IngredientSpec.item(ingredient.substring(5), count));
@@ -575,28 +558,6 @@ public final class ProcessGraph {
     }
 
     /**
-     * The base T1 Wire Mill (ADR-0174/0176). Minimum-F1 physical control joins the
-     * casing, two coils and four plates. Stronger stock does not upgrade the output chassis.
-     */
-    private static ProcessRecipe wireMill() {
-        return new ProcessRecipe(
-                "assemble/wire_mill",
-                MachineFamily.ASSEMBLER,
-                List.of(
-                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
-                        IngredientSpec.item(FabricationLogic.COPPER_COIL, 2),
-                        IngredientSpec.tag("forge:plates/iron", 4),
-                        IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1)),
-                List.of(OutputSpec.item(FabricationLogic.WIRE_MILL, 1)),
-                Double.NaN,
-                null,
-                FabricationLogic.ASSEMBLE_TICKS,
-                FabricationLogic.FU_PER_TICK,
-                List.of(),
-                "industrial");
-    }
-
-    /**
      * Contact oxidation. Air is the oxidiser; bottled oxygen waits (ADR-0075). Temperature is
      * unnamed so the held 450 °C also covers absorption.
      */
@@ -741,28 +702,6 @@ public final class ProcessGraph {
     }
 
     /**
-     * The baseline process reactor (ADR-0075/0186). Its original casing, motor and plate
-     * bill adds one minimum-F1 physical controller.
-     */
-    private static ProcessRecipe chemicalReactor() {
-        return new ProcessRecipe(
-                "assemble/chemical_reactor",
-                MachineFamily.ASSEMBLER,
-                List.of(
-                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
-                        IngredientSpec.item(FabricationLogic.MOTOR, 2),
-                        IngredientSpec.tag("forge:plates/iron", 4),
-                        IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1)),
-                List.of(OutputSpec.item(FabricationLogic.CHEMICAL_REACTOR, 1)),
-                Double.NaN,
-                null,
-                FabricationLogic.ASSEMBLE_TICKS,
-                FabricationLogic.FU_PER_TICK,
-                List.of(),
-                "industrial");
-    }
-
-    /**
      * B2. Eight crushed is four raw, so the secondary ingot is exactly 0.25 u per raw
      * (ADR-0076).
      */
@@ -810,28 +749,6 @@ public final class ProcessGraph {
     }
 
     /**
-     * The wet line's baseline machine (ADR-0076/0186). Minimum-F1 control supplements
-     * the unchanged casing, two motors and four plates.
-     */
-    private static ProcessRecipe chemicalWasher() {
-        return new ProcessRecipe(
-                "assemble/chemical_washer",
-                MachineFamily.ASSEMBLER,
-                List.of(
-                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
-                        IngredientSpec.item(FabricationLogic.MOTOR, 2),
-                        IngredientSpec.tag("forge:plates/iron", 4),
-                        IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1)),
-                List.of(OutputSpec.item(FabricationLogic.CHEMICAL_WASHER, 1)),
-                Double.NaN,
-                null,
-                FabricationLogic.ASSEMBLE_TICKS,
-                FabricationLogic.FU_PER_TICK,
-                List.of(),
-                "industrial");
-    }
-
-    /**
      * 2 B water becomes 2 B hydrogen in the buffer and 1 B vented oxygen (ADR-0077).
      */
     private static ProcessRecipe waterElectrolysis() {
@@ -874,44 +791,6 @@ public final class ProcessGraph {
                 null,
                 ProcessLogic.AIR_TICKS,
                 ProcessLogic.FU_PER_TICK);
-    }
-
-    /** The gas line's cell (ADR-0077/0186). The original three groups plus minimum-F1 control. */
-    private static ProcessRecipe electrolysisCell() {
-        return new ProcessRecipe(
-                "assemble/electrolysis_cell",
-                MachineFamily.ASSEMBLER,
-                List.of(
-                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
-                        IngredientSpec.item(FabricationLogic.MOTOR, 2),
-                        IngredientSpec.tag("forge:plates/iron", 4),
-                        IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1)),
-                List.of(OutputSpec.item(FabricationLogic.ELECTROLYSIS_CELL, 1)),
-                Double.NaN,
-                null,
-                FabricationLogic.ASSEMBLE_TICKS,
-                FabricationLogic.FU_PER_TICK,
-                List.of(),
-                "industrial");
-    }
-
-    /** The gas line's intake (ADR-0077/0186). Same controlled bill as the cell. */
-    private static ProcessRecipe atmosphericIntake() {
-        return new ProcessRecipe(
-                "assemble/atmospheric_intake",
-                MachineFamily.ASSEMBLER,
-                List.of(
-                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
-                        IngredientSpec.item(FabricationLogic.MOTOR, 2),
-                        IngredientSpec.tag("forge:plates/iron", 4),
-                        IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1)),
-                List.of(OutputSpec.item(FabricationLogic.ATMOSPHERIC_INTAKE, 1)),
-                Double.NaN,
-                null,
-                FabricationLogic.ASSEMBLE_TICKS,
-                FabricationLogic.FU_PER_TICK,
-                List.of(),
-                "industrial");
     }
 
     /** B3. Twenty crushed is ten raw, so 2.4 and 0.3 are whole items (ADR-0080). */
@@ -964,32 +843,12 @@ public final class ProcessGraph {
                 ProcessLogic.FU_PER_TICK);
     }
 
-    private static ProcessRecipe flotationCell() {
-        return machineCraft("assemble/flotation_cell", FabricationLogic.FLOTATION_CELL, true);
-    }
-
     private static ProcessRecipe magneticSeparator() {
         return machineCraft("assemble/magnetic_separator", FabricationLogic.MAGNETIC_SEPARATOR);
     }
 
-    private static ProcessRecipe solarArray() {
-        return machineCraft("assemble/solar_array", FabricationLogic.SOLAR_ARRAY);
-    }
-
-    private static ProcessRecipe boiler() {
-        return machineCraft("assemble/boiler", FabricationLogic.BOILER, true);
-    }
-
-    private static ProcessRecipe condenser() {
-        return machineCraft("assemble/condenser", FabricationLogic.CONDENSER, true);
-    }
-
     private static ProcessRecipe pressurePipe() {
         return machineCraft("assemble/pressure_pipe", FabricationLogic.PRESSURE_PIPE);
-    }
-
-    private static ProcessRecipe electricPump() {
-        return machineCraft("assemble/electric_pump", FabricationLogic.ELECTRIC_PUMP);
     }
 
     private static ProcessRecipe industrialTank() {
@@ -1014,10 +873,6 @@ public final class ProcessGraph {
 
     private static ProcessRecipe signalCable() {
         return machineCraft("assemble/signal_cable", FabricationLogic.SIGNAL_CABLE);
-    }
-
-    private static ProcessRecipe logicController() {
-        return machineCraft("assemble/logic_controller", FabricationLogic.LOGIC_CONTROLLER);
     }
 
     private static ProcessRecipe redstoneInterface() {
@@ -1098,26 +953,11 @@ public final class ProcessGraph {
                 List.of(IngredientSpec.item(mould, 1)));
     }
 
-    private static ProcessRecipe inductionFurnace() {
-        return machineCraft("assemble/induction_furnace", FabricationLogic.INDUCTION_FURNACE, true);
-    }
-
-    private static ProcessRecipe caster() {
-        return machineCraft("assemble/caster", FabricationLogic.CASTER, true);
-    }
-
     private static ProcessRecipe machineCraft(String id, String result) {
-        return machineCraft(id, result, false);
-    }
-
-    private static ProcessRecipe machineCraft(String id, String result, boolean minimumControl) {
         List<IngredientSpec> inputs = new ArrayList<>(List.of(
                 IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
                 IngredientSpec.item(FabricationLogic.MOTOR, 2),
                 IngredientSpec.tag("forge:plates/iron", 4)));
-        if (minimumControl) {
-            inputs.add(IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1));
-        }
         return new ProcessRecipe(
                 id,
                 MachineFamily.ASSEMBLER,
@@ -1153,24 +993,6 @@ public final class ProcessGraph {
                 "industrial");
     }
 
-    /** Powered chunk water (ADR-0078). Same craft as the cell. */
-    private static ProcessRecipe fluidWell() {
-        return new ProcessRecipe(
-                "assemble/fluid_well",
-                MachineFamily.ASSEMBLER,
-                List.of(
-                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
-                        IngredientSpec.item(FabricationLogic.MOTOR, 2),
-                        IngredientSpec.tag("forge:plates/iron", 4)),
-                List.of(OutputSpec.item(FabricationLogic.FLUID_WELL, 1)),
-                Double.NaN,
-                null,
-                FabricationLogic.ASSEMBLE_TICKS,
-                FabricationLogic.FU_PER_TICK,
-                List.of(),
-                "industrial");
-    }
-
     /** Fabricated T2 component. No fluid gate (ADR-0074). */
     private static ProcessRecipe motor() {
         return new ProcessRecipe(
@@ -1195,14 +1017,6 @@ public final class ProcessGraph {
 
     private static ProcessRecipe deconstructionPlanner() {
         return machineCraft("assemble/deconstruction_planner", FabricationLogic.DECONSTRUCTION_PLANNER);
-    }
-
-    private static ProcessRecipe patternScanner() {
-        return machineCraft("assemble/pattern_scanner", FabricationLogic.PATTERN_SCANNER);
-    }
-
-    private static ProcessRecipe deconstructor() {
-        return machineCraft("assemble/deconstructor", FabricationLogic.DECONSTRUCTOR);
     }
 
     /** The material path of a generated recipe id such as {@code b0_r1/iron}. */
