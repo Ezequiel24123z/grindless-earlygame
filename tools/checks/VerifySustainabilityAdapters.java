@@ -3,6 +3,11 @@ package io.github.ezequiel24123z.grindless.sustainability;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
+import io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt;
+import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
+import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
+import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
 import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
 import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
 import io.github.ezequiel24123z.grindless.recipe.OutputSpec;
@@ -51,6 +56,7 @@ public final class VerifySustainabilityAdapters {
             reportRelationships();
             processPressure();
             minimumControlProjection();
+            physicalMatrixProjection();
             contentAndImplementationIdentity();
         } catch (Exception failure) {
             failed++;
@@ -117,6 +123,21 @@ public final class VerifySustainabilityAdapters {
         eq("the actual first-book craft keeps its authored stick cost", 2L,
                 craft.inputs().get(new Resource(Kind.ITEM, "minecraft:stick")));
         eq("the actual bootstrap book remains manually crafted", false, craft.automatable());
+        Resource f1 = AuthorityAdapters.physical(new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX));
+        for (String id : List.of("craft/relay_matrix", "assemble/relay_matrix")) {
+            eq("the real manual and automatic batches produce the same five physical F1 Matrices: " + id,
+                    Map.of(f1, 5L), snapshot.routes().get(id).outputs());
+        }
+        for (String id : List.of("relay", "matrix_line")) {
+            eq("the quest subject projects the authored physical default: " + id, f1,
+                    snapshot.objectives().get(id).subject());
+            eq("the quest still requires the complete physical batch: " + id, 5L,
+                    snapshot.objectives().get(id).count());
+            eq("claim evidence retains the same physical batch without consuming it: " + id, 5L,
+                    snapshot.routes().get("quest/" + id).catalysts().get(f1));
+        }
+        eq("an ordinary stock task is not silently tightened into exact Matrix evidence", false,
+                snapshot.routes().get("quest/matrix_line").conditions().containsKey("matrix_rating"));
         Map<String, String> sources = AuthorityAdapters.authoritySourceHashes(Path.of(""));
         String prefix = "common/src/main/java/io/github/ezequiel24123z/grindless/";
         eq("source provenance includes the actual book opener without loading it", true,
@@ -175,6 +196,59 @@ public final class VerifySustainabilityAdapters {
         eq("normal audit serialization preserves minimum control",
                 "item:grindless:relay_matrix [F1]",
                 route.getAsJsonObject("conditions").get("minimum_control_input_0").getAsString());
+    }
+
+    private static void physicalMatrixProjection() {
+        Resource declaration = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX);
+        var actualDefault = ControlMatrixNbt.load(MatrixArchitecture.RELAY, null).orElseThrow();
+        Resource f1 = new Resource(Kind.ITEM, declaration.id(), actualDefault.rating().ordinal(), "items");
+        eq("authored default identity comes from the actual decoder", f1, AuthorityAdapters.physical(declaration));
+        eq("the actual registered legacy Relay default is F1", FluxTier.F1, actualDefault.rating());
+        eq("generic constructors retain the raw registration key", "item:grindless:relay_matrix", declaration.key());
+        eq("physical and generic registration resources remain distinct", false, declaration.equals(f1));
+        eq("physical projection is idempotent", f1, AuthorityAdapters.physical(AuthorityAdapters.physical(declaration)));
+        for (FluxTier tier : List.of(FluxTier.F1, FluxTier.F2, FluxTier.F3)) {
+            var explicit = ControlMatrixNbt.load(MatrixArchitecture.RELAY,
+                    ControlMatrixNbt.save(new ControlMatrixSpec(MatrixArchitecture.RELAY, tier))).orElseThrow();
+            Resource rated = new Resource(Kind.ITEM, declaration.id(), tier.ordinal(), "items");
+            eq("validated explicit ratings are never replaced by a default: " + tier, explicit.rating().ordinal(),
+                    AuthorityAdapters.physical(rated).rating());
+            eq("explicit resource identity is retained exactly: " + tier, true,
+                    rated == AuthorityAdapters.physical(rated));
+        }
+        for (Resource unrelated : List.of(
+                new Resource(Kind.ITEM, "grindless:integrated_matrix"),
+                new Resource(Kind.ITEM, "grindless:superconducting_matrix"),
+                new Resource(Kind.ITEM, "grindless:unknown_matrix"),
+                new Resource(Kind.ITEM, "other_mod:relay_matrix"),
+                new Resource(Kind.ITEM, "minecraft:paper"),
+                new Resource(Kind.TAG, declaration.id()),
+                new Resource(Kind.FLUID, declaration.id()),
+                new Resource(Kind.ITEM, declaration.id(), 0, "blocks"),
+                new Resource(Kind.ITEM, declaration.id(), 0, "fluids"))) {
+            eq("unsupported names, axes and registries cannot obtain a default: " + unrelated.key(),
+                    true, unrelated == AuthorityAdapters.physical(unrelated));
+        }
+        Resource f2 = new Resource(Kind.ITEM, declaration.id(), FluxTier.F2.ordinal(), "items");
+        Resource f3 = new Resource(Kind.ITEM, declaration.id(), FluxTier.F3.ordinal(), "items");
+        ProcessRecipe authored = new ProcessRecipe("fixture/physical_matrix", MachineFamily.ASSEMBLER,
+                List.of(IngredientSpec.item(declaration.id(), 2), IngredientSpec.matrix(declaration.id(), FluxTier.F1, 3),
+                        IngredientSpec.tag(declaration.id(), 7), IngredientSpec.fluid(declaration.id(), 11)),
+                List.of(OutputSpec.item(declaration.id(), 5), OutputSpec.matrix(declaration.id(), FluxTier.F2, 1),
+                        OutputSpec.matrix(declaration.id(), FluxTier.F3, 1)),
+                Double.NaN, null, 400, 32,
+                List.of(IngredientSpec.item(declaration.id(), 1), IngredientSpec.matrix(declaration.id(), FluxTier.F1, 1)));
+        Route projected = AuthorityAdapters.process(authored);
+        eq("physical process inputs merge only identical default/explicit F1 quantities",
+                Map.of(f1, 5L, new Resource(Kind.TAG, declaration.id()), 7L,
+                        new Resource(Kind.FLUID, declaration.id()), 11L, ENERGY, 12_800L), projected.inputs());
+        eq("retained catalysts use the same physical identity and unchanged sum", Map.of(f1, 2L),
+                projected.catalysts());
+        eq("physical default output never erases explicit F2/F3 or changes the batch",
+                Map.of(f1, 5L, f2, 1L, f3, 1L), projected.outputs());
+        eq("normalization invents no route, permission or minimum-control substitution", Map.of(), projected.conditions());
+        eq("normalization preserves the complete physical duration", 400L, projected.durationTicks());
+        eq("normalization preserves the actual rated draw", 32L, projected.fuPerTick());
     }
 
     private static void debtCannotWaiveGeneratedDebt() {
@@ -536,8 +610,10 @@ public final class VerifySustainabilityAdapters {
     private static void checkedDeclarationInventory() {
         Resource declaredItem = item("checked_item");
         Resource declaredBlock = new Resource(Kind.ITEM, "fixture:checked_block", 0, "blocks");
+        Resource relay = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX);
         Map<Resource, String> declarations = Map.of(declaredItem, "fixture:checked_field",
-                declaredBlock, "fixture:provenance_is_not_code/register(\"ghost\")/\"base\"+suffix");
+                declaredBlock, "fixture:provenance_is_not_code/register(\"ghost\")/\"base\"+suffix",
+                relay, "ModItems.RELAY_MATRIX");
         TagResolver.ElementLookup checked = new TagResolver.ElementLookup() {
             @Override
             public TagResolver.ElementStatus element(Resource resource) {
@@ -553,11 +629,17 @@ public final class VerifySustainabilityAdapters {
         AuthorityAdapters.contributeCheckedDeclarations(builder, checked);
         Snapshot inventory = builder.build();
         eq("checked inventory is exactly catalogue references plus verified declarations, without extras",
-                Set.of(item("catalogue_reference"), declaredItem, declaredBlock), inventory.resources());
+                Set.of(item("catalogue_reference"), declaredItem, declaredBlock, relay), inventory.resources());
         eq("the inventory and tag lookup consume the same declaration set", declarations.keySet(),
                 checked.declarations().keySet());
-        eq("public declaration provenance is retained for every checked declaration", 2L,
+        eq("public declaration provenance is retained for every checked declaration", (long) declarations.size(),
                 inventory.inputHashes().keySet().stream().filter(key -> key.startsWith("registry_declaration:")).count());
+        Resource physical = AuthorityAdapters.physical(relay);
+        eq("raw registry declarations are never normalized into authored stacks", false,
+                inventory.resources().contains(physical));
+        eq("raw registration and physical F1 resources can coexist without equality aliases",
+                Set.of(item("catalogue_reference"), declaredItem, declaredBlock, relay, physical),
+                new Builder(inventory).resource(physical).build().resources());
         eq("an inventory reference is not a registry membership proof", TagResolver.ElementStatus.UNKNOWN,
                 checked.element(declaredItem));
         eq("extending a snapshot starts with all of its authorities and evidence intact", inventory,
@@ -675,7 +757,8 @@ public final class VerifySustainabilityAdapters {
         Map<String, String> sources = AuthorityAdapters.authoritySourceHashes(Path.of(""));
         String javaRoot = "common/src/main/java/io/github/ezequiel24123z/grindless/";
         for (String dependency : List.of("energy/FluxTier.java", "recipe/FabricationLogic.java",
-                "recipe/ProcessLogic.java", "recipe/ProcessRecipe.java", "recipe/MachineFamily.java")) {
+                "recipe/ProcessLogic.java", "recipe/ProcessRecipe.java", "recipe/MachineFamily.java",
+                "matrix/ControlMatrixNbt.java", "matrix/MatrixArchitecture.java")) {
             eq("transitive authority source is fingerprinted: " + dependency, true, sources.containsKey(javaRoot + dependency));
         }
         eq("authority source identities never contain an absolute path", false,
@@ -686,6 +769,14 @@ public final class VerifySustainabilityAdapters {
         eq("the actual report implementation has a separate binary identity", true,
                 executed.classHashes().containsKey(reportClass));
         eq("all S1 implementation bytes were available", Set.of(), executed.unresolved());
+        for (Class<?> type : List.of(ControlMatrixNbt.class, ControlMatrixSpec.class, MatrixArchitecture.class,
+                FluxTier.class)) {
+            String path = type.getName().replace('.', '/') + ".class";
+            try (InputStream bytes = type.getResourceAsStream("/" + path)) {
+                eq("physical rating provenance hashes the actual resolved class image: " + type.getName(),
+                        AuthorityAdapters.sha256(bytes.readAllBytes()), executed.classHashes().get(path));
+            }
+        }
         try (InputStream bytes = AuditReports.class.getResourceAsStream("AuditReports.class")) {
             eq("implementation identity hashes the resolved report class bytes",
                     AuthorityAdapters.sha256(bytes.readAllBytes()), executed.classHashes().get(reportClass));

@@ -154,6 +154,17 @@ public final class VerifyResourceGuidance {
         equal("flint remains optional without a first-use tier", null, actual.resources().get(flint).metadata().firstUseTier());
         equal("flint storage does not forbid ordinary discard", new Handling(Action.STORE, true, false, null, null),
                 actual.resources().get(flint).metadata().handling());
+        Resource relay = new Resource(Kind.ITEM, "grindless:relay_matrix", 1, "items");
+        equal("canonical guidance declares the same physical F1 as the T0 exit", relay,
+                result.annotations().ledger().get(0).exitObjective());
+        equal("the physical F1 declaration retains finite bootstrap metadata", ResourceClass.BOOTSTRAP,
+                actual.resources().get(relay).metadata().resourceClass());
+        equal("generic registration inventory does not acquire the physical F1 declaration", false,
+                actual.resources().containsKey(new Resource(Kind.ITEM, relay.id())));
+        equal("guidance derives the actual manual and automatic physical F1 producers",
+                Set.of("craft/relay_matrix", "assemble/relay_matrix"),
+                actual.resources().get(relay).producers().stream().map(RouteReference::route)
+                        .collect(java.util.stream.Collectors.toSet()));
         return assertions - start;
     }
 
@@ -652,6 +663,10 @@ public final class VerifyResourceGuidance {
         String dtoBefore = ResourceGuidanceJson.write(loaded.document());
         var spec = ControlMatrixNbt.load(architecture, carrier.getTag());
         Optional<Resource> physical = ResourceGuidanceClient.matrixItem(id, spec);
+        Optional<Resource> authority = spec.map(value -> AuthorityAdapters.physical(
+                new Resource(Kind.ITEM, id, value.rating().ordinal(), "items")));
+        equal(label + " authority projection preserves valid ratings and never defaults invalid explicit NBT",
+                physical, authority);
         equal(label + " preserves validated physical rating", expectedPhysical, physical.map(Resource::rating).orElse(null));
         var declaration = physical.flatMap(resource -> ResourceGuidanceClient.declaration(loaded, resource, architectures));
         equal(label + " selects only the correct declaration", expectedDeclaration,

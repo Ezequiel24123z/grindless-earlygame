@@ -3,7 +3,6 @@ package io.github.ezequiel24123z.grindless.sustainability;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
-import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import io.github.ezequiel24123z.grindless.progression.T1Progression;
 import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
 
@@ -23,7 +22,7 @@ import static io.github.ezequiel24123z.grindless.sustainability.SustainabilityMo
  */
 public final class T1Sustainability {
     private static final Gson JSON = new GsonBuilder().serializeNulls().disableHtmlEscaping().setPrettyPrinting().create();
-    private static final Resource RELAY = item(FabricationLogic.RELAY_MATRIX);
+    private static final Resource RELAY = AuthorityAdapters.physical(item(FabricationLogic.RELAY_MATRIX));
 
     public record InputEvidence(String route, Resource resource, long amount, boolean catalyst,
                                 String status, List<String> producers) {
@@ -168,10 +167,9 @@ public final class T1Sustainability {
                         "scope", "Existing SustainabilityAudit/ConstructionReserve finite replay, not a T1 replay"),
                 "side_streams", sideStreams(t0),
                 "unproved", List.of(
-                        "The existing auditor does not normalize untagged default-F1 outputs into the explicit F1 input identity.",
                         "Prior-tier finite custody has not been carried through a complete T1 ConstructionReserve replay.",
                         "Automatic casing and Flux Cell recipes require the established Assembler; complete recurrent input, power and routing closure is not proved.",
-                        "Continuous factory power, nighttime recovery, routing throughput and captured-gas handling need separate evidence.",
+                        "Continuous factory power, nighttime/restart recovery, routing throughput and captured-gas handling need separate evidence.",
                         "Native client, Survival play, actual crafting and longitudinal save compatibility are not proved by this export."));
         return Collections.unmodifiableMap(document);
     }
@@ -227,8 +225,8 @@ public final class T1Sustainability {
                 .append("The F2 recipe consumes explicitly F1 and produces explicitly F2. ")
                 .append("Minimum-control roles are separate route conditions; their exact-rated audit ")
                 .append("input is one valid canonical supply option, not an exhaustive alternatives catalogue. ")
-                .append("The runtime NBT mechanism reads an untagged Relay as F1, but the existing ")
-                .append("audit resource identities are not silently normalized. No complete T1 ")
+                .append("Authored Relay defaults and explicit F1 operands now share the existing ")
+                .append("NBT decoder's physical F1 identity; generic registration declarations stay separate. No complete T1 ")
                 .append("custody/construction replay is claimed. The first Assembler uses a finite ")
                 .append("manual casing seed from the forming line; automatic casing production only ")
                 .append("starts after that Assembler exists. Existing manual casing and Flux Cell ")
@@ -262,15 +260,11 @@ public final class T1Sustainability {
             return new InputEvidence(route.id(), resource, amount, catalyst, "T0_AUDITED_RENEWABLE", producers);
         }
         if (resource.equals(RELAY)) {
+            List<String> producers = List.of(T1Progression.ENTRY_ROUTE, T1Progression.REPRODUCTION_ROUTE).stream()
+                    .filter(id -> require(t0.authorities(), id).retainedOutputs().containsKey(resource)).toList();
             return new InputEvidence(route.id(), resource, amount, catalyst,
-                    "PHYSICAL_T0_SEED_OR_T1_REPRODUCTION_NOT_T0_RENEWABLE",
-                    List.of(T1Progression.ENTRY_ROUTE, T1Progression.REPRODUCTION_ROUTE));
-        }
-        if (resource.kind() == Kind.ITEM && resource.id().equals(RELAY.id())
-                && resource.rating() == MatrixArchitecture.RELAY.firstFrontier().ordinal()) {
-            return new InputEvidence(route.id(), resource, amount, catalyst,
-                    "PHYSICAL_DEFAULT_F1_BINDING_NOT_NORMALIZED_BY_AUDITOR",
-                    List.of(T1Progression.REPRODUCTION_ROUTE));
+                    producers.isEmpty() ? "UNRESOLVED" : "PHYSICAL_T0_SEED_OR_T1_REPRODUCTION_NOT_T0_RENEWABLE",
+                    producers);
         }
         boolean casingSeed = route.id().equals("craft/assembler")
                 && resource.equals(item(FabricationLogic.MACHINE_CASING));

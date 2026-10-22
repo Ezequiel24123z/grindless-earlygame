@@ -2529,7 +2529,7 @@ public final class VerifySustainability {
                 continue;
             }
             Map<Resource, Long> rewards = new TreeMap<>();
-            task.rewards().forEach(reward -> rewards.merge(new Resource(Kind.ITEM, reward.itemId()),
+            task.rewards().forEach(reward -> rewards.merge(AuthorityAdapters.physical(new Resource(Kind.ITEM, reward.itemId())),
                     (long) reward.count(), Math::addExact));
             eq("every exact quest reward " + task.id() + " stays live", rewards, route.outputs());
             yes("quest reward " + task.id() + " stays one-shot", route.oneShot());
@@ -2539,9 +2539,10 @@ public final class VerifySustainability {
         Route starter = authorities.routes().get("quest/" + QuestCatalogue.STARTER_SUPPLIES);
         eq("the final Relay route declares its strict physical rating", "F1",
                 authorities.routes().get("quest/relay").conditions().get("matrix_rating"));
-        eq("the native first-frontier declaration keeps the authored untagged production identity",
-                new Resource(Kind.ITEM, "grindless:relay_matrix"), authorities.objectives().get("relay").subject());
-        eq("a non-default F2 objective cannot inherit that untagged identity",
+        eq("native first-frontier evidence agrees with authored default-F1 production",
+                new Resource(Kind.ITEM, "grindless:relay_matrix", 1, "items"),
+                authorities.objectives().get("relay").subject());
+        eq("a non-default F2 objective retains its separate physical identity",
                 new Resource(Kind.ITEM, "grindless:relay_matrix", 2, "items"),
                 authorities.objectives().get("industrial_matrix").subject());
         eq("the starter has no physical objective", null,

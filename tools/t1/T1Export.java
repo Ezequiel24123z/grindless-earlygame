@@ -13,7 +13,9 @@ import io.github.ezequiel24123z.grindless.process.ConditionState;
 import io.github.ezequiel24123z.grindless.process.MachineEnvelopes;
 import io.github.ezequiel24123z.grindless.process.ProcessConditions;
 import io.github.ezequiel24123z.grindless.progression.T1Progression;
+import io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt;
 import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
+import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
@@ -37,6 +39,7 @@ public final class T1Export {
             JAVA + "recipe/IngredientSpec.java", JAVA + "matrix/ControlMatrixSpec.java",
             JAVA + "sustainability/AuthorityAdapters.java",
             JAVA + "recipe/FabricationLogic.java", JAVA + "matrix/ControlMatrixNbt.java",
+            JAVA + "matrix/MatrixArchitecture.java",
             JAVA + "quest/QuestCatalogue.java", JAVA + "machine/ProcessMachineKind.java",
             JAVA + "recipe/ProcessLogic.java", JAVA + "recipe/ProcessLookup.java",
             JAVA + "energy/FluxTier.java", JAVA + "menu/MachineMenuKind.java",
@@ -92,6 +95,7 @@ public final class T1Export {
                 T1Progression.AtlasSelection.class, T1Sustainability.class,
                 T1Sustainability.InputEvidence.class, T1Sustainability.SeedAllocation.class,
                 AuthorityAdapters.class, IngredientSpec.class, IngredientSpec.MatrixRole.class, ControlMatrixSpec.class,
+                ControlMatrixNbt.class, MatrixArchitecture.class,
                 QuestCatalogue.class, QuestCatalogue.Task.class, QuestCatalogue.Reward.class,
                 QuestCatalogue.Chapter.class, QuestCatalogue.Evidence.class, QuestCatalogue.Type.class,
                 ProcessLogic.class, ProcessLookup.class, FluxTier.class, MachineMenuKind.class,

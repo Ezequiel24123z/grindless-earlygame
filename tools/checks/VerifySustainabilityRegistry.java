@@ -17,6 +17,7 @@ import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
+import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
 import io.github.ezequiel24123z.grindless.research.ResearchLogic;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
 import net.minecraft.SharedConstants;
@@ -137,6 +138,12 @@ public final class VerifySustainabilityRegistry {
         eq("every checked declaration has one public provenance identity", (long) declared.size(),
                 declarationsOnly.build().inputHashes().keySet().stream()
                         .filter(key -> key.startsWith("registry_declaration:")).count());
+        Resource relayDeclaration = item(FabricationLogic.RELAY_MATRIX);
+        Resource relayPhysical = AuthorityAdapters.physical(relayDeclaration);
+        eq("a registry declaration does not invent a physical authored stack", false,
+                declarationsOnly.build().resources().contains(relayPhysical));
+        eq("registration alone does not manufacture an Integrated Matrix", false,
+                declared.containsKey(item("grindless:integrated_matrix")));
         SourceBinding sources = sourceBinding(root, AuthorityAdapters.canonical(root, registry), declared);
         Snapshot snapshot = sources.snapshot();
         TagResolution iron = snapshot.tags().get(tag("forge:ingots/iron"));
@@ -2866,12 +2873,18 @@ public final class VerifySustainabilityRegistry {
             declaration(declared, item("grindless:" + entry.itemName()),
                     "SupplyCatalogue.entries/" + entry.itemName());
         }
+        eq("the projected Relay is bound to its actual checked item declaration", "ModItems.RELAY_MATRIX",
+                declared.get(item(FabricationLogic.RELAY_MATRIX)));
         eq("both actual registration authorities fit the closed declaration grammar", true, !declared.isEmpty());
         return Map.copyOf(declared);
     }
 
     private static void addDeclarations(ClassTree type, boolean blocks, Map<Resource, String> declared) throws IOException {
         closedRegistrationClass(type, blocks);
+        if (!blocks && !normalized(field(type, "RELAY_MATRIX").getInitializer()).equals(
+                "register(\"relay_matrix\",()->newControlMatrixItem(MatrixArchitecture.RELAY,newItem.Properties()))")) {
+            throw new IOException("Unexamined Relay item/architecture binding; membership not evaluated.");
+        }
         for (Tree member : type.getMembers()) {
             if (!(member instanceof VariableTree field) || !field.getType().toString().startsWith("RegistrySupplier<")) {
                 continue;
@@ -3019,6 +3032,26 @@ public final class VerifySustainabilityRegistry {
         rejectProfile("the validated API's import binding cannot be substituted", "ModItems",
                 items.replace("import dev.architectury.registry.registries.DeferredRegister;",
                         "import unknown.DeferredRegister;"), false);
+        for (String[] mutation : List.of(
+                new String[]{"a renamed item cannot inherit the Relay physical binding",
+                        "register(\"relay_matrix\",", "register(\"other_relay_matrix\","},
+                new String[]{"a non-Matrix item cannot inherit the Relay physical binding",
+                        "new ControlMatrixItem(MatrixArchitecture.RELAY, new Item.Properties())",
+                        "new Item(new Item.Properties())"},
+                new String[]{"an unsupported architecture cannot inherit the Relay physical binding",
+                        "new ControlMatrixItem(MatrixArchitecture.RELAY,",
+                        "new ControlMatrixItem(MatrixArchitecture.INTEGRATED,"},
+                new String[]{"a substituted Matrix class is not the registered Matrix authority",
+                        "import io.github.ezequiel24123z.grindless.item.ControlMatrixItem;",
+                        "import fixture.ControlMatrixItem;"},
+                new String[]{"a substituted architecture is not the decoded architecture authority",
+                        "import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;",
+                        "import fixture.MatrixArchitecture;"})) {
+            String changed = items.replace(mutation[1], mutation[2]);
+            eq("the Matrix registration counterexample actually changes source: " + mutation[0],
+                    false, items.equals(changed));
+            rejectProfile(mutation[0], "ModItems", changed, false);
+        }
     }
 
     private static void rejectDeclaration(String message, String name, String source, String extra,
@@ -3087,6 +3120,8 @@ public final class VerifySustainabilityRegistry {
                 if (name.equals("ModItems")) {
                     bindings.putAll(Map.of("SupplyCatalogue", "io.github.ezequiel24123z.grindless.material.SupplyCatalogue",
                             "SupplyItem", "io.github.ezequiel24123z.grindless.material.SupplyItem",
+                            "ControlMatrixItem", "io.github.ezequiel24123z.grindless.item.ControlMatrixItem",
+                            "MatrixArchitecture", "io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture",
                             "ArrayList", "java.util.ArrayList", "Collections", "java.util.Collections",
                             "List", "java.util.List"));
                 } else {

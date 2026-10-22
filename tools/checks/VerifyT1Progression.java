@@ -44,9 +44,12 @@ public final class VerifyT1Progression {
         String exporter = Files.readString(root.resolve(Path.of("tools", "t1", "T1Export.java")));
         var fingerprinted = java.util.regex.Pattern.compile(
                 "for \\(Class<\\?> type : List\\.of\\(([\\s\\S]*?)\\)\\) \\{").matcher(exporter);
-        equal("the exporter fingerprints typed inputs, the catalogue and actual wet-proof implementations (source contract)", true,
-                fingerprinted.find() && List.of("AuthorityAdapters.class", "VerifySustainabilityRegistry.class",
+        List<String> imageExpressions = fingerprinted.find()
+                ? java.util.Arrays.stream(fingerprinted.group(1).split(",")).map(String::strip).toList() : List.of();
+        equal("the exporter fingerprints typed inputs, the physical decoder and actual wet-proof implementations (source contract)", true,
+                List.of("AuthorityAdapters.class", "VerifySustainabilityRegistry.class",
                         "IngredientSpec.class", "IngredientSpec.MatrixRole.class", "ControlMatrixSpec.class",
+                        "ControlMatrixNbt.class", "MatrixArchitecture.class",
                         "QuestCatalogue.class", "QuestCatalogue.Task.class", "QuestCatalogue.Reward.class",
                         "QuestCatalogue.Chapter.class", "QuestCatalogue.Evidence.class", "QuestCatalogue.Type.class",
                         "ProcessLogic.class", "ProcessLookup.class", "FluxTier.class", "MachineMenuKind.class",
@@ -56,17 +59,22 @@ public final class VerifyT1Progression {
                         "ProcessConditions.class", "ProcessConditions.Builder.class",
                         "ConditionEnvelope.class", "ConditionEnvelope.Builder.class", "ConditionBand.class",
                         "ConditionReport.class", "ConditionFault.class").stream()
-                        .allMatch(fingerprinted.group(1)::contains));
+                        .allMatch(imageExpressions::contains));
         var sources = java.util.regex.Pattern.compile(
                 "SOURCES = List\\.of\\(([\\s\\S]*?)\\);").matcher(exporter);
-        equal("the exporter binds the sources of its new catalogue and wet applicability claims (source contract)", true,
-                sources.find() && List.of("tools/checks/VerifySustainabilityRegistry.java",
-                        "quest/QuestCatalogue.java", "machine/ProcessMachineKind.java",
-                        "recipe/ProcessLogic.java", "recipe/ProcessLookup.java", "energy/FluxTier.java",
-                        "menu/MachineMenuKind.java", "process/MachineEnvelopes.java", "process/ConditionState.java",
-                        "process/Agitation.java", "process/ProcessConditions.java", "process/ConditionEnvelope.java",
-                        "process/ConditionBand.java", "process/ConditionReport.java", "process/ConditionFault.java")
-                        .stream().allMatch(sources.group(1)::contains));
+        List<String> sourceExpressions = sources.find()
+                ? java.util.Arrays.stream(sources.group(1).split(",")).map(String::strip).toList() : List.of();
+        equal("the exporter binds the exact sources of physical defaults, catalogue and wet applicability claims (source contract)", true,
+                List.of("\"tools/checks/VerifySustainabilityRegistry.java\"",
+                        "JAVA + \"matrix/ControlMatrixNbt.java\"", "JAVA + \"matrix/MatrixArchitecture.java\"",
+                        "JAVA + \"quest/QuestCatalogue.java\"", "JAVA + \"machine/ProcessMachineKind.java\"",
+                        "JAVA + \"recipe/ProcessLogic.java\"", "JAVA + \"recipe/ProcessLookup.java\"",
+                        "JAVA + \"energy/FluxTier.java\"", "JAVA + \"menu/MachineMenuKind.java\"",
+                        "JAVA + \"process/MachineEnvelopes.java\"", "JAVA + \"process/ConditionState.java\"",
+                        "JAVA + \"process/Agitation.java\"", "JAVA + \"process/ProcessConditions.java\"",
+                        "JAVA + \"process/ConditionEnvelope.java\"", "JAVA + \"process/ConditionBand.java\"",
+                        "JAVA + \"process/ConditionReport.java\"", "JAVA + \"process/ConditionFault.java\"")
+                        .stream().allMatch(sourceExpressions::contains));
         SustainabilityAudit.Result t0 = canonicalResult(root);
         int checks = verify(t0);
         Path generated = root.resolve(Path.of("docs", "tiers", "t1-production-graph.json"));
@@ -161,6 +169,7 @@ public final class VerifyT1Progression {
         equal("the Assembler removes repetition through the existing executor", true, reproduction.automatable());
         equal("the Bench still cannot manufacture the frontier Matrix", false,
                 snapshot.routes().containsKey("bench/relay_matrix"));
+        physicalControllerSupply(t0);
         componentRoutes(snapshot);
         factoryReproduction(snapshot);
         thermalGeneratorAssembly(t0);
@@ -312,9 +321,67 @@ public final class VerifyT1Progression {
                 "t1_finite_establishment_replayed", "global_optimum_claimed")) {
             equal("bounded source evidence cannot invent " + flag, false, document.get(flag).getAsBoolean());
         }
+        equal("only the resolved identity limitation is removed; all real proof limits remain",
+                List.of("Prior-tier finite custody has not been carried through a complete T1 ConstructionReserve replay.",
+                        "Automatic casing and Flux Cell recipes require the established Assembler; complete recurrent input, power and routing closure is not proved.",
+                        "Continuous factory power, nighttime/restart recovery, routing throughput and captured-gas handling need separate evidence.",
+                        "Native client, Survival play, actual crafting and longitudinal save compatibility are not proved by this export."),
+                T1Sustainability.document(t0).get("unproved"));
         equal("every direct consumption/catalyst edge is exported", inputs.size(),
                 document.getAsJsonArray("mandatory_input_evidence").size());
         return assertions - before;
+    }
+
+    private static void physicalControllerSupply(SustainabilityAudit.Result t0) {
+        Snapshot snapshot = t0.authorities();
+        Resource f1 = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX,
+                ControlMatrixNbt.load(MatrixArchitecture.RELAY, null).orElseThrow().rating().ordinal(), "items");
+        equal("the existing seed batch remains exactly five physical controllers", 5L,
+                T1Sustainability.seedAllocation(snapshot).batchOutput());
+        equal("only actual authored manual and Assembler routes produce physical F1",
+                Set.of(T1Progression.ENTRY_ROUTE, T1Progression.REPRODUCTION_ROUTE),
+                snapshot.routes().values().stream().filter(route -> route.retainedOutputs().containsKey(f1))
+                        .map(Route::id).collect(java.util.stream.Collectors.toSet()));
+        equal("the manual and Assembler producer batches agree on actual physical F1", Map.of(f1, 5L),
+                snapshot.routes().get(T1Progression.REPRODUCTION_ROUTE).outputs());
+        for (var input : T1Sustainability.inputs(t0)) {
+            if (input.resource().equals(f1)) {
+                equal("all physical F1 inputs retain the finite-seed/reproduction boundary: " + input.route(),
+                        "PHYSICAL_T0_SEED_OR_T1_REPRODUCTION_NOT_T0_RENEWABLE", input.status());
+                equal("physical F1 inputs name both actual matching producers: " + input.route(),
+                        List.of(T1Progression.ENTRY_ROUTE, T1Progression.REPRODUCTION_ROUTE), input.producers());
+            }
+        }
+        equal("the explicit F1 predecessor has no invented minimum-control role", false,
+                snapshot.routes().get(T1Progression.EXIT_ROUTE).conditions().keySet().stream()
+                        .anyMatch(key -> key.startsWith("minimum_control_")));
+        equal("physical identity agreement is not a T0 renewable Matrix claim", false,
+                t0.tiers().get(0).renewable().contains(f1));
+        Map<String, Route> changed = new TreeMap<>(snapshot.routes());
+        for (String id : List.of(T1Progression.REPRODUCTION_ROUTE, T1Progression.ENTRY_ROUTE)) {
+            Route actual = changed.get(id);
+            Resource f2 = new Resource(Kind.ITEM, f1.id(), FluxTier.F2.ordinal(), "items");
+            changed.put(id, new Route(actual.id(), actual.authority(), actual.source(), actual.family(),
+                    actual.inputs(), actual.catalysts(), Map.of(f2, 5L), actual.discharged(),
+                    actual.durationTicks(), actual.fuPerTick(), actual.conditions(), actual.prerequisites(),
+                    actual.oneShot(), actual.modOwned(), actual.automatable()));
+            Snapshot mutated = new Snapshot(snapshot.resources(), changed, snapshot.terminals(), snapshot.tags(),
+                    snapshot.objectives(), snapshot.inputHashes(), snapshot.findings());
+            var fixture = new SustainabilityAudit.Result(mutated, t0.annotations(), t0.tiers(), t0.debt(), t0.findings());
+            var predecessor = T1Sustainability.inputs(fixture).stream()
+                    .filter(input -> input.route().equals(T1Progression.EXIT_ROUTE) && input.resource().equals(f1))
+                    .findFirst().orElseThrow();
+            boolean none = id.equals(T1Progression.ENTRY_ROUTE);
+            equal("a different physical output cannot remain an F1 producer: " + id,
+                    none ? List.of() : List.of(T1Progression.ENTRY_ROUTE), predecessor.producers());
+            equal("an identity mismatch remains an explicit unresolved edge: " + id,
+                    none ? "UNRESOLVED" : "PHYSICAL_T0_SEED_OR_T1_REPRODUCTION_NOT_T0_RENEWABLE",
+                    predecessor.status());
+            if (none) {
+                rejects("the seed allocator cannot substitute explicit F2 for default F1",
+                        () -> T1Sustainability.seedAllocation(mutated));
+            }
+        }
     }
 
     private static void wireForming(Snapshot snapshot) {
@@ -589,9 +656,8 @@ public final class VerifyT1Progression {
         Map<Resource, Long> composed = new TreeMap<>(physicalInputs(core));
         physicalInputs(finished).forEach((resource, amount) -> composed.merge(resource, amount, Math::addExact));
         equal("exactly one core is consumed and cancelled from the composed input bill", 1L, composed.remove(component));
-        equal("the canonical physical controller is present once before baseline identity comparison", 1L,
-                composed.remove(controller));
-        composed.put(item(FabricationLogic.RELAY_MATRIX), 1L);
+        equal("the same physical F1 controller is present once in manual and automatic construction", 1L,
+                composed.get(controller));
         equal("both Thermal steps preserve the full manual construction materials", physicalInputs(manual), composed);
         equal("Thermal reproduction preserves the ordinary manual machine output", manual.outputs(), finished.outputs());
         for (Route stage : List.of(core, finished)) {

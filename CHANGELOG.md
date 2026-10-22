@@ -15,6 +15,18 @@ entries below reference those records by id.
 
 ### Added
 
+- **Align authored Relay defaults with their actual physical F1 identity.**
+  ADR-0184 uses AuthorityAdapters.physical and the existing NBT decoder for
+  craft/process/quest projections and T0/T1 metadata; the closed registration
+  profile checks the real Relay item/architecture supplier and imports.
+  Raw registry keys, explicit higher ratings, five-controller batches/draws,
+  bills, rewards and runtime data stay unchanged. Existing regressions and
+  direct source/class provenance cover the seam and reject identity/omission
+  counterexamples. This source-only correction does not carry finite T1 custody,
+  prove renewable closure/autonomy or update canonical outputs; Java/writers
+  and integration qualification need their own later source-bound window.
+  Existing unrated display contexts still need a separately owned client lookup
+  follow-up before integrated guidance parity; client/runtime are untouched here.
 - **Select the real default-F1 authority correction while G7 qualifies51.**
   ADR-0184 reuses the existing Matrix decoder and authority adapters to project
   authored registered Relay defaults consistently with explicit F1 inputs.
