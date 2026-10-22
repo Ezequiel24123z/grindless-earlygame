@@ -1145,6 +1145,37 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
+**Complete manual-manufacturing source composition before execution:**
+parent normally composes A652968a2, C ab1e8ab0 and Bdc048034 in that order.
+Private merge76b19048 has parents0b1b8a15/A652; mergeeaa21be9 has
+parents76b19048/Cab1e; this final ordinary B merge retains both histories
+in each sole CHANGELOG conflict. No application conflict or manual code/data
+edit is used. The40 A,14 C and10 B non-changelog paths are disjoint and
+byte-exact to their completed source commits. The canonical four stay
+actual A9bb3, not a hand-generated manual-capital/finite result.
+
+Private B-guard handoffSHA256
+093e2d92bae3ac9e000e2fb8cc31df0f33716ec517023c702a659d82c96b9dd9
+is parent verified. Normaldc048/exact63f/tree6d99b25a changes only BE,
+native aggregate, Persistence and its own bullet:4 files322 insertions17
+deletions, including27 changed runtime lines. Ten protected method bodies
+are author-compared exact; this is not a compiler/behavioral pass. The
+written expected-red contract now has a source repair, not an executed green.
+
+Same reviewer582f assesses ONLY newe960-to-dc runtime/test delta, without
+repeating the original B/generic/A/C review. The source is publishable
+coherent WIP for required CI, but no personal-PC GO is issued until that
+verdict closes. Actual common/Forge/compiler/contracts/one native/manual/
+Bench guard/model/source-image custody remains pending; the unbound G11
+preparation or old G10 logs do not supply it. No source-normal retirement
+deletes real owner machines, stored paid work or a world.
+
+The same reviewer582f then closes only newe960-to-dc with no significant
+source issue conditional on actual A/C. No original/full review or producer
+is repeated. Actual Java/Gradle/native/model/integrated validation remains
+unexecuted and the19-expectation smoke is still pending. This scoped verdict
+unblocks one reviewed exact-source qualification, not deployment/acceptance.
+
 **Final A review and C follow-up intake:** review9219 closes with no
 significant source issue across original A7f9-to-d686 and only its finished
 d686-to652 delta. Common/Forge compilation, contracts, native registration/

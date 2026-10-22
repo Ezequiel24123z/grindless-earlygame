@@ -4,6 +4,29 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**Complete manual-manufacturing SOURCE is normally composed, not executed.**
+Normal A652/Cab1e/Bdc048 are integrated with exactly40/14/10 non-changelog
+blobs respectively; only changelog conflicts and every history is retained.
+Private Amerge76b19048 and Cmergeeaa21be9 precede this final B composition.
+All four canonical files remain actual A9; no generated/app file is hand-edited.
+Publication is coherent combined WIP for required CI, not compiler/native/
+model proof. A/C/original B and same-reviewer582f's new Bench-runtime delta
+are now source-reviewed without significant issue within their exact scopes.
+No personal-PC source/lease is bound and no new producer runs.
+
+**B guard SOURCEdc048 is delivered.** Normal parent63f107a9/tree6d99b25a,
+four-file322 insertions17 deletions delta; private separate handoffSHA093e2d92
+is parent verified, old46bf/c00 stay exact. It holds orphaned positive Bench
+work before matching/inspection/cache adoption, preserves owner/stores/live/
+zero/valid-Guide semantics and uses C's exact OUT_OF_BAND/menuFault text.
+The existing native aggregate adds one actual Bench while retaining19
+expectations/budget. Ten protected methods including work/workCycle/diagnosis,
+settlement and load/save are author-compared exact, not Java proof.
+Review582f receives only e960-to-dc, not a replay of old B/A/C reviews.
+It now finds no significant new-delta issue conditional on the actual A/C
+interfaces. Java/Gradle/native/model/integrated execution remains unperformed;
+there is no inferred red/green or19-expectation pass.
+
 **OWNER CORRECTION ADR-0188 is the current product authority.** Normal final
 machines are manual; their operating processes remain automatable. Components,
 materials, passive infrastructure and real multiblock controllers use authored
@@ -433,8 +456,8 @@ identity repairs invocation without altering Git configuration.
 
 | Category | Current integration boundary |
 | --- | --- |
-| COMPLETED | Historical proofs preserved; ADR-0188/per-product policy published; generic custody/B source reviews clear; initial A41/C15 source delivered with declared integration limits; coordinator resolves Furnace boundary conservatively and assigns narrow source follow-ups |
-| BLOCKED | Actual source inspection identifies orphaned positive Bench fallback clearing paid owner/progress; ADR-0189 guard repair and combined exact-source qualification are required. No urgent owner/credential decision |
+| COMPLETED | Historical proofs preserved; complete A652/Cab1e/Bdc048 source normally composed with exact40/14/10 blobs and A9 unchanged; A/C/original-B source reviews clear, new Bench guard source delivered |
+| BLOCKED | None known in reviewed source. Exact-source compiler/native/model qualification remains required; no urgent owner/credential decision or executed guard pass yet |
 | NOT EXECUTED | ADR-0188 recipe retirement/manual ingredient/integrated contracts and new native/model qualification; ADR-0187 Java/replay/writers; rendered/client-wire/owner-world/campaign/package/player deployment/main/release/whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
 | NEEDS MY DECISION | None |

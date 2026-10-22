@@ -40,6 +40,10 @@ universal self-replication or mandatory Assembler use. Retire obsolete live
 automatic normal-machine constructors, supply valid manual authorities and
 retarget teaching/fixtures/finite proof before a new exact-source GO.
 The old common-model-only preparation is frozen without execution.
+Complete A652/Cab1e/Bdc source is now normally composed with exact40/14/10
+owned blobs and only changelog conflicts. All A/C/original-B/new-B-delta source
+reviews are clear within scope; one exact-source G11 compiler/existing-carrier
+native/model window is next, not another proposal or repeated source review.
 Generic custody review8ef is clear, but no Java/finite result is inferred.
 Preserve historical proofs, actual worlds and all unavailable paid work.
 

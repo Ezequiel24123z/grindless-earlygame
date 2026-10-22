@@ -153,7 +153,8 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     /** Inspection never resolves a recipe, changes subscriptions or resurrects a retired generation. */
     public Optional<ProcessRecipe> inspectionRecipe() {
-        return recipeGeneration == ProcessLookup.generation() ? Optional.ofNullable(cached) : Optional.empty();
+        return !unavailablePaidBenchWork() && recipeGeneration == ProcessLookup.generation()
+                ? Optional.ofNullable(cached) : Optional.empty();
     }
 
     public ConditionFault inspectionConditionFault() {
@@ -630,6 +631,11 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     private ProcessRecipe recipe(List<FluidInsert.Source> sources) {
         refreshRecipeGeneration();
+        if (unavailablePaidBenchWork()) {
+            cached = null;
+            cachedRecipeId = "";
+            return null;
+        }
         if (kind == ProcessMachineKind.ASSEMBLER && !assemblerWork.valid()) {
             cached = null;
             return null;
@@ -659,6 +665,9 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     /** Shared read-only selection; inspection of produced volume never publishes a cached recipe. */
     private Optional<ProcessRecipe> matchingRecipe(List<FluidInsert.Source> sources) {
+        if (unavailablePaidBenchWork()) {
+            return Optional.empty();
+        }
         if (kind == ProcessMachineKind.ASSEMBLER) {
             if (!assemblerWork.valid()) {
                 return Optional.empty();
@@ -684,6 +693,13 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             found = ProcessLookup.find(kind.family(), inputs(), fluid.state(), FluidInsert.available(sources));
         }
         return found;
+    }
+
+    /** A retired/unattributed paid Bench job cannot authorize another batch or lose its raw balance. */
+    private boolean unavailablePaidBenchWork() {
+        return kind == ProcessMachineKind.ASSEMBLY_BENCH && progress > 0.0
+                && ProcessLookup.byId(kind.family(), workRecipeId).isEmpty()
+                && LegacyGuideAssembly.resume(kind.family(), workRecipeId, progress).isEmpty();
     }
 
     private void activateAssemblerWork(String id) {
@@ -994,15 +1010,17 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             return;
         }
         lastFault = report.fault();
+        boolean retainedBenchWork = unavailablePaidBenchWork();
         MachineStatus observed = ProcessLogic.status(recipe != null, missing, stuck,
                 report.canRun() || recipe == null, powered, workingNow);
         if (recipe == null && fluidOutput > 0) {
             observed = MachineStatus.BLOCKED;
         }
-        if (structureFault != WorkshopStructure.Fault.NONE || siteFault != SourceSite.Fault.NONE) {
+        if (retainedBenchWork || structureFault != WorkshopStructure.Fault.NONE || siteFault != SourceSite.Fault.NONE) {
             observed = MachineStatus.OUT_OF_BAND;
         }
-        boolean stableIdle = recipe == null && !missing && structureFault == WorkshopStructure.Fault.NONE
+        boolean stableIdle = !retainedBenchWork && recipe == null && !missing
+                && structureFault == WorkshopStructure.Fault.NONE
                 && siteFault == SourceSite.Fault.NONE;
         if ((stableIdle ? display.settle(MachineStatus.IDLE) : display.observe(observed))
                 && getLevel() != null) {
@@ -1125,6 +1143,9 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     @Override
     public Component menuFault() {
+        if (unavailablePaidBenchWork()) {
+            return Component.translatable("gui.grindless.bench.retained_work", workRecipeId, Double.toString(progress));
+        }
         return lastFault.isFault()
                 ? Component.literal(lastFault.message())
                 : Component.empty();

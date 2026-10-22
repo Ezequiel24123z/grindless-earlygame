@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Normally compose the complete manual-manufacturing source.**
+  Preserve A652's40, C ab1e's14 and B dc048's10 non-changelog blobs exactly
+  through ordinary merges; only changelog conflicts, retaining every history.
+  All four canonical payloads remain actual A9 until normal writers execute.
+  A/C/original-B and the new paid-Bench runtime delta source reviews are clear
+  within their exact scopes. Publish coherent combined WIP
+  for required CI, not a compiler/native/model or product pass. No personal-PC
+  GO, owner-world change or recipe-credit refund follows from composition.
 - **Preserve final recipe review and finite-capital/Bench-text source.**
   A's immutable original+delt652 review finds no significant source issue,
   not a runtime/compiler pass. C now provides actual vanilla authority/R33
@@ -125,6 +133,76 @@ entries below reference those records by id.
   Supply B's exact two-argument Bench retained-work message without changing
   runtime/fault/transport code or claiming rendered-client evidence.
   No Java/model/native/writer, actual class hash or player-save result is claimed.
+- **Hold orphaned paid Bench work before recipe resolution (ADR-0188).**
+  Guard read-only matching/inspection and cached recipe adoption when positive
+  Bench work has no current owner, including unattributed work and legacy
+  Recipe-only loading. Preserve the raw owner/credit without another row,
+  draw, transfer, refund, completion, ledger or schema change. Reuse the
+  existing strict paid-Guide compatibility authority; live known Bench and
+  zero/unpaid lookup remain functional. The executor, work/workCycle gates
+  and diagnostic prefix, settlement, other families and physical profiles
+  remain unchanged. Use the existing OUT_OF_BAND/menuFault presentation rather
+  than silent idle; C's separate locale commit supplies
+  `gui.grindless.bench.retained_work` with owner/paid-tick arguments.
+  Extend actual typed Bench contracts for read-only state, stale cache,
+  generation withdrawal/return, ordinary current output, zero/unpaid work and
+  valid partial/completed Guide resolution, without minting a fake Guide output.
+  Add one real Bench/old Furnace owner/current brick-block competitor to the
+  same command-gated native aggregate, conserving stores through ticks/reindex/
+  binary reopen and retaining the diagnostic Bench in its disposable cell.
+  All nineteen expectations, original markers, scenario/timing budgets and
+  prior raw capsules stay exact; the aggregate's authored scope now includes
+  held Bench work, not a replayed native result. Parent must compose/review
+  this source with A's retirements and C's key before an exact-source GO.
+  Scoped lexical/source guards, exact protected-method comparisons and 963
+  documentation links pass; no Java/VSR/native execution is inferred.
+  Java/native/model/writer/PC/publication and owner-world recovery remain unrun.
+- **Expose the coupled retired-Furnace/Bench paid-work boundary (ADR-0188).**
+  Follow the coordinator's provisional manual-final vanilla Furnace decision,
+  not an owner-confirmed answer. Extend existing Assembler refusal/retention
+  cases to `assemble/bootstrap/furnace`; add actual Bench BE/NBT contracts for
+  `bench/furnace` and already-retired `bench/quern`, partial/completed-fractional
+  work and legacy Recipe-only owner recovery. Derive a real competing
+  `bench/brick_block` bill rather than register a fake recipe or invent stock.
+  Preserve the old paid owner/amount through reopen and refuse that permitted
+  fallback without draw, completion, refund or store mutation. Inspection
+  identifies an unresolved production defect: `matchingRecipe` falls back to
+  another current row, then the non-Assembler `recipe` branch zeroes Progress
+  and replaces WorkRecipe, losing the retired balance. The new competing-Bench
+  assertions are expected red by inspection, not executed or weakened.
+  A narrow Bench orphaned-paid-work refusal before fallback, retaining the
+  existing Guide compatibility exception, needs separately owned runtime
+  repair; this test-only follow-up does not rewrite the executor. Preserve
+  e960/source041, original private handoff and all native nineteen-marker
+  meanings. Two-path/whitespace/lexical/source guards and 963 documentation
+  links pass, not the unexecuted retention behavior. No Java/native/model/
+  writer/PC/ref absorption or publication.
+- **Retarget lane-B selection/work and native crafting contracts (ADR-0188).**
+  Use the real colliding Blueprint Tool/Deconstruction Planner routes, deriving
+  grouped quantities and timing instead of keeping normal-machine fabrication
+  live. Pure ledger fixtures are explicitly unit-only. Retain stable-ID/current-
+  catalogue/menu authority, exact partial/fractional/blocked work, rollback,
+  reentry, typed-SNBT preservation and lookup-derived legacy AUTO oracles.
+  Concrete retired Washer/Press targets refuse without fallback or Flux draw;
+  raw paid ownership survives reopening and cannot pay either permitted tool.
+  The same matrix-lifecycle carrier now authors one loaded
+  `grindless:pulverizer` shaped Ingredient/JSON/network/result-slot/inventory
+  probe with actual Relay F1-F3, malformed/unrelated/unknown-encoded refusal
+  and one baseline output/control debit. The no-delivery Forge FakePlayer
+  proves no actual client transport/rendering or Survival supply.
+  Preserve the original sixteen markers and nineteen-expectation budget;
+  replace only current `MATRIX-CONTROL-BLOCKED`/`MATRIX-CONTROL-CONSUMED-ONCE`
+  expectations with explicitly permitted `MATRIX-ASSEMBLER-TOOL-*` semantics,
+  retaining the existing helper paths/timing. Old G10 evidence is unchanged.
+  Integration depends on lane A's retired catalogue, manual JSON and MOD-bus
+  `minimum_control` serializer; no A/C refs, runtime/model/canonical writes,
+  owner-save migration, player update or publication is included. Scoped
+  whitespace/lexical/source/carrier guards and 963 documentation links pass;
+  Java compilation, contract execution and native qualification are not run.
+  Preserve source checkpoint041022f7 and its original attribution-format
+  failure: both coauthor texts exist, but a blank separator makes Git parse
+  only the final trailer. A normal documentation-only follow-up records both
+  attributions contiguously; no amend, rewritten history or changed Java blob.
 - **Correct the manufacturing objective to manual final normal machines.**
   The owner explicitly rejects universal factory self-replication. ADR-0188
   supersedes automatic complete-normal-machine fabrication, not automated
