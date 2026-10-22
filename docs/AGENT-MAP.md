@@ -231,6 +231,15 @@ recipe/bill/engine/registration/save changes. Reuse actual default-F1/STIRRED
 Washer and both output streams. One new free acquisition lesson preserves all
 old50 IDs/rewards/values and cannot gate initial F2. No canonical hand edits or
 PC/cache/G4 alias access follows from source ownership.
+ADR-0183 closes51 compatibility in the existing FtbQuestDefinitionPublisher/
+FtbQuestUpdatePlanner/FtbQuestIntegration and host Read-PrismQuestPlan receipt
+validation (currently hardcoded50). Preserve authentic historical source-file
+publication and exact known46/50/51 logical/native sets; source-bound current
+catalogue is not a permanent literal50. Unknown/equal-count-wrong-ID shapes
+remain refusals, old tasks/rewards/tags stay exact, only new lessons are free.
+Keep schemas/ownership/stopped-target/backup/journal guards and existing focused
+Java/Test-PrismDev -Suite QuestDefinitions fixtures. No new engine, flag or
+active G5 source switch is authorized.
 The same existing ControlMatrixInputChecks.registered probe now checks the new
 core's actual Item class/registry ID, without another case or marker. This
 observation is pending execution, not supplied by synthetic lookup carriers.

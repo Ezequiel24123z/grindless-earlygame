@@ -429,6 +429,17 @@ G3 and are reused; no new server/client or51 content enters this window.
 All admission/Sync/configuration/artifact/plan/apply observations remain pending.
 Keep privacy/resource/owner guards and return clean/Java0/locksfalse explicitly.
 
+**Separate51 source compatibility:** ADR-0183 assigns existing FTB ownercb273782
+to compose wet738 with the current task-container fix and close publisher/
+planner/startup/host receipt consumers. Known46/50/51 exact identity sets and
+reviewed lesson additions replace the accidental current50 assumption, not
+source/class/JAR/ownership/paid-state guards. Keep schema2/receipt-plan formats,
+authentic old source-file46 export and DD0-only unreceipted adoption. Use the
+existing focused Java/QuestDefinitions host fixtures; no PC/JVM or G5 alias
+permission. Implementation remains pending and the current50 plan window runs
+independently. The wet source owner separately closes newly relevant T1 writer
+source/executed-image provenance through the existing exporter, not new carriers.
+
 | Category | Current qualification state: G4 verified closed, G5 assigned |
 | --- | --- |
 | COMPLETED | G3/A3 normal outputs and custody; actual G4 legacy reference/native89/19markers/managed201/JDK34/current package and fictitious deployment/seed; parent176-file custody/2578 inputs and safe leaseback; source686 configuration fix composed |

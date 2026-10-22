@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 66,
+  "plan_revision": 67,
   "updated": "2026-10-22",
   "phase": "managed_FTB_update_and_explicit_control_capacity_development_after_closed_M_wave",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -150,6 +150,16 @@
     "G4_source_alias_updates_authorized": false,
     "canonical_outputs": "do_not_hand_edit_normal_writers_only_in_a_later_fixed_source_window",
     "acceptance": "real_F1_STIRRED_applicability_6live_route_Atlas_bindings_optional_DAG_old50IDs_rewards_values_unchanged_new_concise_no_reward_task"
+  },
+  "catalogue51_compatibility": {
+    "policy": "ADR-0183",
+    "status": "accepted_separate_source_scope_not_implemented_or_qualified",
+    "source_owner_session": "cb273782-4065-44e2-90a3-9c0c036367ce",
+    "required_source": "compose_wet738105d4_with_current_source686_fix_without_touching_frozen_G5_alias988",
+    "known_lineage": "46_plus_first_grid_forming_dies_copper_coil_flux_cell_is50_plus_wet_beneficiation_is51_exact_ID_sets_not_scalar_count_or_arbitrary_subset",
+    "seams": "publisher_planner_FtbQuestIntegration_host_receipt_validation_and_existing_Java_QuestDefinitions_PS_fixtures",
+    "preserve": "authentic_old_source_CLI46_schema2_actual_class_source_JAR_compilation_binding_only_DD0_29bc_unreceipted46_known_managed_receipts_stopped_safefile_backup_journal_noop_paid_fence_old50IDs_rewards_starter",
+    "not_authorized": "PC_SSH_JVM_cache_player_G5_alias_retarget_new_engine_flags_schemas_or_canonical_hand_edits"
   },
   "autonomous_tier_delivery": {
     "policy": "ADR-0178",

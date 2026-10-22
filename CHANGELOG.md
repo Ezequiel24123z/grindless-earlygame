@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Select explicit known-catalogue51 compatibility, not a wider count loophole.**
+  ADR-0183 separates46/50/51 logical/native lineage from unchanged reference2/
+  receipt/plan schemas. The FTB source owner composes wet738 and updates publisher,
+  planner, integration and host receipt guards with existing focused fixtures.
+  Preserve full source/class/JAR binding, exact retained identity/reward/tag
+  contracts and only authentic DD0 unreceipted46 adoption. Implementation is
+  pending; active G5 remains current50/fixed988 with no retarget.
 - **Assign only the remaining current50 plan boundary after verified G4 leaseback.**
   Sole604 receives fixed98874f6 G5 in a new build-only root: CURRENT dry-run,
   source-bound artifact materialization if required, canonical update of the

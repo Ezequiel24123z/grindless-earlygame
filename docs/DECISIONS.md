@@ -194,6 +194,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0180](#adr-0180--reproduce-the-thermal-generator-through-an-honest-two-stage-subassembly) | Reproduce the Thermal Generator through an honest two-stage subassembly | Accepted bounded acquisition scope; implementation/proof pending |
 | [0181](#adr-0181--compare-one-generated-platform-shim-by-exact-self-name-equivalence) | Compare one generated platform shim by exact self-name equivalence | Source555dbe9 integrated; G4 publication0 reported, final custody/negatives pending |
 | [0182](#adr-0182--expose-existing-wet-beneficiation-as-an-optional-t1-baseline-line) | Expose existing wet beneficiation as an optional T1 baseline line | Accepted bounded content scope; implementation/qualification pending |
+| [0183](#adr-0183--version-known-native-catalogue-lineage-without-weakening-provenance) | Version known native catalogue lineage without weakening provenance | Accepted compatibility scope for51; implementation/proof pending |
 
 ---
 
@@ -8667,3 +8668,56 @@ canonical files or new fixture-as-gameplay authority. Reuse unchanged machine,
 fluid, save and native quest mechanisms; require runtime only for a concrete
 uncovered assumption. Source work stays isolated while G4 owns PC/cache and
 its frozen271f386 alias; never retarget that executor or access player data.
+
+---
+
+## ADR-0183 — Version known native catalogue lineage without weakening provenance
+
+**Status.** Accepted bounded compatibility scope under ADR-0177/0178/0182,
+2026-10-22. Source738105d4 provides51 quests but cannot publish/update/start
+through the current46/50 guards. Implementation and qualification of this
+extension are pending; the frozen current50 plan window remains separate.
+
+**Context.** Native catalogue content evolves while reference schema2, managed
+receipt/plan formats and file transaction semantics stay unchanged. Hardcoded
+current50 checks occur in publisher, planner, native integration and host
+receipt validation. Planner history currently treats any prior50 as the
+entire current catalogue, which becomes false when the optional wet node exists.
+Simply allowing every count or treating names/counts as provenance is unsafe.
+
+**Decision.** Recognize only the known46/50/51 catalogue lineage through explicit
+logical/native identity sets and reviewed additions. The first transition adds
+first_grid/forming_dies/copper_coil/flux_cell; the next adds only
+wet_beneficiation. Derive a historical identity set from that known lineage for
+validation, never generate an allegedly authentic old publication by deleting
+nodes from the current runtime. Actual publication must still use the complete
+loaded generator/catalogue bound to its real source/classes/JAR/compilation
+receipt. Keep the historical source-file CLI compatible with authentic old
+compiled catalogues rather than imposing current51 on a real46 producer.
+
+The planner's destination must be the actual current source-bound generator,
+not a literal50. Old46 and50 references must match their exact known identity
+set; current51 must match its complete set. Refuse unknown counts/versions,
+replacement or missing IDs despite equal counts, inconsistent document counts,
+changed retained tasks/rewards/tags/chapter identities and nonfree additions.
+Only the known original DD0/JAR29bc/46 provenance may establish an unreceipted
+baseline. Later managed predecessors require matching real ownership/receipt
+and caller-selected publication hashes. No adoption by filenames or subsets.
+
+Wire schema2 and existing receipt/plan versions need not change merely for one
+new content node. Update every real consumer, including FtbQuestIntegration
+and host receipt validation, with the same bounded known-lineage contract.
+Retain unknown-schema/type, source/runtime/JAR, actual loaded-image, safe-file,
+backup/journal, stopped-target and partial-recovery guards. The Bash twin must
+continue forwarding the same host contract; no second engine or migration flag.
+Old50 logical/native/reward identities and the finite starter stay unchanged;
+the new optional acquisition has no reward and cannot enter first-F2 dependencies.
+
+**Proof.** Extend existing Java/native-parser and focused QuestDefinitions host
+fixtures for authentic-shaped46-to51, managed50-to51 and completed51 no-op;
+also reject unknown/partial/equal-count-wrong-ID catalogues, reward/task drift,
+source/hash mismatch and unknown ownership. Label synthetic file fixtures as
+such, not authentic historical publication or played survival. Reuse unchanged
+transaction/native-paid mechanisms and G4/G5 evidence under the same inputs;
+select a new real runtime boundary only when its changed assumption requires it.
+Do not retarget the active current50 executor to this51 source.

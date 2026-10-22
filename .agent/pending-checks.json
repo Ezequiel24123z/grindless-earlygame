@@ -89,6 +89,13 @@
     "no_recipe_bill_engine_save_or_firstF2_change": true,
     "no_PC_JVM_cache_player_or_G4_alias_access": true
   },
+  "catalogue51_compatibility": {
+    "policy": "ADR-0183",
+    "source_owner_session": "cb273782-4065-44e2-90a3-9c0c036367ce",
+    "status": "separate_known46_50_51_ID_lineage_extension_selected_not_implemented",
+    "surfaces": "publisher_planner_runtime_integration_host_receipt_and_existing_focused_tests",
+    "no_unknown_count_adoption_new_wire_schema_or_G5_retarget": true
+  },
   "ftb_questbook_blocker": {
     "policy": "ADR-0171",
     "backend_owner": "ac50334e-0ce4-4f67-bebf-581ac3318185",
