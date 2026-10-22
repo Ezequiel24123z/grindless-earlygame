@@ -15,6 +15,26 @@ entries below reference those records by id.
 
 ### Added
 
+- **Observe the actual current50 plan/apply/no-op outcome, pending final custody.**
+  G5 reports real988 package/runtime and canonical package update preserving
+  authentic46 bytes/mtime, then one fresh CURRENT compile and bound plan with
+  target_writes0. DefinitionsUpdated followed by SAME-plan Unchanged preserves
+  file bytes/mtimes/backups and protected runtime; InspectVerifiedStopped,
+  50/50 coherent but not launched. No prior success/recovery replay; final
+  custody/guard cleanup/leaseback are not yet claimed.
+- **Close the current50 outcome with exact final custody and safe leaseback.**
+  Parent verifies87 files/2578 frozen inputs, genuine988 package/runtime,
+  current receiptf8bd, actual plan464b and both loaded images. All24 target
+  files/mtimes/backups are identical after first/same-plan/final;16 protected
+  runtime files and exact46 backups remain intact, installed50 matches plan.
+  Initial parent backup-name assumption fails; actual before- names verify
+  without any producer replay. Clean988/Java0/locksfalse/owned guard absent
+  return10:28:43Z is verified. Only the fictitious stopped target is updated.
+- **Bind the wet feature's new proof dependencies through the existing exporter.**
+  Source338db24d extends T1Export SOURCES/images and existing guards, including
+  actual selected-kind getClass() images rather than ordinal filenames.
+  28/37 is authored shape;101 non-JVM checks are not emitted runtime provenance.
+  Parent reviews it without invalidating G4/G5 or hand-editing canonical outputs.
 - **Observe the fixed CURRENT task configuration without claiming a plan.**
   G5 reports fresh new-root admission/Sync9880, then FIRST Gradle CURRENT
   prepareFtbQuestUpdate --dry-run with no historical-root option succeeds.

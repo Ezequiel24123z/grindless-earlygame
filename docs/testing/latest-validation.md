@@ -509,6 +509,52 @@ lease. Required package/runtime materialization and unchanged16-file target
 verification follow; actual current compilation/plan/apply and final custody
 remain pending. No successful G4 mechanism is replayed.
 
+**Reported G5 actual outcome10:23:53Z:** clean988/Java0/locksfalse. Package/
+runtime988 are genuine, not C271 relabeled. The existing fictitious16-file entry
+matches exactly, canonical Prepare0 missing/package update0 downloads retains
+both authentic46 chapter bytes/mtimes. ONE normal fresh CURRENT compilation
+publishes the actual source/package/refacdf/target-bound plan with
+target_writes0; pre/post planning target snapshot is identical.
+Canonical DefinitionsUpdated is followed by the SAME plan/hash Unchanged:
+all files/mtimes/backup inventory and protected runtime stay unchanged.
+InspectVerifiedStopped identifies coherent50/50, never launched. No recovery,
+native/JDK/legacy/model/CI replay. Final custody/guard cleanup and explicit
+leaseback remain pending, so these results are not yet parent-verified closure.
+
+**G5 final parent verification closes current50.** All87 custody files match
+manifest `1f5799576c5da69bdbf73401a1537b67ef1ec044f96e093cda25a85dd0ba9793`;
+2578 frozen inputs are unchanged. Source bundle
+`212d779f2c7cdb8f8b4bf8efd7a4e2d0bb0d17983c2922e352d6720aa26ae83f`
+is11560bytes/exact988. Genuine package
+`50e2d735854b384408883f8ad973b944bc63d00667218d2cd96ff39f21bac981`
+(2,033,937bytes) embeds selected runtime
+`b07ebf35676d9b9d7d752306f2d74a2c24de7bee316f30da58ec356c964fe9cf`
+with source/runtime988, not relabeled271.
+
+Actual fresh current receipt
+`f8bdc64b461a8415cf791c1a9f1210fdce43c5c1a63ebc2ee09b9afe0e05a684`
+binds distinct remap
+`28c87f43fdd15c7ed7630012cebadca1341297a32a071aeac6079e9ecbe94703`
+and actual copied Definitions/Catalogue images. Plan
+`464b42924e8e748bd55e004f587088f083ba201126afe443ec0b2aad738dde5b`
+binds real source/runtime/JAR/referenceacdf/ownership; pre/post planning
+snapshot is exact, target_writes0/native_progress_writes0. Apply receipt is
+DefinitionsUpdated and the SAME file/hash yields Unchanged without a backup.
+All24 files/mtimes after first/second/final are equal;16 protected runtime/
+metadata/package-backup files remain exact. Both decoded after payloads and
+original46 before-prefixed backup hashes match the actual plan; its backup
+plan.json is byte-identical. Initial parent observer assumes unprefixed
+backup names and fails; inspecting the actual before- layout closes only
+that observer without replaying production. Canonical Inspect is VerifiedStopped.
+
+Fresh final10:28:43.3068952Z closure is clean988/all-observed-ownedJava0/
+work-cache locksfalse/client_commandlines_read=false; exact owned offline
+hook removal/absence is verified. Explicit leaseback closes G5. No recovery,
+target launch, player/world/PrismRoot or prior successful native/JDK/legacy/
+model replay occurs. The fictional target is now coherent988/50/50, not a
+played candidate. Retain its old source988/f8 classpath/output for later
+authentic50 source-file publication; any51 source uses a new isolated root.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

@@ -454,16 +454,52 @@ not Grindless's completion settlement; machine-specific mutation hooks were
 not audited. No kit, balance, narrower MKI, source import or new runtime proof
 is selected by that reference. Current latent multiplier/installer gaps remain.
 
-| Category | Current qualification state: G4 verified closed, G5 assigned |
+**Reported G5 completion boundary10:23:53Z, not leaseback:** source988 stays
+clean/Java0/locksfalse. Real988 package/runtime, canonical0-missing/0-download
+package update and unchanged authentic46 bytes/mtime precede ONE real fresh
+CURRENT compile and published source/package/reference/target-bound plan.
+Planning writes0 target bytes and preserves its snapshot. Canonical first apply
+returns DefinitionsUpdated; the identical plan/hash returns Unchanged with all
+file bytes/mtimes/backup inventory stable and runtime/protected files intact.
+Inspect is VerifiedStopped, target50/50 coherent but never launched. Final
+custody/guard cleanup/explicit return are still pending; no PC ownership changes.
+
+Wet provenance follow-up338db24d is locally delivered after738: existing
+SOURCES/images grow to28/37 expressions, including actual selected enum
+implementation getClass() values, catalogue and condition/runtime dependencies.
+The byte-resource reader/hash stays unchanged. Parent reviews the two-file
+delta;101 non-JVM static checks are not emitted Java hashes/writer passes.
+It changes neither G4/G5 source nor their proofs. Future51 still needs its
+own source/projection/compatibility qualification.
+
+**G5 CLOSED and parent-verified:**87 custody files against manifest1f579957,
+2578 immutable inputs and source bundle212d779f are verified. Actual fresh
+current receiptf8bdc64b, selected runtimeb07ebf35/fresh remap28c87f43 and both
+copied loaded images match. Plan464b4292 binds source/runtime988, real package/
+target/refacdf and actual output chapter payloads. Canonical DefinitionsUpdated
+then SAME-plan Unchanged leave all24 files/mtimes/backups identical;16 runtime/
+metadata/package-backup files stay intact. Authentic46 before-chapter backups
+and installed50 after hashes match the plan; backup plan.json is byte-identical.
+The parent's first unprefixed-backup-name observer fails, then the actual
+before- filenames verify, without any producer/test replay. Inspect is stopped.
+
+Explicit safe return10:28:43.3068952Z is clean988/Java0/locksfalse with only
+the owned offline guard removed/absent and no client command lines read.
+No PC lease is active. Only the fictitious instance has genuine988/50/50;
+never launched, no player state touched. Preserve the G5 root at988 with its
+f8 receipt/classes/classpath/JARs: a later actual50 publication can reuse CLI8
+without recompiling. Do not Sync51 into that receipt's historical source root.
+
+| Category | Current qualification state: G4/G5 current50 outcome verified closed |
 | --- | --- |
-| COMPLETED | G3/A3 normal outputs and custody; actual G4 legacy reference/native89/19markers/managed201/JDK34/current package and fictitious deployment/seed; parent176-file custody/2578 inputs and safe leaseback; source686 configuration fix composed |
-| BLOCKED | CURRENT GradleBuild configuration/plan/apply has a real red; source686 is not runtime-qualified. Wet738 additionally needs explicit51 publisher/planner/startup/host compatibility |
-| NOT EXECUTED | Fixed CURRENT dry-run/fresh compiler/plan/apply/same-plan/recovery; wet Java/writers/compatibility51; player update, client campaign and whole-tier acceptance |
+| COMPLETED | G3/A3 models/custody; G4 real legacy/native89/19markers/managed201/JDK34 and176-file custody; G5 actual configuration/fresh compiler/plan/apply/same-plan with87-file custody/2578 inputs/24 target files/16 protected files and safe leaseback; reviewed wet338 source |
+| BLOCKED | None for current50 engineering; source51 compatibility and its own source/projection qualification remain open |
+| NOT EXECUTED | Recovery (not needed), source51 Java/writers/compatibility qualification, launching the fictitious target, player update/client campaign/main/release or whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | Existing GUI/JEI/reward/appearance and longitudinal-campaign gates remain open |
 | NEEDS MY DECISION | None from the owner; bounded technical repair is delegated |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
 | COST / BILLING RISK | None new; no generation/provider/dependency installation authorized |
-| DEPLOYED STATE | Playerdd0/JAR29bc/ZIP79ce and original/backup/G3/M unchanged. Only the stopped fictitious target has C271 runtime50 plus authentic46 definitions; never launch it pending valid update |
+| DEPLOYED STATE | Playerdd0/JAR29bc/ZIP79ce and original/backup/G4/G3/M unchanged. Only the stopped fictitious target has genuine988 runtime/package with50 coherent native definitions; it was not launched |
 
 Next integrate coherent local checkpoints and select only their changed proofs.
 Any heavy qualification needs a new sole-owner lease on an exact published

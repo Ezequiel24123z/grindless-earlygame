@@ -20,8 +20,8 @@
   },
   "current_PC_execution": {
     "assignment": "current-plan-consumption-20261022",
-    "active": true,
-    "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
+    "active": false,
+    "owner_session": null,
     "last_owner_session": "604195bd-6826-4299-89af-1dcf39545263",
     "source": "98874f6254aa10c91a77dcb9312a37dc1a7c7b50",
     "previous_G4_source": "271f3862182ac522ecf7cac3fde000dd1f099cce",
@@ -34,14 +34,14 @@
     "source_frozen_until_active_stages_and_locks_close": true,
     "qualification_package_fictitious_target_plan_authorized": true,
     "real_PrismRoot_player_world_writes_authorized": false,
-    "result": "G5_actual_admission_newRoot_Sync9880_FIRST_CURRENT_dryrun_no_ftbDefinitionRoot_BUILD_SUCCESSFUL_actionsSKIPPED_config0_compiler_plan_apply_pending_required_package_next_no_G4replay",
-    "returned": false,
-    "returned_utc": null,
-    "return_state": "NOT_OBSERVED_for_new_G5_window",
+    "result": "CLOSED_G5_parent87custody2578inputs_currentcompilerf8_plan464_actual_applyDefinitionsUpdated_SAMEplanUnchanged_24files_mtimes_backups_16protected_stable_authentic46backup_50installed_InspectVerifiedStopped_source_runtime988_no_prior_success_replay",
+    "returned": true,
+    "returned_utc": "2026-10-22T10:28:43.3068952Z",
+    "return_state": "parent_verified_clean988_Java0locksfalse_clientcmdlines_not_read_only_owned_guard_removed_absent_explicit_leaseback",
     "previous_85e_attempt": "CI39733641733_main_toolcompile0_actual_regressions_Sync_only_noPCJVM_safe_return06_35_57Z_closure8363ad93",
     "previous_423a_attempt": "Sync0_real_CI_compile_red_no_PC_JVM_safe_return05_53_20Z_closure8d96179a_raw00348af1_preserved",
     "previous_returned_lease": "integrated_blueprint_native_20261021_cleanM_Java0_locks0_2026_10_21_21_56_31Z_evidence_preserved",
-    "new_explicit_guarded_window_required": false
+    "new_explicit_guarded_window_required": true
   },
   "active_development_wave": {
     "base": "ad5b50dd509b0261818101ff08e786750826161a",
@@ -63,6 +63,7 @@
     "FTB_legacy_contract": "ADR0181_actualG4_managed201_and_legacy_pub0_refacdf_verified_one_sealed_self_alias_allotherpayloads_exact_source_unchanged_by686",
     "G4_closed_proofs": "parent_verified_legacyCLI8_schema2_46_referenceacdf_no_oldcompile_native19_PASS1_FAIL0_89_managed201_assetJDK34_total22new_EOL_currentpackage0490_sourceRuntime271_embedded_and_testedJARe9d_176files2578inputs",
     "G4_current_plan_block": "ArrayList_named_in_GradleBuild_current_branch_before_compile_plan_apply_real_exit1_source686_one_line_Project_tasks_fix_integrated_current_dryrun_and_actual_plan_unexecuted_no_pendingtransaction_fake50runtime46defs_DO_NOT_START",
+    "G5_closed_outcome": "current50_config_dryrun_realcompiler_plan_apply_noop_parent_verified87files2578inputs_plan464_package50e2_runtimeb07_compilerf8_remap28_no_pending_coherent_stopped50_50_fictitious_never_started_G4oldred_preserved",
     "factory_reproduction": "4f3aae3_plus9b9c619_source_normally_integrated_209_84_266_shapes_unexecuted_List_eq_compile_oracles_source_repaired_precise_yes_equals_JVM_confirmation_pending",
     "wire_order_oracle": "f1097b7_source_repaired_relative_after_assembly_no_registry_fix_or_actual_writer_pass_inferred",
     "pure_control_index": "a5a89a4_source_normally_integrated_no_registry_in_index_minimum_candidates_join_nonempty_hits_canonical_order_dedup_beforebootstrap_and_real_Relay_regressions_pending_actual_execution",
@@ -86,6 +87,7 @@
     "source_base": "e4cc108389ed0b58d15ed5c0678ecd27660aa103",
     "status": "local_source738105d4_ready_old50_invariants_static_only_not_yet_integrated_publisher_planner_startup_host51_compatibility_pending",
     "source_checkpoint": "738105d48cafc71c38fbb66f703122906afcf2f3",
+    "provenance_followup": "338db24d_parent738_T1Export_sources_images_extend_existing28_37_including3kind_getClass_actual101nonJVMchecks_noJava_writers_receipts_parent_reviewed_not_yet_integrated",
     "no_recipe_bill_engine_save_or_firstF2_change": true,
     "no_PC_JVM_cache_player_or_G4_alias_access": true
   },
