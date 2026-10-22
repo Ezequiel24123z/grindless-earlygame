@@ -8,6 +8,7 @@ import io.github.ezequiel24123z.grindless.menu.FieldGuideMenu;
 import io.github.ezequiel24123z.grindless.menu.LandingMapMenu;
 import io.github.ezequiel24123z.grindless.menu.ProcessAtlasMenu;
 import io.github.ezequiel24123z.grindless.menu.ProcessMachineMenu;
+import io.github.ezequiel24123z.grindless.menu.AssemblerSelectionNetwork;
 import io.github.ezequiel24123z.grindless.menu.QuestBookMenu;
 import io.github.ezequiel24123z.grindless.shop.ShopCommands;
 import io.github.ezequiel24123z.grindless.shop.ShopMenu;
@@ -57,6 +58,7 @@ public final class ModMenus {
     public static void register() {
         MENUS.register();
         ShopNetwork.register();
+        AssemblerSelectionNetwork.register();
         ShopCommands.register();
         DevTelemetry.register();
     }

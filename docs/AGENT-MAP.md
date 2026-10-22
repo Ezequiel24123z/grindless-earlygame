@@ -282,6 +282,17 @@ recipe-owned work including fractional carry, completion rollback and old NBT.
 Never fall back from an explicit invalid target to another output or erase
 paid work to make the selector convenient. Reuse existing UI/persistence/lookup
 and the smallest native fixture; implementation/proof are still pending.
+The source implementation adds `machine/AssemblerWork` for optional
+`SelectedRecipe`/`SuspendedWork`, leaving active `Progress`/`WorkRecipe` and
+store identities intact. `menu/AssemblerSelectionNetwork` carries exact IDs,
+opening tokens and catalogue revisions; vanilla per-menu short data binds
+authoritative snapshots to their opening. Register C2S in ModMenus and S2C
+only in GrindlessClient. The Assembler-only searchable side panel preserves
+the 176x204 body and physical slots. Malformed work is retained fail-closed;
+bounded suspended capacity refuses a new owner without dropping balances.
+Existing logic/lookup/persistence/UI checks and the existing Matrix fixture
+own the changed proof. Java/native/rendered/world qualification is not a
+source or non-JVM-static result.
 The upstream comparison is a pattern reference, not imported code or proof.
 Recipe data, FTB/quests, default-F1 source ownership and G7 are outside this lane.
 

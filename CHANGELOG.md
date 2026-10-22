@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Implement lossless explicit Assembler targets on the existing executor.**
+  ADR-0185 adds current-graph stable-ID matching, recipe-keyed suspended
+  double base-work, fail-closed retained malformed state and server-owned
+  menu/opening/catalogue validation. A native searchable output picker
+  extends only the Assembler; AUTO, other layouts, stores and rollback stay
+  intact. Existing contract/native-fixture cases are being authored; local
+  non-JVM evidence cannot qualify Java, native behavior, appearance, the
+  player's world or whole T1. No recipes, bills, dependencies or outputs change.
 - **Choose explicit Assembler targets instead of repricing colliding recipes.**
   ADR-0185 selects a stable-ID, server-authoritative menu choice on the existing
   executor and transaction. Reuse bounded GT/Mekanism configuration/validation
