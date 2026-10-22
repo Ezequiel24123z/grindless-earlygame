@@ -64,6 +64,40 @@ The first parent metadata observer misreads PowerShell's property-collection
 Count and fails before link/Git staging; explicit array capture repairs that
 read-only check without changing lane data or replaying a producer.
 
+**A/C initial source is delivered; narrow Furnace follow-ups now run.**
+A d6867960/exact7f9/treeccf2a850 reports41 owned files, normal clean source,
+manual catalogue/control/policy/replication retirement and all allowed tool
+routes, no Java/native. It explicitly leaves old vanilla Furnace autoroutes
+open rather than claiming universal closure.
+
+The coordinator asks that exact boundary once; the owner is unavailable and
+delegates autonomous decisions. Coordinator chooses manual-only FINAL
+minecraft:furnace, since it remains a real processor even as a Thermal input.
+This is NOT owner-confirmed Furnace preference. A withdraws only bench/furnace
+and assemble/bootstrap/furnace; preserve actual vanilla manual craft, Thermal
+material bill/raw seed, smelting, other basics and all existing placed items.
+C uses actual vanilla/minecraft:furnace authority and honest finite capital/
+manual-upstream core evidence; no claim of automatic net core supply.
+B covers retired Bench work and reports any concrete runtime-paid-work defect
+before editing an unowned engine. No speculative refund/completion/erasure.
+
+C d4d1/ebb4a582/exact7f9/treea50fe515 supplies15 files/453 insertions129
+deletions, manual-capital annotations/strict recurring-feed negatives,
+manual progression/finite selections/teaching and authored43/98 pins.
+Private handoffSHAe5cca7f3 is parent verified; original25e handoff remains.
+33 decoded T0 bodies/51 logical paid identities stay intact;19 T1 bodies
+remain within42words. Source errors (wrong adapter path, unanchored table
+observer, runtime-ID/session-tool mismatch) are preserved with read-only
+recoveries. Review3c54e5ca finds no significant C-only source issue in that
+capital semantic delta; it does not rerun the generic-state review or execute
+typed tests/models/native. The pending narrow Furnace follow-up is not yet
+that reviewed source.
+
+Parent's policy patch initially applies the three metadata files, then stops
+at a stale ADR context. Actual partial state is inspected before completing
+only the remaining documentation hunk; no application/producer is rolled
+back, rerun or silently relabeled.
+
 Generic custody review8ef12f19 finds no significant issue in source6b within
 admission/conservation/execution/export. This does not approve automatic final
 normal-machine manufacture or execute Java/replay. Retain that reusable state
@@ -71,7 +105,7 @@ mechanism and rebind its T1 projection to corrected manual authorities.
 Research86151eb2 checks the smallest appropriate official Forge ingredient/
 shaped-matching API, not another engine or copied implementation.
 
-**ADR-0187 SOURCE is complete and normally composed, not yet qualified.**
+**Earlier ADR-0187 intake before generic review, not the active execution scope.**
 Normal6c53b321/exactf5c2dde then6b191767 supplies nine owned paths/
 1112 insertions49 deletions, clean source treebaa360a6 and both trailers.
 Parent verifies private handoffSHA25e77bcb, preserves all seven Java blobs
@@ -352,7 +386,7 @@ identity repairs invocation without altering Git configuration.
 
 | Category | Current integration boundary |
 | --- | --- |
-| COMPLETED | Historical G7/G8/G10/A7/A8/A9 preserved; generic custody reviewed; ADR-0188/per-product policy published; official-API research qualified; B fixture SOURCE041/e960 and static review clear with original attribution error retained; A/C source remain |
+| COMPLETED | Historical proofs preserved; ADR-0188/per-product policy published; generic custody/B source reviews clear; initial A41/C15 source delivered with declared integration limits; coordinator resolves Furnace boundary conservatively and assigns narrow source follow-ups |
 | BLOCKED | None urgent; revised source/manual-control/fixture/progression implementation and qualification are prerequisites, not a new owner decision |
 | NOT EXECUTED | ADR-0188 recipe retirement/manual ingredient/integrated contracts and new native/model qualification; ADR-0187 Java/replay/writers; rendered/client-wire/owner-world/campaign/package/player deployment/main/release/whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |

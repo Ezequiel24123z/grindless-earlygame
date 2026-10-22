@@ -1145,6 +1145,35 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
+**Subsequent A/C SOURCE intake and Furnace boundary:** A reports normal
+d6867960/exact7f9/treeccf2a850,41 files and ordered blob-manifestSHA256
+999813d236a124194b77c3e086d649ea3cd42a0492ea7ad9fadf807aedd451f7,
+without Java/native/model execution. That original report explicitly leaves
+vanilla Furnace autoroutes open; it is not a universal policy pass.
+The coordinator asks once; owner unavailable/autonomous-decision response
+leads to the scoped manual-only final vanilla Furnace choice in ADR-0188,
+not an invented owner confirmation. A/C/B receive narrow source follow-ups;
+actual vanilla manual craft, Thermal costs/seed, smelting and worlds remain.
+
+C's normald4d1/ebb4a582d0546cc3676d33268e8e20b73b11e401/exact7f9,
+treea50fe515c2e3c1e0831920dc0f2dac51cbf46abf, changes15 owned paths/
+453 insertions129 deletions. Private handoffSHA256
+e5cca7f3814032aadffddab63b1b73326cc5edbd5402a0ecab9ed2d765eae624
+is parent verified; original25e handoff remains. MANUAL_CAPITAL distinguishes
+finite available/installed machines from recurring renewable feed, including
+tag-alias negatives. Manual constructors/method alternatives,33 unchanged
+decoded T0 bodies/51 logical paid identities,19 concise T1 bodies and
+authored43/98 pins depend explicitly on A's pure policy/Kind/manual-key data.
+No stub/WIP ref or actual loaded-class hash is substituted for that dependency.
+Independent3c54e5ca finds no significant C-only source issue; compile/replay/
+writers/images/native/client/world remain unexecuted.
+
+C retains wrong-adapter-path and unanchored-table-regex observer failures plus
+the runtime-agent/session-tool namespace rejection, with read-only recovery.
+Parent's documentation patch applies three metadata files before failing at
+stale ADR context; actual partial state is inspected, and only remaining docs
+are completed. Neither failure repairs/replays an application producer.
+
 Normal source commits6c53b321/exactf5c2dde then
 `6b1917672f48eda7b5320ee4bc3733a2b474300a`, parent
 `6c53b3216144a6bfdb0bfb13633796f365a5406b`, tree

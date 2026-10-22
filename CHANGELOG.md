@@ -15,6 +15,16 @@ entries below reference those records by id.
 
 ### Added
 
+- **Receive manual-capital source and resolve the explicit Furnace boundary.**
+  Initial A d68641-file source and C d4d1/ebb15-file source are delivered,
+  without Java/replay. C-only review finds no significant source issue;
+  authored43/98, finite manual capital and preserved51 IDs/33 T0 bodies are
+  not executed results. Owner unavailable after one scope question, the
+  coordinator applies manual-only final vanilla Furnace without claiming
+  owner confirmation; preserve manual craft/Thermal bill/smelting and request
+  narrow A/C/B follow-ups. Retain source/observer failures, including a
+  partially applied parent doc patch completed after inspection. No PC grant,
+  source hotfix on an active runtime, player update or whole-tier claim.
 - **Receive the manual-boundary fixture source without a false runtime pass.**
   B041/e960 supplies live component-selector/retired-work checks and actual
   manual-recipe/Ingredient/crafting probe source, with19 expectations and two

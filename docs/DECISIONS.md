@@ -9094,6 +9094,19 @@ manual and machine manufacture. Preserve valid existing methods unless an
 individual design calls for change; do not impose universal Assembler-only
 production, universal dual recipes or universal automatic conversion.
 
+**Coordinator Furnace boundary decision.** A reports that the old
+bench/furnace and assemble/bootstrap/furnace routes still automatically output
+the vanilla furnace. The coordinator asks that exact scope once; the owner is
+unavailable and delegates autonomous decisions. Apply manual-only FINAL
+minecraft:furnace as the conservative interpretation for a real standalone
+processor, rather than creating an implicit exception because it is also a
+Thermal component. This is a coordinator decision, not a separately confirmed
+owner Furnace preference. Keep the existing vanilla manual craft, exact
+Thermal bill/raw seed, smelting operations, other valid basics and all placed
+items. Use the actual vanilla/minecraft:furnace authority in finite capital
+proof, not an invented craft/furnace route. A machine-only local core process
+with a manually supplied furnace is not automatic net renewable core supply.
+
 Complexity belongs in increasingly interdependent materials, circuits,
 mechanical parts, chemical/thermal/energy conditions and specialized
 multiblocks. Manual final assembly must still require the actual industrial
