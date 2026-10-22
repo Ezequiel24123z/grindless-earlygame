@@ -312,7 +312,10 @@ menu/host/access checks. Preserve legacy AUTO, actual selected output, stores,
 recipe-owned work including fractional carry, completion rollback and old NBT.
 Never fall back from an explicit invalid target to another output or erase
 paid work to make the selector convenient. Reuse existing UI/persistence/lookup
-and the smallest native fixture; source is implemented and qualification is pending.
+and the smallest native fixture. G10 qualifies exacta54 compile/UI1297/
+Persistence/one native1028/19 plus normal models31/41/A9bb3 and278-file
+custody; native menu-player/state/codec carriers are not rendered interface,
+actual client-wire delivery or owner-save compatibility.
 The source implementation adds `machine/AssemblerWork` for optional
 `SelectedRecipe`/`SuspendedWork`, leaving active `Progress`/`WorkRecipe` and
 store identities intact. `menu/AssemblerSelectionNetwork` carries exact IDs,
@@ -352,18 +355,23 @@ Motor from the controlled Washer without changing the six wet routes or seed.
 After that serialized release, VerifyRecipes checks exactly the old six plus
 nine identities in generation order, all nine full four-group bills, unchanged
 costs/outputs/milestones and slot fit. All selector assertions and unrelated
-recipe guards remain intact. These are source/static changes, not Java,
-normal-output, acquisition or representative combined mechanism passes.
+recipe guards remain intact. The initial source/static result is separately
+qualified by G10's actuala54 combined compiler/native and normal models/A9.
+Unchanged Recipe/Atlas/Registry successes are transparently reused from
+original bb5 CI; new UI/Persistence mains actually execute on the PC.
+This is not nine independent runtime proofs, owner Survival or whole T1.
 
-The same existing ControlMatrixInputChecks.registered probe now checks the new
+Historical G3 fixture observations below are not the current replay queue.
+The same existing ControlMatrixInputChecks.registered probe checks the new
 core's actual Item class/registry ID, without another case or marker. This
 observation is pending execution, not supplied by synthetic lookup carriers.
 Actual G3 registered() now passes including that binding, but the aggregate
 probe fails later at primaryControl's vanilla input-tag materialization.
 Follow-up957613f uses genuine counted cobblestone and actual input matching.
 Never widen ProcessLookup.resolve's material-output domain just to satisfy
-the fixture. Corrected primary selection/capability still needs actual execution;
-the observed blocked/once-cycle markers alone are not aggregate PASS.
+the fixture. Corrected primary selection/capability subsequently passes in
+G4; the extended selector/control mechanism passes separately in G10.
+The original G3 blocked/once-cycle markers alone remain an aggregate FAIL.
 
 The owner's2026-10-21 instruction separately opens T1 development (ADR-0168/0169).
 Use [the first-factory plan](../plan/feature-t1-first-factory-1.md): live route

@@ -196,8 +196,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0182](#adr-0182--expose-existing-wet-beneficiation-as-an-optional-t1-baseline-line) | Expose existing wet beneficiation as an optional T1 baseline line | G7 actual models29/38/A7 verified; acquisition shadowing remains under ADR-0185 |
 | [0183](#adr-0183--version-known-native-catalogue-lineage-without-weakening-provenance) | Version known native catalogue lineage without weakening provenance | G7 actual ABI/backend/ready51/package/managed51/custody and original CI evidence verified |
 | [0184](#adr-0184--project-authored-default-matrices-through-their-real-physical-rating) | Project authored default Matrices through their real physical rating | G8 actual31/41/changed contracts/normal A8/239 custody verified; not rendered or finite-T1 proof |
-| [0185](#adr-0185--choose-assembler-recipes-explicitly-without-repricing-or-losing-work) | Choose Assembler recipes explicitly without repricing or losing work | Sourcea89/30e/438 reviewed/normally composed with F1/A8; Java/native/UI proof pending |
-| [0186](#adr-0186--supply-physical-baseline-control-to-nine-existing-process-families) | Supply physical baseline control to nine existing process families | Sourceab3/304/ccfe normally composed; exactdata/15-role review clear, execution pending |
+| [0185](#adr-0185--choose-assembler-recipes-explicitly-without-repricing-or-losing-work) | Choose Assembler recipes explicitly without repricing or losing work | G10 actuala54 Java/native1028/models/A9/278 custody verified; no rendered/client-wire/owner-world pass |
+| [0186](#adr-0186--supply-physical-baseline-control-to-nine-existing-process-families) | Supply physical baseline control to nine existing process families | G10 combined representative mechanism/normal A9/custody verified; no per-family runtime or whole-tier acceptance |
 | [0187](#adr-0187--continue-the-finite-first-factory-witness-with-conserved-t0-custody) | Continue the finite first-factory witness with conserved T0 custody | Accepted source scope; implementation and finite continuation proof pending |
 
 ---
@@ -8822,9 +8822,12 @@ inferred from the source correction.
 **Status.** Accepted bounded correction under ADR-0020/0043/0174/0178,
 2026-10-22. Source tracing establishes the ambiguity; normal sourcea89/30e/438
 is composed with the reviewed F1/A8 baseline after a nineteen-file review with
-no significant issue. Compilation, actual AST/server/native/packet/interface
-and saved-state proof remain pending. G7/G8 retain their separate source-bound
-scope and do not qualify this behavior.
+no significant issue. G10 subsequently qualifies exacta54 compilation,
+UI1297/Persistence and one real server/menu-state/native mechanism1028/19,
+then normal models31/41/A9bb3 through independently verified278-file custody.
+Normal integration preserves all four actual writer bytes. Real client-wire,
+rendered interface and owner-save compatibility remain unproved. G7/G8 retain
+their separate source-bound scope; they are not retargeted as this proof.
 
 **Context.** Chemical Reactor, Washer, Electrolysis Cell, Atmospheric Intake
 and numerous machineCraft rows share casing1/motor2/plates4. ProcessLookup.find
@@ -8910,9 +8913,12 @@ registration/default rule or retarget G8's immutable4ee source.
 
 **Status.** Accepted bounded construction-data follow-up under ADR-0107/0174/
 0176/0178, 2026-10-22. Sourceab3/304/ccfe is normally composed after serialized
-file release and direct bounded data/check review. Normal outputs and actual
-combined Java/native proof remain pending. This does not retarget G8 or make
-any family a ready tier.
+file release and direct bounded data/check review. G10 subsequently closes
+the combined sourcea54 compiler/contracts, one representative real native,
+normal models31/41/A9bb3 and278-file custody. Unchanged contract successes
+are explicitly reused from original bb5 CI, not relabeled a54 executions.
+This does not retarget G8, require a native per recipe or make any family a
+ready tier, genuine chassis upgrade or played acquisition.
 
 **Context.** Nine functional F1 ProcessMachineKind families have existing
 Assembler constructors with casing1/motor2/plates4 and no physical controller:
@@ -8964,10 +8970,10 @@ runtime acquisition, whole-tier or human acceptance is inferred from data.
 ## ADR-0187 — Continue the finite first-factory witness with conserved T0 custody
 
 **Status.** Accepted bounded source scope under ADR-0131/0140/0174/0178,
-2026-10-22. G10 reports actual repaired Java, one native aggregate and normal
-model stages passing on a54; its final data/custody/leaseback remain separate.
-This decision authorizes an isolated source outcome, not another PC window,
-new gameplay, a completed finite replay or whole-T1 readiness.
+2026-10-22. At authorization, G10 reported repaired Java/native/model stages;
+it later closes sourcea54/normal A9/278-file custody and fresh lease return
+separately. This decision authorizes an isolated source outcome, not another
+PC window, new gameplay, a completed finite replay or whole-T1 readiness.
 
 **Context and existing solution.** T1Sustainability honestly leaves finite
 establishment unproved. Its five-controller allocation and direct producer

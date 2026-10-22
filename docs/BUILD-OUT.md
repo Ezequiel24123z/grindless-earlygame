@@ -47,9 +47,11 @@ with F1/A8 after independent review. ADR-0186's serialized shared recipe
 sourceccfe is complete and normally composed. Exactbb5 CI confirms the0ab
 tool-javac repair but exposes UI preview bootstrap and two Persistence
 NaN/AUTO oracle failures. Reviewed source014 repairs those harness boundaries;
-G10 on exacta54 now reports actual compiler/repaired mains/one canonical native
-and normal writer/independent/canonical model stages0. Final A9/raw custody/
-leaseback/integration remain pending, not a reason to repeat successful stages.
+G10 on exacta54 closes actual compiler/UI1297/Persistence/one canonical native
+1028/19 and normal writer/independent/canonical model stages0. Independent
+QA verifies278-file custody and fresh17:04:48Z leaseback; parent verifies all
+four exact writer Git blobs and normally integrates A9bb3. Do not repeat
+successful stages or retarget the a54 native binary to its data-only child.
 ADR-0187 opens one isolated source outcome for conserved finite T0-to-first-
 factory custody through the existing auditor/reserve. Preserve G10 inputs
 and player state; source is not a new PC/JVM grant or a proved finite replay.

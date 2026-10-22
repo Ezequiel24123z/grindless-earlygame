@@ -3,8 +3,10 @@
 Status: **active development, not a release or completed T1 acceptance**.
 Current G7 engineering is closed with339 custody plus recovered original CI5,
 actual writer41df/data26e/29-38 provenance and managed51 file idempotence.
-The fictitious26e/51 target stays stopped; Assembler target shadowing remains
-a separate real acquisition gap under ADR-0185. Reviewed default-F1/display
+The fictitious26e/51 target stays stopped. G10 subsequently closes the
+ADR-0185/0186 selector/control mechanism on a54, normal A9bb3 and independently
+verified278-file custody, not actual client-wire/owner Survival or whole T1.
+Reviewed default-F1/display
 source57d is normally integrated and G8 verifies actual31/41/new contracts/
 normal A8 through239-file custody. This is not rendered or finite-T1 proof.
 All old source/lease snapshots below retain
@@ -151,7 +153,7 @@ recipe is needed.
 
 ### Next bounded choices
 
-**Source-checked construction follow-up, not an executed result:** the
+**Historical source inventory, subsequently qualified in G10:** the
 nine functional F1 ProcessMachineKind families Chemical Reactor, Chemical
 Washer, Electrolysis Cell, Atmospheric Intake, Induction Furnace, Caster,
 Flotation, Boiler and Condenser have existing Assembler constructors with only
@@ -162,19 +164,21 @@ that is not permanent approval of controller-free active machines. ADR-0186
 now explicitly selects one existing minimum-F1 fourth operand for those nine,
 preserving the old three material groups and all other runtime fields. Keep
 passive infrastructure/component bills, first
-five-controller seed and exact F2 evidence intact. Serialize VerifyRecipes
-ownership after the active selector source; do not patch frozen G8 or turn
-this inventory into a manufacturing/runtime pass.
+five-controller seed and exact F2 evidence intact. VerifyRecipes ownership
+was explicitly released and serialized through the integrated selector base.
+G10 supplies actual combined compilation/representative native and normal
+projections/A9, not a replay per family, owner acquisition or G8 retarget.
 
-1. Integrate reviewed selector source and complete its new native mechanism
-   with the nine-controller follow-up. G4/G5/G7/G8 are already closed within
-   scope; do not replay them to repair documentation. Preserve player state.
+1. Complete ADR-0187's conserved finite T0-to-first-factory witness using the
+   existing audit/reserve. Source work is isolated; actual Java/model
+   qualification needs a later exact-source window. G4/G5/G7/G8/G10 are closed
+   within scope, not reasons for replay. Preserve player state.
 2. Broaden real baseline families and interdependent processing beyond the first
    factory. Existing Motor/Wire Mill/chemistry code is prior art, not work to
    duplicate or proof of accepted revised-tier gameplay. Reuse the shared
    engine/chassis; do not narrow legacy envelopes or silently change paid work.
-3. Qualify the now-integrated default-F1 resource correction, then resolve
-   finite T1 custody using the actual decoder and existing audit/reserve.
+3. Preserve G8's proved default-F1 correction while resolving finite T1
+   custody and the separate net-supply/autonomy properties.
    Do not collapse F2/higher/cross-architecture identity or turn a model alias
    into an unlimited-supply/complete-tier certificate. Sifter still needs real
    content, not reinterpretation of a fixture.

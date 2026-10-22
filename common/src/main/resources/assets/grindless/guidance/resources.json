@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "content_sha256": "9a3bcb5a460a83e9a9d76720375f4782a24cc3b524a4009b2b7bf789853c875a",
+  "content_sha256": "44e9078efc7360152058bf2b6f58ddfa9501f75b6682201bf438374d23d19cb5",
   "resources": [
     {
       "resource": {
@@ -7882,6 +7882,105 @@
         },
         {
           "route": "assemble/assembler",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/atmospheric_intake",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/boiler",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/caster",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/chemical_reactor",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/chemical_washer",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/condenser",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/electrolysis_cell",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/flotation_cell",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:relay_matrix [F1]",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/induction_furnace",
           "source": "ProcessGraph.generate",
           "via": "item:grindless:relay_matrix [F1]",
           "kind": "consumed_input",

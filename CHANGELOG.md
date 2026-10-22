@@ -15,6 +15,16 @@ entries below reference those records by id.
 
 ### Added
 
+- **Close G10 and normally integrate its exact four writer payloads.**
+  Actuala54 compile/UI1297/Persistence/one native1028/19/PASS1/FAIL0 and normal
+  Guidance/Economy/T1 write/independent/canonical stages pass. QA verifies278
+  files, actual31/41 images/sources,2576/2580 inputs, original CI5/equivalence
+  and fresh17:04:48Z cleanA9/Java0/locksfalse/own-guard-absent lease return.
+  Parent verifies normal A9bb3/exacta54 parent/both trailers and all four Git
+  blobs byte-for-byte against actual normal outputs before normal merge.
+  Preserve API/R-alias observer failures, original source reds and derived
+  launcher-exit basis; no producer replay, generated hand edit, data-child
+  runtime, package/player update or graphical/whole-tier acceptance.
 - **Keep finite-continuation source moving after a disclosed app startup failure.**
   App sessionb430 is created but CLI startup and same-session delivery each
   time out without a confirmed start/delivery. One runtime Sol6.1Max worker owns the

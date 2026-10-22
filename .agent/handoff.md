@@ -4,7 +4,28 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
-**G10 actual native and model stages report PASS; final custody is pending.**
+**G10 is technically closed, independently audited and normally integrated.**
+Actual invocation sourcea54 supplies compiler0, UI1297/0, Persistence0, one
+canonical native1028/19 exact-once markers/PASS1/FAIL0 and normal model stages.
+QA14dbfb79 verifies278/278 custody files, all31/41 write/check source/images,
+2576 unchanged nonoutputs/2580 A9 inputs, original CI5/equivalence, exits,
+native timing and final guard/Java/lock return, with no material discrepancy.
+Parent verifies bundlee2fdcae0/1875 bytes, normal A9bb3/exacta54 parent/
+four paths/both trailers and ALL four Git blobs byte-for-byte equal actual
+normal writer payloads. A9 is normally merged in this checkpoint, not edited.
+The native source remainsa54; no runtime or package ran after data-only A9.
+
+**G10 lease explicitly returned17:04:48.5853692Z.** Fresh read-only closure
+is clean actualA9/owned and all-observedJava0/work-cache locksfalse/own guard
+hash-verified removed and absent, with no PC writes. Final stdoutSHAd036cd6f
+and stderr remain outside immutable capsuleaca883ce/278. No PC task remains;
+future access needs a new explicit guarded window, not an old grant.
+Native tested/staged/remapped JARd024a5aa/2527348 bytes was frozen before
+writers. Launcher0 is derived from the canonical harness's rejection of
+nonzero, not a separately captured server-exit receipt. No actual client
+wire/rendered/no-command/owner-save/whole-T1 result or player update follows.
+
+**Earlier G10 actual native and model stage report, before final custody:**
 Sole604 reports one canonical matrix-lifecycle on cleana54,19 expectations,
 aggregatePASS1/FAIL0, natural save-stop and retained world. Tested/staged/
 remapped JARs and inventory were frozen before subsequent Gradle. Three
@@ -247,9 +268,9 @@ identity repairs invocation without altering Git configuration.
 
 | Category | Current integration boundary |
 | --- | --- |
-| COMPLETED | Verified G7/A7/G8/A8 and unused G9 custody; selector/controller/014 source integrated; G10 actual compiler/repaired mains/one native/normal model stages report0, final custody pending; ADR-0187 source decision published and one isolated runtime implementation started |
-| BLOCKED | Whole-T1 delivery still lacks finite establishment/autonomy/genuine upgrade/client/world evidence. App CLI startup failed twice; one runtime worker continues source instead, not a silent coordinator-coder fallback |
-| NOT EXECUTED | Final G10 A9/custody acceptance/integration; ADR-0187 Java/finite replay/writers; player deployment, target launch, main/release and whole-tier acceptance. Unused G9 remains unexecuted |
+| COMPLETED | Verified G7/A7/G8/A8 and unused G9 custody; G10 actual compile/UI1297/Persistence/native1028/19/normal models31-41,278-file QA/fresh lease return and exact four-payload A9 normal integration; ADR-0187 source continues separately |
+| BLOCKED | None within G10. Whole-T1 delivery still lacks finite establishment/autonomy/genuine upgrade/client/world evidence; no urgent owner decision |
+| NOT EXECUTED | ADR-0187 Java/finite replay/writers; rendered/client-wire/owner-world/campaign qualification, package/player deployment/main/release/whole-tier acceptance or runtime after A9. Unused G9 remains unexecuted |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
 | NEEDS MY DECISION | None |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |

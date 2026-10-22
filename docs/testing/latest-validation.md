@@ -977,6 +977,83 @@ session, PC/JVM/writer or proof is created. Its future finite continuation
 must reuse the existing source-bound audit/reserve and actual custody;
 implementation and Java execution remain pending.
 
+### G10 final verified outcome and normal A9 integration
+
+Actual compiler/native/writer source is
+`a54f8de2b8113a1c796183498b1a9c18c2470941`; data-only normal A9 is
+`bb3f99bbaa0f110faefb94d51f9e91a412bcc8d1`, exact parenta54, tree
+`b85ac69e5e1bca6c79317735a2bc3a9b33d7367b`. Parent verifies bundle1875 bytes/
+`e2fdcae0fc87d4de0c41bcf49fc2bba33b7a4f5c110fb17f88164b2a3474d95b`,
+both trailers/four-path scope and every Git blob byte-for-byte against the
+actual normal writer output before normal integration. The delta is108
+insertions/6 deletions: nine controller-consumer projections, source snapshot
+hashes and the controlled Washer bill. No generated output is hand-edited.
+
+| Actual a54 proof | Observed result |
+| --- | --- |
+| Common/Forge/classes/classpath and tool javac | exit0 |
+| Source014 MachineUi | 1297 assertions/0 failed/exit0; source-owned bootstrap, no invoker injection |
+| Source014 Persistence | ALL PERSISTENCE CHECKS PASSED/exit0 |
+| One canonical matrix-lifecycle | 19/19 expectations exactly once, PASS1/FAIL0,1028 actual assertions, harness0 and natural save-stop/world retention |
+| Guidance write / independent CheckOnly | 74 declarations/5359 comparisons each, exit0 |
+| Economy write / independent CheckOnly | 416 checks/17 offers each, exit0 |
+| T1 write / independent CheckOnly | 975 contracts each, exit0 |
+| Post-write Economy / T0 guidance / T1 canonical | 417 /2935 with0 failures /979, all exit0 |
+
+All three CheckOnly processes are independent JVMs and preserve all four
+payload hashes AND mtimes. Actual write/check receipts each contain31 source
+paths/41 images;82 image copies and all sources match their frozen inputs,
+including real enum classes$2/$4/$8. Only the necessary guidance build
+resource is refreshed. The2576 non-output inputs remain identical;2580 clean
+A9 inputs are separately frozen.
+
+Native capture16:18:30.7019178Z precedes the first writer16:27:12Z and any
+later Gradle. Tested/staged/remapped JARs are2527348 bytes with SHA256
+`d024a5aa9f060854ae7f987b8571b4116dd8bcf4973510f35c68c5cddfe06778`.
+Primary log SHA256 is
+`bfa300466ef80ccb43a035f6f3ab544d15a5a8a2e66e09abb2729160ec658223`.
+Inventory is exactly Grindless plus Architectury599211 bytes/
+`47d5eca3d83aae1ac1d4a70116727715bd7ef4c077d228fee873065cbca94687`.
+Launcher0 is DERIVED from the canonical harness's explicit nonzero-launcher
+rejection, not a separately captured independent server exit. No runtime
+executes on data-child A9 and no future package binary equality is asserted.
+
+| Actual normal output | Bytes | SHA256 |
+| --- | ---: | --- |
+| guidance/resources.json | 612730 | `5bc8363d8293f227a6177df3a3e8a604f0b25d4917ae1710b141914a80a6400e` |
+| docs/tiers/t0-economy.json | 181744 | `be3062fd4435b7c44dba1c37f2f7ef29fcd279a64e04e1b475bfb035648767bc` |
+| docs/tiers/t1-production-graph.json | 81544 | `16a90d9a6a08e116dd4400afa7b30116581de5fc68c7910ba8814c6fc80889f8` |
+| docs/tiers/t1-production-graph.md | 18270 | `1640324c0f06fa172299c4143804300624098ce5d3530b8f036d77e2fc77951a` |
+
+Independent read-only QA14dbfb79 verifies278/278 safe contained files and all
+native/model/input/image/exit/timing/CI-reuse/guard relationships against
+manifestSHA256
+`aca883cee655373dbcfd57ba7999483aff978b10b2b3d4b660752213469e5541`.
+No material discrepancy is found. Parent separately owns the Git review
+above; no producer, old proof or application review is repeated.
+
+The original bb5 CI5 retains all five red suites. The single a54 API lookup
+connection failure is preserved; actual committed common/forge/tools
+equivalence changes only UI/Persistence, whose new mains really execute on
+the PC. Other successes remain explicitly original-bb5 proof reuse, not
+retargeted a54 executions. The local R/Invoke-History observer error remains
+preserved and only its read-only function names are repaired.
+
+Own guardSHA26d3919bafcd04a8727d5da2d9ceea57bb20eae928cbb309f52208641cbb1d94
+is hash-verified/removed/absent. AFTER settled custody, fresh READ-ONLY final
+closure17:04:48.5853692Z records clean actualA9, owned/all-observedJava0,
+work/cache locksfalse, guard absent and no PC writes. Final stdoutSHA256
+`d036cd6f30a6f263ce42521d6ef8bf76e0fa4cdee629b1092171fd5fd4df6ef2`
+and stderr remain outside the immutable278-file capsule. The G10 lease is
+explicitly returned; no PC task remains.
+
+This closes the bounded selector/control technical outcome. Native
+menu-player/codec state is not real client-wire delivery, rendered GUI,
+no-command Survival, the actual owner's save compatibility, whole-T1 supply/
+autonomy or chassis-upgrade acceptance. No package, Prism/player/fictitious
+target update, paid-quest/ABI replay, main or release action occurred.
+ADR-0187 source continues independently and has no new PC execution grant.
+
 **G7 report12:21:13Z, still awaiting final custody/leaseback:** clean
 ApplicableSource26e/Java0/locksfalse; one direct plain FTB boot reports0,
 ready51/Done and natural save/stop, with tested JAR/inventory captured before
