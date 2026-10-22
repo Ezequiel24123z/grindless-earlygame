@@ -465,6 +465,11 @@ public final class GenerateAssets {
     }
 
     private static int writeText(File file, String text) throws IOException {
+        if (file.isFile() && Files.readString(file.toPath(), StandardCharsets.UTF_8)
+                .replace("\r\n", "\n").equals(text.replace("\r\n", "\n"))) {
+            // Count the output even when preserving its existing bytes and modification time.
+            return 1;
+        }
         File parent = file.getParentFile();
         if (!parent.exists() && !parent.mkdirs()) {
             throw new IllegalStateException("could not create " + parent);

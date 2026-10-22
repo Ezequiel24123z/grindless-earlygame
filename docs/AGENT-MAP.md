@@ -128,6 +128,15 @@ Use explicit InstanceId/plan/hash/current stopped installed pack; pending
 journal blocks startup/Inspect/Deploy. Native/legacy paid world data stay untouched.
 The shell twins forward the same API. Source/compiler/planner/real-plan JVM
 qualification is pending; the unchanged-input Windows786/103 file proof is not it.
+Actual G3 now supplies managed-files44/stale-class0 and both authentic legacy
+compilers/remap, but publication rejects a generated309-byte PlatformMethods
+name/payload. ADR-0181's narrow source contract permits only one exact-format/
+fingerprint self-hash64 pair, preserving module/hash32/suffix and all other
+names/payloads/bytes. No prefix exclusion or general normalization. Upstream
+source corroborates the path stamp/template; implementation and real corrected
+export remain pending, with no attested artifact-to-commit build claim.
+Reconsume the real original compiler receipt if its bindings are unchanged;
+do not build old classes again merely to test comparison code.
 
 ### Exact Matrix identity versus control capacity
 
@@ -203,6 +212,12 @@ renewable tier. VerifyRecipes/Atlas/T1/assets cover composed material/cost/
 slot/lookup/model invariants; vanilla-carrier lookup is not native registration.
 The merged test keeps pure-index checks BEFORE bootstrap; do not drop them to
 make thermal reflection tests run.
+Normal5aa56be makes the existing shared GenerateAssets.writeText preserve
+UTF8 bytes/mtime for CRLF/LF-equivalent text while returning one logical output.
+Do not trim other whitespace, suppress real content changes or fork the PS/SH
+wrappers; both invoke this Java writer. Existing VerifyApprovedMultitool covers
+the22 new no-op/count/mtime/real-update/missing-output assertions, not another
+runner or full native/generator replay. Its actual JDK execution remains pending.
 The same existing ControlMatrixInputChecks.registered probe now checks the new
 core's actual Item class/registry ID, without another case or marker. This
 observation is pending execution, not supplied by synthetic lookup carriers.

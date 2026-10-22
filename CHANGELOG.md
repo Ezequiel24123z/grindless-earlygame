@@ -15,6 +15,19 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve unchanged generated text through the shared asset writer.**
+  Normal5aa56be adds a five-line CRLF/LF-equivalent no-op to GenerateAssets,
+  retaining existing bytes/mtime and logical output count while still publishing
+  real content/spacing changes. Both existing script twins use this writer.
+  The existing JDK fixture gains22 assertions; the source owner's22 non-JVM
+  model assertions are not Java execution. G3 recovery remains separate.
+- **Bound the actual generated-shim comparison instead of excluding payloads.**
+  ADR-0181 approves only one exact-format/fingerprint PlatformMethods self-name
+  pair, preserving module/identity/suffix and every other payload/instruction.
+  Actual inspected309-byte classes differ only in self UTF8. Independent
+  upstream source corroborates the path-derived name and fixed generator;
+  source implementation/corrected publisher qualification remain pending.
+  Preserve the authentic compiler receipt for validated reuse.
 - **Preserve the real legacy-publication mismatch while independent writers continue.**
   G3 managed-files-only reports44 plus its stale-class regression, Gradle/native0.
   Both authentic dd0 JavaCompile tasks and remap actually run, producing receipt

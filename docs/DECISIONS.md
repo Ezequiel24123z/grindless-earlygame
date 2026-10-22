@@ -192,6 +192,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0178](#adr-0178--continue-autonomously-and-deliver-ready-tiers-to-the-longitudinal-game) | Continue autonomously and deliver ready tiers to the longitudinal game | Accepted direct owner operating mandate |
 | [0179](#adr-0179--reproduce-four-slot-fit-first-factory-machines-without-repricing-bootstrap) | Reproduce four-slot-fit first-factory machines without repricing bootstrap | Accepted bounded acquisition scope; implementation/proof pending |
 | [0180](#adr-0180--reproduce-the-thermal-generator-through-an-honest-two-stage-subassembly) | Reproduce the Thermal Generator through an honest two-stage subassembly | Accepted bounded acquisition scope; implementation/proof pending |
+| [0181](#adr-0181--compare-one-generated-platform-shim-by-exact-self-name-equivalence) | Compare one generated platform shim by exact self-name equivalence | Accepted narrow source contract; upstream corroborated, execution pending |
 
 ---
 
@@ -8527,3 +8528,84 @@ bulk-input selection against generic Assembler recipes, optional acyclicity,
 registry/model validity and unchanged manual/claim/F2 contracts. Reuse the shared
 execution/Matrix mechanism proof; add only genuinely uncovered registration
 or adapter observations, not repeated native cycles for ordinary content.
+
+---
+
+## ADR-0181 — Compare one generated platform shim by exact self-name equivalence
+
+**Status.** Accepted bounded source-repair contract under ADR-0177/0178,
+2026-10-22. Upstream source independently corroborates the measured class
+structure and path-dependent name. Implementation and corrected publisher
+execution remain pending. The original G3 publication failure stays real;
+no player update or reference publication follows from this decision.
+
+**Context.** G3 genuinely compiles/remaps the preserved dd0 source in a fresh
+normal enclave. Receipt5f911a77 is authentic. Selected JAR29bcce43 and fresh
+JAR8a7af1e8 each have2273 entries;2272 common payloads are byte-identical.
+The remaining309-byte Architectury PlatformMethods class differs in its entry
+and internal self-name. Both compiler successes must not be repeated merely
+to test a changed comparator.
+
+The source owner inspects both actual classes without a JVM: ClassFile52.0,
+flags0x0011, constant-pool count10, self UTF8 at#1 and Class#1 at#2/this_class,
+Object superclass, no interfaces/fields. The only method is public static
+getCurrentTarget()Ljava/lang/String;, max_stack1/max_locals0, exactly ldc#8
+(`forge`)/areturn, with no exceptions/other attributes. Only self UTF8 differs;
+every other byte matches. The reported SELF-representation SHA-256 is
+`0a84a9c64d4531a5942f7fab6de29d225f189424344d81b42e4642cb468923d6`.
+Upstream source independently corroborates the generator below; the concrete
+input-path SHA preimages are not independently reobserved on the PC here.
+
+**Decision.** Preserve ordinary exact comparison first. Only for one unmatched
+pair may the publisher accept this exact recognized class format/fingerprint
+with internal name equal to its JAR entry. Preserve the module prefix,32-hex
+identity and artifact suffix across the pair; permit only the64-hex component
+of the self-name to differ. Validate/hash the fixed structure and all remaining
+bytes, not merely its method's answer. All other JAR names/payloads remain exact.
+
+An extra shim, missing/extra other resource, inconsistent entry/internal name,
+changed instruction, flags, descriptor, constant pool or other byte fails closed.
+This is a comparison of one concrete generated structure, not prefix exclusion,
+arbitrary class normalization, a parser/compiler/remapper framework or blanket
+binary reproducibility. Keep selected-JAR and fresh-compilation identities
+distinct, and expose the applied comparison/names/fingerprint in the existing
+publication evidence. Source/input/recipe/loaded-image/compilation hashes,
+reference schema2 and stale-class rejection remain mandatory.
+
+**Established implementation and scope.** Running pins are plugin3.4.164 and
+Loom1.7.423. The plugin's [project identifier implementation][181-project]
+persists a32-hex UUID in the checkout's ignored `.gradle` cache; it is not
+versioned project source. Its [generated package function][181-package]
+combines that identifier with SHA256 of the UTF8 input-JAR path string and
+the legalized filename. The [Forge wiring][181-forge] uses that function.
+An isolated build directory therefore changes the path-derived64-hex segment,
+not necessarily any application code or the checkout UUID.
+
+The transformer's [platform-method generator][181-transformer] corroborates
+the exact52.0/public-final/single constant-return method measured above.
+These cited implementations are MIT-licensed; no code/assets are imported.
+The plugin release-to-source-commit association is date-correlated evidence,
+not an attested binary build mapping. Keep actual artifact versions and cited
+source commits distinct; exact observed bytes/fingerprint still bound the
+exception. No claim about every possible Gradle task override is needed.
+
+Changing the compiler recipe to force a historical absolute path/namespace
+would invalidate the successful fresh receipt and risk old output custody.
+Compare the already-proved narrow generated structure instead. A different
+checkout UUID, changed filename identity or unknown generator shape remains a
+visible refusal, not a general historical-JAR recovery guarantee.
+
+**Reuse and limits.** The existing eight-argument source-file publisher already
+accepts the authentic compilation receipt and validates its immutable inputs.
+Reconsume that receipt/output after source repair if those bindings still match;
+do not add an adoption flag, rebuild the legacy source by assumption or alter
+historical outputs. Exact and recognized-rename positives plus changed-body,
+identity, additional-entry and other-resource negatives belong in the existing
+contract. Retain the upstream corroboration and qualify the corrected publisher
+on the actual preserved pair. A source-only
+fixture is not that real export or managed-plan consumption.
+
+[181-project]: https://github.com/architectury/architectury-plugin/blob/3b9bbb8bbf2cd7507193a0ca447a80afc4f9039f/src/main/kotlin/dev/architectury/plugin/TransformingTask.kt#L121-L155
+[181-package]: https://github.com/architectury/architectury-plugin/blob/3b9bbb8bbf2cd7507193a0ca447a80afc4f9039f/src/main/kotlin/dev/architectury/plugin/ArchitecturyPluginExtension.kt#L517-L539
+[181-forge]: https://github.com/architectury/architectury-plugin/blob/3b9bbb8bbf2cd7507193a0ca447a80afc4f9039f/src/main/kotlin/dev/architectury/plugin/ModLoader.kt#L65-L89
+[181-transformer]: https://github.com/architectury/architectury-transformer/blob/2698278e63d0afea4969b5fd6c96a68fb64432f2/src/main/java/dev/architectury/transformer/transformers/TransformExpectPlatform.java#L59-L87

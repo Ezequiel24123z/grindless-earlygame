@@ -258,11 +258,38 @@ original real exit0 without rerun or rewriting the red receipt. Restoration/
 postchecks/A3 remain unobserved. Source owner143a5650 fixes the normal twin
 writers' unchanged-content byte preservation separately, without touching G3.
 
+**Source repairs and latest writer boundary:** normal5aa56be now supplies the
+shared GenerateAssets.writeText no-op: UTF8 CRLF/LF-equivalent text preserves
+bytes/mtime and still counts one output; real content/spacing changes publish.
+Both PS/SH wrappers inherit it. The existing JDK fixture adds22 assertions;
+the author's22 source-bound non-JVM model checks are not Java execution.
+Require that one existing JDK fixture later, not a full normal-generator replay.
+
+ADR-0181 records the separate legacy comparison contract after actual inspection:
+one fixed-format/fingerprint PlatformMethods pair may vary only its self-name's
+hash64. Every other byte/name/payload remains exact; changed code/additional
+shims fail. Independent upstream source corroborates the cached checkout UUID,
+SHA256 of the input-JAR path and exact fixed Forge class template; cited commits
+are not an attested binary build mapping. Source implementation is pending.
+The old compilation receipt remains valid for reconsumption only while all its
+source/recipe/image bindings match; no new adoption API or remapper is needed.
+
+At08:24:44Z604 reports actual Guidance/Economy/T1 normal writes, three independent
+CheckOnly runs and canonical stages18/19/20 all exit0. Both T1 receipts include
+the real AuthorityAdapters/IngredientSpec/MatrixRole/ControlMatrixSpec hashes;
+every CheckOnly preserves all five outputs. The four own EOL spills restore
+exact initial hashes through existing checkout filters, without generator replay.
+Real1266-asset comparison changes only GENERATED.md, no PNG/other asset.
+An initially nested JSON-array comparison falsely reports drift; original
+before/after data and corrected observation are retained, without regeneration.
+The five-output A3 checkpoint/final custody/leaseback remain pending; parent
+still has no PC access. Native1 and legacy1 remain explicit failures.
+
 | Category | Current G3 checkpoint, not a completed wave |
 | --- | --- |
-| COMPLETED | Actual compile/javac and managed44/stale-class contract; original legacy compilation receipt and failed-publication/JAR custody preserved; native carrier source repair integrated |
-| BLOCKED | Corrected native/legacy properties remain unproved; asset postchecks wait for exact own-output EOL restoration. Source owners repair normal mechanisms without retargeting G3 |
-| NOT EXECUTED | Corrected native/publisher, final normal-output checkpoint/custody, real managed-plan consumption, new package/client/player update, whole-tier acceptance |
+| COMPLETED | Actual compile/javac and managed44/stale-class contract; authentic legacy compilation/custody retained; native carrier and asset no-op source repairs; executor-reported exact EOL restoration, normal writers/CheckOnly/canonical guards and1266-asset comparison |
+| BLOCKED | Corrected native/legacy properties remain unproved; comparator source repair and actual post-fix proofs are separate from the completed writer stages |
+| NOT EXECUTED | Corrected native/publisher and asset JDK fixture; final A3 checkpoint/custody/leaseback; real managed-plan consumption, new package/client/player update, whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | Existing GUI/JEI/reward/appearance and longitudinal-campaign gates remain open |
 | NEEDS MY DECISION | None from the owner; bounded technical repair is delegated |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |

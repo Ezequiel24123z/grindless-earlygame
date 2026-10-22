@@ -326,6 +326,30 @@ Restoration and completed asset postchecks remain unobserved. Separate bounded
 source repair targets existing twin writers' no-op byte preservation and genuine
 content updates; it supplies no retroactive G3 pass.
 
+**Observed follow-up08:24:44Z:** sole604 reports exact original-manifest hashes
+restored for all four own EOL spills through existing checkout filters. Normal
+generator12c is not repeated. Real before/after manifests cover1266 assets:
+only GENERATED.md changes, no PNG/other asset. The first PowerShell comparator
+nests a JSON array and falsely reports drift; preserved raw manifests diagnose
+that observer error and corrected reading closes it without regeneration.
+
+Normal Guidance/Economy/T1 writes, three independent CheckOnly invocations and
+canonical guard stages18/19/20 all actually exit0. Every CheckOnly leaves the
+five outputs intact; both T1 receipts contain real executed AuthorityAdapters,
+IngredientSpec, MatrixRole and ControlMatrixSpec hashes. Final five-output A3
+checkpoint, parent bundle/provenance verification and explicit leaseback remain
+pending. No PC access transfers at this stage; native1/legacy1 stay red.
+
+Normal5aa56be separately fixes the shared text writer's unchanged CRLF/LF
+publication, retaining bytes/mtime/logical count and real content changes.
+Its existing JDK fixture gains22 assertions;22 source-bound non-JVM model
+checks are reported passed, not Java execution. Run that one existing fixture
+later; the normal7c55 generator/model proofs need not be repeated just for
+the no-op helper. ADR-0181 separately records the exact one-shim comparison
+contract after actual byte inspection. Independent upstream source corroborates
+the input-path stamp and exact Forge class template; it is not binary build
+attestation. Implementation and corrected publisher evidence remain pending.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the
