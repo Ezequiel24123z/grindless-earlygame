@@ -239,14 +239,15 @@ function Invoke-Fixture($Fixture, [string]$Action = 'Deploy', [hashtable]$Change
     return Invoke-PrismDev @arguments
 }
 
-function New-FixtureQuestPlan($Fixture, [switch]$Managed, [switch]$TwoChanged) {
+function New-FixtureQuestPlan($Fixture, [switch]$Managed, [switch]$TwoChanged,
+        [ValidateSet(46, 50, 51)][int]$PreviousCount = 46, [ValidateSet(46, 50, 51)][int]$QuestCount = 50) {
     # Synthetic chapter bytes exercise the production filesystem transaction, not native loading.
     $chapters = Join-Path $Fixture.Target 'minecraft/config/ftbquests/quests/chapters'
     $files = @()
     foreach ($tier in @(0, 1)) {
         $filename = "grindless_t$tier.snbt"
-        $oldCount = @(32, 14)[$tier]
-        $newCount = @(32, 18)[$tier]
+        $oldCount = @(32, ($PreviousCount - 32))[$tier]
+        $newCount = @(32, ($QuestCount - 32))[$tier]
         $versions = @()
         foreach ($count in @($oldCount, $newCount)) {
             $quests = @(0..($count - 1) | ForEach-Object {
@@ -277,14 +278,14 @@ function New-FixtureQuestPlan($Fixture, [switch]$Managed, [switch]$TwoChanged) {
     $receipt = [ordered]@{ schemaVersion = 1; tool = 'grindless-ftb-definitions'
         instanceId = $Fixture.InstanceId; ownershipId = $state.Owner.ownershipId
         sourceRevision = $Fixture.Source; runtimeSourceRevision = $Fixture.Source
-        grindlessSha256 = $state.Receipt.grindless.sha256; questCount = 50
+        grindlessSha256 = $state.Receipt.grindless.sha256; questCount = $QuestCount
         files = @($files | ForEach-Object {
             [ordered]@{ fileName = $_.fileName; bytes = $_.afterBytes; sha256 = $_.afterSha256 }
         }) }
     $previousReceipt = $null
     if ($Managed) {
         $oldReceipt = (ConvertTo-Json $receipt -Depth 30) | ConvertFrom-Json
-        $oldReceipt.questCount = 46
+        $oldReceipt.questCount = $PreviousCount
         foreach ($file in $oldReceipt.files) {
             $oldFile = @($files | Where-Object { $_.fileName -ceq $file.fileName })[0]
             $file.bytes = $oldFile.beforeBytes; $file.sha256 = $oldFile.beforeSha256
@@ -362,6 +363,63 @@ function Test-PrismQuestDefinitionTransactions {
                 RuntimeRevision = $f.Source }
         } 'RuntimeRevision is only a Build/BuildAndDeploy input' 'Definition actions never ignore a conflicting runtime selector'
         Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'CLI ambiguity refusals preserve every target byte/timestamp'
+
+        foreach ($previousCount in @(46, 50, 51)) {
+            $f = New-Fixture
+            $null = Invoke-Fixture $f
+            $plan = New-FixtureQuestPlan $f -PreviousCount $previousCount -QuestCount 51 -Managed:($previousCount -ne 46)
+            $world = Get-FixtureSnapshot (Join-Path $f.Target 'minecraft/saves')
+            $stable = Get-FixtureSnapshot $f.Target
+            $result = Invoke-FixtureQuestUpdate $f $plan
+            if ($previousCount -eq 51) {
+                Assert-Test ($result.Outcome -ceq 'Unchanged') 'Completed51 plan is immediately a no-op'
+                Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'Completed51 no-op preserves every timestamp/byte'
+                Assert-Test (-not [IO.Directory]::Exists((Join-Path $f.Target '.grindless-dev-backups'))) 'Completed51 no-op creates no backup'
+            } else {
+                Assert-Test ($result.Outcome -ceq 'DefinitionsUpdated') "Known$previousCount-to51 filesystem update"
+            }
+            Assert-Test ((Read-PrismJson (Join-Path $f.Target $script:PrismQuestReceiptFile)).questCount -eq 51) 'Published ownership identifies51 content, not a new wire schema'
+            Assert-Test ((Get-FixtureSnapshot (Join-Path $f.Target 'minecraft/saves')) -ceq $world) 'Known51 update never touches progress/paid-history bytes'
+            $stable = Get-FixtureSnapshot $f.Target
+            Assert-Test ((Invoke-FixtureQuestUpdate $f $plan).Outcome -ceq 'Unchanged') "Repeated$previousCount-to51 application is a no-op"
+            Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'Known51 repeated update preserves every timestamp/byte'
+        }
+        foreach ($unknown in @(47, 52, '51', 51.5)) {
+            $f = New-Fixture
+            $null = Invoke-Fixture $f
+            $plan = New-FixtureQuestPlan $f -PreviousCount 50 -QuestCount 51 -Managed
+            $plan.Plan.receipt.questCount = $unknown
+            Save-FixtureQuestPlan $plan
+            $stable = Get-FixtureSnapshot $f.Target
+            Assert-Refused { Invoke-FixtureQuestUpdate $f $plan } 'Invalid native definition ownership receipt' "Unknown/noninteger content version$unknown type=$($unknown.GetType().Name)"
+            Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'Unknown content version refuses before mutation'
+        }
+        $f = New-Fixture
+        $null = Invoke-Fixture $f
+        $plan = New-FixtureQuestPlan $f -PreviousCount 50 -QuestCount 51 -Managed
+        [IO.File]::Delete((Join-Path $f.Target $script:PrismQuestReceiptFile))
+        $stable = Get-FixtureSnapshot $f.Target
+        Assert-Refused { Invoke-FixtureQuestUpdate $f $plan } 'ownership drifted' 'Managed50 predecessor cannot lose its ownership receipt'
+        Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'Missing managed50 ownership is never adopted'
+        $f = New-Fixture
+        $null = Invoke-Fixture $f
+        $plan = New-FixtureQuestPlan $f -PreviousCount 50 -QuestCount 51 -Managed
+        $chapter = Join-Path $plan.Chapters 'grindless_t1.snbt'
+        $original = [IO.File]::ReadAllText($chapter)
+        foreach ($edit in @('quest-ID', 'missing-ID', 'task-data', 'reward-data', 'tag-data')) {
+            $changed = switch ($edit) {
+                'quest-ID' { $original.Replace('id:"00000000000000C8"', 'id:"0000000000009999"') }
+                'missing-ID' { $original.Replace('id:"00000000000000C8"', 'missing_id:"00000000000000C8"') }
+                'task-data' { $original.Replace('ftbquests:checkmark', 'ftbquests:dimension') }
+                'reward-data' { $original.Replace('rewards:[]', 'rewards:[{id:"0000000000008888"}]') }
+                'tag-data' { $original.Replace('rewards:[]', 'rewards:[],tags:["foreign"]') }
+            }
+            Assert-Test ($changed -cne $original) "Synthetic preflight mutation actually changes$edit"
+            Write-FixtureText $chapter $changed
+            $stable = Get-FixtureSnapshot $f.Target
+            Assert-Refused { Invoke-FixtureQuestUpdate $f $plan } 'drifted or were edited' "Managed50-to51 preserves unknown$edit edits"
+            Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'Published byte binding refuses edited identity/data before any mutation'
+        }
 
         foreach ($name in @('grindless_t0.snbt', 'grindless_t1.snbt', 'foreign.snbt')) {
             $f = New-Fixture
@@ -557,7 +615,7 @@ function Test-PrismQuestDefinitionTransactions {
         $stable = Get-FixtureSnapshot $f.Target
         Assert-Test ((Invoke-FixtureQuestUpdate $f $plan).Outcome -ceq 'Unchanged') 'No-receipt transition is idempotent after its first managed receipt'
         Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'No-receipt repeat does not create additional backups'
-        Write-Output 'PASS: native definition filesystem46-to50, two-file preflight, verified backups, rollback/recovery, drift/ownership/link refusals and no-op.'
+        Write-Output 'PASS: known46/50/51 definition filesystem, two-file preflight, verified backups, rollback/recovery, identity/data/ownership/link refusals and no-op.'
         Write-Output 'These synthetic plan/byte fixtures do not execute the Java SNBT publisher, native loader, player import or saved-world migration.'
     } finally {
         Set-Item Function:\Set-PrismReplacement $script:OriginalReplacement
