@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Keep the remaining basic-family control gap visible during implementation.**
+  Source tracing confirms nine existing functional F1 process constructors
+  share casing/motor/plate bills without a physical Matrix, including the
+  bounded Washer route. Record this against the accepted control contract,
+  not as an accepted controller-free family or a silent bill change. Preserve
+  G8's exact source and serialize the next recipe-file work after the selector.
 - **Assign only the changed F1 model boundary while selector source continues.**
   Sole604 receives G8/exact4ee/new common-only root after independently verified
   G7 return. Execute affected authority/registry/guidance/T0/T1 contracts and

@@ -150,15 +150,30 @@ recipe is needed.
 
 ### Next bounded choices
 
-1. Close G4's actual corrected native/JDK/export and canonical managed-plan
-   consumption, not another implementation of the already-composed updater.
-   Preserve the player game; the new package/target are qualification-only.
+**Additional source-checked construction gap, not a new bill selection:** the
+nine functional F1 ProcessMachineKind families Chemical Reactor, Chemical
+Washer, Electrolysis Cell, Atmospheric Intake, Induction Furnace, Caster,
+Flotation, Boiler and Condenser have existing Assembler constructors with only
+casing1/motor2/plates4. The Motor/casing subassemblies add no physical Matrix.
+This does not fulfill the accepted active-machine control contract. ADR-0182
+deliberately preserved the Washer's old bill for its bounded content increment;
+that is not permanent approval of controller-free active machines. The
+existing minimum-control fourth operand is relevant prior art and fits four
+input groups, but a separate explicit source decision/contract update must
+precede any bill change. Keep passive infrastructure/component bills, first
+five-controller seed and exact F2 evidence intact. Serialize VerifyRecipes
+ownership after the active selector source; do not patch frozen G8 or turn
+this inventory into a manufacturing/runtime pass.
+
+1. Complete the exact G8 default-F1 model/normal-output proof and the separate
+   selector source/new native mechanism. G4/G5/G7 are already closed within
+   scope; do not replay them to repair documentation. Preserve player state.
 2. Broaden real baseline families and interdependent processing beyond the first
    factory. Existing Motor/Wire Mill/chemistry code is prior art, not work to
    duplicate or proof of accepted revised-tier gameplay. Reuse the shared
    engine/chassis; do not narrow legacy envelopes or silently change paid work.
-3. Reconcile default-F1 resource evidence and finite T1 custody using the actual
-   ControlMatrixNbt/default-frontier contract and existing audit/adapters.
+3. Qualify the now-integrated default-F1 resource correction, then resolve
+   finite T1 custody using the actual decoder and existing audit/reserve.
    Do not collapse F2/higher/cross-architecture identity or turn a model alias
    into an unlimited-supply/complete-tier certificate. Sifter still needs real
    content, not reinterpretation of a fixture.

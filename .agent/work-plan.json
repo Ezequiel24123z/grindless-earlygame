@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 86,
+  "plan_revision": 87,
   "updated": "2026-10-22",
   "phase": "FTB51_engineering_and_T1_recipe_reachability_with_default_identity_correction",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -67,6 +67,14 @@
     "loader_boot": "None_G8_common_model_display_only_NO_changed_registration_loader_or_machine_mechanism_NO_new_boot_resolves_unknown_physical_render_human_gate_stays",
     "current_plan_compilation": "None_G8_no_FTBcompiler_plan_package_target_or_Forgebackend",
     "closure_required": "actual_newbinding_selected_suites_exits_or_exactCI_proof_NEW31_41observed_sourceclassimages_actual_normal4payloads_CheckOnly_byte_mtimeinvariance_canonicalchecks_nonoutput_frozeninputs_A8normal_bundle_ifchanged_source_metadata_honest_guardhash_removed_absent_Java0locksfalse_explicitreturn_no_target"
+  },
+  "baseline_family_control_gap": {
+    "status": "source_inventory_confirmed_not_new_bill_or_gameplay_acceptance",
+    "families": ["CHEMICAL_REACTOR", "CHEMICAL_WASHER", "ELECTROLYSIS_CELL", "ATMOSPHERIC_INTAKE", "INDUCTION_FURNACE", "CASTER", "FLOTATION", "BOILER", "CONDENSER"],
+    "evidence": "real_F1_kind_tiers_and_ProcessGraph_three_group_constructors_casing_motor_plate_no_transitiveMatrix_in_components",
+    "limit": "ADR0182_no_bill_change_was_bounded_not_permanent_control_exemption",
+    "next": "explicit_followup_scope_then_existing_minimumControl_priorart_no_passive_or_seed_F2_change_serialize_VerifyRecipes_after_selector_owner",
+    "G8_retarget_or_source_hotfix_authorized": false
   },
   "assembler_recipe_choice": {
     "status": "isolated_ADR0185_source_implementation_active_runtime_proof_pending",

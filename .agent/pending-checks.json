@@ -18,6 +18,11 @@
     "escalation": "serious_blocker_or_urgent_owner_decision",
     "no_implicit_public_release_main_merge_or_paid_generation": true
   },
+  "baseline_family_control_gap": {
+    "status": "source_confirmed_nine_F1process_constructors_no_controller",
+    "not_authorized": "silent_bill_change_G8hotfix_passive_tax_or_gameplay_acceptance",
+    "next": "explicit_followup_after_selector_recipe_file_ownership_return"
+  },
   "assembler_recipe_choice": {
     "status": "isolated_source_implementation_active_runtime_proof_pending",
     "policy": "ADR-0185",
