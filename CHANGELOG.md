@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Close G15 without reopening a retired execution window.**
+  The own guard was already removed before the conditional amendment was
+  admitted, so no remaining stage or writer ran. Preserve133-file custody,
+  the seven passed mains and the exact two Adapters failures; fresh06:19Z
+  returns clean e1ed with Java0/locksfalse/guard absent. No A11 or partial
+  model is invented; the source repair needs a new guarded delta window.
 - **Preserve the first G15 result and route its exact obsolete quest oracle.**
   Compilation and seven affected mains pass on e1ed; Adapters still expects
   51 objectives and omits the new optional lesson. Preserve both real reds,

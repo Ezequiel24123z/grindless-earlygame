@@ -11,7 +11,7 @@
   "active_t1_gas_increment": {
     "policy": "ADR-0190",
     "baseline": "8a1a3365dee930d312616c9f9023ecbd513ccb8b",
-    "status": "G15_compile_7checks_pass_Adapters1044_2fails_old51_oracle_SOURCE_fix_and_amended_independent_remaining_scope_NO_A11",
+    "status": "G15_CLOSED_Adapters1044_2fail_compile7checks0_133custody_returned_amendment_notadmitted_NOwriters_A11_orPClease",
     "fuel_source": "c74273858966c4ed9f8930a18a4bd348881dc74d",
     "content_source": "5c34ea3887d587ca0e585f295079a5695fce1a6f",
     "provenance": "direct_fuel_sources_and_images_plus3actual_gas_family_images_added_to_existingpins_NO_old43_98_relabel",
@@ -22,7 +22,8 @@
     "boundaries": "no_full_upgrade_energy_contract_wholeT1_or_world_acceptance_NO_player_update",
     "prepared_inventory_sha256": "dee779f420a7804f8b0c4c3dbf5e88696bda3afca1cfc3bb9f2ce80d7b737bee",
     "prepared_plan_sha256": "4b73a040a98d9bf702388223cc795cd13a54446109f014b1ac45545364a989da",
-    "PC_grant": "gas-utilities-qualification-g15-20261023_exacte1edcfe5804475bead2d92f407b1ad09a589ce4c_sole604",
+    "PC_grant": null,
+    "last_PC_scope": "G15_closed_returned_e1ed_compile7mains0_Adapters2fail_no_remainingstages",
     "qualified_source": null
   },
   "autonomous_tier_delivery": {
@@ -149,8 +150,8 @@
   },
   "current_PC_execution": {
     "assignment": "gas-utilities-qualification-g15-20261023",
-    "active": true,
-    "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
+    "active": false,
+    "owner_session": null,
     "source": "e1edcfe5804475bead2d92f407b1ad09a589ce4c",
     "writer_invocation_source": "e1edcfe5804475bead2d92f407b1ad09a589ce4c",
     "normal_data_checkpoint": null,
@@ -162,14 +163,15 @@
     "real_PrismRoot_player_world_writes_authorized": false,
     "failure_policy": "retain_actualpartialoutputs_DIRTYexactsubset_NO_restore_waiver_hotfix_or_producerreplay",
     "prohibited": "NO_CI_native_legacyHeraclesrun_compilerEnclave_publication_package_actualPrism_world_deps_provider",
-    "result": "REPORTED_compile_EnergyFluidRecipesAtlasQuestClaimsTeaching0_Adaptersold51countsetFAIL1044_2",
+    "result": "CLOSED_REPORTED_compile_7checks0_Adaptersold51FAIL1044_2_133custody_CLEAN_NOmodels",
+    "custody_manifest_sha256": "924915d9ce876d0781c2ea4b684459f455a0506c416717c742ddfb495e517940",
     "A11": "NOT_AUTHORIZED_on_failed_e1ed_scope_preserve_partial_outputs",
     "amendment": "ONLY_if_stillowned_guardpresent_before_return_continue_unexecuted_independent_stages_ownhardchecks_NO_replay_or_hotfix_IF_alreadyclosed_do_not_reopen",
-    "amendment_admission": "UNCONFIRMED",
-    "returned": false,
-    "returned_utc": null,
-    "return_state": "NOT_OBSERVED_G15",
-    "new_explicit_guarded_window_required": false
+    "amendment_admission": "NOT_ADMITTED_guard_removed_before_admission_NO_remaining_stage_or_reopen",
+    "returned": true,
+    "returned_utc": "2026-10-23T06:19:09.4950989Z",
+    "return_state": "REPORTED_e1edCLEAN_Java0locksfalse_ownGuardabsent_explicitreturn",
+    "new_explicit_guarded_window_required": true
   },
   "closed_G14_execution": {
     "assignment": "installed-capital-checker-g14-20261023",

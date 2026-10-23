@@ -4,6 +4,15 @@ Updated: 2026-10-23. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**G15 is CLOSED and explicitly RETURNED; the conditional amendment was NOT
+admitted.** Its guard was hash-removed at06:17:20Z before receipt of the
+amendment. The executor correctly ran no remaining Registry/Guidance/
+backend/Prism/model stage and did not reopen the lease. Fresh final readonly
+06:19:09.4950989Z records exacte1ed CLEAN/Java0/locksfalse/guard absent;
+rawSHA72a02106 and133-file manifest924915d9 are preserved. There are no
+partial writer outputs because no writer ran. Source checker repair continues.
+G16 preparation is local only and needs a new exact-source guarded GO.
+
 **G15 first real red is an omitted52-objective test expectation.**
 Exacte1ed common/Forge/tools and Energy/Fluid/Recipes/Atlas/Quest/Claims/
 Teaching exit0. Adapters reports1044 pass/two fail: its old51 count and

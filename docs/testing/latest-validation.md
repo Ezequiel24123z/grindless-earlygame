@@ -4,6 +4,18 @@
 
 ### ADR-0190 optional T1 gas utilities
 
+**G15 explicit return; amendment not admitted.** The own guard
+019c933e1176c4f5afbbb6ebdff1eb55ccf0ab8dce1cf28f3ac0454076285555 was
+removed at06:17:20Z before the executor admitted the amendment. Therefore
+Registry/Guidance/FTB/Prism/writers did NOT run and no lease was reopened.
+133-file manifest924915d9ce876d0781c2ea4b684459f455a0506c416717c742ddfb495e517940
+and2595 unchanged non-output inputs are reported; independent custody
+review remains pending. Fresh final06:19:09.4950989Z records exacte1ed
+clean/owned-allJava0/workcachelocksfalse/guard absent and explicit return,
+stdoutSHA72a02106a9487cc944e48823299c631d65886709c967657e18a1a7056a0acf08.
+Nonempty progress stderr is not an exit receipt; exit0 is tool219 history.
+No model output or A11 was generated. A new G16 source/lease is required.
+
 **G15 first real failure, exacte1ed.** Common/Forge/tools and seven affected
 Energy/Fluid/Recipes/Atlas/Quest/Claims/Teaching mains pass. Stage24 Adapters
 exits1/wrapper1 with1044 passes/two failures: expected51 instead of52 and

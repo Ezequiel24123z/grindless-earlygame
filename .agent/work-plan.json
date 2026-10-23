@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 138,
+  "plan_revision": 139,
   "updated": "2026-10-23",
   "phase": "optional_t1_gas_utilities_and_lossy_hydrogen_source_development",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -11,7 +11,7 @@
   "active_development": {
     "policy": "ADR-0190",
     "source_baseline": "8a1a3365dee930d312616c9f9023ecbd513ccb8b",
-    "status": "G15_compile_and_7affectedchecks_PASS_Adapters_old51_oracle_FAIL_sourceowner_fix_remaining_independent_scope_conditionally_amended",
+    "status": "G15_CLOSED_compile_7checks_PASS_Adapters_old51_oracle_FAIL_NOremainingstages_amendment_notadmitted_sourcefix_active_NO_PClease",
     "content_session": "a6d4adca-c6b0-40b5-85a9-9ba83326329b",
     "fuel_session": "7042c976-722d-4974-92f5-e614e95bd506",
     "research_agent": "68d2d543-5902-4095-8fbb-c8ddc8ac4f74",
@@ -37,8 +37,8 @@
   },
   "current_PC_execution": {
     "assignment": "gas-utilities-qualification-g15-20261023",
-    "active": true,
-    "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
+    "active": false,
+    "owner_session": null,
     "last_owner_session": "604195bd-6826-4299-89af-1dcf39545263",
     "source": "e1edcfe5804475bead2d92f407b1ad09a589ce4c",
     "source_tree": "69c3720b48fe99f8493e7e2375fff907a07ee3dc",
@@ -63,7 +63,14 @@
     "failure_policy": "stop_dependents_preserve_actual_firstfailure_and_partialoutputs_DIRTYexactsubset_NO_restore_reconstruction_stock_budget_testwaiver_sourcehotfix_or_producerreplay",
     "prohibited": "NO_CIquery_native_smokes_legacyHeraclesrun_compilerEnclave_FTBpublication_ABI_JDKfixture_Blueprint_assets_package_Prism_real_target_world_newdeps_provider_generation_or_oldrootwrites",
     "process_privacy": "existingoffline_CPU2worker1Serial_settings_freshresource_ownership_NO_clientcommandlines_or_playerstop_restart",
-    "result": "REPORTED_commonForge_toolcompile0_EnergyFluidRecipesAtlasQuestClaimsTeaching0_Adapters1044pass2FAIL_old51_vs52_NO_writer_result_yet",
+    "result": "CLOSED_REPORTED_commonForge_toolcompile_7mains0_Adapters1044_2FAIL133custody_CLEAN_returned_NO_backend_writers_A11",
+    "custody_manifest_sha256": "924915d9ce876d0781c2ea4b684459f455a0506c416717c742ddfb495e517940",
+    "custody_files": 133,
+    "custody_QA_status": "PENDING_new_failed_boundary",
+    "unchanged_nonoutput_inputs": 2595,
+    "own_guard_removed_utc": "2026-10-23T06:17:20Z",
+    "own_guard_sha256_removed": "019c933e1176c4f5afbbb6ebdff1eb55ccf0ab8dce1cf28f3ac0454076285555",
+    "final_readonly_sha256": "72a02106a9487cc944e48823299c631d65886709c967657e18a1a7056a0acf08",
     "first_failure": {
       "stage": "24-adapters",
       "exit": 1,
@@ -77,11 +84,11 @@
       "source_owner": "a6d4adca-c6b0-40b5-85a9-9ba83326329b"
     },
     "amendment": "EXPLICIT_before_return_IF_lease_still_owned_and_guard_present_continue_ONLY_unexecuted_independent25Registry26Guidance27FTB28Prism_and_normalwriters_ownhardchecks_NO_compile_success_or24replay_NO_A11_NO_sourcechange_IF_guard_removed_or_returned_do_NOT_reopen",
-    "amendment_admission": "AWAITING_EXECUTOR_CONFIRMATION_NOT_INFERRED_FROM_IDLE",
-    "returned": false,
-    "returned_utc": null,
-    "return_state": "NOT_OBSERVED_G15",
-    "new_explicit_guarded_window_required": false,
+    "amendment_admission": "NOT_ADMITTED_guard_was_already_removed_and_custody_settled_NO_independent_remaining_stage_or_reopen",
+    "returned": true,
+    "returned_utc": "2026-10-23T06:19:09.4950989Z",
+    "return_state": "REPORTED_aftercustody_e1edCLEAN_ownedallJava0_workcachelocksfalse_ownGuardabsent_explicitreturn_NO_models_generated_or_sourcechange",
+    "new_explicit_guarded_window_required": true,
     "closure_required": "settled_raw_source_class_provenance_output_inputs_receipts_final_actualHEAD_Java0locksfalse_ownGuardhashremoved_absent_explicitreturn_namedfinalraws"
   },
   "closed_G14_execution": {
