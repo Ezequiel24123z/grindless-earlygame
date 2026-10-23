@@ -15,6 +15,16 @@ entries below reference those records by id.
 
 ### Added
 
+- **Make baseline hydrogen fuel recovery lossy without repricing saved burns.**
+  Separate newly ignited hydrogen at50 ticks per1000mB from unchanged CO400.
+  The live unmodified electrolysis batch still costs6400FU and emits2000mB
+  hydrogen, now worth3200FU at Thermal32FU/t. Author exact-rate, legacy400
+  counterexample, actual ignition and binary-NBT regressions for paid
+  Burn/Duration, partial gas, blocked refunds/faces, inventory, energy,
+  configuration and saved capabilities. Keep ThermalBE byte-unchanged.
+  This is source-only: no Java/build/native/model or PC execution occurred.
+  The50% claim covers the unmodified T1 baseline, not the separate future
+  SPEED/time-versus-energy-multiplier boundary or whole-tier readiness.
 - **Close the bounded manual-machine engineering increment.**
   Independent QA verifies115/115 G14 artifacts, new S1 identities, actual
   R36/T0/T1 outcomes, unchanged copied payloads and recorded safe return.
