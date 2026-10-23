@@ -12,7 +12,9 @@ The manual-policy increment now closes through G11 native, G13 actual finite/
 writer/43-98 proof and G14 corrected-check closure; A10 is normally integrated
 ata792f02b with all custody verified. The new source baseline8a1a3365 starts
 ADR-0190's optional gas-utilities branch and future-ignition loss correction,
-not another run of the closed manual-policy programme.
+not another run of the closed manual-policy programme. G15/G16 now qualify
+the gas increment and A11 is normally integrated at43fbb3ac, with402-file/
+recovery custody closed. It is not deployed or all T1.
 Current G7 engineering is closed with339 custody plus recovered original CI5,
 actual writer41df/data26e/29-38 provenance and managed51 file idempotence.
 The fictitious26e/51 target stays stopped. G10 subsequently closes the
@@ -83,7 +85,7 @@ execution engine, global unlock or list of invented bills.
 | `wire_forming` | Optional | Manually construct the existing F1 Wire Mill, then automate its iron/copper wire and copper coil routes after assembly; not a first-F2 dependency or an upgraded machine. |
 | `tool_reproduction` | Optional | Reproduce four retained Press dies after manual seeding without a forming/assembly cycle or first-F2 prerequisite. |
 | `wet_beneficiation` | Optional | Fabricate Motors, manually construct the Washer, then use its real washing/reduction routes and both output streams. |
-| `gas_utilities` | Optional | Use existing Motor/manual Cell, Intake and Reactor constructors; automate electrolysis, oxygen and powered water recovery, with lossy baseline hydrogen fuel. New combined qualification is pending. |
+| `gas_utilities` | Optional | Use existing Motor/manual Cell, Intake and Reactor constructors; automate electrolysis, oxygen and powered water recovery, with lossy baseline hydrogen fuel. G15/G16 engineering proof is qualified; actual player/world experience is separate. |
 | `relay_f2` | Exit | Only `assemble/relay_matrix_f2`; actual physical F1/casing/glass/Flux Cell operands remain canonical. |
 | `extraction` | Optional | Scanner/finite terrestrial extraction as a compatible supplement, not the unlimited canonical source of mandatory inputs. |
 | `logistics` | Optional | Existing hoppers/belts/arms/interfaces within their implemented sides/owner semantics; no new transaction framework. |
@@ -187,11 +189,11 @@ was explicitly released and serialized through the integrated selector base.
 G10 supplies actual combined compilation/representative native and normal
 projections/A9, not a replay per family, owner acquisition or G8 retarget.
 
-1. Implement and qualify ADR-0190's optional gas-utilities branch through the
-   existing manual Cell/Intake/Reactor, Motor and gas routes, a reward-free
-   native lesson and honest baseline hydrogen recovery. Preserve old51 IDs,
-   first-F2, biomass/CO and paid burns. G11-G14 are closed source-bound proof,
-   not a queue to replay or permission to update the player's instance.
+1. Preserve the completed ADR-0190 optional gas-utilities increment, old51
+   IDs/rewards/first-F2 and honest baseline recovery. G11-G16 are closed
+   source-bound proof, not a queue to replay or permission to update the
+   player's instance. New content should reuse these mechanisms and state
+   its actual missing capability rather than requalify unchanged cases.
 2. Continue the broader basic-family and real capability contract beyond this
    gas increment. Existing Motor/Wire Mill/chemistry code is prior art, not
    work to duplicate. Reuse the shared engine/chassis; do not narrow legacy
@@ -222,7 +224,8 @@ canonical fuel route or new number from this inventory alone; resolve the
 actual balance/route scope explicitly before accepting that expansion.
 ADR-0190 now selects50 ticks per hydrogen bucket, preservingCO400 and
 electrolysis6400FU: two buckets recover3200FU at the unmodified F1 baseline.
-That is the new authored decision, not yet an executed source result.
+G15 validates the literal baseline rates/actual ignition/binary custody,
+and G16 closes current contracts/projections without replaying those mains.
 Stored already-paid burns remain intact; future ignition changes value.
 Actual machine-upgrade energy behavior remains a separately unqualified
 boundary, not a hidden claim that every serialized loadout is balanced.

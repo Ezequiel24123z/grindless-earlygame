@@ -11,7 +11,7 @@
   "active_t1_gas_increment": {
     "policy": "ADR-0190",
     "baseline": "8a1a3365dee930d312616c9f9023ecbd513ccb8b",
-    "status": "G16_app_models402integrity_verified_A11integrated43fbb_remaining_LOCAL_observer_invocation_link_NO_PClease",
+    "status": "COMPLETE_BOUNDED_ADR0190_G16_and_originalG15reuse_402QA_recovery_link_VERIFIED_A11integrated43fbb_NO_PClease",
     "oracle_repair_source": "981b5fd904d195fff0de08946fcabc4999c35052",
     "G16_inventory_sha256": "8da0f5501fc1598ac8bc61f3a89ccd263edcaef0cc84b0247c0adf41aae25677",
     "G16_preparation_sha256": "a5e473a20d4dd25e9a9cd62dbb42ab70fd15795ee506ac38affa0691025ff6f7",
@@ -26,8 +26,10 @@
     "prepared_inventory_sha256": "dee779f420a7804f8b0c4c3dbf5e88696bda3afca1cfc3bb9f2ce80d7b737bee",
     "prepared_plan_sha256": "4b73a040a98d9bf702388223cc795cd13a54446109f014b1ac45545364a989da",
     "PC_grant": null,
-    "last_PC_scope": "G15_closed_returned_e1ed_compile7mains0_Adapters2fail_no_remainingstages",
-    "qualified_source": null
+    "last_PC_scope": "G16_closed_verified_fb846_newcontracts_models_A11integrated43fbb_reuse_originale1ed7mains_G15red_preserved",
+    "qualified_source": "fb846b1d40216b2a01137ef78c9c53b86899bdce",
+    "integrated_checkpoint": "43fbb3ac3f1a5b28f9d11653b2ab077a26680f5a",
+    "limits": "no_player_deploy_wholeT1_or_upgraded_energy_claim_POSIXSKIP_and_FTBsynthetic_scope_retained"
   },
   "autonomous_tier_delivery": {
     "policy": "ADR-0178",
@@ -169,10 +171,11 @@
     "real_PrismRoot_player_world_writes_authorized": false,
     "prohibited": "NO_reusedmainreplays_CI_native_legacybackend_enclave_publication_package_actualPrism_world_deps_provider",
     "failure_policy": "preserve_actualpartial_DIRTYsubset_NO_restore_waiver_hotfix_or_successfulproducerreplay",
-    "result": "REPORTED_G16_newchecks_backend52_Prism262_models45_103_andpostcanonicals_PASS_A11cf66_byteverified402QA_pending",
+    "result": "CLOSED_VERIFIED_G16_newcontracts_models45_103_postcanonicals_A11cf66_integrated43fbb_402QA_recovery_link_closed",
     "custody_manifest_sha256": "ab2e19641257fb9296b7490fc53c15a1f066bfe7a2cca3d0f6c29e9b5d2861d0",
-    "custody_QA_status": "PARTIAL_VERIFIED411bd_402stages_pins_outputs_closure_BLOCKED_local_original_recovery_invocation_link",
-    "observer_recovery": "path_variable_fix_AND_existingimage_originalbaseline_preservation_only_NOT_just_variable_rename_actual_helper_invocation_stdout_pending",
+    "custody_QA_status": "VERIFIED402_411bd_plus_original_history_recovery_link_NO_remaining_material_gap",
+    "observer_recovery": "original_call_patch3hunks_hashnamedcopies_output_and_attempt2_verified_no_producerreplay_initialfailure_preserved",
+    "recovery_addendum_sha256": "cc041ca8d3e3a7be3b10f254ea76cf0762246175fbffab3b238642d3d89f8d0e",
     "integrated_checkpoint": "43fbb3ac3f1a5b28f9d11653b2ab077a26680f5a",
     "returned": true,
     "returned_utc": "2026-10-23T06:52:36.8634860Z",

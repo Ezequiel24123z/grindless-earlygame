@@ -4,6 +4,38 @@ Updated: 2026-10-23. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**ADR-0190's optional T1 gas increment is complete and technically qualified.**
+The line exposes existing manual Cell/Intake/Reactor construction and eight
+actual authorities, with one reward-free52nd objective and all51 old IDs/
+rewards/first-F2 intact. Future H2 ignition is50 ticks per bucket, giving
+50-percent unmodified electrolysis recovery; existing paid burns/gas remain
+preserved. This is not a future module/chassis energy claim.
+
+G15's seven successes remain e1ed evidence and its old Adapters red remains
+historical. G16 onfb846 closes the corrected/unexecuted contracts, FTB52
+synthetic backend, temporary host tests, normal models and actual45/103
+per-action provenance. Normal A11cf66 is integrated at43fbb3ac with every
+writer byte preserved. Independent QA411b verifies402/402 and closes its
+narrow recovery gap from the ORIGINAL tool events/addendumcc041ca8.
+The original command/output and three custody-only patch hunks bind
+PRESERVED_SUCCESS08/09/10 before independent checks/A11, without replay.
+The initial observer failure is retained, not relabelled a success.
+
+| Disclosure | Final gas-increment handoff |
+| --- | --- |
+| COMPLETED | Optional gas content, H2 recovery/save contracts, exact52 lineage, affected data/backend/host proofs, A11 integration and independent custody/recovery closure |
+| BLOCKED | None for this bounded increment |
+| NOT EXECUTED | Player deployment, publication/main merge, new native/legacy/CI replay; QuestClaims POSIX fixture remains SKIPPED |
+| NEEDS HUMAN VALIDATION | Actual book/client interaction, gas layout/Survival, real saves and campaign; broader T1/upgrade acceptance is not granted |
+| NEEDS MY DECISION | None for this increment |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | None new |
+| DEPLOYED STATE | Installed instance/world unchanged; isolated A11 is clean and the PC lease returned |
+
+No active source worker, PC grant or qualification remains for this increment.
+Continue the separate broader family/capability programme from the tier map;
+do not reopen completed G15/G16 or turn this optional branch into all T1.
+
 **Final G16 review verifies the application/model result but requests one
 local recovery-invocation link.** QA411b confirms402/402, sixteen actual
 stages/exits,45/103 per writer/check, outputs/invariance and recorded safe

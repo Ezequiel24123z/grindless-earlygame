@@ -47,8 +47,9 @@ paid work rather than restarting those completed windows.
 is complete through A10 integration ata792f02b and independent G14 custody.
 The owner's renewed instruction now selects ADR-0190: optional T1 gas
 utilities using existing Cell/Intake/Reactor families and a lossy hydrogen
-baseline, with one reward-free native lesson. Source content and fuel lanes
-run separately; existing models/native proofs are not reset. The wider
+baseline, with one reward-free native lesson. This increment is now complete:
+G15/G16 qualified proofs, byte-exact A11 integration at43fbb3ac and final
+independent custody/recovery closure. Existing proofs are not reset. The wider
 family and genuine in-place-upgrade contract remains in the
 [tier map](tiers/t1-development-map.md), not silently implemented by a fuel
 number or a higher control ingredient. No PC or deployment grant is active.

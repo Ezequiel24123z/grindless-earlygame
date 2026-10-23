@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Close the optional T1 gas increment with original evidence intact.**
+  The same independent QA closes the recovery link from original command/
+  patch/output history and hash-named helpers, without new PC work or replay.
+  Together with402-file/current-provenance checks and byte-exact A11
+  integration at43fbb, the bounded gas/fuel/52-objective increment is complete.
+  Preserve the initial observer failure, POSIX skip, synthetic-backend limits
+  and undeployed player state; no broader T1 or upgrade claim is granted.
 - **Keep the remaining G16 observer provenance gap explicit.**
   Independent QA verifies402 artifacts, all application stages, expanded
   provenance, output invariance and closure, but requests the original local

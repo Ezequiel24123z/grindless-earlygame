@@ -9296,9 +9296,11 @@ native proofs remain bound to their original code and are not relabeled.
 development instruction and ADR-0174/0178/0188, 2026-10-23. Source baseline
 8a1a3365 closes the preceding manual-machine increment. This decision opens
 two isolated source lanes, not another PC lease or a player update.
-Hydrogen sourcec7427385 and content5c34ea38 are subsequently normally composed
-after direct review, preserving their owned blobs. Actual combined
-qualification remains pending.
+Hydrogen sourcec7427385 and content5c34ea38 are normally composed after direct
+review. Original G15 fuel/content proofs, repaired981b oracles and actual
+G16 contracts/models qualify the bounded increment; A11 is normally
+integrated at43fbb3ac and independent402-file/recovery QA is closed.
+This is not deployment, whole-tier or human acceptance.
 
 **Context and existing solution.** The first factory is not all T1. Existing
 manual Electrolysis Cell, Atmospheric Intake and Chemical Reactor constructors,

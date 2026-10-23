@@ -4,6 +4,30 @@
 
 ### ADR-0190 optional T1 gas utilities
 
+**Final bounded G16 QA closure.** The same QA411b verifies addendum10522/
+cc041ca8d3e3a7be3b10f254ea76cf0762246175fbffab3b238642d3d89f8d0e and
+the four specifically named original JSON history records with their exact
+IDs/tool calls/timestamps/UTF-8 record hashes. Original call
+call_5vpeGOHZTgfFFiXENotciN1o runs06:45:55.156Z to06:47:39.881Z and its
+shell225 result is exit0. Its actual command matches the preserved extract;
+the original patch has the three documented custody hunks.
+PRESERVED_SUCCESS08/09/10 precedes CheckOnly11/12/13, canonic14/15/16 and A11.
+The UTF-8/CRLF extract matches the630-byte attempt2 stdout and its original
+hash. No producer, PC action or402-file review was repeated to close this.
+
+The link is historical command/patch/hash-named copies/output, not a printed
+mainHash, saved bootstrap or new remote attestation. The original observer
+failure and final-readonly history-only exit limitation remain visible.
+No material gap remains within this bounded QA. Parent independently
+verified A11's Git ancestry/scope/trailers/all four binary blobs and normally
+integrated it at43fbb3ac3f1a5b28f9d11653b2ab077a26680f5a.
+
+This closes the optional gas engineering increment: original e1ed seven
+mains plus new fb846 contracts/backend/fixtures/models/current45-103 proof.
+The POSIX inaccessible-ledger fixture is still SKIPPED; FTB synthetic
+receipts are not actual Minecraft52 or a player-world pass. No deployment,
+whole-T1 acceptance or upgraded-electrolysis energy guarantee follows.
+
 **G16 review: substantive results verified, one local invocation link open.**
 QA411b verifies402/402, all sixteen new stage receipts/exits, model outputs,
 45/103 per action and206 images,52 distinct source pins with explicit EOL,
