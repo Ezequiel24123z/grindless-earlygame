@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 135,
+  "plan_revision": 136,
   "updated": "2026-10-23",
   "phase": "optional_t1_gas_utilities_and_lossy_hydrogen_source_development",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -11,7 +11,7 @@
   "active_development": {
     "policy": "ADR-0190",
     "source_baseline": "8a1a3365dee930d312616c9f9023ecbd513ccb8b",
-    "status": "FUEL_SOURCE_c742_REVIEWED_NORMALLY_COMPOSED_CONTENT_ACTIVE_RESEARCH_COMPLETE_NO_PC_GRANT_OR_EXECUTED_RESULT",
+    "status": "FUELc742_CONTENT5c34_SOURCE_REVIEWED_NORMALLY_COMPOSED_COMBINED_QUALIFICATION_PENDING_NO_PC_GRANT",
     "content_session": "a6d4adca-c6b0-40b5-85a9-9ba83326329b",
     "fuel_session": "7042c976-722d-4974-92f5-e614e95bd506",
     "research_agent": "68d2d543-5902-4095-8fbb-c8ddc8ac4f74",
@@ -27,7 +27,11 @@
     "fuel_handoff_sha256": "9dc1ceea688b4e9e4ef710f0ad5d80e3b57c340bc356c156449da02d4843a0a6",
     "fuel_review": "DIRECT_full20line_runtime_and_authoredtests_delta_no_significant_issue_ThermalBE_and_othermechanisms_byteunchanged",
     "research_result": "pinnedGT248e1f8_paid_electrolysis_noH2in_inspectedFuelRecipes_Mek96c7362_sharedneutralbaseline_FixedUsageEnergyContainer_noefficiencyDiscount_sourceonly_NO_externalburn_saveproof",
-    "source_content_checkpoint": null,
+    "source_content_checkpoint": "5c34ea3887d587ca0e585f295079a5695fce1a6f",
+    "content_handoff_sha256": "a5cbbe7ed5184b13f5d941d05bbf9a65fba8a98cd0da824fcef0f34b3ed8c634",
+    "content_review": "DIRECT_complete16file456plus137minus_review_clear_15nonchangelog_blobs_exact_old51_and_firstF2_unchanged_exact52_and_unknown53_guards",
+    "new_provenance_boundary": "existing_T1_pinlists_add_FluidLogic_ThermalLogic_sources_images_and_three_actual_gas_family_getClass_expressions_actualnames_counts_hashes_unobserved",
+    "source_canonical_outputs": "still_previous_G14_A10_bytes_expected_refresh_via_normalwriters_only",
     "qualified_source": null
   },
   "current_PC_execution": {

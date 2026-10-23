@@ -83,6 +83,7 @@ execution engine, global unlock or list of invented bills.
 | `wire_forming` | Optional | Manually construct the existing F1 Wire Mill, then automate its iron/copper wire and copper coil routes after assembly; not a first-F2 dependency or an upgraded machine. |
 | `tool_reproduction` | Optional | Reproduce four retained Press dies after manual seeding without a forming/assembly cycle or first-F2 prerequisite. |
 | `wet_beneficiation` | Optional | Fabricate Motors, manually construct the Washer, then use its real washing/reduction routes and both output streams. |
+| `gas_utilities` | Optional | Use existing Motor/manual Cell, Intake and Reactor constructors; automate electrolysis, oxygen and powered water recovery, with lossy baseline hydrogen fuel. New combined qualification is pending. |
 | `relay_f2` | Exit | Only `assemble/relay_matrix_f2`; actual physical F1/casing/glass/Flux Cell operands remain canonical. |
 | `extraction` | Optional | Scanner/finite terrestrial extraction as a compatible supplement, not the unlimited canonical source of mandatory inputs. |
 | `logistics` | Optional | Existing hoppers/belts/arms/interfaces within their implemented sides/owner semantics; no new transaction framework. |

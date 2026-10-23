@@ -2,6 +2,7 @@ package io.github.ezequiel24123z.grindless.sustainability;
 
 import com.google.gson.GsonBuilder;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
+import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
 import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceContext;
 import io.github.ezequiel24123z.grindless.machine.GeneratorKind;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
@@ -23,6 +24,7 @@ import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
 import io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
+import io.github.ezequiel24123z.grindless.recipe.ThermalLogic;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,6 +49,7 @@ public final class T1Export {
             JAVA + "guidance/ResourceGuidanceContext.java",
             JAVA + "quest/QuestCatalogue.java", JAVA + "machine/ProcessMachineKind.java",
             JAVA + "recipe/ProcessLogic.java", JAVA + "recipe/ProcessLookup.java",
+            JAVA + "fluid/FluidLogic.java", JAVA + "recipe/ThermalLogic.java",
             JAVA + "energy/FluxTier.java", JAVA + "menu/MachineMenuKind.java",
             JAVA + "process/MachineEnvelopes.java", JAVA + "process/ConditionState.java",
             JAVA + "process/Agitation.java", JAVA + "process/ProcessConditions.java",
@@ -111,9 +114,12 @@ public final class T1Export {
                 ControlMatrixNbt.class, MatrixArchitecture.class, ResourceGuidanceContext.class,
                 QuestCatalogue.class, QuestCatalogue.Task.class, QuestCatalogue.Reward.class,
                 QuestCatalogue.Chapter.class, QuestCatalogue.Evidence.class, QuestCatalogue.Type.class,
-                ProcessLogic.class, ProcessLookup.class, FluxTier.class, MachineMenuKind.class,
+                ProcessLogic.class, ProcessLookup.class, FluidLogic.class, ThermalLogic.class,
+                FluxTier.class, MachineMenuKind.class,
                 ProcessMachineKind.class, ProcessMachineKind.ASSEMBLER.getClass(),
                 ProcessMachineKind.CHEMICAL_WASHER.getClass(), ProcessMachineKind.ARC_FURNACE.getClass(),
+                ProcessMachineKind.ELECTROLYSIS_CELL.getClass(), ProcessMachineKind.ATMOSPHERIC_INTAKE.getClass(),
+                ProcessMachineKind.CHEMICAL_REACTOR.getClass(),
                 MachineEnvelopes.class, ConditionState.class, Agitation.class,
                 ProcessConditions.class, ProcessConditions.Builder.class,
                 ConditionEnvelope.class, ConditionEnvelope.Builder.class, ConditionBand.class,

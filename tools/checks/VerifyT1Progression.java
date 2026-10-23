@@ -12,11 +12,13 @@ import io.github.ezequiel24123z.grindless.process.ConditionState;
 import io.github.ezequiel24123z.grindless.progression.T1Progression;
 import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
 import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
+import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
 import io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy;
 import io.github.ezequiel24123z.grindless.recipe.ProcessGraph;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.recipe.T1Recipes;
+import io.github.ezequiel24123z.grindless.recipe.ThermalLogic;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
 
 import java.nio.charset.StandardCharsets;
@@ -56,6 +58,9 @@ public final class VerifyT1Progression {
                         "ProcessLogic.class", "ProcessLookup.class", "FluxTier.class", "MachineMenuKind.class",
                         "ProcessMachineKind.class", "ProcessMachineKind.ASSEMBLER.getClass()",
                         "ProcessMachineKind.CHEMICAL_WASHER.getClass()", "ProcessMachineKind.ARC_FURNACE.getClass()",
+                        "ProcessMachineKind.ELECTROLYSIS_CELL.getClass()",
+                        "ProcessMachineKind.ATMOSPHERIC_INTAKE.getClass()", "ProcessMachineKind.CHEMICAL_REACTOR.getClass()",
+                        "FluidLogic.class", "ThermalLogic.class",
                         "MachineEnvelopes.class", "ConditionState.class", "Agitation.class",
                         "ProcessConditions.class", "ProcessConditions.Builder.class",
                         "ConditionEnvelope.class", "ConditionEnvelope.Builder.class", "ConditionBand.class",
@@ -79,6 +84,7 @@ public final class VerifyT1Progression {
                         "JAVA + \"guidance/ResourceGuidanceContext.java\"",
                         "JAVA + \"quest/QuestCatalogue.java\"", "JAVA + \"machine/ProcessMachineKind.java\"",
                         "JAVA + \"recipe/ProcessLogic.java\"", "JAVA + \"recipe/ProcessLookup.java\"",
+                        "JAVA + \"fluid/FluidLogic.java\"", "JAVA + \"recipe/ThermalLogic.java\"",
                         "JAVA + \"energy/FluxTier.java\"", "JAVA + \"menu/MachineMenuKind.java\"",
                         "JAVA + \"process/MachineEnvelopes.java\"", "JAVA + \"process/ConditionState.java\"",
                         "JAVA + \"process/Agitation.java\"", "JAVA + \"process/ProcessConditions.java\"",
@@ -158,7 +164,7 @@ public final class VerifyT1Progression {
                         .filter(line -> line.requirement() == T1Progression.Requirement.EXIT)
                         .map(T1Progression.Line::id).toList());
         for (String optional : List.of("component_fabrication", "wire_forming", "tool_reproduction",
-                "wet_beneficiation", "extraction", "logistics", "storage", "kiln", "factory_space")) {
+                "wet_beneficiation", "gas_utilities", "extraction", "logistics", "storage", "kiln", "factory_space")) {
             equal("the optional branch is not a first-factory mandate: " + optional, false,
                     T1Progression.byId(optional).mandatory());
         }
@@ -211,6 +217,7 @@ public final class VerifyT1Progression {
         wireForming(snapshot);
         toolReproduction(snapshot);
         wetBeneficiation(t0);
+        gasUtilities(snapshot);
 
         Route exit = snapshot.routes().get(T1Progression.EXIT_ROUTE);
         Resource ratedF1 = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX, FluxTier.F1.ordinal(), "items");
@@ -354,6 +361,14 @@ public final class VerifyT1Progression {
                 wetDocument.get("requirement").getAsString());
         equal("the existing exporter includes all six live wet authorities", 6,
                 wetDocument.getAsJsonArray("routes").size());
+        var gasDocument = document.getAsJsonArray("lines")
+                .get(T1Progression.lines().indexOf(T1Progression.byId("gas_utilities"))).getAsJsonObject();
+        equal("the existing exporter projects the optional gas line", "gas_utilities",
+                gasDocument.get("id").getAsString());
+        equal("the existing exporter keeps gas utilities optional", "OPTIONAL",
+                gasDocument.get("requirement").getAsString());
+        equal("gas export includes every selected live authority", T1Progression.byId("gas_utilities").routeIds().size(),
+                gasDocument.getAsJsonArray("routes").size());
         equal("raw source hashes are not embedded in committed model data", false, document.has("authority_sha256"));
         equal("manual-only Furnace policy is attributed to the coordinator, not invented owner confirmation",
                 "MANUAL_ONLY_COORDINATOR_DECISION_NOT_OWNER_CONFIRMED",
@@ -828,6 +843,119 @@ public final class VerifyT1Progression {
                         materials.stream().filter(view -> view.name().equals("iron")).toList()))));
     }
 
+    private static void gasUtilities(Snapshot snapshot) {
+        T1Progression.Line line = T1Progression.byId("gas_utilities");
+        equal("gas utilities select only existing Motor/manual-machine/process/fuel authorities",
+                List.of("assemble/motor", "craft/electrolysis_cell", "craft/atmospheric_intake",
+                        "craft/chemical_reactor", "electrolysis/water", "air/oxygen", "recombine/water",
+                        "fuel/thermal_generator/grindless:hydrogen"), line.routeIds());
+        equal("gas utilities follow only assembly", Set.of("assembly"), line.requires());
+        equal("gas utilities remain optional", T1Progression.Requirement.OPTIONAL, line.requirement());
+        equal("gas utilities follow their actual construction precursor", true,
+                T1Progression.lines().indexOf(line) > T1Progression.lines().indexOf(T1Progression.byId("assembly")));
+        equal("the gas acquisition selects that optional line", line, T1Progression.byQuest("gas_utilities"));
+        equal("the gas lesson selects its complete live route set", line.routeIds(),
+                T1Progression.questRouteIds("gas_utilities"));
+        equal("gas utilities do not enter the finite first-F2 selection", false,
+                T1Progression.finiteRouteIds().stream().anyMatch(line.routeIds()::contains));
+        equal("the mandatory power authority remains biomass", "fuel/thermal_generator/biomass",
+                T1Progression.POWER_ROUTE);
+        equal("mandatory power retains the exact original route selection",
+                List.of("craft/thermal_generator", "craft/flux_pylon_mk1", T1Progression.POWER_ROUTE),
+                T1Progression.byId("power").routeIds());
+        var processes = ProcessGraph.generate(AuthorityAdapters.materialViews());
+        var atlas = T1Progression.atlasForQuest("gas_utilities", AtlasLogic.allEntries(processes));
+        equal("only the actual gas fuel is outside the Atlas", Set.of(T1Progression.HYDROGEN_FUEL_ROUTE),
+                atlas.nonAtlasRouteIds());
+        for (ProcessMachineKind kind : List.of(ProcessMachineKind.ELECTROLYSIS_CELL,
+                ProcessMachineKind.ATMOSPHERIC_INTAKE, ProcessMachineKind.CHEMICAL_REACTOR)) {
+            String name = kind.name().toLowerCase(java.util.Locale.ROOT);
+            Route craft = snapshot.routes().get("craft/" + name);
+            manualNormalConstruction(craft);
+            T1Recipes.Shaped shaped = T1Recipes.shaped().stream().filter(row -> row.name().equals(name))
+                    .findFirst().orElseThrow();
+            Map<Resource, Long> bill = new TreeMap<>();
+            for (IngredientSpec input : shaped.ingredients()) {
+                Resource resource = AuthorityAdapters.physical(new Resource(
+                        Kind.valueOf(input.kind().toUpperCase(java.util.Locale.ROOT)),
+                        input.id(), input.matrixRating(), "items"));
+                bill.merge(resource, (long) input.count(), Math::addExact);
+            }
+            equal("manual gas construction retains the actual complete shaped bill: " + name,
+                    bill, physicalInputs(craft));
+            equal("manual gas construction retains minimum F1 control: " + name, true,
+                    shaped.ingredients().stream().anyMatch(input -> input.isMinimumControl()
+                            && input.matrixRating() == FluxTier.F1.ordinal()));
+            equal("manual gas construction exposes its actual minimum control role: " + name,
+                    "item:grindless:relay_matrix [F1]", craft.conditions().get("minimum_control_key_M"));
+            equal("gas construction retains the ordinary output and quantity: " + name,
+                    Map.of(item(shaped.result()), (long) shaped.resultCount()), craft.outputs());
+            equal("the actual ordinary gas machine remains F1: " + name, FluxTier.F1, kind.tier());
+        }
+        for (String id : List.of("assemble/motor", "electrolysis/water", "air/oxygen", "recombine/water")) {
+            var process = processes.stream().filter(recipe -> recipe.id().equals(id)).findFirst().orElseThrow();
+            Route route = snapshot.routes().get(id);
+            equal("gas selection preserves every live process amount/condition/cost: " + id,
+                    AuthorityAdapters.process(process), route);
+            equal("gas Atlas keeps the complete live recipe: " + id, AtlasLogic.entry(process),
+                    atlas.entries().stream().filter(entry -> entry.id().equals(id)).findFirst().orElseThrow());
+            equal("gas operations remain automatable: " + id, true, route.automatable());
+            equal("gas work accounts for every powered tick: " + id,
+                    Math.multiplyExact(route.durationTicks(), route.fuPerTick()), route.inputs().get(ENERGY));
+            equal("gas work adds no permission gate: " + id, Set.of(), route.prerequisites());
+            ProcessMachineKind kind = java.util.Arrays.stream(ProcessMachineKind.values())
+                    .filter(candidate -> candidate.family() == process.family()).findFirst().orElseThrow();
+            equal("the real family can power its selected process: " + id, true,
+                    process.fuPerTick() <= kind.tier().nominal());
+            equal("the real family fits its grouped item inputs: " + id, true,
+                    process.itemInputs().size() <= kind.menuKind().inputs());
+            equal("the real family fits its item outputs: " + id, true,
+                    process.itemOutputs().size() <= kind.menuKind().outputs());
+            var conditions = ProcessLookup.conditionsOf(process);
+            equal("the real family envelope admits the selected process: " + id, true,
+                    conditions.checkEnvelope(kind.envelope()).canRun());
+            equal("the real held conditions admit full-speed work: " + id, ConditionReport.OPTIMAL,
+                    conditions.evaluate(kind.heldConditions()));
+            equal("the primary fluid fits the real machine buffer: " + id, true,
+                    process.fluidInputs().isEmpty()
+                            || process.fluidInputs().get(0).count() <= FluidLogic.MACHINE_CAPACITY);
+            equal("every stored gas-line output fits the real buffer: " + id, true,
+                    process.fluidOutputs().stream().filter(output -> !output.vented())
+                            .allMatch(output -> output.count() <= FluidLogic.MACHINE_CAPACITY));
+        }
+        Resource hydrogen = new Resource(Kind.FLUID, FluidLogic.HYDROGEN);
+        Resource oxygen = new Resource(Kind.FLUID, FluidLogic.OXYGEN);
+        Route electrolysis = snapshot.routes().get("electrolysis/water");
+        equal("electrolysis stores its actual hydrogen batch",
+                Map.of(hydrogen, (long) ProcessLogic.ELECTROLYSIS_HYDROGEN_MB), electrolysis.retainedOutputs());
+        equal("electrolysis oxygen is captured/vented, not falsely stored", Set.of(oxygen), electrolysis.discharged());
+        Route intake = snapshot.routes().get("air/oxygen");
+        equal("the intake stores only its actual oxygen cut",
+                Map.of(oxygen, (long) ProcessLogic.AIR_OXYGEN_MB), intake.retainedOutputs());
+        equal("the intake spends power rather than consuming fictitious compressed air",
+                Set.of(ENERGY), intake.inputs().keySet());
+        var recombine = processes.stream().filter(recipe -> recipe.id().equals("recombine/water"))
+                .findFirst().orElseThrow();
+        equal("recombination requires hydrogen in the primary buffer and oxygen from neighbours",
+                List.of(IngredientSpec.fluid(ProcessLogic.HYDROGEN, ProcessLogic.RECOMBINE_HYDROGEN_MB),
+                        IngredientSpec.fluid(ProcessLogic.OXYGEN, ProcessLogic.RECOMBINE_OXYGEN_MB)),
+                recombine.fluidInputs());
+        equal("recombination outputs water, never power",
+                Map.of(new Resource(Kind.FLUID, ProcessLogic.WATER), (long) ProcessLogic.RECOMBINE_WATER_MB),
+                snapshot.routes().get(recombine.id()).retainedOutputs());
+        Route fuel = snapshot.routes().get(T1Progression.HYDROGEN_FUEL_ROUTE);
+        equal("hydrogen resolves to the actual generator fuel authority", Authority.GENERATOR_FUEL, fuel.authority());
+        equal("the actual generator burns hydrogen by the live bucket quantity",
+                Map.of(hydrogen, (long) FluidLogic.BUCKET), fuel.inputs());
+        equal("gas-fuel duration comes from FluidLogic, not a teaching balance decision",
+                (long) FluidLogic.burnTicks(FluidLogic.HYDROGEN), fuel.durationTicks());
+        equal("gas-fuel generation comes from the actual Thermal rate and live burn duration",
+                Map.of(ENERGY, Math.multiplyExact(ThermalLogic.FU_PER_TICK,
+                        FluidLogic.burnTicks(FluidLogic.HYDROGEN))), fuel.retainedOutputs());
+        equal("oxygen is not an invented Thermal fuel", false,
+                snapshot.routes().containsKey("fuel/thermal_generator/" + FluidLogic.OXYGEN));
+    }
+
     private static void componentFabrication(Snapshot snapshot) {
         rejects("the obsolete factory-reproduction goal is retired, not renamed as a live machine factory",
                 () -> T1Progression.byId("factory_reproduction"));
@@ -992,14 +1120,15 @@ public final class VerifyT1Progression {
         for (String task : List.of("thermal", "pylon", "scanner", "terrestrial", "pulverizer",
                 "furnace", "press", "assembler", "matrix_line", "glass", "logistics", "kiln",
                 "factory_world", "industrial_matrix", "first_grid", "forming_dies", "copper_coil", "flux_cell",
-                "wet_beneficiation")) {
+                "wet_beneficiation", "gas_utilities")) {
             var selected = T1Progression.atlasForQuest(task, rows);
             Set<String> resolved = new TreeSet<>(selected.nonAtlasRouteIds());
             selected.entries().forEach(entry -> resolved.add(entry.id()));
             equal("runtime teaching resolves every selected authority: " + task,
                     new TreeSet<>(T1Progression.questRouteIds(task)), resolved);
             equal("only real generator fuel is explicitly outside the Atlas: " + task, true,
-                    selected.nonAtlasRouteIds().stream().allMatch(T1Progression.POWER_ROUTE::equals));
+                    selected.nonAtlasRouteIds().stream().allMatch(id -> id.equals(T1Progression.POWER_ROUTE)
+                            || id.equals(T1Progression.HYDROGEN_FUEL_ROUTE)));
         }
         for (Map.Entry<String, String> selection : Map.of(
                 "craft/flux_cell", "flux_cell",

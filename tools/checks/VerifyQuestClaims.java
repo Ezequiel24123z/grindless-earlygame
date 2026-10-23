@@ -80,7 +80,8 @@ public final class VerifyQuestClaims {
             ledger = QuestProgress.load(ledger.save(new CompoundTag()));
             equal("native authority survives restart", true, ledger.usesNativeClaims(first));
             equal("legacy import receipts survive restart", receipts, ledger.claimed(first));
-            for (String id : List.of(QuestCatalogue.STARTER_SUPPLIES, "multitool", "quern", "wet_beneficiation")) {
+            for (String id : List.of(QuestCatalogue.STARTER_SUPPLIES, "multitool", "quern", "wet_beneficiation",
+                    "gas_utilities")) {
                 equal("a retired legacy engine cannot grant " + id, QuestClaimService.Result.NATIVE_BACKEND,
                         QuestClaimService.claim(ledger, first, id, true,
                                 task -> { effects.incrementAndGet(); return true; },
@@ -466,7 +467,8 @@ public final class VerifyQuestClaims {
         Function<List<ItemStack>, Optional<Runnable>> noDelivery = rewards -> {
             throw new AssertionError("A T1 lesson cannot enter inventory delivery");
         };
-        for (String id : List.of("first_grid", "forming_dies", "copper_coil", "flux_cell", "wet_beneficiation")) {
+        for (String id : List.of("first_grid", "forming_dies", "copper_coil", "flux_cell", "wet_beneficiation",
+                "gas_utilities")) {
             QuestCatalogue.Task task = QuestCatalogue.byId(id);
             equal("new teaching remains in the actual T1 chapter " + id, QuestCatalogue.Chapter.T1,
                     QuestCatalogue.chapter(task));
@@ -508,6 +510,9 @@ public final class VerifyQuestClaims {
                 ledger.claimed(player).contains("factory_world"));
         equal("the first F2 claim never needs the optional wet acquisition", false,
                 ledger.claimed(player).contains("wet_beneficiation"));
+        equal("the first F2 claim never needs gas acquisition", false, ledger.claimed(player).contains("gas_utilities"));
+        equal("gas acquisition still requires the Assembler", QuestClaimService.Result.LOCKED,
+                QuestClaimService.claim(ledger, player, "gas_utilities", true, task -> true, noReward, noDelivery));
         equal("the wet acquisition still needs its existing Assembler parent", QuestClaimService.Result.LOCKED,
                 QuestClaimService.claim(ledger, player, "wet_beneficiation", true, task -> true, noReward, noDelivery));
         ledger.claim(player, "assembler");
@@ -517,6 +522,14 @@ public final class VerifyQuestClaims {
                 QuestClaimService.claim(ledger, player, "wet_beneficiation", true, task -> true, noReward, noDelivery));
         equal("the optional acquisition cannot be claimed twice", QuestClaimService.Result.ALREADY_CLAIMED,
                 QuestClaimService.claim(ledger, player, "wet_beneficiation", true, task -> true, noReward, noDelivery));
+        equal("gas acquisition still requires the physical book", QuestClaimService.Result.BOOK_REQUIRED,
+                QuestClaimService.claim(ledger, player, "gas_utilities", false, task -> true, noReward, noDelivery));
+        equal("gas acquisition rejects absent current possession", QuestClaimService.Result.UNMET,
+                QuestClaimService.claim(ledger, player, "gas_utilities", true, task -> false, noReward, noDelivery));
+        equal("gas acquisition records only the reward-free lesson", QuestClaimService.Result.CLAIMED,
+                QuestClaimService.claim(ledger, player, "gas_utilities", true, task -> true, noReward, noDelivery));
+        equal("gas acquisition cannot be claimed twice", QuestClaimService.Result.ALREADY_CLAIMED,
+                QuestClaimService.claim(ledger, player, "gas_utilities", true, task -> true, noReward, noDelivery));
         CompoundTag saved = ledger.save(new CompoundTag());
         QuestProgress restored = QuestProgress.load(saved.copy());
         equal("new lessons and the terminal claim survive the original save schema", ledger.claimed(player),

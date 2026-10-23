@@ -60,7 +60,7 @@ public final class FtbQuestChecks {
     private static final String DISK_LEGACY_KEY = "grindless_native_quest_probe";
     private static final Set<String> DISK_PAID = Set.of("starter_supplies", "multitool");
     private static final Set<String> ADDED_T1_LESSONS = Set.of(
-            "first_grid", "forming_dies", "copper_coil", "flux_cell", "wet_beneficiation");
+            "first_grid", "forming_dies", "copper_coil", "flux_cell", "wet_beneficiation", "gas_utilities");
     private static boolean diskSeededHere;
     private final ServerQuestFile file;
     private final List<UUID> transientTeams = new ArrayList<>();
@@ -233,9 +233,9 @@ public final class FtbQuestChecks {
     private void graph() {
         assertions++;
         FtbQuestNative.verify(file);
-        equal("canonical 51 quest objectives", 51, QuestCatalogue.tasks().size());
+        equal("canonical 52 quest objectives", 52, QuestCatalogue.tasks().size());
         equal("actual T0 chapter size", 32, file.getChapter(FtbQuestDefinitions.id("chapter", "T0")).getQuests().size());
-        equal("actual gated T1 chapter size", 19, file.getChapter(FtbQuestDefinitions.id("chapter", "T1")).getQuests().size());
+        equal("actual gated T1 chapter size", 20, file.getChapter(FtbQuestDefinitions.id("chapter", "T1")).getQuests().size());
         Set<Long> ids = new HashSet<>();
         ids.add(FtbQuestDefinitions.id("chapter", "T0"));
         ids.add(FtbQuestDefinitions.id("chapter", "T1"));
@@ -278,10 +278,10 @@ public final class FtbQuestChecks {
                 rewards++;
             }
         }
-        equal("twenty-five reward-free lessons", 25, lessons);
+        equal("twenty-six reward-free lessons", 26, lessons);
         equal("twenty-six material-reward quests", 26, material);
         equal("thirty-six native reward receipts", 36, rewards);
-        equal("140 unique native chapter/quest/task/reward IDs", 140, ids.size());
+        equal("142 unique native chapter/quest/task/reward IDs", 142, ids.size());
         equal("eleven distinct starter reward stacks", 11, quest(QuestCatalogue.STARTER_SUPPLIES).getRewards().size());
     }
 
@@ -367,7 +367,7 @@ public final class FtbQuestChecks {
         QuestProgress legacy = new QuestProgress();
         Set<String> all = QuestCatalogue.tasks().stream().map(QuestCatalogue.Task::id)
                 .filter(id -> !ADDED_T1_LESSONS.contains(id)).collect(Collectors.toSet());
-        equal("exact historical catalogue cut before the five reviewed lessons", 46, all.size());
+        equal("exact historical catalogue cut before the six reviewed lessons", 46, all.size());
         for (String id : all) {
             check("seed historical receipt " + id, legacy.claim(first, id));
         }

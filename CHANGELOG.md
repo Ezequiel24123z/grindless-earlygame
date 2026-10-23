@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Compose the optional gas branch with its real fuel boundary.**
+  Normally preserve all15 content/check/tool blobs from5c34ea38 and the
+  four reviewed fuel blobs fromc742. Exact52 lineage, old51 IDs/rewards,
+  optional first-F2 separation and direct fuel/family provenance pins are
+  source-reviewed. Only the shared changelog conflicts; no application
+  merge edits or generated-file hand edits. Combined execution is pending.
 - **Integrate the reviewed hydrogen rate without changing fuel custody.**
   Normally preserve c7427385's four code/check blobs; ThermalBE and all
   process/transport/persistence mechanisms remain identical. The new rate
@@ -38,6 +44,17 @@ entries below reference those records by id.
   This is source-only: no Java/build/native/model or PC execution occurred.
   The50% claim covers the unmodified T1 baseline, not the separate future
   SPEED/time-versus-energy-multiplier boundary or whole-tier readiness.
+- **Add one optional post-assembly T1 gas-utilities line (source only).**
+  Select the existing Motor, manual Electrolysis Cell/Atmospheric Intake/Chemical
+  Reactor crafts, water electrolysis, oxygen skim, powered water recombination
+  and actual hydrogen fuel authority without changing recipes, fuel balance or
+  mandatory first-F2 routes. Append one short reward-free acquisition lesson;
+  retain all 51 old IDs, starter stacks and reward receipts. Extend exact native
+  lineage 46/50/51/52 and managed-definition guards/contracts without relaxing
+  fail-closed startup or changing progress. Qualitative lossy-fuel teaching
+  requires the separately owned fuel correction before qualification. Canonical
+  writers, compilation, checks and native execution are NOT EXECUTED here;
+  generated files and the player instance/world remain unchanged (ADR-0190).
 - **Close the bounded manual-machine engineering increment.**
   Independent QA verifies115/115 G14 artifacts, new S1 identities, actual
   R36/T0/T1 outcomes, unchanged copied payloads and recorded safe return.

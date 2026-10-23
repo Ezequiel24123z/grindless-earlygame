@@ -36,14 +36,17 @@ public final class VerifyT1Teaching {
     private static final Set<String> T1_IDS = Set.of(
             "thermal", "pylon", "first_grid", "scanner", "terrestrial", "pulverizer", "furnace",
             "press", "forming_dies", "copper_coil", "assembler", "matrix_line", "glass", "logistics",
-            "kiln", "factory_world", "flux_cell", "industrial_matrix", "wet_beneficiation");
+            "kiln", "factory_world", "flux_cell", "industrial_matrix", "wet_beneficiation", "gas_utilities");
     private static final Set<String> NEW_LESSONS = Set.of(
-            "first_grid", "forming_dies", "copper_coil", "flux_cell", "wet_beneficiation");
+            "first_grid", "forming_dies", "copper_coil", "flux_cell", "wet_beneficiation", "gas_utilities");
     private static final Set<String> WIRE_FORMING_ROUTES = Set.of(
             "craft/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper");
     private static final Set<String> WET_ROUTES = Set.of(
             "assemble/motor", "craft/chemical_washer", "b2/iron", "b2/copper",
             "b2_r1/iron", "b2_r1/copper");
+    private static final Set<String> GAS_ATLAS_ROUTES = Set.of(
+            "assemble/motor", "craft/electrolysis_cell", "craft/atmospheric_intake",
+            "craft/chemical_reactor", "electrolysis/water", "air/oxygen", "recombine/water");
     // dd0b4bc: sorted key + NUL + decoded body + LF for the 33 native FTB T0 lesson keys.
     private static final String T0_BODY_DIGEST =
             "bf93a3d61465ed953cb33eea9de7b061e4f8f35dc36a68eb5393df3214424391";
@@ -66,13 +69,13 @@ public final class VerifyT1Teaching {
     }
 
     private static void chapters() {
-        equal("the native identity set retains all 50 tasks and adds one rewardless wet lesson",
-                51, QuestCatalogue.tasks().size());
+        equal("the native identity set retains all 51 tasks and adds one rewardless gas lesson",
+                52, QuestCatalogue.tasks().size());
         equal("all T0 task identities remain exactly the deployed set", T0_IDS,
                 QuestCatalogue.tasks().stream()
                         .filter(task -> QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T0)
                         .map(QuestCatalogue.Task::id).collect(Collectors.toSet()));
-        equal("T1 adds only the accepted optional wet lesson to its prior 18 objectives", T1_IDS,
+        equal("T1 adds only the optional gas lesson to its prior 19 objectives", T1_IDS,
                 QuestCatalogue.tasks().stream()
                         .filter(task -> QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T1)
                         .map(QuestCatalogue.Task::id).collect(Collectors.toSet()));
@@ -103,6 +106,14 @@ public final class VerifyT1Teaching {
         equal("the wet lesson names the existing machine item", "grindless:chemical_washer", wet.subject());
         equal("the wet lesson asks for one machine, not a copied construction bill", 1, wet.count());
         equal("the wet lesson stays on its optional path", QuestTeaching.Path.T1_OPTIONAL, QuestTeaching.path(wet));
+        var gas = QuestCatalogue.byId("gas_utilities");
+        equal("the gas lesson appends after all 51 existing tasks", gas, QuestCatalogue.tasks().get(51));
+        equal("the gas lesson follows only the Assembler", List.of("assembler"), gas.requires());
+        equal("the gas lesson observes acquisition, not a gas-processing event", QuestCatalogue.Evidence.ITEM,
+                gas.evidence());
+        equal("the gas lesson names the existing Electrolysis Cell", "grindless:electrolysis_cell", gas.subject());
+        equal("the gas lesson observes one machine", 1, gas.count());
+        equal("the gas lesson stays optional", QuestTeaching.Path.T1_OPTIONAL, QuestTeaching.path(gas));
     }
 
     private static void lessons(JsonObject lang) {
@@ -172,6 +183,17 @@ public final class VerifyT1Teaching {
                 "Reduce", "Arc Furnace", "JEI", "optional")) {
             check("short wet teaching explains " + concept, wet.contains(concept));
         }
+        String gas = lang.get(QuestTeaching.bodyKey(QuestCatalogue.byId("gas_utilities"))).getAsString();
+        equal("the gas title names acquisition, not observed processing", "Acquire an Electrolysis Cell",
+                lang.get("gui.grindless.quest.task.gas_utilities").getAsString());
+        check("the gas lesson retains manual final assembly", gas.startsWith("Manually assemble an Electrolysis Cell;"));
+        for (String concept : List.of("adjacent tanks", "not Clay Conduits", "uncaptured oxygen vents away",
+                "hydrogen in its buffer", "oxygen from neighbours", "spends power recovering water",
+                "Hydrogen fuel is lossy", "JEI", "Optional")) {
+            check("short gas teaching explains " + concept, gas.contains(concept));
+        }
+        equal("gas teaching copies no fuel value or recovery percentage", 0, substitutions(gas));
+        check("gas teaching copies no batch or energy number", gas.chars().noneMatch(Character::isDigit));
     }
 
     private static void selectors(List<AtlasLogic.Entry> entries) {
@@ -180,12 +202,14 @@ public final class VerifyT1Teaching {
         for (String id : T1_IDS) {
             List<AtlasLogic.Entry> selected = QuestTeaching.recipes(QuestCatalogue.byId(id), entries);
             Set<String> expected = new TreeSet<>(T1Progression.questRouteIds(id));
-            boolean nativeFuel = expected.remove(T1Progression.POWER_ROUTE);
+            Set<String> nativeFuel = expected.stream().filter(route -> route.equals(T1Progression.POWER_ROUTE)
+                            || route.equals(T1Progression.HYDROGEN_FUEL_ROUTE)).collect(Collectors.toSet());
+            expected.removeAll(nativeFuel);
             equal("the shared selector returns the exact canonical Atlas IDs " + id, expected,
                     selected.stream().map(AtlasLogic.Entry::id).collect(Collectors.toSet()));
             equal("no selected row is duplicated " + id, expected.size(), selected.size());
             equal("the known native fuel authority is explicit, never a fake recipe " + id,
-                    nativeFuel ? Set.of(T1Progression.POWER_ROUTE) : Set.of(),
+                    nativeFuel,
                     T1Progression.atlasForQuest(id, entries).nonAtlasRouteIds());
             for (AtlasLogic.Entry entry : selected) {
                 check("teaching preserves the actual live row and every quantity " + id + "/" + entry.id(),
@@ -200,10 +224,11 @@ public final class VerifyT1Teaching {
                         () -> QuestTeaching.recipes(QuestCatalogue.byId(id), duplicate), entry.id());
                 for (String deferred : List.of("mill/", "contact/", "pickle/", "wash/", "electrolysis/",
                         "craft/wire_mill", "assemble/flux_exosuit", "assemble/flux_drill")) {
-                    check("only the bounded optional base wire routes bypass deferred exclusions "
+                    check("only the bounded wire and gas selections bypass deferred exclusions "
                                     + id + "/" + deferred,
                             !entry.id().startsWith(deferred)
-                                    || (id.equals("assembler") && WIRE_FORMING_ROUTES.contains(entry.id())));
+                                    || (id.equals("assembler") && WIRE_FORMING_ROUTES.contains(entry.id()))
+                                    || (id.equals("gas_utilities") && GAS_ATLAS_ROUTES.contains(entry.id())));
                 }
             }
         }
@@ -216,6 +241,9 @@ public final class VerifyT1Teaching {
         }
         for (String id : WET_ROUTES) {
             changedLiveData(entries, id, "wet_beneficiation");
+        }
+        for (String id : GAS_ATLAS_ROUTES) {
+            changedLiveData(entries, id, "gas_utilities");
         }
     }
 
@@ -257,6 +285,21 @@ public final class VerifyT1Teaching {
                 exit.stream().noneMatch(row -> WIRE_FORMING_ROUTES.contains(row.id())));
         check("the first F2 lesson never requires the optional wet branch",
                 exit.stream().noneMatch(row -> WET_ROUTES.contains(row.id())));
+        check("the first F2 lesson never requires the optional gas branch",
+                exit.stream().noneMatch(row -> GAS_ATLAS_ROUTES.contains(row.id())));
+        List<AtlasLogic.Entry> gas = QuestTeaching.recipes(QuestCatalogue.byId("gas_utilities"), entries);
+        equal("gas teaching selects exactly the seven real Atlas authorities", GAS_ATLAS_ROUTES,
+                gas.stream().map(AtlasLogic.Entry::id).collect(Collectors.toSet()));
+        equal("gas fuel remains an explicit actual authority outside the Atlas", Set.of(T1Progression.HYDROGEN_FUEL_ROUTE),
+                T1Progression.atlasForQuest("gas_utilities", entries).nonAtlasRouteIds());
+        for (String machine : List.of("electrolysis_cell", "atmospheric_intake", "chemical_reactor")) {
+            AtlasLogic.Entry craft = route(gas, "craft/" + machine);
+            equal("gas machine final construction is manual " + machine, "CRAFTING_TABLE", craft.station());
+            equal("gas construction retains its ordinary machine identity " + machine,
+                    List.of("item:grindless:" + machine), craft.outputs());
+            check("gas construction retains minimum F1 physical control " + machine,
+                    craft.inputs().contains("item:grindless:relay_matrix [F1+]"));
+        }
         List<AtlasLogic.Entry> wet = QuestTeaching.recipes(QuestCatalogue.byId("wet_beneficiation"), entries);
         equal("wet teaching selects exactly the six real Motor/Washer/B2/B2-R1 authorities", WET_ROUTES,
                 wet.stream().map(AtlasLogic.Entry::id).collect(Collectors.toSet()));

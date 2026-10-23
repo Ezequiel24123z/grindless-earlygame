@@ -371,7 +371,10 @@ T1 export exposes before/after axes, completed physical batches and blocking
 findings; separate renewable/autonomy/whole-tier/world limits remain. Existing
 typed audit/T0/T1 checks cover conservation/admission/exhaustion/goal-stock
 negatives; `T1Export` explicitly authors43 source paths/98 image expressions
-including custody and executed-batch helpers, not a transitive framework.
+at the original G13 boundary, including custody and executed-batch helpers,
+not a transitive framework. ADR-0190 extends the current lists with both
+fuel-factor sources/images and three gas-family expressions; new executions
+must report their actual counts rather than retaining the old43/98 label.
 Symbolic tag balances cannot masquerade as exact physical carry/output.
 Genuine gaps require coordinator review, not new gameplay. Source/diff/link
 checks pass, not Java/model qualification or observed class hashes; G10, four

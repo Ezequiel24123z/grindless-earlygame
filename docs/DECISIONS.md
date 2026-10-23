@@ -9296,8 +9296,9 @@ native proofs remain bound to their original code and are not relabeled.
 development instruction and ADR-0174/0178/0188, 2026-10-23. Source baseline
 8a1a3365 closes the preceding manual-machine increment. This decision opens
 two isolated source lanes, not another PC lease or a player update.
-Hydrogen sourcec7427385 is subsequently normally composed after direct review;
-content and actual combined qualification remain pending.
+Hydrogen sourcec7427385 and content5c34ea38 are subsequently normally composed
+after direct review, preserving their owned blobs. Actual combined
+qualification remains pending.
 
 **Context and existing solution.** The first factory is not all T1. Existing
 manual Electrolysis Cell, Atmospheric Intake and Chemical Reactor constructors,

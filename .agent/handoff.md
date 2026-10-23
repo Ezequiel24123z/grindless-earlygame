@@ -4,6 +4,23 @@ Updated: 2026-10-23. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**Gas source composition complete; G15 execution still unissued.**
+Content5c34ea38/exact8a1 (16 files456+/137-) is directly reviewed and normally
+composed with reviewed fuelc742. All15 non-changelog content blobs and four
+fuel blobs remain exact. Only the shared changelog conflicted.
+The optional line has eight live authorities and one38-word reward-free
+Cell-acquisition lesson. Old51 declarations/copy/receipts and mandatory
+first-F2 remain; exact52 lineage retains46/50/51 and refuses unknown53/IDs.
+Prism selector and legacy lesson assertions follow the same exact set.
+
+T1Export adds direct FluidLogic/ThermalLogic source+image pins and three
+actual gas-family class expressions. No new runtime provenance count/hash
+is observed yet; do not repeat43/98 as if the proof boundary were unchanged.
+Current canonical payloads still require normal writer refresh. Source
+inspection found no new executor, loader binding, store or transaction
+semantics; use affected compilation/data/ignition/binary/FTB/Prism contracts,
+not a new native per lesson/recipe or a player update.
+
 **New owner continuation: optional T1 gas utilities (ADR-0190).**
 Baseline8a1a3365 remains the closed manual-policy increment. Two new isolated
 Sol6.1 Max source lanes implement existing gas-family content and the

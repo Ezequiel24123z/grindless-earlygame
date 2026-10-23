@@ -20,6 +20,7 @@ public final class T1Progression {
     public static final String FLUX_CELL_ROUTE = "assemble/flux_cell";
     public static final String EXIT_ROUTE = "assemble/relay_matrix_f2";
     public static final String POWER_ROUTE = "fuel/thermal_generator/biomass";
+    public static final String HYDROGEN_FUEL_ROUTE = "fuel/thermal_generator/grindless:hydrogen";
 
     public enum Requirement { MANDATORY, OPTIONAL, EXIT }
 
@@ -76,6 +77,10 @@ public final class T1Progression {
             new Line("wet_beneficiation", Requirement.OPTIONAL,
                     List.of("assemble/motor", "craft/chemical_washer", "b2/iron", "b2/copper",
                             "b2_r1/iron", "b2_r1/copper"), Set.of("assembly")),
+            new Line("gas_utilities", Requirement.OPTIONAL,
+                    List.of("assemble/motor", "craft/electrolysis_cell", "craft/atmospheric_intake",
+                            "craft/chemical_reactor", "electrolysis/water", "air/oxygen", "recombine/water",
+                            HYDROGEN_FUEL_ROUTE), Set.of("assembly")),
             new Line("relay_f2", Requirement.EXIT,
                     List.of("craft/flux_cell", FLUX_CELL_ROUTE, EXIT_ROUTE), Set.of("assembly")),
             new Line("extraction", Requirement.OPTIONAL,
@@ -123,7 +128,7 @@ public final class T1Progression {
             case "furnace" -> "reduction";
             case "press", "forming_dies", "copper_coil" -> "forming";
             case "assembler", "matrix_line" -> "assembly";
-            case "wet_beneficiation" -> "wet_beneficiation";
+            case "wet_beneficiation", "gas_utilities" -> taskId;
             case "glass" -> "glass";
             case "industrial_matrix", "flux_cell" -> "relay_f2";
             case "scanner", "terrestrial" -> "extraction";
@@ -158,14 +163,14 @@ public final class T1Progression {
     }
 
     /**
-     * Missing expected Atlas rows fail visibly. The known non-Atlas fuel authority is returned
+     * Missing expected Atlas rows fail visibly. Known non-Atlas fuel authorities are returned
      * separately so a renderer cannot confuse an absent row with an explanation of that recipe.
      */
     public static AtlasSelection atlasForQuest(String taskId, List<AtlasLogic.Entry> entries) {
         Set<String> selected = new TreeSet<>(questRouteIds(taskId));
         Set<String> nonAtlas = new TreeSet<>();
         for (String id : selected) {
-            if (id.equals(POWER_ROUTE)) {
+            if (id.equals(POWER_ROUTE) || id.equals(HYDROGEN_FUEL_ROUTE)) {
                 nonAtlas.add(id);
             }
         }

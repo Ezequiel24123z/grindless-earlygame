@@ -59,6 +59,7 @@ public final class FtbQuestDefinitionPublisher {
             "industrial_matrix");
     static final Set<String> ADDED_50 = Set.of("first_grid", "forming_dies", "copper_coil", "flux_cell");
     static final Set<String> ADDED_51 = Set.of("wet_beneficiation");
+    static final Set<String> ADDED_52 = Set.of("gas_utilities");
     private static final String SHIM_PREFIX = "architectury_inject_grindless_common_";
     private static final String SHIM_FINGERPRINT = "0a84a9c64d4531a5942f7fab6de29d225f189424344d81b42e4642cb468923d6";
     private static final Pattern SHIM_NAME = Pattern.compile(
@@ -147,6 +148,11 @@ public final class FtbQuestDefinitionPublisher {
                 ids.addAll(ADDED_50);
                 ids.addAll(ADDED_51);
             }
+            case 52 -> {
+                ids.addAll(ADDED_50);
+                ids.addAll(ADDED_51);
+                ids.addAll(ADDED_52);
+            }
             default -> throw new IOException("Unknown native catalogue content version: " + count);
         }
         return Set.copyOf(ids);
@@ -210,7 +216,8 @@ public final class FtbQuestDefinitionPublisher {
                         throw new IOException("Native reward identity drifted");
                     }
                 }
-                if ((ADDED_50.contains(logical) || ADDED_51.contains(logical)) && !rewards.isEmpty()) {
+                if ((ADDED_50.contains(logical) || ADDED_51.contains(logical) || ADDED_52.contains(logical))
+                        && !rewards.isEmpty()) {
                     throw new IOException("Reviewed catalogue additions must remain reward-free");
                 }
             }

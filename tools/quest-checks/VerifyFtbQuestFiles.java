@@ -25,7 +25,7 @@ import static io.github.ezequiel24123z.grindless.forge.quest.FtbQuestDefinitionP
 /** Real native-parser/filesystem contracts, not a real dd0 export or native team/world execution. */
 public final class VerifyFtbQuestFiles {
     private static final Set<String> ADDED = Set.of(
-            "first_grid", "forming_dies", "copper_coil", "flux_cell", "wet_beneficiation");
+            "first_grid", "forming_dies", "copper_coil", "flux_cell", "wet_beneficiation", "gas_utilities");
     private static final String CURRENT_SOURCE = "a".repeat(40);
     private static int assertions;
 
@@ -40,57 +40,55 @@ public final class VerifyFtbQuestFiles {
         staleCompilation(fixture);
         jarPayloadContract(fixture);
         Map<String, CompoundTag> current = FtbQuestDefinitions.chapters();
-        equal(51, currentQuestCount(), "current content follows the complete bound catalogue");
+        equal(52, currentQuestCount(), "current content follows the complete bound catalogue");
         equal(46, knownLogicalIds(46).size(), "known46 identity set");
         equal(50, knownLogicalIds(50).size(), "known50 identity set");
         equal(51, knownLogicalIds(51).size(), "known51 identity set");
+        equal(52, knownLogicalIds(52).size(), "known52 identity set");
         Set<String> delta50 = new java.util.HashSet<>(knownLogicalIds(50));
         delta50.removeAll(knownLogicalIds(46));
         equal(ADDED_50, delta50, "only the four reviewed lessons extend46");
         Set<String> delta51 = new java.util.HashSet<>(knownLogicalIds(51));
         delta51.removeAll(knownLogicalIds(50));
         equal(ADDED_51, delta51, "only wet beneficiation extends50");
+        Set<String> delta52 = new java.util.HashSet<>(knownLogicalIds(52));
+        delta52.removeAll(knownLogicalIds(51));
+        equal(Set.of("gas_utilities"), delta52, "only gas utilities extend51");
+        equal(ADDED_52, delta52, "publisher52 additions are the reviewed exact identity set");
         refuses(() -> knownLogicalIds(47), "47 is not a content version");
-        refuses(() -> knownLogicalIds(52), "52 is not a content version");
+        refuses(() -> knownLogicalIds(53), "53 is not a content version");
         Map<String, FtbQuestFiles.Chapter> encodedCurrent = FtbQuestFiles.generated(current);
-        Map<String, CompoundTag> previous50 = new LinkedHashMap<>();
-        current.forEach((name, document) -> {
-            CompoundTag copy = document.copy();
-            ListTag quests = copy.getList("quests", Tag.TAG_COMPOUND);
-            for (int index = quests.size() - 1; index >= 0; index--) {
-                if (quests.getCompound(index).getString("id")
-                        .equals(FtbQuestDefinitions.code(FtbQuestDefinitions.questId("wet_beneficiation")))) {
-                    quests.remove(index);
-                }
-            }
-            previous50.put(name, copy);
-        });
+        Map<String, CompoundTag> previous50 = withoutLessons(current, Set.of("wet_beneficiation", "gas_utilities"));
+        Map<String, CompoundTag> previous51 = withoutLessons(current, Set.of("gas_utilities"));
+        requireKnownDefinitions(previous50, 50);
+        requireKnownDefinitions(previous51, 51);
         Path config50 = fixture.resolve("previous50-config");
         FtbQuestFiles.ensure(config50, previous50);
         Map<Path, String> before50 = snapshot(config50);
-        refuses(() -> FtbQuestFiles.ensure(config50, current),
+        refuses(() -> FtbQuestFiles.ensure(config50, previous51),
                 "startup preserves its fail-closed50-to51 boundary for a missing optional lesson");
         equal(before50, snapshot(config50), "missing wet definitions cannot silently rewrite an installed50 chapter");
+        refuses(() -> FtbQuestFiles.ensure(config50, current), "startup preserves its fail-closed50-to52 boundary");
+        equal(before50, snapshot(config50), "missing gas definitions never rewrite an installed50 chapter");
+        Path config51 = fixture.resolve("previous51-config");
+        FtbQuestFiles.ensure(config51, previous51);
+        Map<Path, String> before51 = snapshot(config51);
+        refuses(() -> FtbQuestFiles.ensure(config51, current),
+                "startup preserves its fail-closed51-to52 boundary for missing gas quest/task identities");
+        equal(before51, snapshot(config51), "missing gas definitions cannot silently rewrite an installed51 chapter");
         // Synthetic old-ID input: never publish this as an authentic historical source/hash receipt.
-        Map<String, CompoundTag> previous = new LinkedHashMap<>();
-        current.forEach((name, document) -> {
-            CompoundTag copy = document.copy();
-            ListTag quests = copy.getList("quests", Tag.TAG_COMPOUND);
-            for (int index = quests.size() - 1; index >= 0; index--) {
-                String id = quests.getCompound(index).getString("id");
-                if (ADDED.stream().anyMatch(lesson -> FtbQuestDefinitions.code(FtbQuestDefinitions.questId(lesson)).equals(id))) {
-                    quests.remove(index);
-                }
-            }
-            previous.put(name, copy);
-        });
+        Map<String, CompoundTag> previous = withoutLessons(current, ADDED);
+        requireKnownDefinitions(previous, 46);
         refuses(() -> definitionSet(previous, CURRENT_SOURCE, CURRENT_SOURCE, "b".repeat(64), "f".repeat(64)),
-                "a reduced46 fixture is not an authentic publication by current51 classes");
+                "a reduced46 fixture is not an authentic publication by current52 classes");
         refuses(() -> definitionSet(previous50, CURRENT_SOURCE, CURRENT_SOURCE, "b".repeat(64), "f".repeat(64)),
-                "a reduced50 fixture is not an authentic publication by current51 classes");
+                "a reduced50 fixture is not an authentic publication by current52 classes");
+        refuses(() -> definitionSet(previous51, CURRENT_SOURCE, CURRENT_SOURCE, "b".repeat(64), "f".repeat(64)),
+                "a reduced51 fixture is not an authentic publication by current52 classes");
         JsonObject reference = syntheticPublication(previous, FtbQuestUpdatePlanner.LEGACY_SOURCE,
                 FtbQuestUpdatePlanner.LEGACY_SOURCE, FtbQuestUpdatePlanner.LEGACY_JAR);
         JsonObject reference50 = syntheticPublication(previous50, "d".repeat(40), "d".repeat(40), "e".repeat(64));
+        JsonObject reference51 = syntheticPublication(previous51, "d".repeat(40), "d".repeat(40), "e".repeat(64));
         JsonObject destination = definitionSet(current, CURRENT_SOURCE, CURRENT_SOURCE, "b".repeat(64), "f".repeat(64));
         Path instance = fixture.resolve("Grindless-File-Dev");
         Path config = instance.resolve("minecraft").resolve("config");
@@ -117,12 +115,12 @@ public final class VerifyFtbQuestFiles {
         Files.createDirectories(team.getParent());
         Files.writeString(team, "SYNTHETIC OPAQUE PAID/TEAM STATE: NEVER PARSE OR REWRITE");
         Map<Path, String> before = snapshot(instance);
-        refuses(() -> FtbQuestFiles.ensure(config, current), "startup preserves its fail-closed46-to51 boundary");
+        refuses(() -> FtbQuestFiles.ensure(config, current), "startup preserves its fail-closed46-to52 boundary");
         equal(before, snapshot(instance), "startup missing-ID refusal never changes either chapter");
         JsonObject plan = FtbQuestUpdatePlanner.prepare(instance, encode(reference), destination);
         equal(before, snapshot(instance), "whole native preflight writes no target byte");
         equal(2, plan.getAsJsonArray("files").size(), "only the two known definition filenames are replacements");
-        equal(51, plan.getAsJsonObject("receipt").get("questCount").getAsInt(), "new receipt identifies51 definitions");
+        equal(52, plan.getAsJsonObject("receipt").get("questCount").getAsInt(), "new receipt identifies52 definitions");
         for (var element : plan.getAsJsonArray("files")) {
             JsonObject replacement = element.getAsJsonObject();
             String name = replacement.get("fileName").getAsString();
@@ -135,7 +133,8 @@ public final class VerifyFtbQuestFiles {
         refuses(() -> FtbQuestUpdatePlanner.prepare(instance, encode(reference50), destination),
                 "unreceipted50 never acquires ownership from names/counts", "authentic pinned dd0/46");
         lineageRefusals(instance, reference50, previous50, destination);
-        managed50(fixture, previous50, reference50, destination, owner, deployment, plan.getAsJsonObject("receipt"));
+        managedPrevious(fixture, previous50, reference50, destination, owner, deployment, plan.getAsJsonObject("receipt"));
+        managedPrevious(fixture, previous51, reference51, destination, owner, deployment, plan.getAsJsonObject("receipt"));
 
         Path t1 = chapters.resolve("grindless_t1.snbt");
         byte[] originalT1 = Files.readAllBytes(t1);
@@ -238,22 +237,37 @@ public final class VerifyFtbQuestFiles {
             equal(replacement.get("beforeSha256"), replacement.get("afterSha256"), "already managed current definitions plan a no-op");
         }
         equal(published, snapshot(instance), "repeated native preflight remains read-only");
-        JsonObject completed51 = FtbQuestUpdatePlanner.prepare(instance, encode(destination), destination);
-        equal(51, completed51.getAsJsonObject("receipt").get("questCount").getAsInt(), "managed51 reference remains51");
-        equal(published, snapshot(instance), "completed51 reference/current plan is a read-only no-op");
+        JsonObject completed52 = FtbQuestUpdatePlanner.prepare(instance, encode(destination), destination);
+        equal(52, completed52.getAsJsonObject("receipt").get("questCount").getAsInt(), "managed52 reference remains52");
+        equal(published, snapshot(instance), "completed52 reference/current plan is a read-only no-op");
         equal("SYNTHETIC OPAQUE PAID/TEAM STATE: NEVER PARSE OR REWRITE", Files.readString(team), "native progress and paid history stay opaque and unchanged");
 
         Path compatibleConfig = fixture.resolve("compatible").resolve("config");
         FtbQuestFiles.ensure(compatibleConfig, current);
         Path compatibleT1 = FtbQuestFiles.chapterDirectory(compatibleConfig).resolve("grindless_t1.snbt");
         CompoundTag compatible = current.get("grindless_t1.snbt").copy();
-        compatible.putString("title", "USER-COMPATIBLE COMPLETE51 CHAPTER");
+        compatible.putString("title", "USER-COMPATIBLE COMPLETE52 CHAPTER");
         Files.writeString(compatibleT1, compatible + "\n");
         byte[] compatibleBytes = Files.readAllBytes(compatibleT1);
         FtbQuestFiles.ensure(compatibleConfig, current);
         equal(true, Arrays.equals(compatibleBytes, Files.readAllBytes(compatibleT1)), "ensure remains identity-complete, never unconditional exact-byte management");
         System.out.println("FTB_MANAGED_FILE_CONTRACT_PASS assertions=" + assertions + " fixture=" + fixture.toAbsolutePath());
         System.out.println("SYNTHETIC_REFERENCE_ONLY: this is not a genuine dd0 publication, registered native execution, paid-receipt reopen or owner-world pass.");
+    }
+
+    private static Map<String, CompoundTag> withoutLessons(Map<String, CompoundTag> documents, Set<String> removed) {
+        Map<String, CompoundTag> result = new LinkedHashMap<>();
+        Set<String> ids = removed.stream().map(logical -> FtbQuestDefinitions.code(FtbQuestDefinitions.questId(logical)))
+                .collect(java.util.stream.Collectors.toSet());
+        documents.forEach((name, document) -> {
+            CompoundTag copy = document.copy();
+            ListTag quests = copy.getList("quests", Tag.TAG_COMPOUND);
+            for (int index = quests.size() - 1; index >= 0; index--) {
+                if (ids.contains(quests.getCompound(index).getString("id"))) { quests.remove(index); }
+            }
+            result.put(name, copy);
+        });
+        return result;
     }
 
     /** Deliberately doctored fixture metadata, never an authentic output of the publication CLI. */
@@ -276,7 +290,7 @@ public final class VerifyFtbQuestFiles {
     private static void lineageRefusals(Path instance, JsonObject previous, Map<String, CompoundTag> documents,
                                         JsonObject destination) throws Exception {
         Map<Path, String> before = snapshot(instance);
-        for (int unknown : List.of(47, 52)) {
+        for (int unknown : List.of(47, 53)) {
             JsonObject bad = previous.deepCopy();
             bad.addProperty("questCount", unknown);
             refuses(() -> FtbQuestUpdatePlanner.prepare(instance, encode(bad), destination),
@@ -323,28 +337,43 @@ public final class VerifyFtbQuestFiles {
         }
         JsonObject partialDestination = previous.deepCopy();
         refuses(() -> FtbQuestUpdatePlanner.prepare(instance, encode(previous), partialDestination),
-                "known50 is not the complete current51 destination", "complete actual source-bound generator");
-        Map<String, CompoundTag> paidAddition = new LinkedHashMap<>();
-        FtbQuestDefinitions.chapters().forEach((name, document) -> paidAddition.put(name, document.copy()));
-        String wet = FtbQuestDefinitions.code(FtbQuestDefinitions.id("quest", "wet_beneficiation"));
-        for (Tag value : paidAddition.get("grindless_t1.snbt").getList("quests", Tag.TAG_COMPOUND)) {
+                "known50 is not the complete current52 destination", "complete actual source-bound generator");
+        Map<String, CompoundTag> wrong52 = new LinkedHashMap<>();
+        FtbQuestDefinitions.chapters().forEach((name, document) -> wrong52.put(name, document.copy()));
+        String gas = FtbQuestDefinitions.code(FtbQuestDefinitions.questId("gas_utilities"));
+        for (Tag value : wrong52.get("grindless_t1.snbt").getList("quests", Tag.TAG_COMPOUND)) {
             CompoundTag quest = (CompoundTag) value;
-            if (quest.getString("id").equals(wet)) {
-                CompoundTag reward = new CompoundTag();
-                reward.putString("id", FtbQuestDefinitions.code(FtbQuestDefinitions.id("reward", "wet_beneficiation/0")));
-                quest.getList("rewards", Tag.TAG_COMPOUND).add(reward);
+            if (quest.getString("id").equals(gas)) {
+                quest.putString("id", FtbQuestDefinitions.code(FtbQuestDefinitions.id("quest", "unknown_gas")));
             }
         }
-        JsonObject paid = syntheticPublication(paidAddition, CURRENT_SOURCE, CURRENT_SOURCE, "b".repeat(64));
-        refuses(() -> FtbQuestUpdatePlanner.prepare(instance, encode(previous), paid),
-                "a new content lesson cannot gain native rewards");
+        JsonObject replaced52 = syntheticPublication(wrong52, CURRENT_SOURCE, CURRENT_SOURCE, "b".repeat(64));
+        refuses(() -> FtbQuestUpdatePlanner.prepare(instance, encode(previous), replaced52),
+                "equal-count52 cannot replace the exact gas identity", "replaced native quest identity");
+        for (String logical : List.of("wet_beneficiation", "gas_utilities")) {
+            Map<String, CompoundTag> paidAddition = new LinkedHashMap<>();
+            FtbQuestDefinitions.chapters().forEach((name, document) -> paidAddition.put(name, document.copy()));
+            String id = FtbQuestDefinitions.code(FtbQuestDefinitions.questId(logical));
+            for (Tag value : paidAddition.get("grindless_t1.snbt").getList("quests", Tag.TAG_COMPOUND)) {
+                CompoundTag quest = (CompoundTag) value;
+                if (quest.getString("id").equals(id)) {
+                    CompoundTag reward = new CompoundTag();
+                    reward.putString("id", FtbQuestDefinitions.code(FtbQuestDefinitions.id("reward", logical + "/0")));
+                    quest.getList("rewards", Tag.TAG_COMPOUND).add(reward);
+                }
+            }
+            JsonObject paid = syntheticPublication(paidAddition, CURRENT_SOURCE, CURRENT_SOURCE, "b".repeat(64));
+            refuses(() -> FtbQuestUpdatePlanner.prepare(instance, encode(previous), paid),
+                    "a new content lesson cannot gain native rewards: " + logical);
+        }
         equal(before, snapshot(instance), "all lineage refusals happen before target mutation");
     }
 
-    private static void managed50(Path fixture, Map<String, CompoundTag> documents, JsonObject reference,
-                                   JsonObject destination, JsonObject owner, JsonObject deployment,
-                                   JsonObject currentReceipt) throws Exception {
-        Path instance = fixture.resolve("Grindless-Managed50-Dev");
+    private static void managedPrevious(Path fixture, Map<String, CompoundTag> documents, JsonObject reference,
+                                        JsonObject destination, JsonObject owner, JsonObject deployment,
+                                        JsonObject currentReceipt) throws Exception {
+        int previousCount = reference.get("questCount").getAsInt();
+        Path instance = fixture.resolve("Grindless-Managed" + previousCount + "-Dev");
         Path config = instance.resolve("minecraft").resolve("config");
         Files.createDirectories(instance);
         JsonObject ownership = owner.deepCopy();
@@ -366,22 +395,22 @@ public final class VerifyFtbQuestFiles {
         Files.write(receiptPath, encode(receipt));
         Map<Path, String> before = snapshot(instance);
         JsonObject plan = FtbQuestUpdatePlanner.prepare(instance, encode(reference), destination);
-        equal(51, plan.getAsJsonObject("receipt").get("questCount").getAsInt(), "managed50-to51 plan succeeds");
-        equal(hash(encode(receipt)), plan.get("previousReceiptSha256").getAsString(), "managed50 receipt is hash-bound");
-        equal(before, snapshot(instance), "managed50 planning writes nothing");
+        equal(52, plan.getAsJsonObject("receipt").get("questCount").getAsInt(), "managed" + previousCount + "-to52 plan succeeds");
+        equal(hash(encode(receipt)), plan.get("previousReceiptSha256").getAsString(), "managed predecessor receipt is hash-bound");
+        equal(before, snapshot(instance), "managed predecessor planning writes nothing");
         JsonObject changed = receipt.deepCopy();
         changed.addProperty("sourceRevision", "e".repeat(40));
         Files.write(receiptPath, encode(changed));
         Map<Path, String> changedBefore = snapshot(instance);
         refuses(() -> FtbQuestUpdatePlanner.prepare(instance, encode(reference), destination),
-                "unknown managed50 source receipt refuses", "Unknown or modified native definition ownership receipt");
+                "unknown managed predecessor source receipt refuses", "Unknown or modified native definition ownership receipt");
         equal(changedBefore, snapshot(instance), "refused source receipt is preserved exactly");
         Files.write(receiptPath, encode(receipt));
         Map<Path, String> restored = snapshot(instance);
         JsonObject badReference = reference.deepCopy();
         badReference.getAsJsonArray("files").get(0).getAsJsonObject().addProperty("sha256", "0".repeat(64));
-        refuses(() -> FtbQuestUpdatePlanner.prepare(instance, encode(badReference), destination), "managed50 publication hash drift refuses");
-        equal(restored, snapshot(instance), "managed50 refused attempts preserve all source/receipt files");
+        refuses(() -> FtbQuestUpdatePlanner.prepare(instance, encode(badReference), destination), "managed predecessor publication hash drift refuses");
+        equal(restored, snapshot(instance), "managed predecessor refused attempts preserve all source/receipt files");
     }
 
     private static void staleCompilation(Path fixture) throws Exception {

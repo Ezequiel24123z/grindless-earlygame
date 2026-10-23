@@ -191,6 +191,8 @@ public final class QuestCatalogue {
             matrixTask("industrial_matrix", "industrial", "grindless:relay_matrix", FluxTier.F2, 1,
                     List.of("matrix_line", "glass"), reward("minecraft:iron_ingot", 8)),
             lesson("wet_beneficiation", "wet_beneficiation", Evidence.ITEM, "grindless:chemical_washer", 1,
+                    List.of("assembler")),
+            lesson("gas_utilities", "gas_utilities", Evidence.ITEM, "grindless:electrolysis_cell", 1,
                     List.of("assembler")));
 
     private QuestCatalogue() {
@@ -214,7 +216,7 @@ public final class QuestCatalogue {
             case "thermal", "pylon", "scanner", "terrestrial", "pulverizer", "furnace", "press",
                     "assembler", "matrix_line", "glass", "logistics", "kiln", "factory_world",
                     "industrial_matrix", "first_grid", "forming_dies", "copper_coil", "flux_cell",
-                    "wet_beneficiation" -> Chapter.T1;
+                    "wet_beneficiation", "gas_utilities" -> Chapter.T1;
             default -> Chapter.T0;
         };
     }

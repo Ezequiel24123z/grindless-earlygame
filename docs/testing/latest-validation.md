@@ -4,6 +4,24 @@
 
 ### ADR-0190 optional T1 gas utilities
 
+Content5c34ea3887d587ca0e585f295079a5695fce1a6f has exactparent8a1/tree
+adf3ab8b13394cd01f99c2f1a5a27cab2fb23859,16 files456+/137-.
+Parent directly reviews the complete source/check/tool diff and records
+handoffSHAa5cbbe7ed5184b13f5d941d05bbf9a65fba8a98cd0da824fcef0f34b3ed8c634.
+Normal composition preserves all15 content blobs plus four fuel blobs;
+only changelog conflicts. Existing52 lineage extensions retain exact
+historical sets, current IDs/receipts and unknown-version refusal.
+Gas selectors remain optional and use actual family/recipe constraints.
+
+The explicit T1 provenance adds both fuel-factor sources/images and the
+three selected gas-family class expressions. Actual names/counts/hashes
+must come from the next compiled writer/check receipts, not a guessed
+old43/98 shape. Current normal data is not yet refreshed. Needed proof is
+combined compile, affected Energy/Fluid/Recipe/Quest/T1/FTB and isolated
+Prism definition contracts, then normal canonical output qualification.
+No registration/store/scheduling/claim implementation changed, so old
+native mechanisms are reused without new per-recipe or per-lesson runs.
+
 New baseline8a1 source lanes are separate from the completed manual-policy
 programme. Fuelc74273858966c4ed9f8930a18a4bd348881dc74d has exactparent8a1,
 tree71065861ef556cd2fb84bb2988fd5b7e8f33b046 and five files172+/13-.
