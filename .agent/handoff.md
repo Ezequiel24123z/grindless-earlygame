@@ -4,6 +4,23 @@ Updated: 2026-10-23. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**G15 first real red is an omitted52-objective test expectation.**
+Exacte1ed common/Forge/tools and Energy/Fluid/Recipes/Atlas/Quest/Claims/
+Teaching exit0. Adapters reports1044 pass/two fail: its old51 count and
+old50+wet exact set omit the explicitly added gas lesson. Parent reads the
+actual two failures and source predicate; no material/gate error or stale
+canonical equality is inferred. Content ownera6d4 repairs the coupled
+checker source on isolated exacte1ed, without PC or live-source edits.
+
+An explicit amendment allows only the still-unexecuted independent Registry/
+Guidance/FTB/Prism and normal writer/check/canonical stages on frozene1ed,
+WITH all their own hard checks, if admitted before leaseback/guard removal.
+If already closed, do not reopen. Admission has not yet been confirmed.
+Do not repeat compile/seven successful mains or the failed Adapters main.
+A11 is withdrawn for this failed source; retain any normal outputs DIRTY
+with original provenance for a later properly qualified checker-only delta.
+The two red expectations remain in the original status/receipts.
+
 **G15 exact-source targeted GO, no result yet.** Sole604 executes source
 e1edcfe5804475bead2d92f407b1ad09a589ce4c on a NEW gas-utilities root using
 private inventorydee779f4/preparation4b73a040 after fresh admission/Sync.

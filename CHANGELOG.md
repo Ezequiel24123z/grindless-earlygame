@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve the first G15 result and route its exact obsolete quest oracle.**
+  Compilation and seven affected mains pass on e1ed; Adapters still expects
+  51 objectives and omits the new optional lesson. Preserve both real reds,
+  assign the same source owner a precise repair and withdraw A11. Only an
+  explicitly admitted pre-return amendment may continue unexecuted independent
+  checks/producers; no closed lease, successful stage or source is replayed.
 - **Assign the composed gas increment one targeted G15 window.**
   Sole604/exacte1ed uses a new guarded root for fuel/binary/recipe/content/
   FTB52 and synthetic Prism contracts plus normal projections/current

@@ -4,6 +4,23 @@
 
 ### ADR-0190 optional T1 gas utilities
 
+**G15 first real failure, exacte1ed.** Common/Forge/tools and seven affected
+Energy/Fluid/Recipes/Atlas/Quest/Claims/Teaching mains pass. Stage24 Adapters
+exits1/wrapper1 with1044 passes/two failures: expected51 instead of52 and
+an exact old50+wet objective set lacking gas_utilities. Parent verifies
+both raw failures and questAccessPrerequisites source; this is an obsolete
+test oracle, not a waived product invariant or canonical-stale failure.
+Original stdoutSHA1950d5fac8e385ab97c84e4405e053e645635f55cc96077c94f5bc060fd7c941
+and stderrSHA8efea118ae0d8389468090f5edd9d9d951f5a2abde431a1f6eac1677e5a275a7
+remain preserved. The same content author owns the exact source repair.
+
+Before any reported return, the coordinator explicitly amends the scope:
+only if the lease/guard is still held, execute remaining independent stages
+and normal producers with all their own hard checks, without redoing
+successful compilation/mains or modifying source. If already returned or
+guard removed, do not reopen. Executor admission is still unconfirmed.
+A11 is withdrawn even if those stages pass; keep any real normal outputs
+and original source evidence DIRTY for a reviewed later checker-only delta.
 **G15 assignment, not an executed pass.** Exact composed source
 e1edcfe5804475bead2d92f407b1ad09a589ce4c/tree69c3720b48fe99f8493e7e2375fff907a07ee3dc
 preserves reviewed fuel/content blobs. Sole604 receives new private
