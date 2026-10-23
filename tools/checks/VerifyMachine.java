@@ -657,6 +657,8 @@ public final class VerifyMachine {
         // Speed: double speed for roughly triple power, the one documented figure.
         eq("one speed halves the time", 0.5, set.timeMultiplier());
         eq("one speed triples the energy", 3.0, set.energyMultiplier());
+        eq("empty loadout keeps the process draw", 32L, ProcessMachineBlockEntity.upgradedTickCost(32L, UpgradeSet.EMPTY));
+        eq("one speed triples the process draw", 96L, ProcessMachineBlockEntity.upgradedTickCost(32L, set));
         UpgradeSet twoSpeed = set.install(MachineUpgrade.SPEED, ChassisMark.MK_V);
         eq("speed stacks", 2, twoSpeed.count(MachineUpgrade.SPEED));
         eq("two speeds quarter the time", 0.25, twoSpeed.timeMultiplier());
@@ -669,10 +671,12 @@ public final class VerifyMachine {
         eq("three recipes per cycle", 3, twoPar.parallelCount());
         eq("power scales linearly with parallel", 3.0, twoPar.energyMultiplier());
         eq("parallel does not change cycle time", 1.0, twoPar.timeMultiplier());
+        eq("parallel triples the process draw", 96L, ProcessMachineBlockEntity.upgradedTickCost(32L, twoPar));
 
         // Efficiency: cheaper, slower. The opposite trade.
         yes("efficiency is slower", eff.timeMultiplier() > 1.0);
         yes("efficiency is cheaper", eff.energyMultiplier() < 1.0);
+        yes("efficiency lowers the process draw", ProcessMachineBlockEntity.upgradedTickCost(32L, eff) < 32L);
 
         UpgradeSet removed = twoSpeed.remove(MachineUpgrade.SPEED);
         eq("removing leaves one", 1, removed.count(MachineUpgrade.SPEED));

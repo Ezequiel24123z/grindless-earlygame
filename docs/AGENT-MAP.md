@@ -952,6 +952,9 @@ an uninitialized subclass field. Existing menu ordinals and `ItemLayout=3` stay 
 that quota without draining a ready recipe's primary batch. Consumption/extraction debits it;
 missing legacy ownership stays unmarked, and invalid explicit ownership is logged, never used
 to drain input. `FluidEndpoint.acceptedAmount` is shared by execution and Forge simulation.
+`ProcessMachineBlockEntity.upgradedTickCost(base, upgrades)` is the shared per-tick process
+power authority: request/draw, stored-energy fallback, `ProcessLogic.work` requested amount
+and `hasPowerWaiting` all consume the same scaled value so already-paid ticks are not repriced.
 Process work runs at most once per world tick despite subscription changes (ADR-0132).
 
 ## Sustainability export and dashboard ownership

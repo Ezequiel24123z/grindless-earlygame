@@ -293,8 +293,9 @@ public final class VerifyPersistence {
                     machine.inspectionProgress());
             check("the real transaction writes the selected output, not the last dry output (carriers)",
                     machine.getItem(4).is(Items.CLAY_BALL) && machine.getItem(4).getCount() == 1);
-            check("actual completion debits one paid tick once",
-                    machine.energy().getStored() == 512 - blueprint.fuPerTick());
+            check("actual completion debits one upgraded tick once",
+                    machine.energy().getStored() == 512L - ProcessMachineBlockEntity.upgradedTickCost(
+                            blueprint.fuPerTick(), machine.upgrades()));
             check("actual completion consumes the existing exact grouped bill once",
                     java.util.stream.IntStream.range(0, bill.size()).allMatch(slot -> machine.getItem(slot).isEmpty()));
             change(machine, planner.id());
