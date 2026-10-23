@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate byte-exact A10 data after the G14 checker closure.**
+  Checker317 reports R36/T0/T1 passes while reusing the original489
+  writers/checks/provenance. Parent verifies the normal A10d668 bundle,
+  exact parent/four-path scope/contiguous trailers and every Git blob byte
+  against the four original generated files. Preserve new S1 identities
+  and the clean returned PC checkpoint;115-file independent custody review
+  remains pending. No producer replay, native run or player update occurs.
 - **Grant the minimal G14 checker/canonical delta using original G13 data.**
   Bind new checker source317 separately from original489 writer/provenance.
   After fresh guarded Sync, copy only the four verified complete payloads,

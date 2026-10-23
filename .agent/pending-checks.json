@@ -20,7 +20,7 @@
   },
   "normal_machine_manufacturing": {
     "policy": "ADR-0188",
-    "status": "G13_proofs343_verified_checker483d_composed317_G14_DELTA_ONLY_granted_NO_newcheck_orA10",
+    "status": "G13_proofs343_verified_G14_deltaPASS_A10d668_byteverified_normal_integration115QA_pending_NO_PClease",
     "normal_final_manual_only_operating_processes_automatable": true,
     "other_product_modes": ["MANUAL_ONLY", "MACHINE_ONLY", "BOTH"],
     "infrastructure_manual_and_machine_methods_per_product": true,
@@ -132,13 +132,13 @@
   },
   "current_PC_execution": {
     "assignment": "installed-capital-checker-g14-20261023",
-    "active": true,
-    "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
+    "active": false,
+    "owner_session": null,
     "source": "317ef1e87c54ef3ccf395ac4f569038aa7a2ef15",
     "writer_invocation_source": "489bf01fb382a907c184f6172e6c1027dcf248e9",
     "writer_source_scope": "REUSED_G13_ONLY_NO_G14_writer_CheckOnly_or_provenance_retarget",
     "applicable_source_runtime": null,
-    "normal_data_checkpoint": null,
+    "normal_data_checkpoint": "d66881826ce34cc0d17cc70d1b2fffad0c1f1ca2",
     "inventory_sha256": "89b67cebfdcf1d8d44a55214ef85ff2a9773955c592d6e352b0c40b6f9b67550",
     "local_preparation_sha256": "4d8259998b9afd95c757456945c439ce585b730373dfb383f4e5227cd21a0402",
     "scope": "DELTA_ONLY_NEWroot_freshSync317_exact4verified_G13_payload_materialization_common_toolcompile_R36_postT0_postT1_invariance_newS1identity_A10_ifpassed",
@@ -148,11 +148,13 @@
     "allowed_data_derivation": "NORMAL_A10_exactparent317_onlyoriginal489_four_payloadbytes_after_newchecks_invariance_frozenothers_Java0locksfalse_contiguoustrailers_cleanbundle_NOPUSH_RUNTIMEafterdata",
     "failure_policy": "preserve_copied_payloads_and_actual_new_failure_DIRTYexactsubset_NO_restore_ungrantedwriters_waiver_or_hotfix",
     "prohibited": "NO_writers_CheckOnly_Forge_native_FTB_ABI_Blueprint_assets_package_Prism_world_deps_provider_or_oldrootwrites",
-    "result": "GRANTED_NOT_OBSERVED_NO_G14_copy_check_or_A10_pass",
-    "returned": false,
-    "returned_utc": null,
-    "return_state": "NOT_OBSERVED_G14",
-    "new_explicit_guarded_window_required": false
+    "result": "REPORTED_DELTA_PASS_R36_59_0_T0_2847_0_T1_1655_0_A10d668_normal4_byteverified115QA_pending",
+    "custody_QA_status": "PENDINGd8bc581b_115_newdelta_reuse_S1_and_closure",
+    "custody_manifest_sha256": "8cbb3099df10facfc83bbd3e9c6117d302ea3ba065c708adb74b85874c0a57d8",
+    "returned": true,
+    "returned_utc": "2026-10-22T23:54:10.0231308Z",
+    "return_state": "REPORTED_actualA10d668_CLEAN_Java0locksfalse_ownGuardremoved_absent_explicitreturn_NO_runtimeafterdata",
+    "new_explicit_guarded_window_required": true
   },
   "closed_G13_execution": {
     "assignment": "continued-funding-qualification-g13-20261022",
@@ -185,7 +187,7 @@
   },
   "installed_capital_oracle_qualification": {
     "source_repair": "483d25d7d032127b2e0494072d306b52f8f5c21d",
-    "status": "SOURCE_REVIEW_CLEAR_NORMAL_COMPOSITION_NEW_CHECK_EXECUTION_PENDING",
+    "status": "G14_delta_R36_T0_T1_PASS_REPORTED_normalA10_parent317_byteverified115QA_pending",
     "reused_writer_source": "489bf01fb382a907c184f6172e6c1027dcf248e9",
     "reuse": "four_original_G13_payloads_verified_3write_3check_43_98_at489_NO_newwriter_or_retarget",
     "required": "changed_check_compile_R36_corrected_postT0_unexecuted_postT1_payload_invariance_actual_new_widerS1identity",
@@ -320,7 +322,7 @@
   },
   "active_development_wave": {
     "base": "ad5b50dd509b0261818101ff08e786750826161a",
-    "status": "G13_originalproofs_verified_strict_oracle483d_composed317_G14_delta_sole604_NO_result",
+    "status": "G13_originalproofs_verified_G14_changedchecksPASS_A10d668_byteverified115QA_pending_NO_activePC",
     "earlier_source_fields": "historical_initial_wave_snapshots_not_current_failures_or_execution_grants_current_PC_execution_and_finite_T1_custody_continuation_govern",
     "owners": {
       "managed_FTB_definitions": "cb273782-4065-44e2-90a3-9c0c036367ce",
@@ -351,7 +353,7 @@
     "asset_EOL_checkpoint": "5aa56be_shared_Java_writer_twin_callers_actualG4_existingJDKfixture34_total_22new_EOL_pass_parent_raw_verified_no_normal_generator_replay",
     "normal_G3_outputs": "A3e1efe470_normal5outputs_integrated_parent_verified205files_2573inputs_4images_bothT1receipts_5Gitblobs_equal_writer_bytes_bundle3a9ac835_manifestde198742_normalwrite_check_Guidance74_5323_Economy416_17_T1794_canonical417_2908_0_797_G3_returned08_34_07Z",
     "qualification_preparer": "604195bd-6826-4299-89af-1dcf39545263_last_G10_executor_returned17_04_48Z_no_current_PC_grant",
-    "PC_owner": "604195bd-6826-4299-89af-1dcf39545263",
+    "PC_owner": null,
     "PC_source": "317ef1e87c54ef3ccf395ac4f569038aa7a2ef15",
     "PC_source_worker_access": false,
     "T0_world_client_deploy_or_acceptance": false,

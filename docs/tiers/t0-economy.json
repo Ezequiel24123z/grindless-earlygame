@@ -1,5 +1,5 @@
 {
-  "authority_snapshot_sha256": "3ba9df241ac968030c690a342068698dc3939e9049057d0aee2740274837d7cc",
+  "authority_snapshot_sha256": "4c7c34a23fdc8c3405c3c21ea7aced7ce2df4a7cad0509f6422fb7130823bc14",
   "balance_ledger": [
     {
       "new": "Explicit paid recovery",
@@ -114,24 +114,6 @@
         "fuDemand": 4800,
         "grossInputs": {
           "energy:FU": 4800,
-          "item:minecraft:stick": 3,
-          "tag:grindless:boards": 4,
-          "tag:minecraft:stone_crafting_materials": 1
-        },
-        "grossOutputs": {
-          "item:grindless:clay_mixer": 1
-        },
-        "route": "bench/clay_mixer",
-        "serialTicks": 600,
-        "source": "ProcessGraph.generate"
-      },
-      {
-        "batches": 1,
-        "catalystsPerExecution": {},
-        "family": "ASSEMBLY_BENCH",
-        "fuDemand": 4800,
-        "grossInputs": {
-          "energy:FU": 4800,
           "item:grindless:ceramic_insulator": 2,
           "tag:forge:ingots/copper": 1,
           "tag:grindless:boards": 3
@@ -157,23 +139,6 @@
           "item:grindless:crank_handle": 1
         },
         "route": "bench/crank_handle",
-        "serialTicks": 600,
-        "source": "ProcessGraph.generate"
-      },
-      {
-        "batches": 1,
-        "catalystsPerExecution": {},
-        "family": "ASSEMBLY_BENCH",
-        "fuDemand": 4800,
-        "grossInputs": {
-          "energy:FU": 4800,
-          "tag:forge:ingots/iron": 1,
-          "tag:minecraft:stone_crafting_materials": 8
-        },
-        "grossOutputs": {
-          "item:grindless:crude_extractor": 1
-        },
-        "route": "bench/crude_extractor",
         "serialTicks": 600,
         "source": "ProcessGraph.generate"
       },
@@ -211,40 +176,6 @@
         },
         "route": "bench/data_core",
         "serialTicks": 1200,
-        "source": "ProcessGraph.generate"
-      },
-      {
-        "batches": 1,
-        "catalystsPerExecution": {},
-        "family": "ASSEMBLY_BENCH",
-        "fuDemand": 4800,
-        "grossInputs": {
-          "energy:FU": 4800,
-          "tag:minecraft:stone_crafting_materials": 8
-        },
-        "grossOutputs": {
-          "item:minecraft:furnace": 1
-        },
-        "route": "bench/furnace",
-        "serialTicks": 600,
-        "source": "ProcessGraph.generate"
-      },
-      {
-        "batches": 1,
-        "catalystsPerExecution": {},
-        "family": "ASSEMBLY_BENCH",
-        "fuDemand": 4800,
-        "grossInputs": {
-          "energy:FU": 4800,
-          "item:minecraft:stick": 1,
-          "tag:forge:ingots/iron": 1,
-          "tag:minecraft:stone_crafting_materials": 7
-        },
-        "grossOutputs": {
-          "item:grindless:hand_crank_dynamo": 1
-        },
-        "route": "bench/hand_crank_dynamo",
-        "serialTicks": 600,
         "source": "ProcessGraph.generate"
       },
       {
@@ -296,24 +227,6 @@
           "item:grindless:quest_book": 1
         },
         "route": "bench/quest_book",
-        "serialTicks": 600,
-        "source": "ProcessGraph.generate"
-      },
-      {
-        "batches": 1,
-        "catalystsPerExecution": {},
-        "family": "ASSEMBLY_BENCH",
-        "fuDemand": 4800,
-        "grossInputs": {
-          "energy:FU": 4800,
-          "item:minecraft:glass": 1,
-          "tag:grindless:boards": 7,
-          "tag:minecraft:stone_crafting_materials": 1
-        },
-        "grossOutputs": {
-          "item:grindless:research_terminal": 1
-        },
-        "route": "bench/research_terminal",
         "serialTicks": 600,
         "source": "ProcessGraph.generate"
       },
@@ -461,21 +374,21 @@
         "source": "ProcessGraph.generate"
       },
       {
-        "batches": 15,
+        "batches": 14,
         "catalystsPerExecution": {
           "item:minecraft:bricks": 7
         },
         "family": "FIRING_CHAMBER",
-        "fuDemand": 24000,
+        "fuDemand": 22400,
         "grossInputs": {
-          "energy:FU": 24000,
-          "item:grindless:biomass": 60
+          "energy:FU": 22400,
+          "item:grindless:biomass": 56
         },
         "grossOutputs": {
-          "item:minecraft:charcoal": 30
+          "item:minecraft:charcoal": 28
         },
         "route": "bootstrap/biocarbon",
-        "serialTicks": 3000,
+        "serialTicks": 2800,
         "source": "ProcessGraph.generate"
       },
       {
@@ -498,20 +411,20 @@
         "source": "ProcessGraph.generate"
       },
       {
-        "batches": 13,
+        "batches": 7,
         "catalystsPerExecution": {},
         "family": "QUERN",
-        "fuDemand": 6240,
+        "fuDemand": 3360,
         "grossInputs": {
-          "energy:FU": 6240,
-          "item:grindless:mineral_aggregate": 13
+          "energy:FU": 3360,
+          "item:grindless:mineral_aggregate": 7
         },
         "grossOutputs": {
-          "item:minecraft:cobblestone": 52,
-          "item:minecraft:gravel": 26
+          "item:minecraft:cobblestone": 28,
+          "item:minecraft:gravel": 14
         },
         "route": "bootstrap/dry_aggregate",
-        "serialTicks": 1560,
+        "serialTicks": 840,
         "source": "ProcessGraph.generate"
       },
       {
@@ -628,23 +541,23 @@
         "source": "ProcessGraph.generate"
       },
       {
-        "batches": 3,
+        "batches": 1,
         "catalystsPerExecution": {
           "item:minecraft:bricks": 7
         },
         "family": "FIRING_CHAMBER",
-        "fuDemand": 9600,
+        "fuDemand": 3200,
         "grossInputs": {
-          "energy:FU": 9600,
-          "tag:forge:raw_materials/iron": 3,
-          "tag:grindless:carbon": 3
+          "energy:FU": 3200,
+          "tag:forge:raw_materials/iron": 1,
+          "tag:grindless:carbon": 1
         },
         "grossOutputs": {
-          "item:grindless:slag": 3,
-          "tag:forge:ingots/iron": 3
+          "item:grindless:slag": 1,
+          "tag:forge:ingots/iron": 1
         },
         "route": "bootstrap/reduce_iron",
-        "serialTicks": 1200,
+        "serialTicks": 400,
         "source": "ProcessGraph.generate"
       },
       {
@@ -682,19 +595,19 @@
         "source": "ProcessGraph.generate"
       },
       {
-        "batches": 5,
+        "batches": 4,
         "catalystsPerExecution": {},
         "family": "QUERN",
-        "fuDemand": 1600,
+        "fuDemand": 1280,
         "grossInputs": {
-          "energy:FU": 1600,
-          "item:grindless:fibreboard": 5
+          "energy:FU": 1280,
+          "item:grindless:fibreboard": 4
         },
         "grossOutputs": {
-          "item:minecraft:stick": 20
+          "item:minecraft:stick": 16
         },
         "route": "bootstrap/sticks",
-        "serialTicks": 400,
+        "serialTicks": 320,
         "source": "ProcessGraph.generate"
       },
       {
@@ -791,17 +704,17 @@
         "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/biomass_dynamo.json"
       },
       {
-        "batches": 1,
+        "batches": 2,
         "catalystsPerExecution": {},
         "family": "CRAFTING_TABLE",
         "fuDemand": 0,
         "grossInputs": {
-          "item:minecraft:stick": 3,
-          "tag:grindless:boards": 4,
-          "tag:minecraft:stone_crafting_materials": 1
+          "item:minecraft:stick": 6,
+          "tag:grindless:boards": 8,
+          "tag:minecraft:stone_crafting_materials": 2
         },
         "grossOutputs": {
-          "item:grindless:clay_mixer": 1
+          "item:grindless:clay_mixer": 2
         },
         "route": "craft/clay_mixer",
         "serialTicks": 0,
@@ -946,6 +859,23 @@
         "family": "CRAFTING_TABLE",
         "fuDemand": 0,
         "grossInputs": {
+          "item:minecraft:glass": 1,
+          "tag:grindless:boards": 7,
+          "tag:minecraft:stone_crafting_materials": 1
+        },
+        "grossOutputs": {
+          "item:grindless:research_terminal": 1
+        },
+        "route": "craft/research_terminal",
+        "serialTicks": 0,
+        "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/research_terminal.json"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "CRAFTING_TABLE",
+        "fuDemand": 0,
+        "grossInputs": {
           "item:grindless:ceramic_insulator": 1,
           "tag:grindless:boards": 4
         },
@@ -991,18 +921,18 @@
         "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_trough.json"
       },
       {
-        "batches": 284,
+        "batches": 250,
         "catalystsPerExecution": {},
         "family": "BIOMASS_DYNAMO",
         "fuDemand": 0,
         "grossInputs": {
-          "item:grindless:biomass": 284
+          "item:grindless:biomass": 250
         },
         "grossOutputs": {
-          "energy:FU": 454400
+          "energy:FU": 400000
         },
         "route": "fuel/biomass_dynamo/biomass",
-        "serialTicks": 56800,
+        "serialTicks": 50000,
         "source": "SourceLogic.BIOMASS_BURN_TICKS + BIOMASS_DYNAMO"
       },
       {
@@ -1102,50 +1032,50 @@
         "source": "QuestCatalogue.tasks/workshop_flow + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton"
       },
       {
-        "batches": 103,
+        "batches": 93,
         "catalystsPerExecution": {},
         "family": "BIOCULTIVATOR",
-        "fuDemand": 65920,
+        "fuDemand": 59520,
         "grossInputs": {
-          "energy:FU": 65920,
-          "fluid:minecraft:water": 25750,
-          "item:grindless:mineral_aggregate": 103
+          "energy:FU": 59520,
+          "fluid:minecraft:water": 23250,
+          "item:grindless:mineral_aggregate": 93
         },
         "grossOutputs": {
-          "item:grindless:biomass": 412
+          "item:grindless:biomass": 372
         },
         "route": "source/biomass",
-        "serialTicks": 16480,
+        "serialTicks": 14880,
         "source": "ProcessGraph.generate"
       },
       {
-        "batches": 124,
+        "batches": 108,
         "catalystsPerExecution": {},
         "family": "GEOLOGICAL_COLLECTOR",
-        "fuDemand": 99200,
+        "fuDemand": 86400,
         "grossInputs": {
-          "energy:FU": 99200,
-          "fluid:minecraft:water": 31000
+          "energy:FU": 86400,
+          "fluid:minecraft:water": 27000
         },
         "grossOutputs": {
-          "item:grindless:mineral_aggregate": 124,
-          "item:minecraft:clay_ball": 124
+          "item:grindless:mineral_aggregate": 108,
+          "item:minecraft:clay_ball": 108
         },
         "route": "source/geological_aggregate",
-        "serialTicks": 24800,
+        "serialTicks": 21600,
         "source": "ProcessGraph.generate"
       },
       {
-        "batches": 67,
+        "batches": 62,
         "catalystsPerExecution": {},
         "family": "HAND_PUMP",
         "fuDemand": 0,
         "grossInputs": {},
         "grossOutputs": {
-          "fluid:minecraft:water": 67000
+          "fluid:minecraft:water": 62000
         },
         "route": "source/hand_pump",
-        "serialTicks": 3350,
+        "serialTicks": 3100,
         "source": "HandPumpBlockEntity.work/isSource + FluidLogic.PUMP_MB_PER_TICK/BUCKET"
       },
       {
@@ -1289,9 +1219,9 @@
       {
         "claimedRewards": 12,
         "guaranteed": 0,
-        "margin": 1,
+        "margin": 0,
         "playerProvided": 20,
-        "required": 31,
+        "required": 32,
         "resource": {
           "id": "minecraft:stick",
           "kind": "ITEM",
@@ -1301,18 +1231,18 @@
         "status": "conditional_established"
       }
     ],
-    "fuDemand": 482320,
+    "fuDemand": 427920,
     "grossInputs": {
-      "energy:FU": 482320,
-      "fluid:minecraft:water": 71750,
-      "item:grindless:biomass": 376,
+      "energy:FU": 427920,
+      "fluid:minecraft:water": 65250,
+      "item:grindless:biomass": 338,
       "item:grindless:calibrated_data_core": 1,
       "item:grindless:ceramic_insulator": 28,
       "item:grindless:clay_conduit": 2,
       "item:grindless:conveyor_belt": 4,
       "item:grindless:data_core": 1,
-      "item:grindless:fibreboard": 5,
-      "item:grindless:mineral_aggregate": 123,
+      "item:grindless:fibreboard": 4,
+      "item:grindless:mineral_aggregate": 107,
       "item:grindless:settling_channel": 2,
       "item:grindless:settling_screen": 2,
       "item:grindless:unfired_ceramic": 45,
@@ -1325,23 +1255,22 @@
       "item:minecraft:paper": 2,
       "item:minecraft:redstone": 4,
       "item:minecraft:sand": 23,
-      "item:minecraft:stick": 45,
+      "item:minecraft:stick": 44,
       "tag:forge:ingots/copper": 7,
-      "tag:forge:ingots/iron": 2,
       "tag:forge:raw_materials/copper": 7,
-      "tag:forge:raw_materials/iron": 3,
+      "tag:forge:raw_materials/iron": 1,
       "tag:grindless:boards": 68,
-      "tag:grindless:carbon": 34,
+      "tag:grindless:carbon": 32,
       "tag:minecraft:planks": 4,
-      "tag:minecraft:stone_crafting_materials": 88
+      "tag:minecraft:stone_crafting_materials": 65
     },
     "grossOutputs": {
-      "energy:FU": 454400,
-      "fluid:minecraft:water": 72250,
+      "energy:FU": 400000,
+      "fluid:minecraft:water": 67250,
       "item:grindless:assembly_bench": 1,
       "item:grindless:basic_tank": 1,
       "item:grindless:biocultivator": 1,
-      "item:grindless:biomass": 412,
+      "item:grindless:biomass": 372,
       "item:grindless:biomass_dynamo": 1,
       "item:grindless:calibrated_data_core": 1,
       "item:grindless:ceramic_grog": 15,
@@ -1350,15 +1279,13 @@
       "item:grindless:clay_mixer": 2,
       "item:grindless:conveyor_belt": 8,
       "item:grindless:crank_handle": 2,
-      "item:grindless:crude_extractor": 1,
       "item:grindless:crude_manipulator": 2,
       "item:grindless:data_core": 2,
       "item:grindless:fibreboard": 60,
       "item:grindless:firing_chamber": 1,
       "item:grindless:geological_collector": 1,
-      "item:grindless:hand_crank_dynamo": 1,
       "item:grindless:hand_pump": 2,
-      "item:grindless:mineral_aggregate": 124,
+      "item:grindless:mineral_aggregate": 108,
       "item:grindless:multitool": 2,
       "item:grindless:process_atlas": 1,
       "item:grindless:quern": 2,
@@ -1372,28 +1299,28 @@
       "item:grindless:settling_item_output": 1,
       "item:grindless:settling_screen": 4,
       "item:grindless:settling_trough": 1,
-      "item:grindless:slag": 10,
+      "item:grindless:slag": 8,
       "item:grindless:unfired_ceramic": 48,
       "item:grindless:workshop_item_input": 1,
       "item:grindless:workshop_item_output": 1,
       "item:minecraft:brick": 12,
       "item:minecraft:bricks": 9,
-      "item:minecraft:charcoal": 34,
+      "item:minecraft:charcoal": 32,
       "item:minecraft:chest": 1,
-      "item:minecraft:clay_ball": 136,
-      "item:minecraft:cobblestone": 52,
+      "item:minecraft:clay_ball": 120,
+      "item:minecraft:cobblestone": 28,
       "item:minecraft:crafting_table": 1,
       "item:minecraft:dirt": 14,
       "item:minecraft:flint": 1,
-      "item:minecraft:furnace": 3,
+      "item:minecraft:furnace": 2,
       "item:minecraft:glass": 7,
-      "item:minecraft:gravel": 40,
+      "item:minecraft:gravel": 28,
       "item:minecraft:paper": 4,
       "item:minecraft:redstone": 14,
       "item:minecraft:sand": 23,
-      "item:minecraft:stick": 32,
+      "item:minecraft:stick": 28,
       "tag:forge:ingots/copper": 7,
-      "tag:forge:ingots/iron": 3,
+      "tag:forge:ingots/iron": 1,
       "tag:forge:raw_materials/copper": 7,
       "tag:forge:raw_materials/iron": 7
     },
@@ -1418,8 +1345,8 @@
       "item:minecraft:crafting_table": 1
     },
     "manualWork": {
-      "budgetActions": 741,
-      "marginActions": 563,
+      "budgetActions": 665,
+      "marginActions": 487,
       "requiredActions": 178,
       "status": "conditional_established",
       "terminal": "manual/crank_handle"
@@ -1428,7 +1355,7 @@
       "item:grindless:biomass": 1,
       "item:grindless:crank_handle": 1
     },
-    "serialWorkTicks": 144010,
+    "serialWorkTicks": 127360,
     "status": "conditional_model_pass",
     "unmetObligations": {},
     "unresolvedInfrastructure": []
@@ -1570,36 +1497,6 @@
       },
       {
         "disposition": "NON_INCREASING",
-        "inputPotential": "23",
-        "outputPotential": "23",
-        "route": "bench/hand_crank_dynamo"
-      },
-      {
-        "disposition": "NON_INCREASING",
-        "inputPotential": "24",
-        "outputPotential": "24",
-        "route": "bench/crude_extractor"
-      },
-      {
-        "disposition": "NON_INCREASING",
-        "inputPotential": "34",
-        "outputPotential": "34",
-        "route": "bench/research_terminal"
-      },
-      {
-        "disposition": "NON_INCREASING",
-        "inputPotential": "17",
-        "outputPotential": "17",
-        "route": "bench/quern"
-      },
-      {
-        "disposition": "NON_INCREASING",
-        "inputPotential": "21",
-        "outputPotential": "21",
-        "route": "bench/clay_mixer"
-      },
-      {
-        "disposition": "NON_INCREASING",
         "inputPotential": "41",
         "outputPotential": "41",
         "route": "bench/firing_chamber"
@@ -1621,12 +1518,6 @@
         "inputPotential": "12",
         "outputPotential": "12",
         "route": "bench/settling_screen"
-      },
-      {
-        "disposition": "NON_INCREASING",
-        "inputPotential": "15",
-        "outputPotential": "15",
-        "route": "bench/hand_pump"
       },
       {
         "disposition": "NON_INCREASING",
@@ -1669,30 +1560,6 @@
         "inputPotential": "4",
         "outputPotential": "4",
         "route": "bench/crank_handle"
-      },
-      {
-        "disposition": "NON_INCREASING",
-        "inputPotential": "22",
-        "outputPotential": "22",
-        "route": "bench/geological_collector"
-      },
-      {
-        "disposition": "NON_INCREASING",
-        "inputPotential": "28",
-        "outputPotential": "28",
-        "route": "bench/biocultivator"
-      },
-      {
-        "disposition": "NON_INCREASING",
-        "inputPotential": "21",
-        "outputPotential": "21",
-        "route": "bench/assembly_bench"
-      },
-      {
-        "disposition": "NON_INCREASING",
-        "inputPotential": "37",
-        "outputPotential": "37",
-        "route": "bench/biomass_dynamo"
       },
       {
         "disposition": "NON_INCREASING",
@@ -1747,12 +1614,6 @@
         "inputPotential": "16",
         "outputPotential": "16",
         "route": "bench/crafting_table"
-      },
-      {
-        "disposition": "NON_INCREASING",
-        "inputPotential": "16",
-        "outputPotential": "16",
-        "route": "bench/furnace"
       },
       {
         "disposition": "NON_INCREASING",
@@ -2904,94 +2765,6 @@
       "duration_ticks": 600,
       "family": "ASSEMBLY_BENCH",
       "fu_per_tick": 8,
-      "id": "bench/hand_crank_dynamo",
-      "inputs": {
-        "item:minecraft:stick": 1,
-        "tag:forge:ingots/iron": 1,
-        "tag:minecraft:stone_crafting_materials": 7
-      },
-      "max_executions_per_player_world": null,
-      "outputs": {
-        "item:grindless:hand_crank_dynamo": 1
-      },
-      "prerequisites": [],
-      "source": "BootstrapAssembly"
-    },
-    {
-      "boundary": "CONVERSION",
-      "duration_ticks": 600,
-      "family": "ASSEMBLY_BENCH",
-      "fu_per_tick": 8,
-      "id": "bench/crude_extractor",
-      "inputs": {
-        "tag:forge:ingots/iron": 1,
-        "tag:minecraft:stone_crafting_materials": 8
-      },
-      "max_executions_per_player_world": null,
-      "outputs": {
-        "item:grindless:crude_extractor": 1
-      },
-      "prerequisites": [],
-      "source": "BootstrapAssembly"
-    },
-    {
-      "boundary": "CONVERSION",
-      "duration_ticks": 600,
-      "family": "ASSEMBLY_BENCH",
-      "fu_per_tick": 8,
-      "id": "bench/research_terminal",
-      "inputs": {
-        "item:minecraft:glass": 1,
-        "tag:grindless:boards": 7,
-        "tag:minecraft:stone_crafting_materials": 1
-      },
-      "max_executions_per_player_world": null,
-      "outputs": {
-        "item:grindless:research_terminal": 1
-      },
-      "prerequisites": [],
-      "source": "BootstrapAssembly"
-    },
-    {
-      "boundary": "CONVERSION",
-      "duration_ticks": 600,
-      "family": "ASSEMBLY_BENCH",
-      "fu_per_tick": 8,
-      "id": "bench/quern",
-      "inputs": {
-        "item:minecraft:stick": 1,
-        "tag:minecraft:stone_crafting_materials": 8
-      },
-      "max_executions_per_player_world": null,
-      "outputs": {
-        "item:grindless:quern": 1
-      },
-      "prerequisites": [],
-      "source": "BootstrapAssembly"
-    },
-    {
-      "boundary": "CONVERSION",
-      "duration_ticks": 600,
-      "family": "ASSEMBLY_BENCH",
-      "fu_per_tick": 8,
-      "id": "bench/clay_mixer",
-      "inputs": {
-        "item:minecraft:stick": 3,
-        "tag:grindless:boards": 4,
-        "tag:minecraft:stone_crafting_materials": 1
-      },
-      "max_executions_per_player_world": null,
-      "outputs": {
-        "item:grindless:clay_mixer": 1
-      },
-      "prerequisites": [],
-      "source": "BootstrapAssembly"
-    },
-    {
-      "boundary": "CONVERSION",
-      "duration_ticks": 600,
-      "family": "ASSEMBLY_BENCH",
-      "fu_per_tick": 8,
       "id": "bench/firing_chamber",
       "inputs": {
         "item:minecraft:brick": 5,
@@ -3055,24 +2828,6 @@
       "max_executions_per_player_world": null,
       "outputs": {
         "item:grindless:settling_screen": 1
-      },
-      "prerequisites": [],
-      "source": "BootstrapAssembly"
-    },
-    {
-      "boundary": "CONVERSION",
-      "duration_ticks": 600,
-      "family": "ASSEMBLY_BENCH",
-      "fu_per_tick": 8,
-      "id": "bench/hand_pump",
-      "inputs": {
-        "item:minecraft:stick": 1,
-        "tag:grindless:boards": 3,
-        "tag:minecraft:stone_crafting_materials": 1
-      },
-      "max_executions_per_player_world": null,
-      "outputs": {
-        "item:grindless:hand_pump": 1
       },
       "prerequisites": [],
       "source": "BootstrapAssembly"
@@ -3197,78 +2952,6 @@
       "max_executions_per_player_world": null,
       "outputs": {
         "item:grindless:crank_handle": 1
-      },
-      "prerequisites": [],
-      "source": "BootstrapAssembly"
-    },
-    {
-      "boundary": "CONVERSION",
-      "duration_ticks": 600,
-      "family": "ASSEMBLY_BENCH",
-      "fu_per_tick": 8,
-      "id": "bench/geological_collector",
-      "inputs": {
-        "tag:grindless:boards": 3,
-        "tag:minecraft:stone_crafting_materials": 5
-      },
-      "max_executions_per_player_world": null,
-      "outputs": {
-        "item:grindless:geological_collector": 1
-      },
-      "prerequisites": [],
-      "source": "BootstrapAssembly"
-    },
-    {
-      "boundary": "CONVERSION",
-      "duration_ticks": 600,
-      "family": "ASSEMBLY_BENCH",
-      "fu_per_tick": 8,
-      "id": "bench/biocultivator",
-      "inputs": {
-        "item:minecraft:clay_ball": 2,
-        "tag:grindless:boards": 4,
-        "tag:minecraft:stone_crafting_materials": 2
-      },
-      "max_executions_per_player_world": null,
-      "outputs": {
-        "item:grindless:biocultivator": 1
-      },
-      "prerequisites": [],
-      "source": "BootstrapAssembly"
-    },
-    {
-      "boundary": "CONVERSION",
-      "duration_ticks": 600,
-      "family": "ASSEMBLY_BENCH",
-      "fu_per_tick": 8,
-      "id": "bench/assembly_bench",
-      "inputs": {
-        "item:minecraft:stick": 1,
-        "tag:grindless:boards": 3,
-        "tag:minecraft:stone_crafting_materials": 4
-      },
-      "max_executions_per_player_world": null,
-      "outputs": {
-        "item:grindless:assembly_bench": 1
-      },
-      "prerequisites": [],
-      "source": "BootstrapAssembly"
-    },
-    {
-      "boundary": "CONVERSION",
-      "duration_ticks": 600,
-      "family": "ASSEMBLY_BENCH",
-      "fu_per_tick": 8,
-      "id": "bench/biomass_dynamo",
-      "inputs": {
-        "item:minecraft:furnace": 1,
-        "item:minecraft:stick": 1,
-        "tag:forge:ingots/copper": 1,
-        "tag:minecraft:stone_crafting_materials": 6
-      },
-      "max_executions_per_player_world": null,
-      "outputs": {
-        "item:grindless:biomass_dynamo": 1
       },
       "prerequisites": [],
       "source": "BootstrapAssembly"
@@ -3426,22 +3109,6 @@
       "max_executions_per_player_world": null,
       "outputs": {
         "item:minecraft:crafting_table": 1
-      },
-      "prerequisites": [],
-      "source": "BootstrapAssembly"
-    },
-    {
-      "boundary": "CONVERSION",
-      "duration_ticks": 600,
-      "family": "ASSEMBLY_BENCH",
-      "fu_per_tick": 8,
-      "id": "bench/furnace",
-      "inputs": {
-        "tag:minecraft:stone_crafting_materials": 8
-      },
-      "max_executions_per_player_world": null,
-      "outputs": {
-        "item:minecraft:furnace": 1
       },
       "prerequisites": [],
       "source": "BootstrapAssembly"
@@ -6085,7 +5752,7 @@
     },
     "common/src/main/java/io/github/ezequiel24123z/grindless/recipe/T1Recipes.java": {
       "baseline_blob": "7d447b4d0187e85689ddd215293519c094572d98",
-      "evaluated_blob": "0e01f883a79644aa17dda5064ade806b6237b8be",
+      "evaluated_blob": "c7b67a53a7f4a70224e6da7ae2ebef3410a6f95e",
       "source_equal": false
     },
     "common/src/main/java/io/github/ezequiel24123z/grindless/research/ResearchLogic.java": {

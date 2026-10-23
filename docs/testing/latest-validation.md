@@ -1145,6 +1145,34 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
+**G14 executed delta and normal A10 intake, independent custody pending.**
+Checker317 reports common/classpath/tool compile0, regression780/0 including
+R36=59/0/R35=51/0, corrected T0canonical2847/0 and T1canonical1655/0.
+There is no new writer/CheckOnly/43-98 emission: the four outputs and original
+producer evidence remain on489. New S1 implementation
+a2ffa3e8283260fa2dc0e6d368d6a3e200c27bab7ec166313f4ff805604908ed and source
+937bfd1e8a92ba33769e8682c0eeb38279f13819d06ed433c40d89c083037fe7 are
+captured honestly for the changed checks.
+
+Data child d66881826ce34cc0d17cc70d1b2fffad0c1f1ca2 has exact parent317
+and treea288cf79eefea624a46d589b979a18e192234313. Parent verifies the19754-byte
+bundle/SHA1b99c2ab4b1b7a187412f969f853787e4456d4bffdc21111a615a5d6f52fe25c,
+prerequisite, sole parent, exact four-path scope and both contiguous Git
+trailers. Binary Git stdout streams are compared at EVERY byte with G13
+originals, not text pipelines. All four recorded SHA/lengths match exactly.
+The generated model retains manual manufacture and explicit nonacceptance
+of whole-tier, renewable-closure and player/world claims.
+Normal integration does not regenerate or hand-edit any payload.
+
+Capsule115/manifest8cbb3099df10facfc83bbd3e9c6117d302ea3ba065c708adb74b85874c0a57d8,
+copy invariance,2595 non-output inputs and2599 final inputs await QA d8bc581b.
+Fresh final23:54:10.0231308Z records actualA10 clean/owned-allJava0/locksfalse/
+ownGuardd985f461 removed/absent and explicit lease return. Final rawSHA
+b5d12b188d056cbaa83ffa5639ee6e837a6ef69a8591d69c4e9e14f06f4c2c7c
+has a named original; stderr is nonempty progress and final exit0 remains
+tool208 history rather than an independent receipt. No runtime after A10,
+old-root modification, player update or whole-tier acceptance is inferred.
+
 **G14 delta-only assignment with two explicit source roles.** Checker source
 317ef1e87c54ef3ccf395ac4f569038aa7a2ef15/treeb1f0a98e935f26def1ac49f44acc5cc3516728f1
 normally preserves both483d checker blobs. Sole604 uses new inventory89b67ceb

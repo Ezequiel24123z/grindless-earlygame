@@ -4,6 +4,27 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**G14 delta passes are reported and the lease is RETURNED; A10 is byte-verified
+and normally composed, independent115-file review pending.**
+Checker317 runs common/tools0, regressions780/0 (R36=59/0, R35=51/0),
+repaired T0canonical2847/0 and T1canonical1655/0. No new writer/CheckOnly,
+43-98 emission, CI, Forge/native or player operation was performed.
+Original normal outputs/provenance remain489; the new wider-S1 identities
+are implementationa2ffa3e8/source937bfd1e, not old hashes relabelled.
+
+Normal A10d66881826ce34cc0d17cc70d1b2fffad0c1f1ca2 has exact parent317.
+Parent verifies bundle19754 bytes/SHA1b99c2ab, four-path scope, both Git-parsed
+contiguous trailers and EACH blob byte-for-byte against original G13 payloads.
+Only those four generated files enter the normal merge; no hand edits.
+The commit explicitly records G13 writers489/G14 checker317/no producer replay.
+
+Fresh postcustody23:54:10.0231308Z reports actualA10 CLEAN/Java0/locksfalse/
+ownGuardd985f461 removed+absent and explicit return. Capsule115/
+manifest8cbb3099 and2595 unchanged other inputs/2599 frozen final inputs
+are being reviewed by QA d8bc581b. Named final stdoutb5d12b18 and progress
+stderr retain the history-only final-exit limitation. No runtime follows A10.
+Human/client/save/art/audio/pacing/campaign and whole-tier release remain open.
+
 **G14 DELTA-ONLY GO, no new result.** Sole604/checker source
 317ef1e87c54ef3ccf395ac4f569038aa7a2ef15, private inventory89b67ceb and
 preparation4d825999. The NEW custody-oracle root needs fresh admission and
