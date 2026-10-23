@@ -1,16 +1,21 @@
 ---
 goal: Begin T1 with canonical first-factory lines, live teaching and a reusable-system handbook
-version: 7
+version: 8
 date_created: 2026-10-21
-last_updated: 2026-10-22
+last_updated: 2026-10-23
 owner: Sol coordinator
-status: 'In progress'
+status: 'Completed'
 tags: [feature, t1, progression, documentation, reuse, compatibility]
 ---
 
 # Introduction
 
-![Status: In progress](https://img.shields.io/badge/status-In%20progress-yellow)
+![Status: Completed](https://img.shields.io/badge/status-Completed-brightgreen)
+
+This bounded first-factory/manual-manufacturing engineering plan closes with
+normal A10 integration ata792f02b and independent G14 custody verification.
+It does not complete the broader T1 contract, accept T0/T1, qualify a player
+save or authorize a deployment/release. Those gates remain separate.
 
 ADR-0188 reopens this plan for the owner's manufacturing correction: normal
 final machines are manual, their processes remain automatable, and other
@@ -165,7 +170,7 @@ identities; this plan closure is not permission to replay or relabel them.
 | TASK-018 | In existing `VerifyLogic`, `VerifyPersistence`, `VerifyMachineUi`, Forge `ControlMatrixInputChecks` and the existing matrix-lifecycle carrier/data, use real permitted colliding component recipes and explicit retired-machine negatives. Apply ADR-0189's precise orphaned-paid-Bench resolution/cache guard in `ProcessMachineBlockEntity`, preserving valid Guide/live/unpaid/other-family semantics and no new ledger/schema. Preserve generic Matrix/selection/paid-work proofs; cover actual manual-control matching and loader binding without inventing live recipes. Source work can run alongside TASK-017; integrated completion depends on TASK-017. | Implemented/reviewed; G11 UI/Persistence/native1273/19 and custody verified | 2026-10-22 |
 | TASK-019 | Rebind `T1Progression`, `T1Sustainability`, affected T0 capital annotations/audit contracts, quest teaching/locales and explicit T1 exporter pins to manual constructors/allowed component routes. Preserve quest IDs/rewards/starter/first-F2 and finite custody; remove the obsolete normal-machine-reproduction goal. Repair actual continuation funding in the existing reserve executor without new stock/budgets or a second planner. Independent preparation can run alongside TASK-017; integrated completion depends on TASK-017. | Implemented; G13 actual R35/live Press/F1/F2 and producer proofs verified; final qualification remains TASK-021 | 2026-10-22 |
 | TASK-020 | Normally compose/review TASK-017/018/019, retaining exact worker blobs and all historical failures. Verify no automatic normal-machine outputs, manual pattern disambiguation, no prototype promotion or paid-work erasure and declared manual-only/machine-only/dual fidelity. Do not hand-edit canonical reports. | SOURCE composition/scoped reviews complete; actual qualification remains TASK-021 | 2026-10-22 |
-| TASK-021 | After TASK-020, qualify only changed boundaries in reviewed exact-source guarded windows. Reuse closed G11 native and G13's actual finite/three-writer/three-CheckOnly/43-98 evidence at original489. After the checker-only483d correction, compile the changed checks, run R36, corrected postT0 and the never-executed postT1; preserve wider-S1 fingerprint changes and original producer provenance. Integrate only the four exact G13 writer bytes after those passes. No writer replay, per-machine smoke or owner deployment follows from this bounded qualification. | Checks and byte-exact normal A10 composition complete; independent G14 custody review pending | 2026-10-22 |
+| TASK-021 | After TASK-020, qualify only changed boundaries in reviewed exact-source guarded windows. Reuse closed G11 native and G13's actual finite/three-writer/three-CheckOnly/43-98 evidence at original489. After the checker-only483d correction, compile the changed checks, run R36, corrected postT0 and the never-executed postT1; preserve wider-S1 fingerprint changes and original producer provenance. Integrate only the four exact G13 writer bytes after those passes. No writer replay, per-machine smoke or owner deployment follows from this bounded qualification. | Yes; G14 checks/custody verified and byte-exact A10 normally integrated ata792, no whole-tier/player acceptance | 2026-10-23 |
 
 ## 3. Alternatives
 

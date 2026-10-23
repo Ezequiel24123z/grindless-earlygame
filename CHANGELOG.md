@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Close the bounded manual-machine engineering increment.**
+  Independent QA verifies115/115 G14 artifacts, new S1 identities, actual
+  R36/T0/T1 outcomes, unchanged copied payloads and recorded safe return.
+  Normal A10 integration ata792 preserves original489 data and exact source
+  roles without producer replay. Mark the first-factory/manual-policy plan
+  complete, not the broader T1 contract, human campaign or release. No active
+  PC lease, player update, main merge or new external spending remains.
 - **Integrate byte-exact A10 data after the G14 checker closure.**
   Checker317 reports R36/T0/T1 passes while reusing the original489
   writers/checks/provenance. Parent verifies the normal A10d668 bundle,

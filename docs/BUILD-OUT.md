@@ -36,16 +36,21 @@ readiness, and no public release/main merge or automatic acceptance follows.
 **Latest product correction (ADR-0188):** normal final machines are manually
 assembled; their processes remain automatable. Other products, including
 infrastructure, follow authored manual-only/machine-only/dual methods, not
-universal self-replication or mandatory Assembler use. Retire obsolete live
-automatic normal-machine constructors, supply valid manual authorities and
-retarget teaching/fixtures/finite proof before a new exact-source GO.
-The old common-model-only preparation is frozen without execution.
-Complete A652/Cab1e/Bdc source is now normally composed with exact40/14/10
-owned blobs and only changelog conflicts. All A/C/original-B/new-B-delta source
-reviews are clear within scope; one exact-source G11 compiler/existing-carrier
-native/model window is next, not another proposal or repeated source review.
-Generic custody review8ef is clear, but no Java/finite result is inferred.
-Preserve historical proofs, actual worlds and all unavailable paid work.
+universal self-replication or mandatory Assembler use. The obsolete automatic
+constructors are retired, manual authorities/teaching/fixtures are aligned
+and the bounded finite proof is qualified. Initial A652/Cab1e/Bdc intake
+preserves exact40/14/10 owned blobs; later corrections and their actual proof
+sequence remain below. Preserve historical failures, worlds and unavailable
+paid work rather than restarting those completed windows.
+
+**Current next (2026-10-23):** the bounded first-factory/manual-policy plan
+is complete through A10 integration ata792f02b and independent G14 custody.
+Continue the separately authorized broader T1 family/content and real
+in-place-upgrade contract from the [tier map](tiers/t1-development-map.md).
+The first five-machine increment is not the whole T1 contract. No active
+PC lease or deployment grant remains; select a new coherent source scope
+before any further execution, and do not repeat the closed model/native
+proofs or update the player's game merely because this increment closed.
 
 **Latest actual boundary:** G11 native-only on f1b9 is closed through1273
 assertions/19 markers and independent46-file custody, with the fresh lease
@@ -64,9 +69,12 @@ G13 then qualifies the real finite route and all writers/checks/43-98, with
 fails. Reviewed checker-only483d replaces that false predicate with strict
 paid-unit conservation/R36. Next is the changed-check/postT0/postT1 delta
 and byte-exact integration of the original489 writer outputs, not another
-producer/native run. G14 needs one new guarded GO; do not modify the player.
+producer/native run. G14 then closes R36/T0/T1 with verified115-file custody,
+new checker S1 identities and byte-exact original489 data. Normal A10d668/
+exact317 is integrated ata792f02b; its clean PC lease is returned. This is
+the bounded engineering closure, not a player update or whole-tier acceptance.
 
-**Current next (2026-10-22):** G7 is technically closed with verified339
+**Earlier execution snapshot (2026-10-22, historical):** G7 is technically closed with verified339
 artifacts plus separately recovered original CI5, actual writer41df/normal
 A726e/29-source38-image provenance and real managed50-to51 idempotence in
 the stopped fictitious target. All PC/cache leases are returned. A7 is normally

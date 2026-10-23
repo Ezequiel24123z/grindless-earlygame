@@ -1145,7 +1145,24 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
-**G14 executed delta and normal A10 intake, independent custody pending.**
+**Final bounded closure verified.** Independent QA d8bc verifies115/115
+contained entries/10,950,153 bytes, copied outputs/invariance,2595 unchanged
+non-output inputs/2599 final inputs, five new invocation receipts and clean
+recorded return. The91-class/19-source new S1 maps match the changed-check
+source and actual current images; original489 producer provenance stays
+untouched. R36/T0/T1 outcomes and all negative cases remain genuine.
+No material discrepancy remains. Final-readonly exit0 is still only the
+cited tool208 history; nonempty progress stderr is not a fabricated receipt.
+
+Parent normal integration a792f02b33c9c126ff930176c7c4739e363fca08 preserves
+both5f6cf99a/d668 parents and all four exact A10 blobs. Together, G11 native
+onf1b9, G13 finite/writers/checks/43-98 on489, G14 changed-check/canonical
+closure on317 and normal A10d668 close this manual-policy/first-factory
+engineering increment. No fresh native, generator, CI, package, owner-world
+or whole-tier acceptance is claimed. S1 remains report-only outside its
+explicit conditional proof scope.
+
+**G14 executed delta and normal A10 intake, custody now independently verified.**
 Checker317 reports common/classpath/tool compile0, regression780/0 including
 R36=59/0/R35=51/0, corrected T0canonical2847/0 and T1canonical1655/0.
 There is no new writer/CheckOnly/43-98 emission: the four outputs and original
@@ -1165,7 +1182,7 @@ of whole-tier, renewable-closure and player/world claims.
 Normal integration does not regenerate or hand-edit any payload.
 
 Capsule115/manifest8cbb3099df10facfc83bbd3e9c6117d302ea3ba065c708adb74b85874c0a57d8,
-copy invariance,2595 non-output inputs and2599 final inputs await QA d8bc581b.
+copy invariance,2595 non-output inputs and2599 final inputs pass QA d8bc581b.
 Fresh final23:54:10.0231308Z records actualA10 clean/owned-allJava0/locksfalse/
 ownGuardd985f461 removed/absent and explicit lease return. Final rawSHA
 b5d12b188d056cbaa83ffa5639ee6e837a6ef69a8591d69c4e9e14f06f4c2c7c

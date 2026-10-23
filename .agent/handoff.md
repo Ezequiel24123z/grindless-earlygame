@@ -1,11 +1,37 @@
 # Active orchestration handoff
 
-Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0 ACCEPTANCE OPEN**.
+Updated: 2026-10-23. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0 ACCEPTANCE OPEN**.
 
 ## Active continuation — managed definitions and physical control
 
+**The bounded manual-normal-machine change is complete and qualified.**
+Normal final assembly is manual; operating processes remain automatable.
+Other products retain authored manual-only/machine-only/dual methods.
+G11 native proof remains onf1b9; G13 producers/live finite/43-98 remain on489;
+G14 changed checks pass on317. Normal A10d668 is integrated through
+a792f02b33c9c126ff930176c7c4739e363fca08 with all four original bytes intact.
+Independent QA d8bc verifies115/115, current S1 identities (91 classes/
+19 sources), copy invariance, five invocations and recorded clean return,
+without a material discrepancy. No additional validation or PC lease is open
+for this change. Keep original reds, dirty historical roots and all source roles.
+
+| Disclosure | Final bounded handoff |
+| --- | --- |
+| COMPLETED | Manual manufacturing policy/code, native/finite/checker proofs, normal A10 integration and independent custody closure |
+| BLOCKED | None for this bounded engineering change; broader tier/release gates are not accepted |
+| NOT EXECUTED | Player deployment/update, main/release publication or new native/producer replay |
+| NEEDS HUMAN VALIDATION | GUI/client wire, Survival, real saves, art/audio/pacing and the longitudinal campaign |
+| NEEDS MY DECISION | None for this change |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | None new |
+| DEPLOYED STATE | Player instance/world unchanged; isolated PC A10 is clean and its lease returned |
+
+This closes the first-factory/manual-policy engineering plan, not all T1.
+Continue only the separately accepted broader tier programme; a partial
+increment does not authorize an update to the owner's game or a release.
+
 **G14 delta passes are reported and the lease is RETURNED; A10 is byte-verified
-and normally composed, independent115-file review pending.**
+and normally composed, with the final independent115-file review closed above.**
 Checker317 runs common/tools0, regressions780/0 (R36=59/0, R35=51/0),
 repaired T0canonical2847/0 and T1canonical1655/0. No new writer/CheckOnly,
 43-98 emission, CI, Forge/native or player operation was performed.
@@ -21,7 +47,7 @@ The commit explicitly records G13 writers489/G14 checker317/no producer replay.
 Fresh postcustody23:54:10.0231308Z reports actualA10 CLEAN/Java0/locksfalse/
 ownGuardd985f461 removed+absent and explicit return. Capsule115/
 manifest8cbb3099 and2595 unchanged other inputs/2599 frozen final inputs
-are being reviewed by QA d8bc581b. Named final stdoutb5d12b18 and progress
+are independently verified by QA d8bc581b. Named final stdoutb5d12b18 and progress
 stderr retain the history-only final-exit limitation. No runtime follows A10.
 Human/client/save/art/audio/pacing/campaign and whole-tier release remain open.
 
