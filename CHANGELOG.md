@@ -21,7 +21,9 @@ entries below reference those records by id.
   fallback, work-ratio requested power and status waiting-power checks. This
   keeps the existing paid-tick semantics (ADR-0190): already paid progress,
   saved burns and hydrogen ignition values are unchanged. No new balance
-  numbers, chassis installer, or player deployment. ADR-0192.
+  numbers, chassis installer, or player deployment. The persistence pin
+  that loaded one Speed upgrade now expects that same scaled debit, once.
+  ADR-0192.
 - **Give the Windows Prism tooling job enough time to finish both twins.**
   On 56cd80e2 both CI runs cancelled `prism-tooling-windows` at the five-minute
   job limit during the Git Bash twin, after the managed definition contracts
