@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate normal gas projections after the G16 pending contracts pass.**
+  Exactfb846 passes repaired data checks, FTB52 synthetic/backend and owned
+  Prism fixtures, three writers/checks and canonical rechecks with actual
+  45-source/103-image evidence. Parent verifies A11cf66 exact parent, three
+  changed payloads and all four blob bytes against the real writers.
+  Preserve the post-writer observer failure/recovery without a producer
+  replay. The PC lease is returned; independent402-file review remains,
+  not a native/client/world or whole-tier acceptance claim.
 - **Verify G15's reusable successes without changing its failed outcome.**
   Independent QA confirms133-file custody,18 source bindings, actual class/
   receipt correspondence and safe return. Seven original e1ed mains remain

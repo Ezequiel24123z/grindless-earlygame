@@ -11,7 +11,7 @@
   "active_t1_gas_increment": {
     "policy": "ADR-0190",
     "baseline": "8a1a3365dee930d312616c9f9023ecbd513ccb8b",
-    "status": "oracle981b_composedfb846_G16_remaining_checks_models_GRANTED_reuse7mainse1ed_NO_result",
+    "status": "G16_newchecks_models_PASS_REPORTED_A11cf66_byteverified_normalintegration402QA_pending_NO_PClease",
     "oracle_repair_source": "981b5fd904d195fff0de08946fcabc4999c35052",
     "G16_inventory_sha256": "8da0f5501fc1598ac8bc61f3a89ccd263edcaef0cc84b0247c0adf41aae25677",
     "G16_preparation_sha256": "a5e473a20d4dd25e9a9cd62dbb42ab70fd15795ee506ac38affa0691025ff6f7",
@@ -25,7 +25,7 @@
     "boundaries": "no_full_upgrade_energy_contract_wholeT1_or_world_acceptance_NO_player_update",
     "prepared_inventory_sha256": "dee779f420a7804f8b0c4c3dbf5e88696bda3afca1cfc3bb9f2ce80d7b737bee",
     "prepared_plan_sha256": "4b73a040a98d9bf702388223cc795cd13a54446109f014b1ac45545364a989da",
-    "PC_grant": "gas-content-closure-g16-20261023_exactfb846b1d40216b2a01137ef78c9c53b86899bdce_sole604",
+    "PC_grant": null,
     "last_PC_scope": "G15_closed_returned_e1ed_compile7mains0_Adapters2fail_no_remainingstages",
     "qualified_source": null
   },
@@ -153,11 +153,11 @@
   },
   "current_PC_execution": {
     "assignment": "gas-content-closure-g16-20261023",
-    "active": true,
-    "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
+    "active": false,
+    "owner_session": null,
     "source": "fb846b1d40216b2a01137ef78c9c53b86899bdce",
     "writer_invocation_source": "fb846b1d40216b2a01137ef78c9c53b86899bdce",
-    "normal_data_checkpoint": null,
+    "normal_data_checkpoint": "cf66ee21f004dcbe58d49ac04ad630a4b01b295f",
     "inventory_sha256": "8da0f5501fc1598ac8bc61f3a89ccd263edcaef0cc84b0247c0adf41aae25677",
     "local_preparation_sha256": "a5e473a20d4dd25e9a9cd62dbb42ab70fd15795ee506ac38affa0691025ff6f7",
     "scope": "NEWroot_freshSyncfb846_currentcompile_AdaptersRegistry_Guidance_FTB_Prismfixtures_normalwriters_checks_postcanonicals_actualpins_A11_ifpassed",
@@ -169,11 +169,14 @@
     "real_PrismRoot_player_world_writes_authorized": false,
     "prohibited": "NO_reusedmainreplays_CI_native_legacybackend_enclave_publication_package_actualPrism_world_deps_provider",
     "failure_policy": "preserve_actualpartial_DIRTYsubset_NO_restore_waiver_hotfix_or_successfulproducerreplay",
-    "result": "GRANTED_NOT_OBSERVED",
-    "returned": false,
-    "returned_utc": null,
-    "return_state": "NOT_OBSERVED_G16",
-    "new_explicit_guarded_window_required": false
+    "result": "REPORTED_G16_newchecks_backend52_Prism262_models45_103_andpostcanonicals_PASS_A11cf66_byteverified402QA_pending",
+    "custody_manifest_sha256": "ab2e19641257fb9296b7490fc53c15a1f066bfe7a2cca3d0f6c29e9b5d2861d0",
+    "custody_QA_status": "PENDING411bd2ce_402",
+    "observer_recovery": "copy_variable_failure_afterwriters0_preserved_readonly_recovery_NO_replay",
+    "returned": true,
+    "returned_utc": "2026-10-23T06:52:36.8634860Z",
+    "return_state": "REPORTED_A11cf66CLEAN_Java0locksfalse_ownGuardremoved_absent_explicitreturn",
+    "new_explicit_guarded_window_required": true
   },
   "closed_G15_execution": {
     "assignment": "gas-utilities-qualification-g15-20261023",

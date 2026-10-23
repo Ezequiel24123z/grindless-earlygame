@@ -4,6 +4,43 @@
 
 ### ADR-0190 optional T1 gas utilities
 
+**G16 result and normal A11 intake, independent402-file custody pending.**
+Exactfb846 reports common/Forge/tools0, Adapters1055/0, Registry1376/0 and
+Guidance29255/0. FTB52's managed251, parser1159 and synthetic-native/data2972
+remain separate scopes, not summed assertions or a Minecraft/player-world
+pass. Prism QuestDefinitions reports262 assertions/36 temporary fixtures0.
+Seven G15 mains are reused unchanged at e1ed, including the POSIX SKIPPED
+limit; no old failed Adapters result is retargeted.
+
+Normal Guidance74/4973, Economy396/17 and T11792 writers/checks pass,
+three independent CheckOnly JVMs preserve all four hashes/mtimes, and
+postEconomy397/T02847/T11797 pass. Actual write/check provenance each has
+45 sources/103 images, with206 hash-matching copies. It includes FluidLogic,
+ThermalLogic and real family10/2/4/7/8/9 class names, not the old43/98 label.
+The private writer wrapper initially fails collection after three genuine
+writer0 receipts because a path variable was overwritten. Its original
+helper/failure is retained; recovery only fixes the observer variable and
+copies/hashes existing write evidence. CheckOnly follows recovery; none of
+the successful producers is replayed.
+
+A11cf66ee21f004dcbe58d49ac04ad630a4b01b295f has exact parentfb846/tree
+8eebe17044511f466324796fb26ef939a3269927, three changed normal payloads,
+and unchanged but actually checked Guidance. Parent verifies bundle2285/
+c86e8e5928d21c22844f57d6ee9c30a266e3f592bd80c3099d33cb097345f318,
+sole parent, exact allowed scope, contiguous Git trailers and every byte
+of ALL FOUR blobs against writer/final copies. Normal integration never
+hand-edits these outputs. The generated gas rows show real manual bills,
+6400FU electrolysis and1600FU-per-bucket fuel, without mandatory-F2 changes.
+
+402-file manifestab2e19641257fb9296b7490fc53c15a1f066bfe7a2cca3d0f6c29e9b5d2861d0,
+2595 unchanged other inputs/2599 final inputs and new closure await QA411b.
+Fresh final06:52:36.8634860Z reports actualA11 clean/owned-allJava0/
+workcachelocksfalse/ownGuardcffc3d25 removed/absent and explicit leaseback.
+Final stdoutSHA3d7572115f8e1e1d1a914a5da1feae0c01c3402137a5d4c2c3f9079e2e79c98a
+is preserved; progress stderr is not a receipt and final exit0 stays tool227
+history. No native/CI/legacy/enclave/publication/package/real-instance action
+or runtime after data occurred; whole-tier/client/save acceptance is separate.
+
 **G15 custody independently verified by d393.** All133 contained unique
 files/lengths/hashes,2595 unchanged inputs,18 tool sources with exact
 LF-to-CRLF correspondence, class/argfile/receipt bindings and recorded
