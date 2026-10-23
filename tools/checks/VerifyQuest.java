@@ -35,7 +35,7 @@ public final class VerifyQuest {
     private static final List<String> LINES = List.of(
             "bootstrap", "workshop", "renewable_supply", "settling", "bioculture", "workshop_logistics",
             "relay", "power", "extraction", "factory", "renewables", "logistics", "factory_world",
-            "industrial", "wet_beneficiation");
+            "industrial", "wet_beneficiation", "gas_utilities");
     private static final List<String> LEGACY_IDS = List.of(
             "multitool", "crank", "extractor", "quern", "water", "clay_mixer", "ceramics",
             "workshop_flow", "settling", "calibrate", "relay", "thermal", "pylon", "scanner",
@@ -69,19 +69,20 @@ public final class VerifyQuest {
         List<QuestCatalogue.Task> tasks = QuestCatalogue.tasks();
         List<String> problems = QuestLogic.problems(tasks);
         yes("the catalogue is a book" + (problems.isEmpty() ? "" : " " + problems), problems.isEmpty());
-        eq("thirty-two unchanged T0 tasks and nineteen in-development T1 tasks", 51, tasks.size());
+        eq("thirty-two unchanged T0 tasks and twenty in-development T1 tasks", 52, tasks.size());
         eq("the complete T0 chapter still has thirty-two tasks", 32L, tasks.stream()
                 .filter(task -> QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T0).count());
         eq("all source-defined lines remain explicit", LINES, QuestCatalogue.lines());
         eq("the T0 chapter has its own seven lines", LINES.subList(0, 7),
                 QuestCatalogue.lines(QuestCatalogue.Chapter.T0));
-        eq("the T1 chapter appends one optional line after its unchanged seven lines", LINES.subList(7, 15),
+        eq("the T1 chapter appends optional lines after its unchanged seven lines", LINES.subList(7, 16),
                 QuestCatalogue.lines(QuestCatalogue.Chapter.T1));
         yes("the first task has no dependency", tasks.get(0).requires().isEmpty());
         eq("the old final task retains its ordinal and physical Industrial hand-off",
                 "industrial_matrix", tasks.get(49).id());
         eq("the new optional wet lesson appends without moving existing tasks",
                 "wet_beneficiation", tasks.get(50).id());
+        eq("the optional gas lesson appends after all 51 old tasks", "gas_utilities", tasks.get(51).id());
         eq("one task per id", tasks.size(),
                 (int) tasks.stream().map(QuestCatalogue.Task::id).distinct().count());
         Set<String> old = new HashSet<>(LEGACY_IDS);
@@ -89,7 +90,7 @@ public final class VerifyQuest {
         eq("all 26 original rewarded IDs remain; new teaching never mints a material reward", old,
                 tasks.stream().filter(task -> task.type() == QuestCatalogue.Type.REWARD)
                         .map(QuestCatalogue.Task::id).collect(java.util.stream.Collectors.toSet()));
-        eq("all twenty old T0 lessons and five T1 lessons are rewardless", 25L, tasks.stream()
+        eq("all twenty old T0 lessons and six T1 lessons are rewardless", 26L, tasks.stream()
                 .filter(task -> task.type() == QuestCatalogue.Type.LESSON && task.rewards().isEmpty()).count());
         try {
             task("quest_book_help").reward();
@@ -207,7 +208,7 @@ public final class VerifyQuest {
         eq("only the repeated Matrix line and glass remain terminal claim prerequisites",
                 List.of("matrix_line", "glass"), task("industrial_matrix").requires());
         for (String optional : List.of("scanner", "terrestrial", "logistics", "kiln", "factory_world",
-                "wet_beneficiation")) {
+                "wet_beneficiation", "gas_utilities")) {
             no(optional + " is not a mandatory edge to F2", reaches(optional, "industrial_matrix"));
             yes(optional + " is visibly optional", QuestTeaching.optional(task(optional)));
         }
@@ -218,6 +219,13 @@ public final class VerifyQuest {
                 List.of("assembler"), task("wet_beneficiation").requires());
         eq("the wet lesson observes one actual Chemical Washer", "grindless:chemical_washer",
                 subject("wet_beneficiation"));
+        eq("the optional gas lesson requires only the existing Assembler lesson",
+                List.of("assembler"), task("gas_utilities").requires());
+        eq("the gas lesson observes one actual Electrolysis Cell", "grindless:electrolysis_cell",
+                subject("gas_utilities"));
+        eq("gas possession is not an observed process objective", QuestCatalogue.Evidence.ITEM,
+                task("gas_utilities").evidence());
+        eq("gas acquisition remains reward-free", List.of(), task("gas_utilities").rewards());
         no("the survival route has no dimension objectives",
                 tasks.stream().anyMatch(task -> task.evidence() == QuestCatalogue.Evidence.DIMENSION));
         eq("relay is the final T0 task", "relay", tasks.stream()
@@ -313,6 +321,10 @@ public final class VerifyQuest {
         no("reading alone does not prove Washer acquisition", QuestEvidence.met(wet, 0, "minecraft:overworld"));
         yes("one acquired Washer meets the optional possession objective",
                 QuestEvidence.met(wet, 1, "minecraft:overworld"));
+        QuestCatalogue.Task gas = task("gas_utilities");
+        no("reading alone does not prove Cell acquisition", QuestEvidence.met(gas, 0, "minecraft:overworld"));
+        yes("one acquired Cell meets only the optional possession objective",
+                QuestEvidence.met(gas, 1, "minecraft:overworld"));
     }
 
     private static void rewards() throws IOException {

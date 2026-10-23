@@ -908,8 +908,8 @@ function Read-PrismQuestPlan([string]$Path, [string]$ExpectedHash, [string]$Targ
     if (-not (Test-PrismQuestInteger $receipt.schemaVersion 1 1) -or $receipt.tool -cne 'grindless-ftb-definitions' -or
         $receipt.instanceId -cne $plan.instanceId -or $receipt.ownershipId -cne $plan.ownershipId -or
         $receipt.sourceRevision -cne $plan.sourceRevision -or $receipt.runtimeSourceRevision -cne $plan.runtimeSourceRevision -or
-        $receipt.grindlessSha256 -cne $plan.grindlessSha256 -or -not (Test-PrismQuestInteger $receipt.questCount 46 51) -or
-        $receipt.questCount -notin @(46, 50, 51) -or
+        $receipt.grindlessSha256 -cne $plan.grindlessSha256 -or -not (Test-PrismQuestInteger $receipt.questCount 46 52) -or
+        $receipt.questCount -notin @(46, 50, 51, 52) -or
         $receipt.files -isnot [System.Collections.IList]) { throw 'Invalid native definition ownership receipt.' }
     $expectedFiles = @($plan.files | ForEach-Object {
         [ordered]@{ fileName = $_.fileName; bytes = $_.afterBytes; sha256 = $_.afterSha256 }

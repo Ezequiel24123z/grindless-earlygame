@@ -240,7 +240,7 @@ function Invoke-Fixture($Fixture, [string]$Action = 'Deploy', [hashtable]$Change
 }
 
 function New-FixtureQuestPlan($Fixture, [switch]$Managed, [switch]$TwoChanged,
-        [ValidateSet(46, 50, 51)][int]$PreviousCount = 46, [ValidateSet(46, 50, 51)][int]$QuestCount = 50) {
+        [ValidateSet(46, 50, 51, 52)][int]$PreviousCount = 46, [ValidateSet(46, 50, 51, 52)][int]$QuestCount = 50) {
     # Synthetic chapter bytes exercise the production filesystem transaction, not native loading.
     $chapters = Join-Path $Fixture.Target 'minecraft/config/ftbquests/quests/chapters'
     $files = @()
@@ -364,30 +364,33 @@ function Test-PrismQuestDefinitionTransactions {
         } 'RuntimeRevision is only a Build/BuildAndDeploy input' 'Definition actions never ignore a conflicting runtime selector'
         Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'CLI ambiguity refusals preserve every target byte/timestamp'
 
-        foreach ($previousCount in @(46, 50, 51)) {
-            $f = New-Fixture
-            $null = Invoke-Fixture $f
-            $plan = New-FixtureQuestPlan $f -PreviousCount $previousCount -QuestCount 51 -Managed:($previousCount -ne 46)
-            $world = Get-FixtureSnapshot (Join-Path $f.Target 'minecraft/saves')
-            $stable = Get-FixtureSnapshot $f.Target
-            $result = Invoke-FixtureQuestUpdate $f $plan
-            if ($previousCount -eq 51) {
-                Assert-Test ($result.Outcome -ceq 'Unchanged') 'Completed51 plan is immediately a no-op'
-                Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'Completed51 no-op preserves every timestamp/byte'
-                Assert-Test (-not [IO.Directory]::Exists((Join-Path $f.Target '.grindless-dev-backups'))) 'Completed51 no-op creates no backup'
-            } else {
-                Assert-Test ($result.Outcome -ceq 'DefinitionsUpdated') "Known$previousCount-to51 filesystem update"
+        foreach ($questCount in @(51, 52)) {
+            foreach ($previousCount in @(46, 50, 51, 52)) {
+                if ($previousCount -gt $questCount) { continue }
+                $f = New-Fixture
+                $null = Invoke-Fixture $f
+                $plan = New-FixtureQuestPlan $f -PreviousCount $previousCount -QuestCount $questCount -Managed:($previousCount -ne 46)
+                $world = Get-FixtureSnapshot (Join-Path $f.Target 'minecraft/saves')
+                $stable = Get-FixtureSnapshot $f.Target
+                $result = Invoke-FixtureQuestUpdate $f $plan
+                if ($previousCount -eq $questCount) {
+                    Assert-Test ($result.Outcome -ceq 'Unchanged') "Completed$questCount plan is immediately a no-op"
+                    Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) "Completed$questCount no-op preserves every timestamp/byte"
+                    Assert-Test (-not [IO.Directory]::Exists((Join-Path $f.Target '.grindless-dev-backups'))) "Completed$questCount no-op creates no backup"
+                } else {
+                    Assert-Test ($result.Outcome -ceq 'DefinitionsUpdated') "Known$previousCount-to$questCount filesystem update"
+                }
+                Assert-Test ((Read-PrismJson (Join-Path $f.Target $script:PrismQuestReceiptFile)).questCount -eq $questCount) "Published ownership identifies$questCount content, not a new wire schema"
+                Assert-Test ((Get-FixtureSnapshot (Join-Path $f.Target 'minecraft/saves')) -ceq $world) "Known$questCount update never touches progress/paid-history bytes"
+                $stable = Get-FixtureSnapshot $f.Target
+                Assert-Test ((Invoke-FixtureQuestUpdate $f $plan).Outcome -ceq 'Unchanged') "Repeated$previousCount-to$questCount application is a no-op"
+                Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) "Known$questCount repeated update preserves every timestamp/byte"
             }
-            Assert-Test ((Read-PrismJson (Join-Path $f.Target $script:PrismQuestReceiptFile)).questCount -eq 51) 'Published ownership identifies51 content, not a new wire schema'
-            Assert-Test ((Get-FixtureSnapshot (Join-Path $f.Target 'minecraft/saves')) -ceq $world) 'Known51 update never touches progress/paid-history bytes'
-            $stable = Get-FixtureSnapshot $f.Target
-            Assert-Test ((Invoke-FixtureQuestUpdate $f $plan).Outcome -ceq 'Unchanged') "Repeated$previousCount-to51 application is a no-op"
-            Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'Known51 repeated update preserves every timestamp/byte'
         }
-        foreach ($unknown in @(47, 52, '51', 51.5)) {
+        foreach ($unknown in @(45, 47, 48, 49, 53, '52', 52.5)) {
             $f = New-Fixture
             $null = Invoke-Fixture $f
-            $plan = New-FixtureQuestPlan $f -PreviousCount 50 -QuestCount 51 -Managed
+            $plan = New-FixtureQuestPlan $f -PreviousCount 51 -QuestCount 52 -Managed
             $plan.Plan.receipt.questCount = $unknown
             Save-FixtureQuestPlan $plan
             $stable = Get-FixtureSnapshot $f.Target
@@ -615,7 +618,7 @@ function Test-PrismQuestDefinitionTransactions {
         $stable = Get-FixtureSnapshot $f.Target
         Assert-Test ((Invoke-FixtureQuestUpdate $f $plan).Outcome -ceq 'Unchanged') 'No-receipt transition is idempotent after its first managed receipt'
         Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'No-receipt repeat does not create additional backups'
-        Write-Output 'PASS: known46/50/51 definition filesystem, two-file preflight, verified backups, rollback/recovery, identity/data/ownership/link refusals and no-op.'
+        Write-Output 'PASS: known46/50/51/52 definition filesystem, two-file preflight, verified backups, rollback/recovery, identity/data/ownership/link refusals and no-op.'
         Write-Output 'These synthetic plan/byte fixtures do not execute the Java SNBT publisher, native loader, player import or saved-world migration.'
     } finally {
         Set-Item Function:\Set-PrismReplacement $script:OriginalReplacement

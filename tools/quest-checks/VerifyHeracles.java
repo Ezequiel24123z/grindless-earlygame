@@ -51,7 +51,7 @@ public final class VerifyHeracles {
             "biomass", "fibreboard", "biomass_dynamo", "fluid_logistics", "conveyors", "assembly_bench",
             "research_terminal", "data_core", "calibrated_core");
     private static final List<String> T1_LESSON_IDS = List.of(
-            "first_grid", "forming_dies", "copper_coil", "flux_cell", "wet_beneficiation");
+            "first_grid", "forming_dies", "copper_coil", "flux_cell", "wet_beneficiation", "gas_utilities");
     private static int assertions;
 
     public static void main(String[] args) throws Exception {
@@ -70,13 +70,13 @@ public final class VerifyHeracles {
 
     private static void definitions(Map<String, Quest> definitions) {
         equal("one native quest per catalogue task", QuestCatalogue.tasks().size(), definitions.size());
-        equal("the complete book has 32 unchanged T0 nodes and 19 in-development T1 nodes", 51, definitions.size());
+        equal("the complete book has 32 unchanged T0 nodes and 20 in-development T1 nodes", 52, definitions.size());
         Set<String> expectedIds = new LinkedHashSet<>();
         ORIGINAL_TASK_IDS.forEach(id -> expectedIds.add("grindless_" + id));
         expectedIds.add(STARTER_ID);
         LESSON_IDS.forEach(id -> expectedIds.add("grindless_" + id));
         T1_LESSON_IDS.forEach(id -> expectedIds.add("grindless_" + id));
-        equal("all 46 old generated ids remain with exactly five added T1 lessons", expectedIds, definitions.keySet());
+        equal("all 46 old generated ids remain with exactly six added T1 lessons", expectedIds, definitions.keySet());
         equal("the starter is the first generated entry", STARTER_ID, definitions.keySet().iterator().next());
         var starter = QuestCatalogue.tasks().get(0);
         equal("the first catalogue task is the starter", QuestCatalogue.STARTER_SUPPLIES, starter.id());
@@ -403,7 +403,7 @@ public final class VerifyHeracles {
         HeraclesDefinitions.synchronize(config, encoded);
         HeraclesDefinitions.verifyFiles(config, encoded);
         loadNative(config);
-        equal("the real loader accepts the expanded 51-task owned bundle", 51, QuestHandler.quests().size());
+        equal("the real loader accepts the expanded 52-task owned bundle", 52, QuestHandler.quests().size());
         for (String id : oldCatalogue.keySet()) {
             equal("bundle upgrade retains the original native id and claim contract " + id, true,
                     HeraclesDefinitions.matches(definitions.get(id), QuestHandler.get(id)));
@@ -415,7 +415,7 @@ public final class VerifyHeracles {
         equal("the upgraded starter has no native dependencies", Set.of(), QuestHandler.get(STARTER_ID).dependencies());
         byte[] upgraded = Files.readAllBytes(HeraclesDefinitions.bundle(config));
         HeraclesDefinitions.synchronize(config, encoded);
-        equal("reopening the expanded 51-task bundle is byte-idempotent", true,
+        equal("reopening the expanded 52-task bundle is byte-idempotent", true,
                 java.util.Arrays.equals(upgraded, Files.readAllBytes(HeraclesDefinitions.bundle(config))));
     }
 
@@ -472,7 +472,7 @@ public final class VerifyHeracles {
         HeraclesDefinitions.synchronize(config, encoded);
         HeraclesDefinitions.verifyFiles(config, encoded);
         loadNative(config);
-        equal("the actual loader accepts the complete 46-to-51 definition upgrade", definitions.keySet(),
+        equal("the actual loader accepts the complete 46-to-52 definition upgrade", definitions.keySet(),
                 QuestHandler.quests().keySet());
         equal("only new lessons need native progress construction", T1_LESSON_IDS.stream()
                         .map(QuestProjection::id).collect(java.util.stream.Collectors.toSet()),
@@ -495,7 +495,7 @@ public final class VerifyHeracles {
                 HeraclesClaimProjection.reconcile(nativeProgress, legacy.claimed(player), definitions));
         byte[] upgraded = Files.readAllBytes(HeraclesDefinitions.bundle(config));
         HeraclesDefinitions.synchronize(config, encoded);
-        equal("the 46-to-51 native bundle upgrade is byte-idempotent", true,
+        equal("the 46-to-52 native bundle upgrade is byte-idempotent", true,
                 java.util.Arrays.equals(upgraded, Files.readAllBytes(HeraclesDefinitions.bundle(config))));
     }
 
