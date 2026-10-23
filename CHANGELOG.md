@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **Give the Windows Prism tooling job enough time to finish both twins.**
+  On 56cd80e2 both CI runs cancelled `prism-tooling-windows` at the five-minute
+  job limit during the Git Bash twin, after the managed definition contracts
+  had already passed in PowerShell. The runner then interrupted PowerShell at
+  `Get-PrismPath`. Raise the budget to 20 minutes. This does not skip a check
+  or redeploy installed e50.
 - **Align the native FTB smoke with the current 52-objective catalogue.**
   CI on 96cd03fe started the server, then failed `native-quests` because the
   live check still required 18 Relay-gated T1 objectives after
