@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Verify G15's reusable successes without changing its failed outcome.**
+  Independent QA confirms133-file custody,18 source bindings, actual class/
+  receipt correspondence and safe return. Seven original e1ed mains remain
+  valid; preserve QuestClaims' POSIX SKIPPED status and Adapters1044/2.
+  The two-checker repair leaves successful inputs unchanged. No G15 writer,
+  later stage, new runtime observation or global green result is invented.
 - **Resume only the unproved gas boundaries in a new G16 window.**
   Sole604/exactfb846 gets a fresh root, current repaired helpers and the
   previously unexecuted backend/host/model stages. Reuse seven original

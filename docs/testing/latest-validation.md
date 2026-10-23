@@ -4,6 +4,17 @@
 
 ### ADR-0190 optional T1 gas utilities
 
+**G15 custody independently verified by d393.** All133 contained unique
+files/lengths/hashes,2595 unchanged inputs,18 tool sources with exact
+LF-to-CRLF correspondence, class/argfile/receipt bindings and recorded
+guard/return agree. Seven original mains remain successful; QuestClaims
+reports406 with its POSIX fixture SKIPPED and Teaching1349. No totals are
+invented for ALL-PASSED-only summaries. Original Adapters1044/2 stays failed.
+Final-readonly exit0 remains tool219 history, not a reconstructed receipt.
+No stage25-28, model, provenance or A11 is retroactively supplied by review.
+Parent separately verifies the two-checker repair changes none of those
+seven mains or application inputs, permitting their original-source reuse.
+
 **G16 assignment with original G15 successes reused.** Exact source
 fb846b1d40216b2a01137ef78c9c53b86899bdce/treef2f20705210ad803bc9d02264017646c8e6d56ac
 normally composes both reviewed981b checker blobs. New inventory8da0f550/

@@ -13,8 +13,10 @@ their inputs are unchanged by the two-checker repair and are not replayed.
 Compile the required current closure and execute repaired Adapters/Registry,
 then never-executed Guidance/FTB backend/isolated Prism QuestDefinitions and
 normal writers, independent checks, canonical binding/rechecks and actual
-expanded provenance. G15 custody review remains parallel and required for
-final acceptance, not a new producer. No copied G15 model exists to reuse.
+expanded provenance. G15 custody reviewd393 is complete:133/133,18 source
+bindings, actual classes/receipts, seven successful mains and recorded
+return are verified. QuestClaims406 includes a POSIX fixture SKIPPED, not
+a pass; Teaching1349 remains originale1ed evidence. No G15 model exists.
 A11 can contain only normal4 outputs with exactparentfb846 after genuine
 passes/frozen inputs/Java0/locksfalse/trailers/clean bundle; no push/runtime
 after data. Retain any real failure/partial data DIRTY without restore.
@@ -32,9 +34,9 @@ iterates the catalogue and needs no count patch.
 Seven G15 successful mains and their application inputs are byte-identical
 under this checker-only delta. Reuse them at originale1ed, not as a new run;
 compile/check the repaired helpers and then the previously unexecuted
-stages/models in G16. Private inventory8da0f550/preparationa5e473a2 is local
-only, with no source/grant/lease yet. G15 custody reviewd393 is in progress;
-closed failures and nonadmitted amendment remain immutable.
+stages/models in G16. Earlier local preparation8da0f550/a5e473a2 is now bound
+by the G16 GO above. G15 custody is verified; closed failures and the
+nonadmitted amendment remain immutable.
 
 **G15 is CLOSED and explicitly RETURNED; the conditional amendment was NOT
 admitted.** Its guard was hash-removed at06:17:20Z before receipt of the
@@ -42,8 +44,8 @@ amendment. The executor correctly ran no remaining Registry/Guidance/
 backend/Prism/model stage and did not reopen the lease. Fresh final readonly
 06:19:09.4950989Z records exacte1ed CLEAN/Java0/locksfalse/guard absent;
 rawSHA72a02106 and133-file manifest924915d9 are preserved. There are no
-partial writer outputs because no writer ran. Source checker repair continues.
-G16 preparation is local only and needs a new exact-source guarded GO.
+partial writer outputs because no writer ran. The checker repair and new
+G16 source-bound grant are recorded above, not a reopened G15 lease.
 
 **G15 first real red is an omitted52-objective test expectation.**
 Exacte1ed common/Forge/tools and Energy/Fluid/Recipes/Atlas/Quest/Claims/
