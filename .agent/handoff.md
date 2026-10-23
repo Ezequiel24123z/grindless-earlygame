@@ -4,6 +4,30 @@ Updated: 2026-10-23. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**PLAYER BLOCKER: installed T0 crashes when creating/loading worlds.**
+Two actual2026-10-23 server crash reports stop in FtbQuestNative.verify:
+chapter7A7EC224FEFEF423 is missing from the native in-memory graph at
+FtbQuestIntegration.started. The installed jar is still originaldd0/
+29bcce43 (46 quests), not the recent T1 development source. Both chapter
+files exist with the expected IDs; no world corruption is established.
+Private originals and installation hashes are retained outside Git.
+
+Pinned FTB2001.4.22 creates its singleton at SERVER_BEFORE_START and loads
+it at Architectury SERVER_STARTED, the same event as our verification.
+The crash log lacks the native loading message before verification.
+This identifies event ordering as the repair lead; absent data.snbt/group
+files are not a required precondition in the inspected native loader.
+Do not fabricate those files or delete progress as a workaround.
+
+Hotfix author895ce5ed works in isolation from EXACT installeddd0; preserve
+46 IDs/rewards and all player content. Executor db3f9dcd prepares one NEW
+isolated PC root, but no build/deployment grant exists yet. Historical
+executor604 cannot reload its conversation (two failed deliveries); it has
+received no new work. No active prior G16 lease is reused.
+Qualify the event-order regression and the supported native boot before a
+stopped-owned-instance update with verified backups. Never stop the player's
+game or inject later T1 development into this urgent T0 fix.
+
 **ADR-0190's optional T1 gas increment is complete and technically qualified.**
 The line exposes existing manual Cell/Intake/Reactor construction and eight
 actual authorities, with one reward-free52nd objective and all51 old IDs/

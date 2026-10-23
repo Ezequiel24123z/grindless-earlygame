@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Prioritize the installed T0 world-entry crash over further tier work.**
+  Preserve two real native FTB chapter-verification failures and confirm
+  the installed dd0 jar rather than blame undeployed T1. Chapter files
+  exist; investigate the shared server-start event ordering without
+  deleting worlds or inventing loader files. A separate installed-source
+  hotfix and guarded execution preparation do not authorize deployment.
 - **Close the optional T1 gas increment with original evidence intact.**
   The same independent QA closes the recovery link from original command/
   patch/output history and hash-named helpers, without new PC work or replay.

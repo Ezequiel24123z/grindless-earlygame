@@ -2,6 +2,27 @@
 
 ## Active continuation — source before integrated qualification
 
+### Installed T0 world-entry crash
+
+Owner reports both new and existing worlds crash on2026-10-23. Read-only
+SSH diagnosis preserves two originals (18:29:07/18:30:01 local PC time):
+`IllegalStateException: FTB Quests did not load the Grindless chapter
+7A7EC224FEFEF423`, at FtbQuestNative.verify35 and Integration.started64.
+The two chapter files exist and T0 contains that ID. Actual installed
+2347765-byte jar SHA29bcce43372016719fe1202b8859a18c93147562c04a2ef1daf163fddf7cc54f
+matches the dd0b4bc93187fe172fd336bfa330987220bd7be4 deployment receipt.
+No recent T1 source is installed or blamed. No save was read or modified;
+the logs do not identify which attempt was new versus existing.
+
+FTB pin a74ee04/2001.4.22 creates ServerQuestFile before start and calls
+load on SERVER_STARTED; Grindless verifies on the same unordered listener
+boundary. BaseQuestFile reads chapters even without data.snbt/group files.
+The observed log lacks native load messages before the verification crash.
+Hotfix implementation must prove ordering, not bypass strict verification
+or rebuild a world. Dedicated boot results from earlier sessions did not
+establish client-side listener ordering. Source repair and new proof remain
+pending; no deployment or successful create/load is claimed.
+
 ### ADR-0190 optional T1 gas utilities
 
 **Final bounded G16 QA closure.** The same QA411b verifies addendum10522/
