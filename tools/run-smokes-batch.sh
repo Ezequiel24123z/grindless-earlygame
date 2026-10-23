@@ -104,23 +104,31 @@ done
 
 BATCH=()
 SKIPPED=()
+NATIVE_SKIPPED="no"
 for name in "${SELECTED[@]}"; do
   normalized="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
   isolated="no"
   # A01's post-stop VeinData oracle requires exactly two worked chunks/total two in a fresh world.
+  # workshop-ports needs an empty probe/drop region, not earlier scheduled fixture effects.
+  # blueprint-interaction owns a fresh, empty native capture/stamp fixture.
+  # native-quests additionally needs the isolated FTB dependency composition.
   case "$normalized" in
-    foreign-providers|states|recipe-cache-reload|extractor-backpressure|first-fluids|first-harness) isolated="yes" ;;
+    foreign-providers|states|recipe-cache-reload|extractor-backpressure|first-fluids|first-harness|workshop-ports|blueprint-interaction|native-quests) isolated="yes" ;;
   esac
   # Even an invalid optional-pack path must never be treated as an ordinary shared-world case.
   if [ "$isolated" = "yes" ] || [ -e "$SMOKE_DIR/$name-optional" ] ||
       [ -L "$SMOKE_DIR/$name-optional" ]; then
-    SKIPPED+=("$name")
+    if [ "$normalized" = native-quests ]; then NATIVE_SKIPPED="yes"
+    else SKIPPED+=("$name"); fi
   else
     BATCH+=("$name")
   fi
 done
-[ "${#BATCH[@]}" -gt 0 ] ||
+if [ "${#BATCH[@]}" -eq 0 ]; then
+  [ "$NATIVE_SKIPPED" = "no" ] ||
+    fail 'native-quests requires the isolated FTB backend; use tools/run-smokes.sh <project-root> --only native-quests.'
   fail 'The requested scenario(s) require a fresh datapack world; use tools/run-smokes.sh.'
+fi
 
 append_sidecar() {
   local path="$1" kind="$2" line first="yes"
@@ -167,10 +175,13 @@ if [ "${#SKIPPED[@]}" -gt 0 ]; then
   done
   printf '.\n'
 fi
+if [ "$NATIVE_SKIPPED" = "yes" ]; then
+  printf '%s\n' 'Skipped native-quests: requires the isolated FTB backend (tools/run-smokes).'
+fi
 
 export SMOKE_COMMANDS="$COMMAND_PATH"
 export SMOKE_EXPECT_FILE="$EXPECT_PATH"
 export SMOKE_LOG="$RUN_DIR/smoke-batch.log"
-unset SMOKE_DATAPACK SMOKE_OPTIONAL_DATAPACK
+unset SMOKE_DATAPACK SMOKE_OPTIONAL_DATAPACK SMOKE_QUEST_BACKEND
 # Replace this runner so the native harness retains process ownership and its exact exit status.
 exec "$ROOT/tools/smoke-boot.sh" "$ROOT"

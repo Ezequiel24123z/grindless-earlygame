@@ -2,15 +2,26 @@ package io.github.ezequiel24123z.grindless.quest;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.core.registries.BuiltInRegistries;
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,7 +38,7 @@ public final class VerifyQuestClaims {
 
     private static int assertions;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
         claims();
@@ -36,9 +47,154 @@ public final class VerifyQuestClaims {
         standardInventoryClaim();
         stacking();
         bookAccess();
+        lessons();
+        t1Claims();
         invalidRewards();
         projectionAndReload();
-        System.out.println("ALL QUEST CLAIM CHECKS PASSED: " + assertions);
+        nativeClaimAuthority();
+        guardedLedgerCreation();
+        System.out.println("ALL QUEST CLAIM CHECKS PASSED: " + assertions
+                + "; positive registered F1 evidence/server claims remain required in workshop-ports native probe"
+                + "; actual SavedData load-failure/recreation remains required in a native probe.");
+    }
+
+    private static void nativeClaimAuthority() {
+        QuestProgress ledger = new QuestProgress();
+        UUID first = UUID.randomUUID();
+        UUID second = UUID.randomUUID();
+        ledger.claim(first, QuestCatalogue.STARTER_SUPPLIES);
+        ledger.claim(first, "multitool");
+        Set<String> receipts = ledger.claimed(first);
+        ledger.useNativeClaims(first);
+        ledger.useNativeClaims(first);
+        ledger.updateNativeCompleted(first, Set.of("quern"));
+        equal("compatibility gates can observe native completion", true, ledger.claimed(first).contains("quern"));
+        equal("native completion is not an old paid reward receipt", receipts, ledger.legacyClaims(first));
+        ledger.updateNativeCompleted(first, Set.of());
+        equal("native observations are replaceable, not sticky invented receipts", receipts, ledger.claimed(first));
+        equal("native authority preserves all legacy import receipts", receipts, ledger.claimed(first));
+        equal("native authority is player scoped", false, ledger.usesNativeClaims(second));
+        equal("native authority also fences direct legacy ledger mutation", false, ledger.claim(first, "quern"));
+        AtomicInteger effects = new AtomicInteger();
+        for (int restart = 0; restart < 3; restart++) {
+            ledger = QuestProgress.load(ledger.save(new CompoundTag()));
+            equal("native authority survives restart", true, ledger.usesNativeClaims(first));
+            equal("legacy import receipts survive restart", receipts, ledger.claimed(first));
+            for (String id : List.of(QuestCatalogue.STARTER_SUPPLIES, "multitool", "quern", "wet_beneficiation",
+                    "gas_utilities")) {
+                equal("a retired legacy engine cannot grant " + id, QuestClaimService.Result.NATIVE_BACKEND,
+                        QuestClaimService.claim(ledger, first, id, true,
+                                task -> { effects.incrementAndGet(); return true; },
+                                reward -> { effects.incrementAndGet(); return resolve(reward); },
+                                rewards -> { effects.incrementAndGet(); return Optional.of(effects::incrementAndGet); }));
+            }
+        }
+        equal("retired claims never inspect, stage or deliver rewards", 0, effects.get());
+        equal("an unmigrated second player keeps the legacy fallback", QuestClaimService.Result.CLAIMED,
+                QuestClaimService.claim(ledger, second, QuestCatalogue.STARTER_SUPPLIES, true,
+                        task -> false, VerifyQuestClaims::resolve, capture(new ArrayList<>())));
+        equal("pre-native saved data does not invent an authority", false,
+                QuestProgress.load(new CompoundTag()).usesNativeClaims(first));
+        QuestProgress empty = new QuestProgress();
+        empty.useNativeClaims(first);
+        QuestProgress restored = QuestProgress.load(empty.save(new CompoundTag()));
+        equal("a native-first player retains authority without old receipts", true, restored.usesNativeClaims(first));
+        equal("native-first authority does not fabricate old claims", Set.of(), restored.claimed(first));
+        ListTag numericPlayers = new ListTag();
+        numericPlayers.add(IntTag.valueOf(1));
+        ListTag invalidPlayers = new ListTag();
+        invalidPlayers.add(StringTag.valueOf("not-a-player"));
+        for (net.minecraft.nbt.Tag malformed : List.of(StringTag.valueOf(first.toString()),
+                numericPlayers, invalidPlayers)) {
+            CompoundTag corrupted = new CompoundTag();
+            corrupted.put("NativeClaims", malformed);
+            boolean rejected = false;
+            try {
+                QuestProgress.load(corrupted);
+            } catch (IllegalArgumentException expected) {
+                rejected = true;
+            }
+            equal("corrupt native authority must reject its parsed saved data", true, rejected);
+        }
+    }
+
+    private static void guardedLedgerCreation() throws IOException {
+        Path root = Files.createTempDirectory("grindless-quest-ledger-");
+        try {
+            Path data = Files.createDirectory(root.resolve("data"));
+            Path file = data.resolve(QuestProgress.KEY + ".dat");
+            QuestProgress fresh = QuestProgress.createIfMissing(file);
+            equal("only an absent ledger permits fresh in-memory progress", Set.of(),
+                    fresh.claimed(UUID.randomUUID()));
+            equal("guarded creation does not write a replacement file", false, Files.exists(file));
+            byte[] original = {0x1f, (byte) 0x8b, 0};
+            Files.write(file, original);
+            equal("an existing corrupt ledger cannot be recreated after a swallowed load failure", true,
+                    refusesLedgerCreation(file));
+            equal("refusal preserves the exact existing ledger bytes", true,
+                    java.util.Arrays.equals(original, Files.readAllBytes(file)));
+            Files.write(file, new byte[0]);
+            equal("an empty corrupt ledger is existing data, not a new world", true, refusesLedgerCreation(file));
+            equal("an empty corrupt ledger is not overwritten", 0L, Files.size(file));
+            Files.delete(file);
+            Files.createDirectory(file);
+            equal("a directory at the ledger path cannot be replaced by empty progress", true,
+                    refusesLedgerCreation(file));
+            equal("the existing directory is preserved", true, Files.isDirectory(file));
+            Files.delete(file);
+            try {
+                Files.createSymbolicLink(file, Path.of("missing-ledger-target"));
+            } catch (IOException | UnsupportedOperationException | SecurityException unavailable) {
+                System.out.println("SKIPPED dangling-ledger symlink fixture: symbolic-link creation unavailable ("
+                        + unavailable.getClass().getSimpleName() + ").");
+            }
+            if (Files.isSymbolicLink(file)) {
+                equal("a dangling ledger symlink cannot masquerade as an absent ledger", true,
+                        refusesLedgerCreation(file));
+                equal("refusal preserves the ledger symlink", true, Files.isSymbolicLink(file));
+                Files.delete(file);
+            }
+            Files.write(file, original);
+            if (Files.getFileAttributeView(data, PosixFileAttributeView.class) != null) {
+                Set<PosixFilePermission> permissions = Files.getPosixFilePermissions(data);
+                try {
+                    Files.setPosixFilePermissions(data, Set.of());
+                    boolean inspectable = true;
+                    try {
+                        Files.readAttributes(file, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
+                    } catch (IOException | SecurityException denied) {
+                        inspectable = false;
+                    }
+                    if (inspectable) {
+                        System.out.println("SKIPPED inaccessible-ledger fixture: this process can still inspect attributes.");
+                    } else {
+                        equal("an uninspectable ledger cannot fall back to empty progress", true,
+                                refusesLedgerCreation(file));
+                    }
+                } finally {
+                    Files.setPosixFilePermissions(data, permissions);
+                }
+                equal("permission-fixture refusal preserves the existing ledger bytes", true,
+                        java.util.Arrays.equals(original, Files.readAllBytes(file)));
+            } else {
+                System.out.println("SKIPPED inaccessible-ledger fixture: POSIX permission control is unavailable.");
+            }
+        } finally {
+            try (var paths = Files.walk(root)) {
+                for (Path path : paths.sorted(Comparator.reverseOrder()).toList()) {
+                    Files.deleteIfExists(path);
+                }
+            }
+        }
+    }
+
+    private static boolean refusesLedgerCreation(Path file) {
+        try {
+            QuestProgress.createIfMissing(file);
+            return false;
+        } catch (IllegalStateException expected) {
+            return true;
+        }
     }
 
     private static void claims() {
@@ -262,10 +418,129 @@ public final class VerifyQuestClaims {
                 QuestBookAccess.ensure(ledger, player, full, Items.BOOK));
         ledger.claim(player, QuestCatalogue.STARTER_SUPPLIES);
         Inventory afterClaim = new Inventory(null);
-        equal("a post-claim respawn cannot automatically mint another kit or book",
-                QuestBookAccess.Result.STARTER_CLAIMED,
+        equal("a post-claim respawn recovers only the utility book",
+                QuestBookAccess.Result.DELIVERED,
                 QuestBookAccess.ensure(ledger, player, afterClaim, Items.BOOK));
-        equal("post-claim automatic access leaves the new inventory empty", true, afterClaim.isEmpty());
+        equal("post-claim recovery creates exactly one utility book", 1, count(afterClaim, Items.BOOK));
+        equal("post-claim recovery cannot repeat the kit", 0, count(afterClaim, Items.COBBLESTONE));
+        equal("post-claim recovery cannot repeat old rewards", 0, count(afterClaim, Items.CLAY_BALL));
+        equal("post-claim recovery retains every saved claim", Set.of("multitool", QuestCatalogue.STARTER_SUPPLIES),
+                ledger.claimed(player));
+        equal("repeated post-claim recovery is idempotent", QuestBookAccess.Result.PRESENT,
+                QuestBookAccess.ensure(ledger, player, afterClaim, Items.BOOK));
+    }
+
+    private static void lessons() {
+        QuestProgress ledger = new QuestProgress();
+        UUID player = UUID.randomUUID();
+        Function<QuestCatalogue.Reward, ItemStack> noReward = reward -> {
+            throw new AssertionError("A lesson cannot resolve a material reward");
+        };
+        Function<List<ItemStack>, Optional<Runnable>> noDelivery = rewards -> {
+            throw new AssertionError("A lesson cannot enter inventory delivery");
+        };
+        equal("a read-only lesson has an explicit type", QuestCatalogue.Type.LESSON,
+                QuestCatalogue.byId("quest_book_help").type());
+        equal("reading still requires the actual book", QuestClaimService.Result.BOOK_REQUIRED,
+                QuestClaimService.claim(ledger, player, "quest_book_help", false, task -> false, noReward, noDelivery));
+        equal("an explicit reading claim needs no stock or inventory capacity", QuestClaimService.Result.CLAIMED,
+                QuestClaimService.claim(ledger, player, "quest_book_help", true, task -> false, noReward, noDelivery));
+        equal("reopening reading cannot create a reward", QuestClaimService.Result.ALREADY_CLAIMED,
+                QuestClaimService.claim(ledger, player, "quest_book_help", true, task -> false, noReward, noDelivery));
+        equal("a lesson does not silently complete the starter or T0", Set.of("quest_book_help"), ledger.claimed(player));
+        ledger.claim(player, "multitool");
+        equal("an inventory lesson still needs current physical evidence", QuestClaimService.Result.UNMET,
+                QuestClaimService.claim(ledger, player, "manual_work", true, task -> false, noReward, noDelivery));
+        equal("an inventory checklist can be recorded without material delivery", QuestClaimService.Result.CLAIMED,
+                QuestClaimService.claim(ledger, player, "manual_work", true, task -> true, noReward, noDelivery));
+        equal("saved reading and checklist claims survive reload", ledger.claimed(player),
+                QuestProgress.load(ledger.save(new CompoundTag())).claimed(player));
+        equal("another player does not inherit a recorded lesson", Set.of(), ledger.claimed(UUID.randomUUID()));
+    }
+
+    private static void t1Claims() {
+        QuestProgress ledger = new QuestProgress();
+        UUID player = UUID.randomUUID();
+        Function<QuestCatalogue.Reward, ItemStack> noReward = reward -> {
+            throw new AssertionError("A T1 lesson cannot resolve a material reward");
+        };
+        Function<List<ItemStack>, Optional<Runnable>> noDelivery = rewards -> {
+            throw new AssertionError("A T1 lesson cannot enter inventory delivery");
+        };
+        for (String id : List.of("first_grid", "forming_dies", "copper_coil", "flux_cell", "wet_beneficiation",
+                "gas_utilities")) {
+            QuestCatalogue.Task task = QuestCatalogue.byId(id);
+            equal("new teaching remains in the actual T1 chapter " + id, QuestCatalogue.Chapter.T1,
+                    QuestCatalogue.chapter(task));
+            equal("new teaching remains rewardless " + id, QuestCatalogue.Type.LESSON, task.type());
+            equal("T1 teaching cannot record before the individual final T0 claim " + id,
+                    QuestClaimService.Result.LOCKED,
+                    QuestClaimService.claim(ledger, player, id, true, value -> true, noReward, noDelivery));
+        }
+        ledger.claim(player, "relay");
+        ledger.claim(player, "pylon");
+        equal("the grid reading needs no invented operation or inventory evidence", QuestClaimService.Result.CLAIMED,
+                QuestClaimService.claim(ledger, player, "first_grid", true, task -> false, noReward, noDelivery));
+        ledger.claim(player, "press");
+        equal("forming reading has no separate die-possession tax", QuestClaimService.Result.CLAIMED,
+                QuestClaimService.claim(ledger, player, "forming_dies", true, task -> false, noReward, noDelivery));
+        for (String id : List.of("copper_coil", "flux_cell")) {
+            QuestCatalogue.byId(id).requires().forEach(parent -> ledger.claim(player, parent));
+            equal("physical teaching still requires the real book " + id, QuestClaimService.Result.BOOK_REQUIRED,
+                    QuestClaimService.claim(ledger, player, id, false, task -> true, noReward, noDelivery));
+            equal("physical teaching rejects absent current evidence " + id, QuestClaimService.Result.UNMET,
+                    QuestClaimService.claim(ledger, player, id, true, task -> false, noReward, noDelivery));
+            equal("physical teaching records only the existing individual checklist " + id,
+                    QuestClaimService.Result.CLAIMED,
+                    QuestClaimService.claim(ledger, player, id, true, task -> true, noReward, noDelivery));
+        }
+        ledger.claim(player, "glass");
+        List<ItemStack> rewards = new ArrayList<>();
+        equal("the terminal service still rejects absent rated evidence without a portal requirement",
+                QuestClaimService.Result.UNMET,
+                QuestClaimService.claim(ledger, player, "industrial_matrix", true, task -> false,
+                        VerifyQuestClaims::resolve, capture(rewards)));
+        equal("a rejected frontier cannot mint its reward", 0, rewards.size());
+        equal("the old F2 reward is claimable without optional portal progress when its evidence provider passes",
+                QuestClaimService.Result.CLAIMED,
+                QuestClaimService.claim(ledger, player, "industrial_matrix", true, task -> true,
+                        VerifyQuestClaims::resolve, capture(rewards)));
+        equal("the F2 reward remains eight iron ingots", Map.of("minecraft:iron_ingot", 8), quantities(rewards));
+        equal("the F2 claim cannot silently complete the optional branch", false,
+                ledger.claimed(player).contains("factory_world"));
+        equal("the first F2 claim never needs the optional wet acquisition", false,
+                ledger.claimed(player).contains("wet_beneficiation"));
+        equal("the first F2 claim never needs gas acquisition", false, ledger.claimed(player).contains("gas_utilities"));
+        equal("gas acquisition still requires the Assembler", QuestClaimService.Result.LOCKED,
+                QuestClaimService.claim(ledger, player, "gas_utilities", true, task -> true, noReward, noDelivery));
+        equal("the wet acquisition still needs its existing Assembler parent", QuestClaimService.Result.LOCKED,
+                QuestClaimService.claim(ledger, player, "wet_beneficiation", true, task -> true, noReward, noDelivery));
+        ledger.claim(player, "assembler");
+        equal("the wet acquisition rejects absent current possession", QuestClaimService.Result.UNMET,
+                QuestClaimService.claim(ledger, player, "wet_beneficiation", true, task -> false, noReward, noDelivery));
+        equal("the optional acquisition never resolves or delivers a reward", QuestClaimService.Result.CLAIMED,
+                QuestClaimService.claim(ledger, player, "wet_beneficiation", true, task -> true, noReward, noDelivery));
+        equal("the optional acquisition cannot be claimed twice", QuestClaimService.Result.ALREADY_CLAIMED,
+                QuestClaimService.claim(ledger, player, "wet_beneficiation", true, task -> true, noReward, noDelivery));
+        equal("gas acquisition still requires the physical book", QuestClaimService.Result.BOOK_REQUIRED,
+                QuestClaimService.claim(ledger, player, "gas_utilities", false, task -> true, noReward, noDelivery));
+        equal("gas acquisition rejects absent current possession", QuestClaimService.Result.UNMET,
+                QuestClaimService.claim(ledger, player, "gas_utilities", true, task -> false, noReward, noDelivery));
+        equal("gas acquisition records only the reward-free lesson", QuestClaimService.Result.CLAIMED,
+                QuestClaimService.claim(ledger, player, "gas_utilities", true, task -> true, noReward, noDelivery));
+        equal("gas acquisition cannot be claimed twice", QuestClaimService.Result.ALREADY_CLAIMED,
+                QuestClaimService.claim(ledger, player, "gas_utilities", true, task -> true, noReward, noDelivery));
+        CompoundTag saved = ledger.save(new CompoundTag());
+        QuestProgress restored = QuestProgress.load(saved.copy());
+        equal("new lessons and the terminal claim survive the original save schema", ledger.claimed(player),
+                restored.claimed(player));
+        equal("reopening the old F2 id cannot repay it", QuestClaimService.Result.ALREADY_CLAIMED,
+                QuestClaimService.claim(restored, player, "industrial_matrix", true, task -> true,
+                        VerifyQuestClaims::resolve, capture(rewards)));
+        equal("reconstruction preserves only the one original reward", 1, rewards.size());
+        equal("a second player cannot inherit the T1 chapter", QuestClaimService.Result.LOCKED,
+                QuestClaimService.claim(restored, UUID.randomUUID(), "first_grid", true, task -> true,
+                        noReward, noDelivery));
     }
 
     private static void invalidRewards() {
@@ -282,6 +557,7 @@ public final class VerifyQuestClaims {
             equal("invalid reward leaves the ledger untouched", Set.of(), ledger.claimed(player));
             equal("invalid reward is never delivered", 0, paid.get());
         }
+
         QuestProgress ledger = new QuestProgress();
         UUID player = UUID.randomUUID();
         Inventory inventory = new Inventory(null);
@@ -301,18 +577,32 @@ public final class VerifyQuestClaims {
         for (QuestProjection.Entry entry : QuestProjection.entries()) {
             equal("stable owned id " + entry.task().id(), "grindless_" + entry.task().id(), entry.id());
             equal("native parents are legacy claimed prerequisites " + entry.id(),
-                    entry.task().requires().stream().map(QuestProjection::id).toList(), entry.dependencies());
+                    QuestCatalogue.requirements(entry.task()).stream().map(QuestProjection::id).toList(), entry.dependencies());
             equal("projection keeps the exact existing reward " + entry.id(),
                     QuestCatalogue.byId(entry.task().id()).rewards(), entry.task().rewards());
         }
         QuestProgress ledger = new QuestProgress();
         UUID first = UUID.randomUUID();
         UUID second = UUID.randomUUID();
+        Set<String> paid = Set.of("multitool", "quern");
         ledger.claim(first, "multitool");
         ledger.claim(first, "quern");
         CompoundTag original = ledger.save(new CompoundTag());
         equal("original save key is unchanged", "grindless_quest_progress", QuestProgress.KEY);
-        equal("original save has only the Players root", Set.of("Players"), original.getAllKeys());
+        equal("saved progress has only paid receipts and native authority roots",
+                Set.of("Players", "NativeClaims"), original.getAllKeys());
+        equal("unmigrated players have an explicit empty native authority list", new ListTag(),
+                original.get("NativeClaims"));
+        CompoundTag legacyOnly = original.copy();
+        legacyOnly.remove("NativeClaims");
+        equal("legacy load fixture retains the historical Players-only shape", Set.of("Players"),
+                legacyOnly.getAllKeys());
+        QuestProgress legacy = QuestProgress.load(legacyOnly.copy());
+        equal("Players-only saves retain every historical paid receipt", paid, legacy.legacyClaims(first));
+        equal("Players-only saves do not invent native reward authority", false, legacy.usesNativeClaims(first));
+        equal("Players-only reload cannot reopen an already-paid claim", false, legacy.claim(first, "multitool"));
+        equal("Players-only saves upgrade only by adding an empty native authority list",
+                original, legacy.save(new CompoundTag()));
         QuestProgress restored = QuestProgress.load(original.copy());
         for (int reopen = 0; reopen < 3; reopen++) {
             var projected = QuestProjection.claimed(restored.claimed(first));
@@ -325,6 +615,33 @@ public final class VerifyQuestClaims {
             equal("projection never mutates legacy save", original, restored.save(new CompoundTag()));
             restored = QuestProgress.load(restored.save(new CompoundTag()));
         }
+        restored.useNativeClaims(first);
+        CompoundTag nativeOriginal = restored.save(new CompoundTag());
+        ListTag nativePlayers = new ListTag();
+        nativePlayers.add(StringTag.valueOf(first.toString()));
+        equal("migrated saves retain only paid receipts and native authority roots",
+                Set.of("Players", "NativeClaims"), nativeOriginal.getAllKeys());
+        equal("native authority persists exactly the migrated player's UUID", nativePlayers,
+                nativeOriginal.get("NativeClaims"));
+        equal("migration leaves the complete historical receipt NBT unchanged",
+                original.get("Players"), nativeOriginal.get("Players"));
+        restored.updateNativeCompleted(first, Set.of("crank"));
+        equal("compatibility gates can observe native-only completion", Set.of("multitool", "quern", "crank"),
+                restored.claimed(first));
+        equal("native-only completion never enters the paid-receipt projection", false,
+                QuestProjection.claimed(restored.legacyClaims(first)).get("grindless_crank"));
+        equal("native observation and receipt projection never mutate the complete save",
+                nativeOriginal, restored.save(new CompoundTag()));
+        equal("projection and saving retain the live native observation", Set.of("multitool", "quern", "crank"),
+                restored.claimed(first));
+        restored = QuestProgress.load(restored.save(new CompoundTag()));
+        equal("native authority survives after transient observations are discarded", true,
+                restored.usesNativeClaims(first));
+        equal("reloaded native authority remains player scoped", false, restored.usesNativeClaims(second));
+        equal("native reload retains only historical paid receipts", paid, restored.legacyClaims(first));
+        equal("native completion observations are not restored from saved data", paid, restored.claimed(first));
+        equal("native reload preserves the complete receipt and authority save",
+                nativeOriginal, restored.save(new CompoundTag()));
     }
 
     private static Function<List<ItemStack>, Optional<Runnable>> capture(List<ItemStack> target) {

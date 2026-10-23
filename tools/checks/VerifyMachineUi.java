@@ -8,6 +8,11 @@ import io.github.ezequiel24123z.grindless.fluid.FluidState;
 import io.github.ezequiel24123z.grindless.material.MaterialSnapshot;
 import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
+import io.netty.buffer.Unpooled;
+import net.minecraft.SharedConstants;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.Bootstrap;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 
@@ -17,11 +22,16 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Map;
+import java.util.function.Consumer;
 
 /** Structural UI contracts; these checks do not claim a rendered client pass. */
 public final class VerifyMachineUi {
 
     private static final Path COMMON = Path.of("common/src/main/java/io/github/ezequiel24123z/grindless");
+    private static final String BLUEPRINT = "assemble/blueprint_tool";
+    private static final String PLANNER = "assemble/deconstruction_planner";
+    private static final String RETIRED = "assemble/chemical_washer";
     private static int assertions;
     private static int failures;
 
@@ -69,6 +79,7 @@ public final class VerifyMachineUi {
         fluidViews();
         loadedFluidViews();
         recipeShapes();
+        assemblerGeometry();
 
         String menu = Files.readString(COMMON.resolve("menu/ProcessMachineMenu.java"));
         String screen = Files.readString(COMMON.resolve("client/ProcessMachineScreen.java"));
@@ -82,7 +93,9 @@ public final class VerifyMachineUi {
                 screen.contains("for (Slot slot : menu.slots)") && !screen.contains("slot.hasItem()"));
         check("site faults wrap instead of being cut to one line",
                 screen.contains("font.split(statusLine(), imageWidth - 16)")
-                        && !screen.contains("plainSubstrByWidth"));
+                        && !screen.substring(screen.indexOf("var lines = font.split(statusLine()"),
+                                screen.indexOf("menu.primaryFluidView().ifPresent(fluid -> graphics.drawString"))
+                        .contains("plainSubstrByWidth"));
         check("oversized status uses the tested bound, an indicator and the complete tooltip",
                 screen.contains("MachineMenuLayout.visibleStatusLines(lines.size(), font.lineHeight)")
                         && screen.contains("index < visible") && screen.contains("gui.grindless.status_more")
@@ -129,8 +142,15 @@ public final class VerifyMachineUi {
                         && jei.contains("font.split(detail, WIDTH - 8)")
                         && !jei.contains("subList(")
                         && jei.contains("recipe.namesTemperature()")
+                        && jei.contains("recipe.namesPressure()")
                         && jei.contains("recipe.namesAtmosphere()")
                         && jei.contains("recipe.namesAgitation()"));
+        check("JEI exposes exact pressure and optimal width without integer or two-decimal rounding",
+                jei.contains("Component.translatable(\"jei.grindless.pressure\", Double.toString(recipe.pressureMPa()),")
+                        && jei.contains("Double.toString(recipe.pressureHalfWidthMPa())"));
+        check("JEI labels absolute pressure, exact units and the optimal rather than hard-cutoff band",
+                lang.get("jei.grindless.pressure").getAsString()
+                        .equals("Pressure: %s MPa absolute (optimal +/- %s MPa)"));
         check("source and formation conditions are not mislabeled as catalysts",
                 jei.contains("SourceSite.Fault.NEEDS_ROCK_BED")
                         && jei.contains("SourceSite.Fault.NEEDS_OPEN_SKY")
@@ -176,8 +196,243 @@ public final class VerifyMachineUi {
         check("common keeps Forge fluid classes behind the platform bridge",
                 !Files.readString(COMMON.resolve("client/FluidClientPlatform.java")).contains("net.minecraftforge")
                         && !screen.contains("net.minecraftforge"));
+        assemblerAuthority(menu, screen, process, lang);
+        assemblerWire();
         System.out.println(assertions + " MACHINE UI ASSERTIONS; " + failures + " FAILED");
         System.exit(failures == 0 ? 0 : 1);
+    }
+
+    private static void assemblerGeometry() {
+        for (MachineMenuKind kind : MachineMenuKind.values()) {
+            check(kind + " keeps the shared 176x204 machine body", MachineMenuLayout.WIDTH == 176
+                    && MachineMenuLayout.HEIGHT == 204 && MachineMenuLayout.INVENTORY_Y == 122
+                    && MachineMenuLayout.HOTBAR_Y == 180);
+            check(kind + " extends only the Assembler's outer width",
+                    MachineMenuLayout.screenWidth(kind) == (kind == MachineMenuKind.ASSEMBLER ? 312 : 176));
+        }
+        for (int width : List.of(320, 426, 640, 854)) {
+            int left = (width - MachineMenuLayout.screenWidth(MachineMenuKind.ASSEMBLER)) / 2;
+            check("Assembler side panel fits the native minimum and larger GUI widths " + width,
+                    left >= 4 && left + MachineMenuLayout.screenWidth(MachineMenuKind.ASSEMBLER) <= width - 4);
+        }
+        check("the picker is separated from every original slot and the energy/status/inventory body",
+                MachineMenuLayout.ASSEMBLER_PICKER_X > MachineMenuLayout.WIDTH);
+        check("search, AUTO, five native rows, paging and two footer lines remain separate",
+                20 + 18 < 42 && 42 + 20 < MachineMenuLayout.ASSEMBLER_PICKER_ROW_Y
+                        && MachineMenuLayout.ASSEMBLER_PICKER_ROW_Y
+                        + MachineMenuLayout.ASSEMBLER_PICKER_ROWS * MachineMenuLayout.ASSEMBLER_PICKER_ROW_HEIGHT <= 158
+                        && 158 + 20 < 182 && 182 + 9 <= 192 && 192 + 9 < MachineMenuLayout.HEIGHT - 1);
+        for (int row = 0; row < MachineMenuLayout.ASSEMBLER_PICKER_ROWS; row++) {
+            int y = MachineMenuLayout.ASSEMBLER_PICKER_ROW_Y + row * MachineMenuLayout.ASSEMBLER_PICKER_ROW_HEIGHT;
+            check("picker icon " + row + " fits beside its native button without touching paging",
+                    y + 1 + 16 <= 158 && 7 + 16 < 26 && 26 + 100 < MachineMenuLayout.ASSEMBLER_PICKER_WIDTH);
+        }
+        long token = 0xFEDCBA9876543210L;
+        long decoded = 0L;
+        for (int part = 0; part < 4; part++) {
+            int signedShort = (short) (token >>> (part * 16));
+            decoded |= (signedShort & 0xFFFFL) << (part * 16);
+        }
+        check("four signed vanilla data shorts reconstruct the exact opening identity", decoded == token);
+    }
+
+    private static void assemblerWire() {
+        AssemblerSelectionNetwork.Request request = new AssemblerSelectionNetwork.Request(
+                19, 0xFEDCBA9876543210L, 7, BLUEPRINT);
+        FriendlyByteBuf data = new FriendlyByteBuf(Unpooled.buffer());
+        try {
+            AssemblerSelectionNetwork.writeRequest(data, request);
+            check("the actual request codec retains the exact ID, opening and revision",
+                    AssemblerSelectionNetwork.readRequest(data).equals(request) && !data.isReadable());
+        } finally {
+            data.release();
+        }
+        Map<String, Double> history = new java.util.LinkedHashMap<>();
+        for (int index = 0; index < 4100; index++) {
+            history.put("removed/history/" + index, 0.125);
+        }
+        var many = new MachineMenuHost.RecipeSelection("", BLUEPRINT, 0.25, history,
+                MachineMenuHost.SelectionIssue.AUTO);
+        data = new FriendlyByteBuf(Unpooled.buffer());
+        try {
+            AssemblerSelectionNetwork.writeUpdate(data, new AssemblerSelectionNetwork.Update(19, 5L, 9, many,
+                    Optional.empty(), false));
+            check("payload-bounded decoding does not strand valid work behind an arbitrary job-count cap",
+                    AssemblerSelectionNetwork.readUpdate(data).state().equals(many));
+        } finally {
+            data.release();
+        }
+        for (String id : List.of("", RETIRED, "removed/unknown", "press/plate/iron", "x".repeat(256))) {
+            data = new FriendlyByteBuf(Unpooled.buffer());
+            try {
+                var value = new AssemblerSelectionNetwork.Request(19, 5L, 8, id);
+                AssemblerSelectionNetwork.writeRequest(data, value);
+                check("wire parsing never converts or resolves a client ID: " + id.length(),
+                        AssemblerSelectionNetwork.readRequest(data).equals(value));
+            } finally {
+                data.release();
+            }
+        }
+        rejectRequest("truncated requests refuse before mutation", buffer -> buffer.writeInt(19));
+        rejectRequest("trailing request data is not ignored", buffer -> {
+            AssemblerSelectionNetwork.writeRequest(buffer, request);
+            buffer.writeByte(1);
+        });
+        rejectRequest("overlong client IDs cannot bypass the explicit ID limit", buffer -> {
+            buffer.writeInt(19);
+            buffer.writeLong(5L);
+            buffer.writeInt(8);
+            buffer.writeUtf("x".repeat(257));
+        });
+
+        // Keep pure/index contracts pre-bootstrap; only item-bearing snapshots need vanilla registries.
+        SharedConstants.tryDetectVersion();
+        Bootstrap.bootStrap();
+        var state = new MachineMenuHost.RecipeSelection(RETIRED, BLUEPRINT, 160.34375,
+                Map.of(PLANNER, 0.15625, "assemble/press", 5.375),
+                MachineMenuHost.SelectionIssue.UNAVAILABLE);
+        var update = new AssemblerSelectionNetwork.Update(19, request.token(), 9, state,
+                Optional.of(List.of(new ProcessMachineMenu.RecipeChoice(BLUEPRINT, ItemStack.EMPTY),
+                        new ProcessMachineMenu.RecipeChoice(PLANNER, ItemStack.EMPTY))), true);
+        data = new FriendlyByteBuf(Unpooled.buffer());
+        try {
+            AssemblerSelectionNetwork.writeUpdate(data, update);
+            var restored = AssemblerSelectionNetwork.readUpdate(data);
+            check("authoritative synchronization retains a retired normal target and exact live/retired paid work",
+                    restored.container() == update.container() && restored.token() == update.token()
+                            && restored.revision() == 9 && restored.state().equals(state) && restored.acknowledgement());
+            check("the synchronized catalogue carries full stable IDs rather than local graph ordinals",
+                    restored.catalogue().orElseThrow().stream().map(ProcessMachineMenu.RecipeChoice::id).toList()
+                            .equals(List.of(BLUEPRINT, PLANNER)));
+            check("an unresolved output icon remains empty rather than a fabricated item",
+                    restored.catalogue().orElseThrow().stream().allMatch(choice -> choice.output().isEmpty()));
+        } finally {
+            data.release();
+        }
+        data = new FriendlyByteBuf(Unpooled.buffer());
+        try {
+            AssemblerSelectionNetwork.writeUpdate(data, new AssemblerSelectionNetwork.Update(19, 5L, 9, state,
+                    Optional.empty(), false));
+            var restored = AssemblerSelectionNetwork.readUpdate(data);
+            check("ordinary work updates need not retransmit the catalogue or acknowledge another request",
+                    restored.catalogue().isEmpty() && !restored.acknowledgement() && restored.state().equals(state));
+        } finally {
+            data.release();
+        }
+        data = new FriendlyByteBuf(Unpooled.buffer());
+        try {
+            var invalid = new MachineMenuHost.RecipeSelection("", "", Double.NaN, Map.of(),
+                    MachineMenuHost.SelectionIssue.AUTO);
+            AssemblerSelectionNetwork.writeUpdate(data, new AssemblerSelectionNetwork.Update(19, 5L, 9, invalid,
+                    Optional.empty(), false));
+            try {
+                AssemblerSelectionNetwork.readUpdate(data);
+                check("NaN synchronized work must refuse", false);
+            } catch (io.netty.handler.codec.DecoderException expected) {
+                check("NaN synchronized work refuses explicitly", true);
+            }
+        } finally {
+            data.release();
+        }
+    }
+
+    private static void rejectRequest(String label, Consumer<FriendlyByteBuf> write) {
+        FriendlyByteBuf data = new FriendlyByteBuf(Unpooled.buffer());
+        try {
+            write.accept(data);
+            try {
+                AssemblerSelectionNetwork.readRequest(data);
+                check(label, false);
+            } catch (io.netty.handler.codec.DecoderException | IndexOutOfBoundsException expected) {
+                check(label, true);
+            }
+        } finally {
+            data.release();
+        }
+    }
+
+    private static void assemblerAuthority(String menu, String screen, String process,
+                                            com.google.gson.JsonObject lang) throws IOException {
+        String network = Files.readString(COMMON.resolve("menu/AssemblerSelectionNetwork.java"));
+        String work = Files.readString(COMMON.resolve("machine/AssemblerWork.java"));
+        check("the server checks owner, current menu, container and exact opening/revision before selection",
+                menu.contains("!serverPlayer.server.isSameThread()")
+                        && menu.contains("player != owner || player.containerMenu != this || container != containerId")
+                        && menu.contains("token != openingToken || revision != selectionRevision")
+                        && menu.contains("ProcessLookup.byId(MachineFamily.ASSEMBLER, recipeId).isEmpty()"));
+        check("the actual host checks its current live native BE, distance, family and build permissions",
+                process.contains("kind.family() != MachineFamily.ASSEMBLER")
+                        && process.contains("menu.host() != this")
+                        && process.contains("getLevel().getBlockEntity(getBlockPos()) != this")
+                        && process.contains("!getLevel().hasChunkAt(getBlockPos())")
+                        && process.contains("!stillValid(player)") && process.contains("player.isSpectator()")
+                        && process.contains("!player.mayBuild()") && process.contains("!getLevel().mayInteract(player, getBlockPos())")
+                        && process.contains("!player.mayInteract(getLevel(), getBlockPos())")
+                        && process.contains("!player.mayUseItemAt(getBlockPos(), Direction.UP, ItemStack.EMPTY)"));
+        check("load/work/settlement reentrancy refuses without clearing the selected target",
+                process.contains("if (loadingInventory || processing || settling)")
+                        && process.indexOf("return SelectionResult.BUSY;")
+                        < process.indexOf("assemblerWork.select(id);")
+                        && process.contains("beforeWorkRecipeId") && process.contains("progress = beforeProgress;"));
+        check("explicit resolution has no AUTO fallback and revalidates live fluid supplies even for a cache hit",
+                process.contains("return completed.isPresent() ? completed")
+                        && process.contains("ProcessLookup.findSelected(kind.family(), assemblerWork.selected(), inputs()")
+                        && process.contains("progress < cached.durationTicks() && !ProcessLookup.matchesFluid("));
+        check("a completion revalidates current graph identity, exact work owner and conditions inside rollback",
+                process.contains("!currentAssemblerWork(recipe)")
+                        && process.contains("filter(current -> current == recipe)")
+                        && process.contains("recipe.id().equals(workRecipeId) && progress >= recipe.durationTicks()")
+                        && process.contains("ProcessLookup.conditionsOf(recipe).evaluate(conditions()).canRun()"));
+        check("authoritative client IDs arrive through an opening-bound snapshot, not the client's ProcessLookup",
+                menu.contains("openingParts == 15")
+                        && menu.contains("clientSelection.token() == synchronizedOpeningToken()")
+                        && menu.contains("revision < clientSelection.revision()")
+                        && menu.contains("ProcessLookup.recipes(MachineFamily.ASSEMBLER)")
+                        && !screen.contains("ProcessLookup"));
+        check("a click carries the actually displayed revision, not a newer unobserved list",
+                screen.contains("menu.requestSelection(shownSelection, id)")
+                        && menu.contains("displayed.token(), displayed.revision(), recipeId"));
+        check("all rejected wire/menu requests have localized visible refusal and an authoritative acknowledgement",
+                network.contains("player.displayClientMessage(Component.translatable(result.translationKey()), false)")
+                        && network.contains("menu.recordSelectionResult(result)")
+                        && screen.contains("Component.translatable(result.translationKey()).withStyle(ChatFormatting.RED)")
+                        && network.contains("menu.sendSelection(true)")
+                        && network.contains("SelectionResult.MALFORMED") && network.contains("SelectionResult.CLOSED"));
+        check("the server never loads client receiver registration",
+                Files.readString(COMMON.resolve("registry/ModMenus.java")).contains("AssemblerSelectionNetwork.register();")
+                        && Files.readString(COMMON.resolve("client/GrindlessClient.java"))
+                        .contains("AssemblerSelectionNetwork.registerClient();")
+                        && network.contains("NetworkManager.Side.C2S") && network.contains("NetworkManager.Side.S2C")
+                        && !network.contains("net.minecraft.client"));
+        check("the picker is a searchable native paged list with output icons, keyboard and focus",
+                screen.contains("new EditBox(font") && screen.contains("recipeSearch.setResponder")
+                        && screen.contains("entry.name().getString().toLowerCase(Locale.ROOT).contains(query)")
+                        && screen.contains("entry.id().toLowerCase(Locale.ROOT).contains(query)")
+                        && screen.contains("GLFW.GLFW_KEY_PAGE_UP") && screen.contains("recipeSearch.charTyped")
+                        && screen.contains("recipeButtons.get(0).setFocused(true)")
+                        && screen.contains("graphics.renderItem(output, x, y)")
+                        && screen.contains("Button.builder") && screen.contains("hasClickedOutside"));
+        check("pending/empty/unavailable/malformed/current-work states are not optimistic client selection",
+                screen.contains("menu.selectionPending()") && screen.contains("shownSelection == null")
+                        && screen.contains("gui.grindless.assembler.no_results")
+                        && screen.contains("MachineMenuHost.SelectionIssue.INVALID_WORK")
+                        && screen.contains("state.suspended().forEach") && screen.contains("gui.grindless.assembler.active_work")
+                        && !screen.contains("assemblerWork.select"));
+        check("saved work contains only stable IDs and doubles, never live recipes or catalogue ordinals",
+                work.contains("tag.putString(TARGET, selected)") && work.contains("row.putString(\"Recipe\", id)")
+                        && work.contains("row.putDouble(\"Progress\", paid)") && !work.contains(".ordinal()")
+                        && !work.contains("ProcessRecipe") && work.contains("invalidState.get(key).copy()"));
+        for (MachineMenuHost.SelectionIssue issue : MachineMenuHost.SelectionIssue.values()) {
+            check(issue + " has an actual localized selected-target diagnosis", lang.has(issue.translationKey()));
+        }
+        for (MachineMenuHost.SelectionResult result : MachineMenuHost.SelectionResult.values()) {
+            check(result + " has an actual localized request result", lang.has(result.translationKey()));
+        }
+        for (String key : List.of("title", "search", "auto", "auto_selected", "auto_help", "previous", "next",
+                "waiting", "loading", "no_results", "unavailable", "unattributed", "target", "work", "active_work",
+                "held_work", "work_help", "invalid_state", "retained_work", "no_active_recipe")) {
+            check("the Assembler picker localizes " + key, lang.has("gui.grindless.assembler." + key));
+        }
     }
 
     private static void fluidViews() {
@@ -261,6 +516,14 @@ public final class VerifyMachineUi {
 
     private static void recipeShapes() throws IOException {
         ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
+        var blueprint = ProcessLookup.byId(MachineFamily.ASSEMBLER, BLUEPRINT).orElseThrow();
+        var planner = ProcessLookup.byId(MachineFamily.ASSEMBLER, PLANNER).orElseThrow();
+        check("the selector fixtures are current colliding handheld-tool recipes, not normal machines",
+                blueprint.inputs().equals(planner.inputs())
+                        && !blueprint.itemOutputs().equals(planner.itemOutputs()));
+        check("the current server catalogue cannot advertise the retired normal-machine target",
+                ProcessLookup.byId(MachineFamily.ASSEMBLER, RETIRED).isEmpty()
+                        && ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/press").isEmpty());
         for (MachineFamily family : MachineFamily.values()) {
             MachineMenuKind kind = MachineMenuKind.valueOf(family.name());
             check(family + " has a real physical menu schema", MachineMenuLayout.itemSlots(kind).size() == kind.size());

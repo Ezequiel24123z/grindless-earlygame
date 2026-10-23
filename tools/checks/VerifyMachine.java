@@ -8,12 +8,15 @@ import io.github.ezequiel24123z.grindless.process.ConditionFault;
 import io.github.ezequiel24123z.grindless.process.ConditionReport;
 import io.github.ezequiel24123z.grindless.process.ConditionState;
 import io.github.ezequiel24123z.grindless.process.ProcessField;
+import io.github.ezequiel24123z.grindless.process.ProcessConditions;
 import io.github.ezequiel24123z.grindless.material.MaterialRegistry;
 import io.github.ezequiel24123z.grindless.material.RegistryTagView;
 import io.github.ezequiel24123z.grindless.recipe.BootstrapProcesses;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
+import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
+import io.github.ezequiel24123z.grindless.recipe.OutputSpec;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -52,6 +55,7 @@ public final class VerifyMachine {
         persistence();
         statuses();
         regulation();
+        pressureMatching();
         recipeGenerations();
 
         System.out.println(failures == 0
@@ -179,6 +183,118 @@ public final class VerifyMachine {
         Method method = ProcessMachineBlockEntity.class.getDeclaredMethod("recipe", List.class);
         method.setAccessible(true);
         return (ProcessRecipe) method.invoke(machine, List.of());
+    }
+
+    private static void pressureMatching() throws Exception {
+        ProcessRecipe absent = pressureRecipe(Double.NaN, Double.NaN);
+        ProcessConditions unnamed = ProcessLookup.conditionsOf(absent);
+        yes("conversion preserves an unnamed pressure, not ambient pressure", unnamed.pressure() == null);
+        yes("an unnamed pressure runs at zero", unnamed.evaluate(ConditionState.AMBIENT.withPressure(0)).isOptimal());
+        yes("an unnamed pressure imposes no envelope restriction",
+                unnamed.checkEnvelope(ConditionEnvelope.builder().pressure(20, 25).build()).canRun());
+
+        ProcessRecipe named = pressureRecipe(1.0, 0.125);
+        ProcessConditions conditions = ProcessLookup.conditionsOf(named);
+        yes("conversion names exactly the physical pressure dimension",
+                conditions.namedDimensions().equals(List.of(ConditionDimension.PRESSURE)));
+        eq("conversion preserves the absolute MPa optimum", 1.0, conditions.pressure().optimum());
+        eq("conversion preserves the explicit optimal half-width", 1.125, conditions.pressure().optimalMax());
+        eq("conversion reuses the shared tolerance multiplier", 1.25, conditions.pressure().toleranceMax());
+        yes("in-band pressure runs at full speed",
+                conditions.evaluate(ConditionState.AMBIENT.withPressure(1.0)).isOptimal());
+        ConditionReport slower = conditions.evaluate(ConditionState.AMBIENT.withPressure(1.1875));
+        yes("a pressure tolerance mismatch names the existing limiting dimension",
+                slower.canRun() && slower.limiting() == ConditionDimension.PRESSURE);
+        eq("pressure tolerance changes speed rather than outputs", 0.625, slower.efficiency());
+        eq("the exact low pressure tolerance edge still runs", 0.25,
+                conditions.evaluate(ConditionState.AMBIENT.withPressure(0.75)).efficiency());
+        eq("the exact high pressure tolerance edge still runs", 0.25,
+                conditions.evaluate(ConditionState.AMBIENT.withPressure(1.25)).efficiency());
+        yes("the next lower representable pressure reports too low",
+                conditions.evaluate(ConditionState.AMBIENT.withPressure(Math.nextDown(0.75))).fault()
+                        == ConditionFault.PRESSURE_TOO_LOW);
+        yes("the next higher representable pressure reports too high",
+                conditions.evaluate(ConditionState.AMBIENT.withPressure(Math.nextUp(1.25))).fault()
+                        == ConditionFault.PRESSURE_TOO_HIGH);
+        ConditionReport unreachable = conditions.checkEnvelope(ConditionEnvelope.builder().pressure(2, 3).build());
+        yes("an unreachable pressure has the existing named envelope fault",
+                unreachable.fault() == ConditionFault.OUTSIDE_ENVELOPE
+                        && unreachable.limiting() == ConditionDimension.PRESSURE);
+        yes("an envelope reaching only pressure tolerance is honestly degraded",
+                conditions.checkEnvelope(ConditionEnvelope.builder().pressure(1.1875, 1.1875).build()).equals(slower));
+
+        ProcessConditions vacuum = ProcessLookup.conditionsOf(pressureRecipe(0.0, 0.001));
+        yes("zero absolute pressure survives conversion as a real requirement",
+                vacuum.pressure() != null && vacuum.evaluate(ConditionState.AMBIENT.withPressure(0)).isOptimal());
+        yes("ambient pressure is not silently substituted for zero",
+                vacuum.evaluate(ConditionState.AMBIENT).fault() == ConditionFault.PRESSURE_TOO_HIGH);
+        yes("an ambient-only envelope cannot reach the zero-pressure band",
+                vacuum.checkEnvelope(ConditionEnvelope.builder().build()).fault() == ConditionFault.OUTSIDE_ENVELOPE);
+
+        Field graph = ProcessLookup.class.getDeclaredField("GRAPH");
+        graph.setAccessible(true);
+        Object original = graph.get(null);
+        Method index = original.getClass().getDeclaredMethod("index", List.class);
+        index.setAccessible(true);
+        try {
+            graph.set(null, index.invoke(null, List.of(named)));
+            ItemStack[] inputs = {new ItemStack(Items.CLAY_BALL, 2)};
+            ProcessRecipe found = ProcessLookup.find(named.family(), inputs).orElseThrow();
+            yes("indexed item selection retains the same pressured recipe object", found == named);
+            yes("selection and direct conversion retain identical pressure bounds",
+                    ProcessLookup.conditionsOf(found).pressure().toleranceMax()
+                            == conditions.pressure().toleranceMax());
+            no("pressure never bypasses the original item quantities",
+                    ProcessLookup.find(named.family(), new ItemStack[] {new ItemStack(Items.CLAY_BALL, 1)}).isPresent());
+            ProcessMachineBlockEntity machine = machine(ProcessMachineKind.PULVERIZER);
+            machine.setItem(0, inputs[0].copy());
+            selected(machine);
+            machine.energy().setStored(32);
+            CompoundTag paid = machine.saveWithoutMetadata();
+            paid.putDouble("Progress", 12.5);
+            paid.put("Conditions", ConditionState.AMBIENT.withPressure(1.0).save(new CompoundTag()));
+            machine.load(paid.copy());
+            Method work = ProcessMachineBlockEntity.class.getDeclaredMethod("work", long.class, List.class);
+            work.setAccessible(true);
+            work.invoke(machine, 1L, List.of());
+            yes("a fixed-pressure machine cannot invent a regulator from saved state",
+                    machine.inspectionConditionFault() == ConditionFault.PRESSURE_TOO_LOW);
+            eq("the actual fixed pressure is retained", ProcessMachineKind.PULVERIZER.heldConditions().pressure(),
+                    machine.conditions().pressure());
+            eq("blocked pressure spends no Flux", 32L, machine.energy().getStored());
+            eq("blocked pressure consumes no input", 2, machine.getItem(0).getCount());
+            yes("blocked pressure emits no output", machine.getItem(machine.menuKind().inputs()).isEmpty());
+            CompoundTag blocked = machine.saveWithoutMetadata();
+            eq("blocked pressure preserves paid work", 12.5, blocked.getDouble("Progress"));
+            yes("blocked pressure preserves the existing WorkRecipe owner",
+                    paid.getString("WorkRecipe").equals(blocked.getString("WorkRecipe")));
+            yes("pressure adds no active-work or inventory persistence keys",
+                    paid.getAllKeys().equals(blocked.getAllKeys()));
+            eq("pressure keeps ItemLayout unchanged", paid.getInt("ItemLayout"), blocked.getInt("ItemLayout"));
+            eq("pressure keeps FluidOutputQuota unchanged", paid.getInt("FluidOutputQuota"),
+                    blocked.getInt("FluidOutputQuota"));
+            ProcessMachineBlockEntity restored = machine(ProcessMachineKind.PULVERIZER);
+            restored.load(blocked.copy());
+            work.invoke(restored, 2L, List.of());
+            eq("reload retains paid work while the same pressure fault persists", 12.5,
+                    restored.inspectionProgress());
+            eq("reload cannot charge the blocked batch", 32L, restored.energy().getStored());
+            graph.set(null, index.invoke(null, List.of(pressureRecipe(0.1, 0.01))));
+            work.invoke(restored, 3L, List.of());
+            eq("a reachable same-ID definition resumes existing paid work", 13.5, restored.inspectionProgress());
+            eq("resumed work pays only one new tick", 28L, restored.energy().getStored());
+            yes("resuming pressure does not change the saved owner",
+                    restored.saveWithoutMetadata().getString("WorkRecipe").equals(named.id()));
+        } finally {
+            graph.set(null, original);
+        }
+    }
+
+    private static ProcessRecipe pressureRecipe(double optimum, double halfWidth) {
+        return new ProcessRecipe("check/pressure", ProcessMachineKind.PULVERIZER.family(),
+                List.of(IngredientSpec.item("minecraft:clay_ball", 2)),
+                List.of(OutputSpec.item("minecraft:brick", 1)), Double.NaN, optimum, halfWidth, null, null,
+                80, 4, List.of(), null);
     }
 
     private static void regulation() throws Exception {

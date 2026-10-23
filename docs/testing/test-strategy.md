@@ -7,6 +7,13 @@ ordering is now [ADR-0144](../DECISIONS.md#adr-0144--ship-superflat-first-playab
 technical/product RC readiness precedes the owner's longitudinal human acceptance.
 The objective is coverage of relevant properties, not a native scenario per content instance.
 
+ADR-0168/0169 now separately authorize parallel T1 development while the owner tests
+unchanged T0. That instruction changes scope, not proof outcomes: new selectors,
+teaching and projections receive affected compilation/data/codec/backend/export
+checks; unchanged transaction/save/registration mechanisms retain their source-bound
+proofs only under reviewed assumptions. Development does not supply a client pass,
+real saved-world migration, T0 acceptance or a release.
+
 ## Playable-release proof boundaries
 
 `1389ebb` remains engineering evidence. A policy, sprite or document change does not
@@ -113,7 +120,7 @@ S1/C3 gate or renewable cycle simply to adopt this document or clarify their REA
 | Persistence | Reuse tested unchanged NBT/layout/owner semantics. New layouts, adapters or migrations rerun the affected persistence cases and representative reload; actual retained-world compatibility remains a distinct existing acceptance gate |
 | Player communication / dashboard | Validate canonical projection, schema, provenance/privacy, localization and all data instances; reuse common renderer tests. Use representative real-data browser/client interaction for an uncovered UI adapter/layout, not native gameplay for every tooltip |
 | Final T0 integration | Aggregate proof coverage and changed assumptions, retain required CI/release checks and genuine manual gaps. Do not require new native evidence for equivalent content already covered by contracts plus data checks |
-| Ports / external integrations | Still held by the unchanged task dependencies. Existing native proofs may cover internal pieces, not exclusive multiblock linking/aggregation, foreign or ME storage, disconnection or optional API presence. Verify actual versions/APIs and genuinely new boundary classes when that stage is authorized |
+| Ports / external integrations | The bounded controller-backed T0 ports are now implemented/qualified under ADR-0164 and the [exact-F native record](t0-experience-package-native.md). That proof is not foreign/ME storage, arbitrary T1 families or new exclusive linking/aggregation. Preserve actual owner/face/quota/topology assumptions and verify genuinely new boundary classes when authorized |
 
 The first real dashboard binding still needs its already-required real-data/browser
 integration review. Synthetic renderer tests and schema checks alone do not discharge it;

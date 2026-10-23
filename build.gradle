@@ -68,6 +68,16 @@ allprojects {
     def packBoundary = "// Application build inputs stay above this boundary"
     def defaultPackProfile = "expanded"
     def packProfileNames = ["expanded", "preparation", "playable"]
+    def preparationPackProjects = [419699, 238222, 289412, 404465, 404468, 889915]
+    def playablePackProjects = preparationPackProjects + [790626, 429235, 908741]
+    def expandedPackProjects = playablePackProjects + [324717, 422301, 618298, 410811, 314906]
+    def restrictedPackProjects = [preparation: preparationPackProjects, playable: playablePackProjects]
+    def questPackCoordinates = [
+        (289412): [artifact: "ftb-quests", property: "ftbquests"],
+        (404465): [artifact: "ftb-library", property: "ftblibrary"],
+        (404468): [artifact: "ftb-teams", property: "ftbteams"],
+        (889915): [artifact: "ftb-xmod-compat", property: "ftbxmodcompat"]
+    ]
     def publicOverrideRoot = "pack/public-overrides"
     def sha256Bytes = { byte[] bytes ->
         java.security.MessageDigest.getInstance("SHA-256").digest(bytes).encodeHex().toString()
@@ -191,6 +201,9 @@ allprojects {
                     selection.projectIDs.toSet().size() != selection.projectIDs.size())) {
                 throw new GradleException("Invalid dependency selection for $name.")
             }
+            if (name != "expanded" && selection.projectIDs.toSet() != restrictedPackProjects[name].toSet()) {
+                throw new GradleException("Unexpected dependency selection for $name.")
+            }
         }
         def manifest = clonePackData(inputs.manifest)
         if (!(manifest instanceof Map) || manifest.manifestType != "minecraftModpack" ||
@@ -216,48 +229,75 @@ allprojects {
         if (manifest.files.collect { it.projectID }.toSet().size() != manifest.files.size()) {
             throw new GradleException("Duplicate dependency project pins.")
         }
-        def selected = inputs.profiles[profile]
-        if (profile != "expanded") {
-            manifest.name = selected.name
-            manifest.version += "-$profile"
-            manifest.files = manifest.files.findAll { it.projectID in selected.projectIDs }
-            if (manifest.files.size() != selected.projectIDs.size()) {
-                throw new GradleException("Selected profile references missing or duplicate dependency pins.")
-            }
+        def expandedIDs = manifest.files.collect { it.projectID }
+        if (expandedIDs.toSet() != expandedPackProjects.toSet()) {
+            throw new GradleException("Expanded dependency selection differs from the official pack allowlist.")
         }
-        def ids = manifest.files.collect { it.projectID }
         if (!(inputs.metadata instanceof Map) || inputs.metadata.minecraft != rootProject.minecraft_version ||
                 inputs.metadata.loader != "Forge" || !(inputs.metadata.files instanceof List)) {
             throw new GradleException("Dependency verification metadata targets a different platform.")
         }
-        def dependencies = manifest.files.collect { pin ->
+        def authoritativePins = manifest.files.collect { [projectID: it.projectID, fileID: it.fileID] }.toSet()
+        if (!inputs.metadata.files.every { it instanceof Map } ||
+                inputs.metadata.files.size() != manifest.files.size() ||
+                inputs.metadata.files.collect { [projectID: it.projectID, fileID: it.fileID] }.toSet() != authoritativePins) {
+            throw new GradleException("Manifest/dependency metadata pin parity differs.")
+        }
+        def expandedDependencies = manifest.files.collect { pin ->
             def matches = inputs.metadata.files.findAll {
                 it instanceof Map && it.projectID == pin.projectID && it.fileID == pin.fileID
             }
             if (matches.size() != 1 || !(matches[0].sha1 instanceof String) ||
                     !(matches[0].sha1 ==~ /[0-9a-f]{40}/) || !positivePackInteger(matches[0].bytes) ||
+                    (matches[0].containsKey("sha256") && (!(matches[0].sha256 instanceof String) ||
+                            !(matches[0].sha256 ==~ /[0-9a-f]{64}/))) ||
                     !(matches[0].requiredProjectIDs instanceof List) ||
-                    !matches[0].requiredProjectIDs.every { positivePackInteger(it) }) {
+                    !matches[0].requiredProjectIDs.every { positivePackInteger(it) } ||
+                    matches[0].requiredProjectIDs.toSet().size() != matches[0].requiredProjectIDs.size() ||
+                    !(matches[0].fileName instanceof String) ||
+                    !(matches[0].fileName ==~ /[A-Za-z0-9][A-Za-z0-9._+-]*\.jar/)) {
                 throw new GradleException("Missing or invalid verification metadata for ${pin.projectID}/${pin.fileID}.")
             }
-            if (!ids.containsAll(matches[0].requiredProjectIDs)) {
+            if (!expandedIDs.containsAll(matches[0].requiredProjectIDs)) {
                 throw new GradleException("Missing required project for ${pin.projectID}.")
             }
             matches[0]
         }
-        def architectury = dependencies.find { it.projectID == 419699 }
-        def jei = dependencies.find { it.projectID == 238222 }
+        if (expandedDependencies.collect { it.fileName.toLowerCase(java.util.Locale.ROOT) }.toSet().size() !=
+                expandedDependencies.size()) {
+            throw new GradleException("Conflicting dependency jar names.")
+        }
+        def architectury = expandedDependencies.find { it.projectID == 419699 }
+        def jei = expandedDependencies.find { it.projectID == 238222 }
         if (architectury?.fileName != "architectury-${rootProject.architectury_api_version}-forge.jar" ||
                 jei?.fileName != "jei-${rootProject.minecraft_version}-forge-${rootProject.jei_version}.jar") {
             throw new GradleException("Architectury/JEI pins do not match gradle.properties.")
         }
-        def heracles = dependencies.find { it.projectID == 845831 }
-        def resourceful = dependencies.find { it.projectID == 570073 }
-        if (heracles?.fileName != "Heracles-forge-${rootProject.minecraft_version}-${rootProject.heracles_version}.jar" ||
-                heracles?.fileID?.toString() != rootProject.heracles_curse_file ||
-                resourceful?.fileName != "resourcefullib-forge-${rootProject.minecraft_version}-${rootProject.resourcefullib_version}.jar" ||
-                resourceful?.fileID?.toString() != rootProject.resourcefullib_curse_file) {
-            throw new GradleException("Quest backend pins do not match gradle.properties.")
+        questPackCoordinates.each { id, contract ->
+            def version = rootProject.findProperty("${contract.property}_version")
+            def fileID = rootProject.findProperty("${contract.property}_curse_file")
+            if (!(version instanceof String) || version.trim().isEmpty() ||
+                    !(fileID instanceof String) || !(fileID ==~ /[1-9][0-9]*/)) {
+                throw new GradleException("Missing or invalid native FTB pack properties: ${contract.property}.")
+            }
+            def dependency = expandedDependencies.find { it.projectID == id }
+            if (dependency.fileName != "${contract.artifact}-forge-${version}.jar" ||
+                    dependency.fileID.toString() != fileID) {
+                throw new GradleException("Native FTB quest pins do not match gradle.properties: $id.")
+            }
+        }
+        def selected = inputs.profiles[profile]
+        if (profile != "expanded") {
+            manifest.name = selected.name
+            manifest.version += "-$profile"
+            manifest.files = manifest.files.findAll { it.projectID in selected.projectIDs }
+        }
+        def ids = manifest.files.collect { it.projectID }
+        def dependencies = expandedDependencies.findAll { it.projectID in ids }
+        dependencies.each { dependency ->
+            if (!ids.containsAll(dependency.requiredProjectIDs)) {
+                throw new GradleException("Missing required project for ${dependency.projectID} in $profile.")
+            }
         }
         [manifest: manifest, dependencies: dependencies, status: selected.status, selection: clonePackData(selected)]
     }
@@ -367,19 +407,47 @@ allprojects {
             check(defaultPackProfile == "expanded", "The default profile changed.")
             check(expanded.manifest == inputs.manifest, "Expanded manifest/pins changed.")
             check(expanded.status == "playable-pack-candidate-not-acceptance", "Expanded status changed.")
+            check(expanded.manifest.files.size() == 14 &&
+                    expanded.dependencies.collect { [projectID: it.projectID, fileID: it.fileID] }.toSet() ==
+                    inputs.metadata.files.collect { [projectID: it.projectID, fileID: it.fileID] }.toSet(),
+                    "Expanded manifest/metadata pin parity changed.")
             check(preparation.manifest.files == inputs.manifest.files.findAll {
-                it.projectID in [419699, 238222, 845831, 570073]
-            }, "Preparation pins changed.")
+                it.projectID in [419699, 238222, 289412, 404465, 404468, 889915]
+            } && preparation.manifest.files.collect { it.projectID }.toSet() ==
+                    [419699, 238222, 289412, 404465, 404468, 889915].toSet() &&
+                    preparation.manifest.files.size() == 6, "Preparation native FTB pins changed.")
             check(preparation.manifest.name == "Grindless T0 Preparation - integration preview",
                     "Preparation name changed.")
             check(preparation.manifest.version == "${rootProject.pack_version}-preparation", "Preparation version changed.")
             check(preparation.status == "preparation-only-not-acceptance", "Preparation status changed.")
             check(playable.manifest.files == inputs.manifest.files.findAll {
-                it.projectID in [419699, 238222, 845831, 570073, 790626, 429235, 908741]
-            } && playable.manifest.files.size() == 7, "Playable selection differs from ADR-0149.")
-            check(playable.dependencies == inputs.metadata.files.findAll {
+                it.projectID in [419699, 238222, 289412, 404465, 404468, 889915, 790626, 429235, 908741]
+            } && playable.manifest.files.collect { it.projectID }.toSet() ==
+                    [419699, 238222, 289412, 404465, 404468, 889915, 790626, 429235, 908741].toSet() &&
+                    playable.manifest.files.size() == 9, "Playable native FTB selection differs from ADR-0171.")
+            check(playable.dependencies.toSet() == inputs.metadata.files.findAll {
                 it.projectID in playable.manifest.files.collect { pin -> pin.projectID }
-            }, "Playable verification metadata differs from the existing authority.")
+            }.toSet(), "Playable verification metadata differs from the existing authority.")
+            [expanded: expanded, preparation: preparation, playable: playable].each { profile, pack ->
+                [289412: ["ftb-quests", "ftbquests"], 404465: ["ftb-library", "ftblibrary"],
+                 404468: ["ftb-teams", "ftbteams"], 889915: ["ftb-xmod-compat", "ftbxmodcompat"]].each { id, contract ->
+                    def dependency = pack.dependencies.find { it.projectID == id }
+                    check(dependency.fileName == "${contract[0]}-forge-${rootProject.property(contract[1] + '_version')}.jar" &&
+                            dependency.fileID.toString() == rootProject.property(contract[1] + "_curse_file"),
+                            "Exact native FTB version/file pin changed for $id in $profile.")
+                }
+                check(pack.dependencies.every {
+                    pack.manifest.files.collect { pin -> pin.projectID }.containsAll(it.requiredProjectIDs)
+                }, "Dependency closure changed for $profile.")
+            }
+            def digestInputs = clonePackData(inputs)
+            def digestPin = digestInputs.metadata.files.find { it.projectID == 889915 }
+            digestPin.sha256 = sha256Bytes("Synthetic dependency metadata fixture, not a binary proof.".getBytes("UTF-8"))
+            check(resolveClientPack("playable", digestInputs).dependencies.find { it.projectID == 889915 }.sha256 ==
+                    digestPin.sha256, "Declared dependency SHA256 was lost.")
+            digestPin.remove("sha256")
+            check(!resolveClientPack("playable", digestInputs).dependencies.find { it.projectID == 889915 }.containsKey("sha256"),
+                    "Receipt-only SHA256 was invented as published dependency metadata.")
             check(playable.manifest.version == "${rootProject.pack_version}-playable" &&
                     playable.status == "restricted-playable-profile-not-rc", "Playable identity claims an RC.")
             check(playable.selection == inputs.profiles.playable, "The exact profile selection was lost.")
@@ -396,16 +464,14 @@ allprojects {
                 [change: { it.manifest.version = rootProject.minecraft_version }, message: "root version differs"],
                 [change: { it.manifest.minecraft.version = "invalid" }, message: "Minecraft/Forge versions differ"],
                 [change: { it.manifest.minecraft.modLoaders[0].id = "invalid" }, message: "Minecraft/Forge versions differ"],
-                [change: { it.manifest.files.find { f -> f.projectID == 419699 }.fileID = 1 }, message: "verification metadata"],
-                [change: { it.metadata.files.find { f -> f.projectID == 419699 }.fileName = "invalid" }, message: "Architectury/JEI pins"],
-                [change: { it.metadata.files.find { f -> f.projectID == 238222 }.fileName = "invalid" }, message: "Architectury/JEI pins"],
-                [change: { it.manifest.files.find { f -> f.projectID == 845831 }.fileID = 1 }, message: "verification metadata"],
-                [change: { it.metadata.files.find { f -> f.projectID == 845831 }.fileName = "invalid" }, message: "Quest backend pins"],
-                [change: { it.metadata.files.find { f -> f.projectID == 570073 }.fileName = "invalid" }, message: "Quest backend pins"],
-                [change: { it.profiles.preparation.projectIDs = it.profiles.preparation.projectIDs.findAll { id -> id != 570073 } }, message: "Missing required project"],
+                [change: { it.manifest.files.find { f -> f.projectID == 419699 }.fileID = 1 }, message: "metadata pin parity"],
+                [change: { it.metadata.files.find { f -> f.projectID == 419699 }.fileName = "wrong-version.jar" }, message: "Architectury/JEI pins"],
+                [change: { it.metadata.files.find { f -> f.projectID == 238222 }.fileName = "wrong-version.jar" }, message: "Architectury/JEI pins"],
                 [change: { it.metadata.files.find { f -> f.projectID == 238222 }.requiredProjectIDs = [1] }, message: "Missing required project"],
-                [change: { it.profiles.preparation.projectIDs += 1 }, message: "missing or duplicate dependency pins"],
-                [change: { it.profiles.playable.projectIDs += 1 }, message: "missing or duplicate dependency pins", profile: "playable"],
+                [change: { it.metadata.files.find { f -> f.projectID == 289412 }.requiredProjectIDs += 324717 }, message: "Missing required project"],
+                [change: { it.profiles.preparation.projectIDs += 1 }, message: "Unexpected dependency selection"],
+                [change: { it.profiles.playable.projectIDs += 1 }, message: "Unexpected dependency selection", profile: "playable"],
+                [change: { it.profiles.playable.projectIDs += 324717 }, message: "Unexpected dependency selection", profile: "playable"],
                 [change: { it.profiles.playable.projectIDs += 419699 }, message: "Invalid dependency selection"],
                 [change: { it.profiles.playable.projectIDs += -1 }, message: "Invalid dependency selection"],
                 [change: { it.profiles.playable.status = "" }, message: "Invalid pack profile data"],
@@ -414,9 +480,57 @@ allprojects {
                 [change: { it.profiles.unknown = [:] }, message: "Invalid pack profile catalogue"],
                 [change: { it.manifest.files += it.manifest.files[0] }, message: "Duplicate dependency project pins"],
                 [change: { it.manifest.overrides = "../private" }, message: "Invalid pack manifest data"],
+                [change: { it.manifest.files += [projectID: 1, fileID: 1, required: true] },
+                 message: "official pack allowlist"],
+                [change: { it.metadata.files += clonePackData(it.metadata.files[0]) }, message: "metadata pin parity"],
+                [change: { it.metadata.files = it.metadata.files.findAll { f -> f.projectID != 324717 } },
+                 message: "metadata pin parity"],
+                [change: { it.metadata.files += [projectID: 1, fileID: 1] }, message: "metadata pin parity"],
+                [change: { it.metadata.files.find { f -> f.projectID == 324717 }.fileID++ },
+                 message: "metadata pin parity"],
+                [change: { it.metadata.files.find { f -> f.projectID == 324717 }.fileName =
+                        it.metadata.files.find { f -> f.projectID == 790626 }.fileName },
+                 message: "Conflicting dependency jar names"],
                 [change: { it.metadata.files.find { f -> f.projectID == 790626 }.sha1 = "invalid" },
                  message: "verification metadata", profile: "playable"]
             ]
+            [289412, 404465, 404468, 889915].each { id ->
+                cases += [
+                    [change: { data -> data.manifest.files = data.manifest.files.findAll { it.projectID != id } },
+                     message: "official pack allowlist"],
+                    [change: { data -> data.manifest.files.find { it.projectID == id }.fileID++ },
+                     message: "metadata pin parity"],
+                    [change: { data -> data.metadata.files.find { it.projectID == id }.fileID++ },
+                     message: "metadata pin parity"],
+                    [change: { data -> data.metadata.files.find { it.projectID == id }.fileName = "wrong-version.jar" },
+                     message: "Native FTB quest pins"],
+                    [change: { data -> data.metadata.files.find { it.projectID == id }.sha256 = "invalid" },
+                     message: "verification metadata"],
+                    [change: { data ->
+                        def pin = data.manifest.files.find { it.projectID == id }
+                        pin.fileID++
+                        data.metadata.files.find { it.projectID == id }.fileID = pin.fileID
+                    }, message: "Native FTB quest pins"],
+                    [change: { data -> data.metadata.files.find { it.projectID == id }.requiredProjectIDs = [1] },
+                     message: "Missing required project"],
+                    [change: { data -> data.profiles.preparation.projectIDs =
+                            data.profiles.preparation.projectIDs.findAll { it != id } },
+                     message: "Unexpected dependency selection"],
+                    [change: { data -> data.profiles.playable.projectIDs =
+                            data.profiles.playable.projectIDs.findAll { it != id } },
+                     message: "Unexpected dependency selection", profile: "playable"]
+                ]
+            }
+            [845831, 570073].each { id ->
+                cases += [
+                    [change: { data -> data.manifest.files += [projectID: id, fileID: 1, required: true] },
+                     message: "official pack allowlist"],
+                    [change: { data -> data.profiles.preparation.projectIDs += id },
+                     message: "Unexpected dependency selection"],
+                    [change: { data -> data.profiles.playable.projectIDs += id },
+                     message: "Unexpected dependency selection", profile: "playable"]
+                ]
+            }
             cases.each { test ->
                 def changed = clonePackData(inputs)
                 test.change(changed)

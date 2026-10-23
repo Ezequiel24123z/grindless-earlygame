@@ -1,33 +1,34 @@
-# Offline source/resource contract, not Java execution, codec QC or a listening pass.
-# Negative controls mutate only in-memory snapshots; no provider, workspace writes or JVM.
+# Offline physical-sound source/resource contracts. No JVM, provider, credential or listening claim.
 param(
     [string]$Root = (Join-Path $PSScriptRoot '..'),
     [switch]$SelfTest,
     [switch]$SourceOnly
 )
-
 $ErrorActionPreference = 'Stop'
 $Root = (Resolve-Path -LiteralPath $Root).Path
-$baseline = 'cbd318abf1a7533df575764000384543a2dec15c'
+$baseline = 'b8bd5e885aef598bf888d7e390b297a34cbb7d52'
 $source = 'common/src/main/java/io/github/ezequiel24123z/grindless'
 $assets = 'common/src/main/resources/assets/grindless'
-$generator = 'tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/GenerateAssets.java'
-$quernHash = '811b29471e3fa6a51ce76db2241259d02adfc64e244eadc096ef376d1d1970d5'
-$mixerHash = '2c052cd678775f237fbf1a939037006ed26d05588e99a4ff29bbffcd66599f45'
 $hashes = [ordered]@{
-    machine_hum = '1a4444847bcd7b65fa245688b40538e713c857bc0595f7d86dab4e84d1bbe194'
-    machine_hum_heavy = '3614968863fb10953acf429ac990ab92c3a1d196d23ec1e289f85714da7d98f3'
-    pylon_link = '07e5624bfb2eaced8df7219419de6ad214967842db9af16f3f4a050f9ddccd24'
-    relay_click = 'c5446171b5d6194057b2cfc860ffd1d5bf25a6b99004b7cda8c04e85d83a786e'
-    brownout_alarm = 'c6222b817b90ca76c8b95e53df000c8d6cb7b4ddfa21117cd59b09767c2fffc5'
-    t0_grinding = $quernHash
-    t0_wet_work = $mixerHash
+    t0_grinding = '811b29471e3fa6a51ce76db2241259d02adfc64e244eadc096ef376d1d1970d5'
+    t0_wet_work = '2c052cd678775f237fbf1a939037006ed26d05588e99a4ff29bbffcd66599f45'
+    t0_water_flow = '5fbfa5c1906fcc98ac310f3feaa9959fd7838ef5f4f6143dc293d37eadc6aeb1'
+    t0_mineral_extraction = 'a634f9a17c5f5c71e7fd20da8f79ec5453715d125b1084c557de54bb380ba9fb'
 }
-
-function Read-Source([string]$Path) {
-    return [IO.File]::ReadAllText((Join-Path $Root $Path), [Text.Encoding]::UTF8)
+$radii = @{ t0_grinding = 16; t0_wet_work = 16; t0_water_flow = 10; t0_mineral_extraction = 12 }
+$sizes = @{ t0_grinding = 34364; t0_wet_work = 33374; t0_water_flow = 33490; t0_mineral_extraction = 29241 }
+$native = [ordered]@{
+    pylon_link = 'minecraft:block.tripwire.attach'
+    relay_click = 'minecraft:block.lever.click'
+    brownout_alarm = 'minecraft:block.iron_trapdoor.close'
+    t0_fire_draft = 'minecraft:block.furnace.fire_crackle'
 }
-
+$retired = @('machine_hum','machine_hum_heavy','pylon_link','relay_click','brownout_alarm')
+function Read-Source([string]$Path) { [IO.File]::ReadAllText((Join-Path $Root $Path), [Text.Encoding]::UTF8) }
+function Normalize-Lines([string]$Text) { $Text.Replace("`r`n", "`n") }
+function Code([string]$Text) {
+    ([regex]::Replace($Text, '(?s)/\*.*?\*/|//[^\r\n]*|"(?:\\.|[^"\\])*"|''(?:\\.|[^''\\])*''', ' ') -replace '\s+', ' ').Trim()
+}
 function Invoke-LocalGit([string]$Arguments) {
     $process = New-Object Diagnostics.Process
     $process.StartInfo.FileName = 'git'
@@ -37,58 +38,34 @@ function Invoke-LocalGit([string]$Arguments) {
     $process.StartInfo.CreateNoWindow = $true
     $process.StartInfo.RedirectStandardOutput = $true
     $process.StartInfo.RedirectStandardError = $true
-    $process.StartInfo.StandardOutputEncoding = [Text.Encoding]::UTF8
     try {
         if (-not $process.Start()) { throw 'Could not start local Git.' }
-        $stdout = $process.StandardOutput.ReadToEndAsync()
-        $stderr = $process.StandardError.ReadToEndAsync()
+        $stdout = $process.StandardOutput.ReadToEndAsync(); $stderr = $process.StandardError.ReadToEndAsync()
         $process.WaitForExit()
-        $text = $stdout.GetAwaiter().GetResult()
-        $diagnostic = $stderr.GetAwaiter().GetResult()
-        if ($process.ExitCode -ne 0) { throw "Local Git failed: $diagnostic" }
-        return $text
+        if ($process.ExitCode -ne 0) { throw ('Local Git failed: ' + $stderr.GetAwaiter().GetResult()) }
+        $stdout.GetAwaiter().GetResult()
     } finally { $process.Dispose() }
 }
-
-function Normalize-Lines([string]$Text) { return $Text.Replace("`r`n", "`n") }
-function Code([string]$Text) {
-    return ([regex]::Replace($Text, '(?s)/\*.*?\*/|//[^\r\n]*|"(?:\\.|[^"\\])*"|''(?:\\.|[^''\\])*''', ' ') -replace '\s+', ' ').Trim()
-}
-
-# The native files have no text blocks; balance executable braces after removing trivia.
-function Code-Block([string]$Text, [string]$Marker) {
-    $code = Code $Text
-    $start = $code.IndexOf($Marker, [StringComparison]::Ordinal)
-    if ($start -lt 0) { return '' }
-    $open = $code.IndexOf('{', $start)
-    if ($open -lt 0) { return '' }
-    $depth = 0
-    for ($i = $open; $i -lt $code.Length; $i++) {
-        if ($code[$i] -eq '{') { $depth++ }
-        if ($code[$i] -eq '}') {
-            $depth--
-            if ($depth -eq 0) { return $code.Substring($start, $i - $start + 1) }
-        }
-    }
-    return ''
-}
-
 function Bytes-Hash([byte[]]$Bytes) {
     $sha = [Security.Cryptography.SHA256]::Create()
-    try { return ([BitConverter]::ToString($sha.ComputeHash($Bytes))).Replace('-', '').ToLowerInvariant() }
+    try { ([BitConverter]::ToString($sha.ComputeHash($Bytes))).Replace('-', '').ToLowerInvariant() }
     finally { $sha.Dispose() }
 }
-
-# Container/header parsing only: complete pages, one serial, BOS/EOS and Vorbis identification.
-# Exact hashes bind the approved payload; this deliberately does not decode or claim audibility.
+function Particles([string]$Text) {
+    ([regex]::Matches((Code $Text), 'particle\(level, ParticleTypes\.[^;]+;') |
+        ForEach-Object { $_.Value }) -join "`n"
+}
+function Port-Ids([string]$Text) {
+    @([regex]::Matches($Text, 'register\("([a-z0-9_]+)",\s*\(\)\s*->\s*new WorkshopPortBlock\(') |
+        ForEach-Object { $_.Groups[1].Value })
+}
+# Same complete-page Vorbis container check as the prior Mixer contract; no decoder/audibility claim.
 function Ogg-Info([byte[]]$Bytes) {
     $offset = 0; $pages = 0; $serial = 0; $eos = $false; $channels = 0; $rate = 0; $samples = 0L
     while ($offset -lt $Bytes.Length) {
         if ($eos -or $offset + 27 -gt $Bytes.Length -or
             [Text.Encoding]::ASCII.GetString($Bytes, $offset, 4) -cne 'OggS' -or $Bytes[$offset + 4] -ne 0) { return $null }
-        $flags = $Bytes[$offset + 5]
-        $segments = $Bytes[$offset + 26]
-        $data = $offset + 27 + $segments
+        $flags = $Bytes[$offset + 5]; $segments = $Bytes[$offset + 26]; $data = $offset + 27 + $segments
         if ($data -gt $Bytes.Length) { return $null }
         $payload = 0
         for ($i = 0; $i -lt $segments; $i++) { $payload += $Bytes[$offset + 27 + $i] }
@@ -99,267 +76,322 @@ function Ogg-Info([byte[]]$Bytes) {
             if ($flags -ne 2 -or $segments -ne 1 -or $payload -ne 30 -or $Bytes[$data] -ne 1 -or
                 [Text.Encoding]::ASCII.GetString($Bytes, $data + 1, 6) -cne 'vorbis' -or
                 [BitConverter]::ToUInt32($Bytes, $data + 7) -ne 0 -or ($Bytes[$data + 29] -band 1) -ne 1) { return $null }
-            $serial = $pageSerial
-            $channels = $Bytes[$data + 11]
-            $rate = [BitConverter]::ToUInt32($Bytes, $data + 12)
+            $serial = $pageSerial; $channels = $Bytes[$data + 11]; $rate = [BitConverter]::ToUInt32($Bytes, $data + 12)
         } elseif ($pageSerial -ne $serial -or ($flags -band 2) -ne 0) { return $null }
-        $eos = ($flags -band 4) -ne 0
-        $samples = [BitConverter]::ToInt64($Bytes, $offset + 6)
-        $offset = $data + $payload
-        $pages++
+        $eos = ($flags -band 4) -ne 0; $samples = [BitConverter]::ToInt64($Bytes, $offset + 6)
+        $offset = $data + $payload; $pages++
     }
     if (-not $eos -or $pages -lt 2 -or $samples -le 0 -or $rate -eq 0) { return $null }
-    return [pscustomobject]@{ Channels = $channels; Rate = $rate; Pages = $pages; Samples = $samples }
+    [pscustomobject]@{ Channels = $channels; Rate = $rate; Samples = $samples }
 }
-
 $paths = [ordered]@{
     Audio = "$source/client/audio/T0MachineAudio.java"
+    Policy = "$source/client/audio/T0SoundscapePolicy.java"
+    Tracker = "$source/client/audio/QuernLoopTracker.java"
     Client = "$source/client/GrindlessClient.java"
     Effects = "$source/machine/MachineEffects.java"
-    Tracker = "$source/client/audio/QuernLoopTracker.java"
-    Machine = "$source/machine/ProcessMachineBlockEntity.java"
     Registry = "$source/registry/ModSounds.java"
+    Catalogue = "$source/registry/BlockCatalogue.java"
+    Blocks = "$source/registry/ModBlocks.java"
+    Bootstrap = "$source/recipe/BootstrapRecipes.java"
     Sounds = "$assets/sounds.json"
     Lang = "$assets/lang/en_us.json"
-    Generator = $generator
+    Notice = "$assets/AUDIO-NOTICE.txt"
+    Provenance = 'THIRD_PARTY_NOTICES.md'
+    Record = 'docs/assets/t0-experience-audio.json'
+    Mixer = 'docs/assets/mixer-runtime-import.json'
+    Generator = 'tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/GenerateAssets.java'
     Shell = 'tools/convert-audio.sh'
     PowerShell = 'tools/convert-audio.ps1'
-    Import = 'docs/assets/mixer-runtime-import.json'
 }
-$inputFiles = @{}
-foreach ($entry in $paths.GetEnumerator()) { $inputFiles[$entry.Key] = Read-Source $entry.Value }
-$oldAudio = Invoke-LocalGit "show ${baseline}:$source/client/audio/QuernAudio.java"
-$oldEffects = Invoke-LocalGit "show ${baseline}:$source/machine/MachineEffects.java"
+$snapshot = @{}
+foreach ($entry in $paths.GetEnumerator()) { $snapshot[$entry.Key] = Read-Source $entry.Value }
+$portBlockPath = "$source/structure/WorkshopPortBlock.java"
+$snapshot.PortBlock = ''
+if (Test-Path -LiteralPath (Join-Path $Root $portBlockPath) -PathType Leaf) { $snapshot.PortBlock = Read-Source $portBlockPath }
 $oldTracker = Invoke-LocalGit "show ${baseline}:$source/client/audio/QuernLoopTracker.java"
-$oldClient = Invoke-LocalGit "show ${baseline}:$source/client/GrindlessClient.java"
+$oldEffects = Invoke-LocalGit "show ${baseline}:$source/machine/MachineEffects.java"
 $oldSounds = (Invoke-LocalGit "show ${baseline}:$assets/sounds.json") | ConvertFrom-Json
 $oldLang = (Invoke-LocalGit "show ${baseline}:$assets/lang/en_us.json") | ConvertFrom-Json
-$oldGenerator = Invoke-LocalGit "show ${baseline}:$generator"
-$inputFiles.Media = @{}
+$oldNotice = Invoke-LocalGit "show ${baseline}:$assets/AUDIO-NOTICE.txt"
+$snapshot.Retired = @($retired | Where-Object { Test-Path -LiteralPath (Join-Path $Root "$assets/sounds/$_.ogg") })
+$snapshot.Media = @{}
 if (-not $SourceOnly) {
-    foreach ($name in $hashes.Keys) {
-        $path = Join-Path $Root "$assets/sounds/$name.ogg"
-        if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "NOT_RUN media: missing parent-supplied resource $name.ogg" }
-        $inputFiles.Media[$name] = [IO.File]::ReadAllBytes($path)
-    }
-    $inputFiles.Notice = Read-Source "$assets/AUDIO-NOTICE.txt"
-    $inputFiles.Provenance = Read-Source 'THIRD_PARTY_NOTICES.md'
+    foreach ($name in $hashes.Keys) { $snapshot.Media[$name] = [IO.File]::ReadAllBytes((Join-Path $Root "$assets/sounds/$name.ogg")) }
+    $snapshot.MediaNames = @(Get-ChildItem -LiteralPath (Join-Path $Root "$assets/sounds") -File | ForEach-Object { $_.Name })
 }
-
 function Get-Contracts([hashtable]$Files, [bool]$Media) {
-    $audio = Code $Files.Audio
-    $effects = Code $Files.Effects
+    $audio = Code $Files.Audio; $effects = Code $Files.Effects; $policy = Code $Files.Policy
+    $start = $effects.IndexOf('switch (geometry) {', [StringComparison]::Ordinal)
+    $end = $effects.IndexOf('if (status == MachineStatus.OUT_OF_BAND)', [Math]::Max(0, $start), [StringComparison]::Ordinal)
+    $dispatch = ''
+    if ($start -ge 0 -and $end -gt $start) { $dispatch = $effects.Substring($start, $end - $start) }
+    $events = $Files.Sounds | ConvertFrom-Json; $lang = $Files.Lang | ConvertFrom-Json
+    $record = $Files.Record | ConvertFrom-Json
     $c = [ordered]@{}
-    $c['generic tracker is unchanged from the actual reviewed source'] =
-        (Normalize-Lines $Files.Tracker) -ceq (Normalize-Lines $oldTracker)
-    $c['one tracker and one shared block-entity scan own both families'] =
+    $c['generic tracker unchanged'] = (Normalize-Lines $Files.Tracker) -ceq (Normalize-Lines $oldTracker)
+    $c['one loaded-only discovery and tracker'] =
         [regex]::Matches($audio, 'new QuernLoopTracker<>').Count -eq 1 -and
         [regex]::Matches($audio, 'chunk\.getBlockEntities\(\)\.values\(\)').Count -eq 1 -and
-        $audio.Contains('eligible.put(machine.getBlockPos().asLong(), machine)')
-    $tick = (Code-Block $Files.Audio 'private void tick(Minecraft client)').Replace(
-        'eligible(level, chunk, machine, listener, familyFor(machine.kind()))', 'eligible(level, chunk, machine, listener)')
-    $c['bounded loaded-only discovery, pause, overlay, mute and scope dispatch are unchanged'] =
-        $tick -ceq (Code-Block $oldAudio 'private void tick(Minecraft client)')
-    $c['renamed client registration replaces the old binding exactly once'] =
-        -not (Test-Path -LiteralPath (Join-Path $Root "$source/client/audio/QuernAudio.java")) -and
-        (Code ($Files.Client.Replace('T0MachineAudio', 'QuernAudio'))) -ceq (Code $oldClient) -and
-        [regex]::Matches((Code $Files.Client), 'T0MachineAudio\.register\(\)').Count -eq 1
-    $c['disconnect, respawn, shutdown and reload use the original cleanup'] =
-        (Code-Block $Files.Audio 'public static void register()').Replace('T0MachineAudio', 'QuernAudio') -ceq
-        (Code-Block $oldAudio 'public static void register()')
-    $c['only Quern and Clay Mixer select a family'] = (Code-Block $Files.Audio 'private static Family familyFor(') -ceq
-        'private static Family familyFor(ProcessMachineKind kind) { return switch (kind) { case QUERN -> Family.GRINDING; case CLAY_MIXER -> Family.WET_WORK; default -> null; }; }'
-    $c['family events preserve Quern gain one and set only Mixer gain 0.35'] =
-        $audio.Contains('private enum Family { GRINDING(ModSounds.T0_GRINDING, 1.0F), WET_WORK(ModSounds.T0_WET_WORK, 0.35F);') -and
-        $audio.Contains('super(family.event.get(), SoundSource.BLOCKS,') -and $audio.Contains('volume = family.volume;') -and
-        $audio.Contains('pitch = 1.0F;') -and $audio.Contains('looping = true;') -and $audio.Contains('delay = 0;') -and
-        $audio.Contains('relative = false;') -and $audio.Contains('attenuation = SoundInstance.Attenuation.LINEAR;')
-    $eligibility = 'private static boolean eligible(ClientLevel level, LevelChunk chunk, ProcessMachineBlockEntity machine, Vec3 listener, Family family) { BlockPos pos = machine.getBlockPos(); if (family == null || familyFor(machine.kind()) != family || machine.isRemoved() || machine.getLevel() != level || chunk.getBlockEntities().get(pos) != machine || !QuernLoopTracker.inRange(pos.getX() + 0.5 - listener.x, pos.getY() + 0.5 - listener.y, pos.getZ() + 0.5 - listener.z)) { return false; } var state = chunk.getBlockState(pos); return state.getBlock() instanceof ProcessMachineBlock block && block.kind() == machine.kind() && familyFor(block.kind()) == family && state.getValue(ProcessMachineBlock.STATUS) == MachineStatus.RUNNING; }'
-    $c['eligibility requires matching current source identity, kind, family, world, RUNNING and range'] =
-        (Code-Block $Files.Audio 'private static boolean eligible(') -ceq $eligibility
-    $canPlay = (Code-Block $Files.Audio 'public boolean canPlaySound()').Replace(
-        'client.gameRenderer.getMainCamera().getPosition(), family)', 'client.gameRenderer.getMainCamera().getPosition())')
-    $c['native admission rechecks the captured family without retaining a world'] =
-        $audio.Contains('private final WeakReference<ProcessMachineBlockEntity> source;') -and
-        $audio.Contains('private final Family family;') -and $audio.Contains('this.family = family;') -and
-        $audio.Contains('new MachineSound(position, source, familyFor(source.kind()))') -and
-        $audio.Contains('client.gameRenderer.getMainCamera().getPosition(), family)') -and
-        (Code $Files.Machine).Contains('private final ProcessMachineKind kind;') -and
-        $canPlay -ceq (Code-Block $oldAudio 'public boolean canPlaySound()')
-    $c['retirement stops the native object before SoundManager release'] =
-        $audio.Contains('sound.retire(); Minecraft.getInstance().getSoundManager().stop(sound);') -and
-        (Code-Block $Files.Audio 'public void tick()') -ceq (Code-Block $oldAudio 'public void tick()') -and
-        (Code-Block $Files.Audio 'private void retire()') -ceq (Code-Block $oldAudio 'private void retire()')
-    $c['only Mixer opts out of washer hum; Washer and Settler keep the true default'] =
-        $effects.Contains('case MIXER -> washer(status, level, pos, random, false);') -and
-        $effects.Contains('case SETTLER -> washer(status, level, pos, random);') -and
-        $effects.Contains('case WASHER -> washer(status, level, pos, random);') -and
-        $effects.Contains('washer(status, level, pos, random, true);') -and
-        [regex]::Matches($effects, 'washer\(status, level, pos, random, false\)').Count -eq 1
-    $projection = $effects.Replace('case MIXER -> washer(status, level, pos, random, false);',
-        'case MIXER -> washer(status, level, pos, random);').Replace(
-        'private static void washer(MachineStatus status, Level level, BlockPos pos, RandomSource random) { washer(status, level, pos, random, true); } private static void washer(MachineStatus status, Level level, BlockPos pos, RandomSource random, boolean hum)',
-        'private static void washer(MachineStatus status, Level level, BlockPos pos, RandomSource random)').Replace(
-        'if (hum) { sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.04F, 0.15F, 1.2F); }',
-        'sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.04F, 0.15F, 1.2F);')
-    $c['all particles, fault silence, Quern, TANK and unrelated effects match baseline'] = $projection -ceq (Code $oldEffects)
-    $c['passive TANK retains one independent empty arm'] =
-        [regex]::Matches($effects, '\bcase TANK -> \{ }').Count -eq 1
-    $events = $Files.Sounds | ConvertFrom-Json
-    $lang = $Files.Lang | ConvertFrom-Json
+        $audio.Contains('getChunk(x, z, ChunkStatus.FULL, false)') -and
+        $audio.Contains('QuernLoopTracker.minChunk(listener.x)') -and $audio.Contains('QuernLoopTracker.maxChunk(listener.z)')
+    $c['current entity world block and running identity required'] =
+        $audio.Contains('!machine.isRemoved() && machine.getLevel() == level') -and
+        $audio.Contains('chunk.getBlockEntities().get(pos) == machine') -and
+        $audio.Contains('block.kind() == machine.kind()') -and
+        $audio.Contains('state.getValue(ProcessMachineBlock.STATUS) == MachineStatus.RUNNING') -and
+        $audio.Contains('familyFor(machine) == family') -and
+        $audio.Contains('runningBlock(machine, chunk.getBlockState(machine.getBlockPos()))') -and
+        $audio.Contains('new MachineSound(position, source, familyFor(source))')
+    $c['closed physical families exclude passive biology bench and calibration loops'] =
+        $audio.Contains('case QUERN -> Family.GRINDING; case CLAY_MIXER -> Family.WET_WORK; case SETTLING_TROUGH, GEOLOGICAL_COLLECTOR -> Family.WATER_FLOW; default -> null;') -and
+        $audio.Contains('source instanceof CrudeExtractorBlockEntity && state.is(ModBlocks.CRUDE_EXTRACTOR.get())') -and
+        $audio.Contains('source instanceof HandPumpBlockEntity && state.is(ModBlocks.HAND_PUMP.get())') -and
+        -not $audio.Contains('case BIOCULTIVATOR') -and -not $audio.Contains('case ASSEMBLY_BENCH')
+    $c['Quern Mixer gain and native loop semantics preserved'] =
+        $audio.Contains('GRINDING(ModSounds.T0_GRINDING, 1.0F), WET_WORK(ModSounds.T0_WET_WORK, 0.35F),') -and
+        $audio.Contains('super(family.event.get(), SoundSource.BLOCKS,') -and
+        $audio.Contains('looping = true;') -and $audio.Contains('delay = 0;') -and
+        $audio.Contains('pitch = 1.0F;') -and $audio.Contains('attenuation = SoundInstance.Attenuation.LINEAR;')
+    $c['physical ranges match discovery and native admission'] =
+        $audio.Contains('WATER_FLOW(ModSounds.T0_WATER_FLOW, 0.25F, 10)') -and
+        $audio.Contains('EXTRACTION(ModSounds.T0_MINERAL_EXTRACTION, 0.3F, 12)') -and
+        $audio.Contains('< family.radius * family.radius')
+    $c['nearest eight stable voices and four nonqueued onsets'] =
+        $audio.Contains('T0SoundscapePolicy.nearest(eligible,') -and $audio.Contains('feedback.onsets(cranks).forEach') -and
+        $policy.Contains('MAX_LOOPS = 8;') -and $policy.Contains('MAX_ONSETS = 4;') -and
+        $policy.Contains('.thenComparingLong(Map.Entry::getKey)).limit(MAX_LOOPS)') -and
+        $policy.Contains('previous == null || previous.get() != entry.getValue()') -and
+        $policy.Contains('running.put(entry.getKey(), new WeakReference<>(entry.getValue()))')
+    $c['observed crank edge is loaded current RUNNING not animateTick spam'] =
+        $audio.Contains('blockEntity instanceof HandCrankDynamoBlockEntity') -and
+        $audio.Contains('state.is(ModBlocks.HAND_CRANK_DYNAMO.get())') -and
+        $audio.Contains('state.getValue(HandCrankDynamoBlock.STATUS) == MachineStatus.RUNNING') -and
+        -not $effects.Contains('ModSounds.RELAY_CLICK')
+    $c['scope pause mute resource cleanup and late retirement retained'] =
+        $audio.Contains('WeakReference<BlockEntity> source') -and $audio.Contains('onsetWorld.get() != level') -and
+        $audio.Contains('onsetPlayer.get() != client.player') -and $audio.Contains('feedback.clear();') -and
+        $audio.Contains('loops.tick(level, client.player, Map.of(), paused, enabled)') -and
+        $audio.Contains('client.isPaused() || client.getOverlay() != null') -and
+        $audio.Contains('getSoundSourceVolume(SoundSource.MASTER) > 0.0F') -and
+        $audio.Contains('getSoundSourceVolume(SoundSource.BLOCKS) > 0.0F') -and
+        $audio.Contains('CLIENT_PLAYER_QUIT.register') -and $audio.Contains('CLIENT_PLAYER_RESPAWN.register') -and
+        $audio.Contains('CLIENT_STOPPING.register') -and $audio.Contains('ResourceManagerReloadListener') -and
+        $audio.Contains('sound.retire(); Minecraft.getInstance().getSoundManager().stop(sound);')
+    $c['one client registration and no loader imports'] =
+        [regex]::Matches((Code $Files.Client), 'T0MachineAudio\.register\(\)').Count -eq 1 -and
+        -not $audio.Contains('net.minecraftforge') -and -not $audio.Contains('net.fabricmc')
+    $c['all generic and pylon-running synth fallbacks removed'] =
+        -not $effects.Contains('ModSounds.MACHINE_HUM') -and
+        -not $effects.Contains('ModSounds.MACHINE_HUM_HEAVY') -and -not $effects.Contains('ModSounds.PYLON_LINK')
+    $c['passive tank and structural parts remain silent'] =
+        [regex]::Matches($dispatch, '\bTANK\b').Count -eq 1 -and
+        $dispatch.Contains('case TANK -> { }') -and $dispatch.Contains('case CHANNEL, SCREEN -> { }')
+    $c['all original particle calls preserved'] = (Particles $Files.Effects) -ceq (Particles $oldEffects)
+    $c['physical combustion only on actual T0 fuel roles'] =
+        $effects.Contains('case BIOGEN -> combustion(status, level, pos, random);') -and
+        $effects.Contains('case FIREBOX -> { generator(status, level, pos, random); combustion(status, level, pos, random); }') -and
+        $effects.Contains('if (status == MachineStatus.RUNNING) { sound(level, pos, ModSounds.T0_FIRE_DRAFT.get(), random, 0.04F, 0.2F, 1.0F); }')
     $registered = @([regex]::Matches($Files.Registry, 'sound\("([a-z0-9_]+)"\)') | ForEach-Object { $_.Groups[1].Value })
-    $c['registered and resource events are exactly the original six plus wet work'] =
-        ($registered | Sort-Object) -join ',' -ceq (($hashes.Keys | Sort-Object) -join ',') -and
-        (($events.PSObject.Properties.Name | Sort-Object) -join ',') -ceq (($hashes.Keys | Sort-Object) -join ',')
-    $wet = $events.t0_wet_work
-    $c['Mixer binds one exact non-streamed positional event at range sixteen'] =
-        @($wet.sounds).Count -eq 1 -and $wet.sounds[0].name -ceq 'grindless:t0_wet_work' -and
-        $wet.sounds[0].stream -is [bool] -and $wet.sounds[0].stream -eq $false -and
-        $wet.sounds[0].attenuation_distance -eq 16 -and $wet.subtitle -ceq 'subtitles.grindless.t0_wet_work' -and
-        (($wet.PSObject.Properties.Name | Sort-Object) -join ',') -ceq 'sounds,subtitle' -and
-        (($wet.sounds[0].PSObject.Properties.Name | Sort-Object) -join ',') -ceq 'attenuation_distance,name,stream'
-    $preserved = $true
-    foreach ($property in $oldSounds.PSObject.Properties) {
-        $preserved = $preserved -and (ConvertTo-Json $events.($property.Name) -Depth 5 -Compress) -ceq
-            (ConvertTo-Json $property.Value -Depth 5 -Compress)
+    $expectedEvents = @($hashes.Keys) + @($native.Keys) + @('machine_hum','machine_hum_heavy')
+    $c['ten registered events with seven baseline identities retained'] =
+        ($registered | Sort-Object) -join ',' -ceq (($expectedEvents | Sort-Object) -join ',') -and
+        ($events.PSObject.Properties.Name | Sort-Object) -join ',' -ceq (($expectedEvents | Sort-Object) -join ',')
+    $c['both compatibility hum events intentionally silent'] = @($events.machine_hum.sounds).Count -eq 0 -and @($events.machine_hum_heavy.sounds).Count -eq 0
+    foreach ($name in $native.Keys) {
+        $binding = $events.$name.sounds
+        $c["$name uses its exact native physical event"] =
+            @($binding).Count -eq 1 -and $binding[0].type -ceq 'event' -and $binding[0].name -ceq $native[$name]
     }
-    $c['Quern and all five legacy event definitions remain unchanged'] = $preserved
-    $preserved = @($lang.PSObject.Properties).Count -eq (@($oldLang.PSObject.Properties).Count + 1)
-    foreach ($property in $oldLang.PSObject.Properties) { $preserved = $preserved -and $lang.($property.Name) -ceq $property.Value }
-    $c['only the new Mixer subtitle changes localization'] = $preserved -and
+    foreach ($name in $hashes.Keys) {
+        $binding = $events.$name.sounds
+        $c["$name binding is positional and nonstreamed"] = @($binding).Count -eq 1 -and
+            $binding[0].name -ceq "grindless:$name" -and $binding[0].stream -is [bool] -and
+            -not $binding[0].stream -and $binding[0].attenuation_distance -eq $radii[$name]
+    }
+    $c['Quern and Mixer event definitions unchanged'] =
+        (ConvertTo-Json $events.t0_grinding -Depth 5 -Compress) -ceq (ConvertTo-Json $oldSounds.t0_grinding -Depth 5 -Compress) -and
+        (ConvertTo-Json $events.t0_wet_work -Depth 5 -Compress) -ceq (ConvertTo-Json $oldSounds.t0_wet_work -Depth 5 -Compress)
+    $oldSubtitles = @($oldLang.PSObject.Properties | Where-Object { $_.Name.StartsWith('subtitles.grindless.', [StringComparison]::Ordinal) })
+    $currentSubtitles = @($lang.PSObject.Properties | Where-Object { $_.Name.StartsWith('subtitles.grindless.', [StringComparison]::Ordinal) })
+    $preserved = $currentSubtitles.Count -eq $oldSubtitles.Count + 3
+    foreach ($property in $oldSubtitles) { $preserved = $preserved -and $lang.($property.Name) -ceq $property.Value }
+    $c['existing audio subtitles preserved with three additions'] = $preserved -and
         $lang.'subtitles.grindless.t0_wet_work' -ceq 'Clay mixer stirs'
-    $audioBlock = '(?s)// ---- sounds ----.*?(?=\s*writeProvenance\(root, written\);)'
-    $c['asset generation preserves the original five synthetic writers exactly'] =
-        [regex]::Match((Normalize-Lines $Files.Generator), $audioBlock).Value -ceq
-        [regex]::Match((Normalize-Lines $oldGenerator), $audioBlock).Value
-    $c['generator preserves both imported beds, events and public notices'] =
-        $Files.Generator.Contains('`sounds/t0_wet_work.ogg`') -and
-        $Files.Generator.Contains('Quern A import remains byte-identical') -and
+    $c['old public audio notice retained additively'] = (Normalize-Lines $Files.Notice).StartsWith((Normalize-Lines $oldNotice).TrimEnd())
+    $c['all five retired synthetic resources absent'] = @($Files.Retired).Count -eq 0
+    $c['converters reject synthetic runtime resurrection'] =
+        $Files.PowerShell.Contains("throw 'Synthetic runtime conversion is retired.") -and
+        $Files.Shell.Contains('exit 1') -and -not $Files.PowerShell.Contains('& ffmpeg') -and -not $Files.Shell.Contains('ffmpeg -')
+    $c['generator preserves imports and limits WAVs to historical development evidence'] =
         $Files.Generator.Contains('Generation does not write imported Ogg files, `sounds.json`, `AUDIO-NOTICE.txt`') -and
-        -not $Files.Generator.Contains('deleteTree(sounds)') -and -not $Files.Generator.Contains('resourceDir(root, "sounds")')
-    $c['paired converters remain closed to the five synthetic names'] =
-        $Files.Shell.Contains('for name in machine_hum machine_hum_heavy pylon_link relay_click brownout_alarm; do') -and
-        -not $Files.Shell.Contains('"$SRC"/*.wav') -and
-        $Files.PowerShell.Contains("`$names = @('machine_hum', 'machine_hum_heavy', 'pylon_link', 'relay_click', 'brownout_alarm')") -and
-        -not $Files.PowerShell.Contains('Get-ChildItem')
-    if ($Media) {
-        foreach ($name in $hashes.Keys) {
-            $bytes = $Files.Media[$name]
-            $info = Ogg-Info $bytes
-            $c["$name has its exact approved bytes"] = (Bytes-Hash $bytes) -ceq $hashes[$name] -and
-                ($name -ne 't0_grinding' -or $bytes.Length -eq 34364) -and ($name -ne 't0_wet_work' -or $bytes.Length -eq 33374)
-            $c["$name is a complete mono 44100 Vorbis container"] = $null -ne $info -and $info.Channels -eq 1 -and $info.Rate -eq 44100
-        }
-        $info = Ogg-Info $Files.Media.t0_wet_work
-        $c['Mixer container has the selected three-second sample extent'] = $null -ne $info -and $info.Samples -eq 132300
-        $mixerNoticeStart = $Files.Notice.IndexOf('Grindless Clay Mixer wet-work audio', [StringComparison]::Ordinal)
-        $mixerNotice = ''
-        if ($mixerNoticeStart -ge 0) { $mixerNotice = $Files.Notice.Substring($mixerNoticeStart) -replace '\s+', ' ' }
-        $c['both public notices bind the final Mixer hash and game-incorporation provenance'] =
-            $mixerNotice.Contains('t0_wet_work.ogg') -and $Files.Provenance.Contains('t0_wet_work.ogg') -and
-            $mixerNotice.Contains($mixerHash) -and $Files.Provenance.Contains($mixerHash) -and
-            $mixerNotice.Contains('eleven_text_to_sound_v2') -and $Files.Provenance.Contains('eleven_text_to_sound_v2') -and
-            $mixerNotice.Contains('https://elevenlabs.io/creative-terms') -and $Files.Provenance.Contains('https://elevenlabs.io/creative-terms') -and
-            $mixerNotice.Contains('not a standalone sample or sound library')
-        $record = $Files.Import | ConvertFrom-Json
-        $r = $record.resource; $mix = $record.runtime_contract
-        $c['public import metadata agrees with the selected resource, rights and native settings'] =
-            $r.sha256 -ceq $mixerHash -and $r.bytes -eq 33374 -and
-            $r.event -ceq 'grindless:t0_wet_work' -and $r.path -ceq "$assets/sounds/t0_wet_work.ogg" -and
-            $r.imported -eq $true -and $r.import_authorized -eq $true -and $r.notice_recorded_before_import -eq $true -and
-            $r.cc0_or_mit_relicensing -eq $false -and $r.standalone_audio_distribution -ceq 'not_permitted' -and
-            $record.selection.selected_candidate -ceq 'wet-work-a' -and
-            $record.normalization.source_preview -ceq 'wet-work-a.preview.wav' -and
-            $mix.volume -eq 0.35 -and $mix.pitch -eq 1 -and $mix.radius_blocks -eq 16 -and
-            $mix.category -ceq 'BLOCKS' -and $mix.attenuation -ceq 'LINEAR' -and $mix.ordinary_error_sounds -eq $false
+        $Files.Generator.Contains('converters reject runtime synthesis') -and
+        [regex]::Matches($Files.Generator, 'SoundSynth\.write\(new File\(sounds, "[a-z_]+\.wav"').Count -eq 5
+    $catalogue = @([regex]::Matches($Files.Catalogue, 'new Entry\("([a-z_]+)"') | ForEach-Object { $_.Groups[1].Value })
+    $implemented = @([regex]::Matches($Files.Bootstrap, 'new Shaped\("([a-z_]+)"') | ForEach-Object { $_.Groups[1].Value } |
+        Where-Object { $catalogue -ccontains $_ }) + @('fibreboard')
+    $ports = @(Port-Ids $Files.Blocks)
+    $partRows = @($record.machine_coverage | Where-Object { $_.structural_part -eq $true })
+    $activeRows = @($record.machine_coverage | Where-Object { $_.structural_part -ne $true -or $ports -ccontains $_.id })
+    $silentParts = @($partRows | Where-Object {
+        $_.family -cne 'intentional_silence' -or $_.playback -cne 'none' -or
+        $null -ne $_.event -or $null -ne $_.file -or $_.radius_blocks -ne 0 -or
+        $null -ne $_.cost_family -or $_.source_class -cne 'WorkshopPortBlock'
+    }).Count -eq 0
+    $registeredParts = $true
+    if ($ports.Count -gt 0) {
+        $portCode = Code $Files.PortBlock
+        $registeredParts = (($ports | Sort-Object) -join ',') -ceq (($partRows.id | Sort-Object) -join ',') -and
+            $portCode.Contains('class WorkshopPortBlock extends BaseEntityBlock') -and
+            -not [regex]::IsMatch($portCode, '\b(animateTick|MachineEffects|playSound|playLocalSound)\b')
     }
-    return $c
+    $c['registered structural ports are silent parts not machine sources'] =
+        $silentParts -and $registeredParts -and -not $audio.Contains('WorkshopPort')
+    $matrixBindings = $true
+    foreach ($entry in $record.machine_coverage) {
+        if ($entry.family -ceq 'intentional_silence') {
+            $matrixBindings = $matrixBindings -and $null -eq $entry.event -and $null -eq $entry.file -and $entry.playback -ceq 'none'
+        } elseif ($entry.event -is [string] -and $entry.event.StartsWith('grindless:', [StringComparison]::Ordinal)) {
+            $name = $entry.event.Substring(10)
+            if ($entry.file) {
+                $matrixBindings = $matrixBindings -and $hashes.Contains($name) -and $entry.file -ceq "$name.ogg" -and
+                    $entry.radius_blocks -eq $radii[$name]
+            } else {
+                $matrixBindings = $matrixBindings -and $native.Contains($name) -and $entry.native_event -ceq $native[$name]
+            }
+        } else {
+            $matrixBindings = $matrixBindings -and $entry.id -ceq 'fibreboard' -and $entry.playback -ceq 'inherited_interaction'
+        }
+    }
+    $c['coverage exactly matches implemented T0 block crafts plus fibreboard'] =
+        ($implemented | Sort-Object) -join ',' -ceq (($activeRows.id | Sort-Object) -join ',') -and
+        @($record.machine_coverage | Where-Object { -not $_.condition -or -not $_.human_approval }).Count -eq 0 -and $matrixBindings
+    $c['actual finite six request ledger not reset or mistaken for approval'] =
+        $record.generation.performed_posts -eq 6 -and $record.generation.successful_http_200 -eq 6 -and
+        $record.generation.selected_max_posts -eq 6 -and $record.generation.new_wave_max_posts -eq 8 -and
+        $record.generation.selected_grant_exhausted -eq $true -and -not $record.generation.historical_ledgers_reset -and
+        -not $record.human_listening_approved -and -not $record.release_ready
+    $c['two noticed authorized imports with clean actual decoded QC'] = @($record.selected_resources).Count -eq 2 -and
+        @($record.selected_resources | Where-Object { -not $_.imported -or -not $_.import_authorized -or
+            $_.human_approval -cne 'pending' -or @($_.decoded_qc.flags).Count -ne 0 -or $_.decoded_qc.clipped_samples -ne 0 }).Count -eq 0 -and
+        $record.rights.notice_recorded_before_import -eq $true -and -not $record.rights.cc0_or_mit_relicensing
+    foreach ($name in $hashes.Keys) {
+        $c["$name noticed without relicensing"] = $Files.Notice.Contains($hashes[$name]) -and
+            $Files.Provenance.Contains($hashes[$name]) -and $Files.Notice.Contains('not a standalone sample or sound library')
+        if ($Media) {
+            $bytes = $Files.Media[$name]; $info = Ogg-Info $bytes
+            $c["$name exact selected bytes"] = $bytes.Length -eq $sizes[$name] -and (Bytes-Hash $bytes) -ceq $hashes[$name]
+            $c["$name complete mono44100 three-second container"] = $null -ne $info -and
+                $info.Channels -eq 1 -and $info.Rate -eq 44100 -and $info.Samples -eq 132300
+        }
+    }
+    if ($Media) {
+        $c['only four selected runtime Oggs no raw or candidate bundle'] =
+            ($Files.MediaNames | Sort-Object) -join ',' -ceq ((@($hashes.Keys | ForEach-Object { "$_.ogg" }) | Sort-Object) -join ',')
+    }
+    $c
 }
-
-$contracts = Get-Contracts $inputFiles (-not $SourceOnly)
-$allowed = @("$source/client/GrindlessClient.java", "$source/client/audio/QuernAudio.java",
-    "$source/client/audio/T0MachineAudio.java", "$source/machine/MachineEffects.java", "$source/registry/ModSounds.java")
-$changed = (Invoke-LocalGit "diff --name-only $baseline -- common/src/main/java forge/src/main/java") -split '\r?\n'
-$untracked = (Invoke-LocalGit 'ls-files --others --exclude-standard -- common/src/main/java forge/src/main/java') -split '\r?\n'
-$outside = @(@($changed) + @($untracked) | Where-Object { $_ -and $_ -cnotin $allowed })
-$contracts['no other application Java, gameplay, transfer or save-state sources change'] = $outside.Count -eq 0
+$contracts = Get-Contracts $snapshot (-not $SourceOnly)
 $failed = @($contracts.GetEnumerator() | Where-Object { -not $_.Value })
 foreach ($failure in $failed) { Write-Output "FAIL $($failure.Key)" }
-Write-Output "$($contracts.Count) MIXER AUDIO SOURCE/RESOURCE CHECKS, $($failed.Count) FAILED"
-
-$script:controls = 0
-$script:controlFailures = 0
-function Assert-Rejected([string]$Name, [hashtable]$Mutated, [string]$Diagnostic) {
+Write-Output "$($contracts.Count) PHYSICAL T0 AUDIO SOURCE/RESOURCE CHECKS, $($failed.Count) FAILED"
+$controls = 0; $controlFailures = 0
+function Reject-Mutation([string]$Label, [hashtable]$Mutated, [string]$Diagnostic) {
     $script:controls++
-    if ($contracts[$Diagnostic] -ne $true) {
-        $script:controlFailures++
-        Write-Output "FAIL negative control: $Name lacks a green baseline for $Diagnostic"
-        return
+    if ($contracts[$Diagnostic] -ne $true -or (Get-Contracts $Mutated (-not $SourceOnly))[$Diagnostic] -ne $false) {
+        $script:controlFailures++; Write-Output "FAIL negative control $Label -> $Diagnostic"
     }
-    $observed = Get-Contracts $Mutated (-not $SourceOnly)
-    if ($observed[$Diagnostic] -eq $false) { Write-Output "PASS negative control: $Name -> $Diagnostic" }
-    else { $script:controlFailures++; Write-Output "FAIL negative control: $Name -> $Diagnostic" }
 }
-
 if ($SelfTest) {
+    $composed = $snapshot.Clone()
+    if (@(Port-Ids $snapshot.Blocks).Count -eq 0) {
+        $composition = $snapshot.Record | ConvertFrom-Json
+        $revision = $composition.structural_part_composition.source_commit
+        if ($revision -cnotmatch '^[0-9a-f]{40}$') { throw 'A published exact port-composition source is required.' }
+        foreach ($key in @('Blocks','Catalogue','Bootstrap')) {
+            $composed[$key] = Invoke-LocalGit "show ${revision}:$($paths[$key])"
+        }
+        $composed.PortBlock = Invoke-LocalGit "show ${revision}:$portBlockPath"
+    }
+    $composedContracts = Get-Contracts $composed (-not $SourceOnly)
+    if (@($composedContracts.GetEnumerator() | Where-Object { -not $_.Value }).Count -ne 0) { throw 'Published structural-port composition must preserve the audio contracts.' }
+    Write-Output "PASS: published typed-port registration composes $(@(Port-Ids $composed.Blocks).Count) silent parts without machine-family resolution."
+    $copy = $snapshot.Clone(); $language = $copy.Lang | ConvertFrom-Json
+    $unrelated = @($language.PSObject.Properties | Where-Object { -not $_.Name.StartsWith('subtitles.grindless.', [StringComparison]::Ordinal) })[0].Name
+    $language.$unrelated = 'TEST unrelated presentation change'
+    $language | Add-Member NoteProperty 'test.unrelated.quest.text' 'TEST new non-audio localization'
+    $copy.Lang = $language | ConvertTo-Json -Depth 10
+    $isolated = Get-Contracts $copy (-not $SourceOnly)
+    if (@($isolated.GetEnumerator() | Where-Object { -not $_.Value }).Count -ne 0) { throw 'Audio checks must not freeze unrelated localization.' }
+    Write-Output 'PASS: unrelated localization changes remain outside the audio contract.'
     $mutations = @(
-        @('Settler family leak', 'Audio', 'case CLAY_MIXER -> Family.WET_WORK;', 'case SETTLER -> Family.WET_WORK; // case CLAY_MIXER -> Family.WET_WORK;', 'only Quern and Clay Mixer select a family'),
-        @('stale block kind admitted', 'Audio', 'block.kind() == machine.kind()', 'true', 'eligibility requires matching current source identity, kind, family, world, RUNNING and range'),
-        @('stale block entity admitted', 'Audio', 'chunk.getBlockEntities().get(pos) != machine', 'false', 'eligibility requires matching current source identity, kind, family, world, RUNNING and range'),
-        @('captured family bypassed', 'Audio', 'familyFor(machine.kind()) != family', 'false', 'eligibility requires matching current source identity, kind, family, world, RUNNING and range'),
-        @('discovery force-loads a chunk', 'Audio', 'getChunk(x, z, ChunkStatus.FULL, false)', 'getChunk(x, z, ChunkStatus.FULL, true)', 'bounded loaded-only discovery, pause, overlay, mute and scope dispatch are unchanged'),
-        @('Quern gain regressed', 'Audio', 'GRINDING(ModSounds.T0_GRINDING, 1.0F)', 'GRINDING(ModSounds.T0_GRINDING, 0.35F)', 'family events preserve Quern gain one and set only Mixer gain 0.35'),
-        @('Mixer hum restored with comment decoy', 'Effects', 'case MIXER -> washer(status, level, pos, random, false);', 'case MIXER -> washer(status, level, pos, random); // case MIXER -> washer(status, level, pos, random, false);', 'only Mixer opts out of washer hum; Washer and Settler keep the true default'),
-        @('passive TANK generator regression', 'Effects', 'case TANK -> { }', 'case TANK -> generator(status, level, pos, random);', 'passive TANK retains one independent empty arm'),
-        @('Mixer particles changed', 'Effects', 'ParticleTypes.SPLASH, x, pos.getY() + 0.85', 'ParticleTypes.SMOKE, x, pos.getY() + 0.85', 'all particles, fault silence, Quern, TANK and unrelated effects match baseline'),
-        @('generic recovery changed', 'Tracker', 'RETRY_TICKS = 40;', 'RETRY_TICKS = 1;', 'generic tracker is unchanged from the actual reviewed source'),
-        @('generator writes imported wet bed', 'Generator', '"brownout_alarm.wav"', '"t0_wet_work.wav"', 'asset generation preserves the original five synthetic writers exactly')
+        @('force load','Audio','getChunk(x, z, ChunkStatus.FULL, false)','getChunk(x, z, ChunkStatus.FULL, true)','one loaded-only discovery and tracker'),
+        @('stale source','Audio','chunk.getBlockEntities().get(pos) == machine','true','current entity world block and running identity required'),
+        @('kind mismatch','Audio','block.kind() == machine.kind()','true','current entity world block and running identity required'),
+        @('Quern gain','Audio','GRINDING(ModSounds.T0_GRINDING, 1.0F)','GRINDING(ModSounds.T0_GRINDING, 0.35F)','Quern Mixer gain and native loop semantics preserved'),
+        @('water range','Audio','0.25F, 10','0.25F, 160','physical ranges match discovery and native admission'),
+        @('voice wall','Policy','MAX_LOOPS = 8;','MAX_LOOPS = 800;','nearest eight stable voices and four nonqueued onsets'),
+        @('repeat latch','Policy','previous == null || previous.get() != entry.getValue()','true','nearest eight stable voices and four nonqueued onsets'),
+        @('passive tank','Effects','case TANK -> { }','case TANK -> generator(status, level, pos, random);','passive tank and structural parts remain silent'),
+        @('particles','Effects','ParticleTypes.SPLASH, x, pos.getY() + 0.85','ParticleTypes.SMOKE, x, pos.getY() + 0.85','all original particle calls preserved'),
+        @('generic hum','Effects','case MIXER -> washer(status, level, pos, random);','case MIXER -> washer(status, level, pos, random); sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 1, 1, 1);','all generic and pylon-running synth fallbacks removed'),
+        @('tracker retry','Tracker','RETRY_TICKS = 40;','RETRY_TICKS = 1;','generic tracker unchanged')
     )
     foreach ($mutation in $mutations) {
-        if (-not $inputFiles[$mutation[1]].Contains($mutation[2])) { throw "Negative control no longer matches: $($mutation[0])" }
-        $copy = $inputFiles.Clone()
-        $copy[$mutation[1]] = $copy[$mutation[1]].Replace($mutation[2], $mutation[3])
-        Assert-Rejected $mutation[0] $copy $mutation[4]
+        if (-not $snapshot[$mutation[1]].Contains($mutation[2])) { throw "Negative control no longer matches: $($mutation[0])" }
+        $copy = $snapshot.Clone(); $copy[$mutation[1]] = $copy[$mutation[1]].Replace($mutation[2], $mutation[3])
+        Reject-Mutation $mutation[0] $copy $mutation[4]
     }
-    $copy = $inputFiles.Clone()
-    $event = $copy.Sounds | ConvertFrom-Json
-    $event.t0_wet_work.sounds[0].stream = $true
-    $copy.Sounds = ConvertTo-Json $event -Depth 10
-    Assert-Rejected 'streaming Mixer event' $copy 'Mixer binds one exact non-streamed positional event at range sixteen'
-    $copy = $inputFiles.Clone()
-    $copy.Lang = $copy.Lang.Replace('"Clay mixer stirs"', '"Machine error"')
-    Assert-Rejected 'error-palette subtitle' $copy 'only the new Mixer subtitle changes localization'
+    $emptyTank = 'case TANK -> { }'; $activeTank = 'case TANK -> generator(status, level, pos, random);'
+    $tankControls = [ordered]@{
+        'line-comment tank decoy' = "$activeTank // $emptyTank"
+        'block-comment tank decoy' = "$activeTank /* $emptyTank */"
+        'missing tank arm' = ''
+        'nonempty tank block' = 'case TANK -> { generator(status, level, pos, random); }'
+        'string-literal tank decoy' = 'case TANK -> { String decoy = "case TANK -> { }"; generator(status, level, pos, random); }'
+        'duplicate tank arms' = "$emptyTank`n$emptyTank"
+        'grouped tank arm' = 'case TANK, CHANNEL -> { }'
+    }
+    foreach ($control in $tankControls.GetEnumerator()) {
+        $copy = $snapshot.Clone(); $copy.Effects = $copy.Effects.Replace($emptyTank, $control.Value)
+        Reject-Mutation $control.Key $copy 'passive tank and structural parts remain silent'
+    }
+    $copy = $composed.Clone(); $record = $copy.Record | ConvertFrom-Json
+    $firstPort = @(Port-Ids $composed.Blocks)[0]
+    $record.machine_coverage = @($record.machine_coverage | Where-Object { $_.id -cne $firstPort })
+    $copy.Record = $record | ConvertTo-Json -Depth 20
+    Reject-Mutation 'missing registered structural port' $copy 'registered structural ports are silent parts not machine sources'
+    $copy = $composed.Clone(); $record = $copy.Record | ConvertFrom-Json
+    ($record.machine_coverage | Where-Object { $_.id -ceq $firstPort }).playback = 'loop'
+    $copy.Record = $record | ConvertTo-Json -Depth 20
+    Reject-Mutation 'structural port given a working loop' $copy 'registered structural ports are silent parts not machine sources'
+    $copy = $snapshot.Clone(); $copy.Retired = @('machine_hum.ogg')
+    Reject-Mutation 'retired Ogg restored' $copy 'all five retired synthetic resources absent'
+    $copy = $snapshot.Clone(); $record = $copy.Record | ConvertFrom-Json; $record.machine_coverage = @($record.machine_coverage | Where-Object { $_.id -cne 'biocultivator' })
+    $copy.Record = $record | ConvertTo-Json -Depth 20
+    Reject-Mutation 'missing biological coverage' $copy 'coverage exactly matches implemented T0 block crafts plus fibreboard'
+    $copy = $snapshot.Clone(); $record = $copy.Record | ConvertFrom-Json
+    ($record.machine_coverage | Where-Object { $_.id -ceq 'clay_mixer' }).file = 't0_water_flow.ogg'
+    $copy.Record = $record | ConvertTo-Json -Depth 20
+    Reject-Mutation 'wrong machine file' $copy 'coverage exactly matches implemented T0 block crafts plus fibreboard'
+    $copy = $snapshot.Clone(); $copy.Notice = $copy.Notice.Replace($hashes.t0_water_flow, ('0' * 64))
+    Reject-Mutation 'new notice removed' $copy 't0_water_flow noticed without relicensing'
+    $copy = $snapshot.Clone(); $record = $copy.Record | ConvertFrom-Json; $record.human_listening_approved = $true; $copy.Record = $record | ConvertTo-Json -Depth 20
+    Reject-Mutation 'invented listening' $copy 'actual finite six request ledger not reset or mistaken for approval'
     if (-not $SourceOnly) {
-        $copy = $inputFiles.Clone(); $copy.Media = $copy.Media.Clone()
-        $copy.Media.t0_wet_work = $copy.Media.t0_wet_work.Clone()
-        $copy.Media.t0_wet_work[$copy.Media.t0_wet_work.Length - 1] = $copy.Media.t0_wet_work[-1] -bxor 1
-        Assert-Rejected 'changed final Mixer payload' $copy 't0_wet_work has its exact approved bytes'
-        $copy = $inputFiles.Clone(); $copy.Media = $copy.Media.Clone()
-        $copy.Media.t0_wet_work = $copy.Media.t0_wet_work.Clone()
-        $channelOffset = 27 + $copy.Media.t0_wet_work[26] + 11
-        $copy.Media.t0_wet_work[$channelOffset] = 2
-        Assert-Rejected 'stereo Mixer header' $copy 't0_wet_work is a complete mono 44100 Vorbis container'
-        $copy = $inputFiles.Clone(); $copy.Media = $copy.Media.Clone()
-        $copy.Media.t0_wet_work = [byte[]]$copy.Media.t0_wet_work[0..($copy.Media.t0_wet_work.Length - 2)]
-        Assert-Rejected 'truncated final Ogg page' $copy 't0_wet_work is a complete mono 44100 Vorbis container'
-        $copy = $inputFiles.Clone()
-        $copy.Notice = $copy.Notice.Replace($mixerHash, ('0' * 64))
-        Assert-Rejected 'notice no longer binds imported Mixer' $copy 'both public notices bind the final Mixer hash and game-incorporation provenance'
-        $copy = $inputFiles.Clone()
-        $copy.Import = $copy.Import.Replace('"import_authorized": true', '"import_authorized": false')
-        Assert-Rejected 'metadata import authorization missing' $copy 'public import metadata agrees with the selected resource, rights and native settings'
+        foreach ($name in @('t0_wet_work','t0_water_flow')) {
+            $copy = $snapshot.Clone(); $copy.Media = $copy.Media.Clone(); $copy.Media[$name] = $copy.Media[$name].Clone()
+            $copy.Media[$name][-1] = $copy.Media[$name][-1] -bxor 1
+            Reject-Mutation "$name payload" $copy "$name exact selected bytes"
+            $copy = $snapshot.Clone(); $copy.Media = $copy.Media.Clone(); $copy.Media[$name] = $copy.Media[$name].Clone()
+            $channel = 27 + $copy.Media[$name][26] + 11; $copy.Media[$name][$channel] = 2
+            Reject-Mutation "$name stereo" $copy "$name complete mono44100 three-second container"
+        }
+        $copy = $snapshot.Clone(); $copy.MediaNames = @($copy.MediaNames) + @('raw.mp3')
+        Reject-Mutation 'raw candidate packaged' $copy 'only four selected runtime Oggs no raw or candidate bundle'
     }
-    Write-Output "$script:controls NEGATIVE CONTROLS, $script:controlFailures FAILED"
+    Write-Output "$controls NEGATIVE CONTROLS, $controlFailures FAILED"
 }
-Write-Output "BASELINE $baseline"
-foreach ($path in @($paths.Values) + @('tools/checks/VerifyQuernAudio.java', 'tools/checks/VerifyAssets.java',
-        'tools/verify-mixer-audio.ps1', 'tools/verify-mixer-audio.sh')) {
-    $hash = (Get-FileHash -LiteralPath (Join-Path $Root $path) -Algorithm SHA256).Hash.ToLowerInvariant()
-    Write-Output "SHA256 $path $hash"
-}
-if ($SourceOnly) { Write-Output 'NOT_RUN: imported media/container/public-provenance checks (--SourceOnly).' }
-else {
-    foreach ($name in $hashes.Keys) { Write-Output "OGG $name bytes=$($inputFiles.Media[$name].Length) SHA256=$(Bytes-Hash $inputFiles.Media[$name])" }
-}
-Write-Output 'STATIC SOURCE/CONTAINER PROOF ONLY; Java compilation/execution, native playback and human listening NOT_RUN.'
-if ($failed.Count -ne 0 -or $script:controlFailures -ne 0) { exit 1 }
+if ($SourceOnly) { Write-Output 'NOT_EXECUTED: binary container/payload checks (-SourceOnly).' }
+Write-Output "BASELINE $baseline; static source/container proof only, not Java/native/listening/deployment."
+if ($failed.Count -ne 0 -or $controlFailures -ne 0) { exit 1 }

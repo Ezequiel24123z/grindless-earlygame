@@ -42,9 +42,11 @@ public final class FluidLogic {
     /** R1 names 1 B CO. Captured into a tank when one will take it; otherwise vented. */
     public static final int CO_MB = BUCKET;
 
-    /** 1 B of captured CO or hydrogen burns 400 ticks — 20 s of F1, a quarter of a coal. */
+    /** 1 B of captured CO burns 400 ticks — 20 s of F1, a quarter of a coal. */
     public static final int CO_BURN_TICKS = 400;
-    public static final int HYDROGEN_BURN_TICKS = CO_BURN_TICKS;
+
+    /** 1 B of hydrogen burns 50 ticks, keeping unmodified water electrolysis lossy. */
+    public static final int HYDROGEN_BURN_TICKS = 50;
 
     /** R2 roast names 1 B SO₂. Captured like CO; the Thermal Generator must not burn it. */
     public static final int SO2_MB = BUCKET;
@@ -87,11 +89,6 @@ public final class FluidLogic {
     }
 
     /**
-     * How long one bucket of {@code id} burns in the Thermal Generator, or {@code 0} when
-     * that fluid is not a fuel. Hydrogen matches CO (ADR-0077). Oxygen does not burn here;
-     * its sink is recombination.
-     */
-    /**
      * The fluid a recipe emits. Molten ids are 1000 °C; everything else is the ambient
      * reference state (ADR-0079). Count-only outputs cannot carry a temperature.
      */
@@ -105,9 +102,16 @@ public final class FluidLogic {
         return FluidState.of(id, millibuckets);
     }
 
+    /**
+     * How long a newly ignited bucket burns, or {@code 0} for a non-fuel.
+     * Hydrogen has its own lossy baseline rate; oxygen's sink is recombination, not fuel.
+     */
     public static int burnTicks(String id) {
-        if (CARBON_MONOXIDE.equals(id) || HYDROGEN.equals(id)) {
+        if (CARBON_MONOXIDE.equals(id)) {
             return CO_BURN_TICKS;
+        }
+        if (HYDROGEN.equals(id)) {
+            return HYDROGEN_BURN_TICKS;
         }
         return 0;
     }
@@ -128,7 +132,9 @@ public final class FluidLogic {
      */
     public static int accepted(FluidState current, FluidState incoming, int capacity, double maxC,
                                double maxP) {
-        if (incoming == null || incoming.isEmpty() || incoming.temperatureC() > maxC + 1e-9
+        if (incoming == null || incoming.isEmpty() || !Double.isFinite(incoming.temperatureC())
+                || !Double.isFinite(incoming.pressureMPa()) || incoming.temperatureC() < -273.15
+                || incoming.pressureMPa() < 0 || incoming.temperatureC() > maxC + 1e-9
                 || incoming.pressureMPa() > maxP + 1e-9) {
             return 0;
         }

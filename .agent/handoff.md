@@ -1,8 +1,2436 @@
 # Active orchestration handoff
 
-Updated: 2026-10-20. Product gate: **T0 ENGINEERING CANDIDATE; MANUAL/PRODUCT RC GATES HELD**.
+Updated: 2026-10-23. Product gate: **FTB STARTUP HOTFIX e50 DEPLOYED; HUMAN CLIENT CREATE/LOAD OPEN**.
+
+## Active continuation — managed definitions and physical control
+
+**Installed T0 startup hotfix is qualified and deployed. The PC lease is returned.**
+Exact source `e50ab4632f2c322b1c7122fe904e9ddb2fa08fbc`, direct parent `dd0b4bc9`,
+is the installed runtime in owned `Grindless-T0-FTB-Dev`. The same JAR was
+remapped, native-tested, packaged and installed. JAR SHA-256
+`81cd751cf4f6456fa010c00be406d37046f7e892f679987ab178abed8603dbe7`.
+Playable ZIP SHA-256
+`9b1958629f66cd1a51fba7201845065767942b26d165a999e18832907a60011b`.
+Deploy=`Deployed`, Inspect=`VerifiedStopped`. Lease
+`t0-ftb-startup-hotfix-20261023` returned at `2026-10-23T17:59:31.0266491Z`
+with Java 0 and root/cache/deploy locks 0. The profile remains
+`restricted-playable-profile-not-rc`. No client GUI, campaign, T0 acceptance,
+main merge or T1 deployment is claimed. Development `6d19925a` is not the
+deployed artifact. Do not start another Build/Deploy for this source.
+Consolidation PR #57 fast-forwards this branch to main only after its CI is
+green. The 96cd03fe native-quests red is a stale 18/51 pin, corrected in
+56cd80e2. That head's Windows tooling job was then cancelled at the
+five-minute limit, not by a failed assertion. Do not merge either cancelled
+run.
+ADR-0191 records the mechanism. Private receipts stay outside Git.
+
+The diagnosis below is preserved, not an open grant.
+
+Two actual2026-10-23 server crash reports stop in FtbQuestNative.verify:
+chapter7A7EC224FEFEF423 is missing from the native in-memory graph at
+FtbQuestIntegration.started. At the crash, the installed jar was original dd0/
+29bcce43 (46 quests), not the recent T1 development source. Both chapter
+files exist with the expected IDs; no world corruption is established.
+Private originals and installation hashes are retained outside Git.
+
+Pinned FTB2001.4.22 creates its singleton at SERVER_BEFORE_START and loads
+it at Architectury SERVER_STARTED, the same event as our verification.
+The crash log lacks the native loading message before verification.
+This identifies event ordering as the repair lead; absent data.snbt/group
+files are not a required precondition in the inspected native loader.
+Do not fabricate those files or delete progress as a workaround.
+
+Hotfix author 895ce5ed worked from exact installed dd0. Runtime owner
+db3f9dcd completed the guarded window and returned it. 46 IDs/rewards and
+player content were preserved. Historical executor 604 was not reused.
+Observed proof: quest-binding 276/0, native-quests 1134 with seed 56 and
+reopen 58, both copy boots and reopens exit 0, and canonical Prepare,
+Deploy and Inspect. The first native, package and backup observer reds
+remain preserved, not relabeled. No integrated client or GUI pass is claimed.
+Never stop the player's game or inject later T1 development into this instance.
+
+**ADR-0190's optional T1 gas increment is complete and technically qualified.**
+The line exposes existing manual Cell/Intake/Reactor construction and eight
+actual authorities, with one reward-free52nd objective and all51 old IDs/
+rewards/first-F2 intact. Future H2 ignition is50 ticks per bucket, giving
+50-percent unmodified electrolysis recovery; existing paid burns/gas remain
+preserved. This is not a future module/chassis energy claim.
+
+G15's seven successes remain e1ed evidence and its old Adapters red remains
+historical. G16 onfb846 closes the corrected/unexecuted contracts, FTB52
+synthetic backend, temporary host tests, normal models and actual45/103
+per-action provenance. Normal A11cf66 is integrated at43fbb3ac with every
+writer byte preserved. Independent QA411b verifies402/402 and closes its
+narrow recovery gap from the ORIGINAL tool events/addendumcc041ca8.
+The original command/output and three custody-only patch hunks bind
+PRESERVED_SUCCESS08/09/10 before independent checks/A11, without replay.
+The initial observer failure is retained, not relabelled a success.
+
+| Disclosure | Final gas-increment handoff |
+| --- | --- |
+| COMPLETED | Optional gas content, H2 recovery/save contracts, exact52 lineage, affected data/backend/host proofs, A11 integration and independent custody/recovery closure |
+| BLOCKED | None for this bounded increment |
+| NOT EXECUTED | Player deployment, publication/main merge, new native/legacy/CI replay; QuestClaims POSIX fixture remains SKIPPED |
+| NEEDS HUMAN VALIDATION | Actual book/client interaction, gas layout/Survival, real saves and campaign; broader T1/upgrade acceptance is not granted |
+| NEEDS MY DECISION | None for this increment |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | None new |
+| DEPLOYED STATE | Installed instance/world unchanged; isolated A11 is clean and the PC lease returned |
+
+No active source worker, PC grant or qualification remains for this increment.
+Continue the separate broader family/capability programme from the tier map;
+do not reopen completed G15/G16 or turn this optional branch into all T1.
+
+**Final G16 review verifies the application/model result but requests one
+local recovery-invocation link.** QA411b confirms402/402, sixteen actual
+stages/exits,45/103 per writer/check, outputs/invariance and recorded safe
+return. It needs the ORIGINAL command/output binding recovered helper
+4e1db884 to attempt2/PRESERVED_SUCCESS08/09/10; current request JSON names
+the core rather than that helper. Executor604 may recover only existing
+local console/history evidence into a separate addendum. NO PC, replay,
+recapture or rewrite of the original402 artifacts is authorized.
+
+Correction to the initial recovery description: its actual diff also
+preserves existing images and the original baseline, not merely a variable
+rename. These are custody changes, not application edits. Original writers0
+precede the observer failure and CheckOnly follows recovery; do not fabricate
+the missing invocation receipt. A11 integration43fbb remains byte-verified.
+
+**G16 new stages/models pass and A11 is normally composed;402-file review
+is still pending.** Exactfb846 compiles and passes corrected Adapters1055,
+Registry1376, Guidance29255; backend52 reports managed251, parser1159 and
+synthetic-data2972 scopes separately. Prism QuestDefinitions has262 assertions/
+36 owned temporary fixtures. No real target, actual Minecraft52, publication
+or player-world result is inferred. Seven G15 mains remain original e1ed
+evidence; QuestClaims' POSIX SKIPPED and old Adapters red stay explicit.
+
+Three normal writer/check pairs and postcanonicals pass; actual provenance
+is45 sources/103 images EACH action,206 copied images including the two
+fuel factors and six real family getClass names. The writer wrapper had a
+private collection-variable failure AFTER all three writers exited0.
+Original helper/failure/receipts remain; observer-only recovery copied the
+existing write evidence, then independent CheckOnly ran. No producer replay.
+
+A11cf66ee21f004dcbe58d49ac04ad630a4b01b295f has exact parentfb846 and only
+three normal changed files; Guidance was actually written/checked but is
+byte-equal, not forced into a diff. Parent verifies2285-byte bundlec86e8e59,
+sole parent/scope/contiguous trailers and every byte of ALL FOUR Git blobs
+against original writer and final copies. No generated file is hand-edited.
+
+Fresh postcustody06:52:36.8634860Z returns clean actualA11/Java0/locksfalse/
+ownGuardcffc3d25 absent. Manifestab2e1964/402 and2595+2599 inputs await QA411b.
+Final stdout3d757211 and nonempty progress stderr are named; final exit0
+remains tool227 history, not a manufactured receipt. No active PC lease or
+runtime after A11 remains. Human, upgrade-loadout and whole-T1 gates stay open.
+
+**G16 exact-source GO, no observed result yet.** Sole604/source
+fb846b1d40216b2a01137ef78c9c53b86899bdce, private inventory8da0f550 and
+preparationa5e473a2, NEW gas-content-closure root after fresh admission/Sync.
+Do not reopen G15. Its seven successful mains remain originale1ed evidence;
+their inputs are unchanged by the two-checker repair and are not replayed.
+
+Compile the required current closure and execute repaired Adapters/Registry,
+then never-executed Guidance/FTB backend/isolated Prism QuestDefinitions and
+normal writers, independent checks, canonical binding/rechecks and actual
+expanded provenance. G15 custody reviewd393 is complete:133/133,18 source
+bindings, actual classes/receipts, seven successful mains and recorded
+return are verified. QuestClaims406 includes a POSIX fixture SKIPPED, not
+a pass; Teaching1349 remains originale1ed evidence. No G15 model exists.
+A11 can contain only normal4 outputs with exactparentfb846 after genuine
+passes/frozen inputs/Java0/locksfalse/trailers/clean bundle; no push/runtime
+after data. Retain any real failure/partial data DIRTY without restore.
+No native, legacy backend, compiler enclave, CI, publication, real Prism,
+player/world/provider action is authorized. Final guarded leaseback is required.
+
+**Oracle repair981b5fd9/exacte1ed is directly reviewed and normally composed.**
+Only Adapters/Registry and its changelog changed (33+/6-); both checker blobs
+remain exact. Adapters now requires old50+wet+gas, no reward/supply and the
+unchanged F2 prerequisite set. Registry's exact chapter profile follows the
+real source and retains independent wet/gas counterexamples; no comparator,
+native API, runtime or producer is weakened or changed. Guidance already
+iterates the catalogue and needs no count patch.
+
+Seven G15 successful mains and their application inputs are byte-identical
+under this checker-only delta. Reuse them at originale1ed, not as a new run;
+compile/check the repaired helpers and then the previously unexecuted
+stages/models in G16. Earlier local preparation8da0f550/a5e473a2 is now bound
+by the G16 GO above. G15 custody is verified; closed failures and the
+nonadmitted amendment remain immutable.
+
+**G15 is CLOSED and explicitly RETURNED; the conditional amendment was NOT
+admitted.** Its guard was hash-removed at06:17:20Z before receipt of the
+amendment. The executor correctly ran no remaining Registry/Guidance/
+backend/Prism/model stage and did not reopen the lease. Fresh final readonly
+06:19:09.4950989Z records exacte1ed CLEAN/Java0/locksfalse/guard absent;
+rawSHA72a02106 and133-file manifest924915d9 are preserved. There are no
+partial writer outputs because no writer ran. The checker repair and new
+G16 source-bound grant are recorded above, not a reopened G15 lease.
+
+**G15 first real red is an omitted52-objective test expectation.**
+Exacte1ed common/Forge/tools and Energy/Fluid/Recipes/Atlas/Quest/Claims/
+Teaching exit0. Adapters reports1044 pass/two fail: its old51 count and
+old50+wet exact set omit the explicitly added gas lesson. Parent reads the
+actual two failures and source predicate; no material/gate error or stale
+canonical equality is inferred. Content ownera6d4 repairs the coupled
+checker source on isolated exacte1ed, without PC or live-source edits.
+
+An explicit amendment allows only the still-unexecuted independent Registry/
+Guidance/FTB/Prism and normal writer/check/canonical stages on frozene1ed,
+WITH all their own hard checks, if admitted before leaseback/guard removal.
+If already closed, do not reopen. Admission has not yet been confirmed.
+Do not repeat compile/seven successful mains or the failed Adapters main.
+A11 is withdrawn for this failed source; retain any normal outputs DIRTY
+with original provenance for a later properly qualified checker-only delta.
+The two red expectations remain in the original status/receipts.
+
+**G15 exact-source targeted GO, no result yet.** Sole604 executes source
+e1edcfe5804475bead2d92f407b1ad09a589ce4c on a NEW gas-utilities root using
+private inventorydee779f4/preparation4b73a040 after fresh admission/Sync.
+All old roots/proofs/worlds remain intact; no parent or other worker PC/cache
+access. Grant documentation is not the executable source.
+
+Required affected proof: common/Forge/classes/tools; Energy/Fluid/Recipes/
+Atlas/Quest/Claims/T1Teaching/Adapters/Registry/Guidance; existing FTB backend
+and isolated synthetic Prism QuestDefinitions contracts. Normal three
+writers/three independent CheckOnly/all4 byte+mtime invariance, required
+guidance binding and postEcon/T0/T1 follow. Capture the actual expanded
+source/image pins and copied write/check images; do not guess old43/98.
+
+No new native: registration, transport/settlement, BE persistence/scheduling
+and claim implementation are unchanged; data/ignition/binary/backend tests
+cover the new domain. No CI query, legacy Heracles run, compiler enclave,
+FTB publication, packaging or real Prism/player/world action. The Prism
+test owns only its temporary synthetic fixture, not the installed target.
+A11 is optional only after actual passes, exactparent e1ed, normal4 subset,
+frozen other inputs/Java0/locksfalse/trailers/clean bundle, no push/runtime
+after data. Failure preserves real partial outputs DIRTY without restore
+or a waived check. Final raw/guard/Java/locks/custody/leaseback is mandatory.
+
+**Gas source composition complete; G15 execution still unissued.**
+Content5c34ea38/exact8a1 (16 files456+/137-) is directly reviewed and normally
+composed with reviewed fuelc742. All15 non-changelog content blobs and four
+fuel blobs remain exact. Only the shared changelog conflicted.
+The optional line has eight live authorities and one38-word reward-free
+Cell-acquisition lesson. Old51 declarations/copy/receipts and mandatory
+first-F2 remain; exact52 lineage retains46/50/51 and refuses unknown53/IDs.
+Prism selector and legacy lesson assertions follow the same exact set.
+
+T1Export adds direct FluidLogic/ThermalLogic source+image pins and three
+actual gas-family class expressions. No new runtime provenance count/hash
+is observed yet; do not repeat43/98 as if the proof boundary were unchanged.
+Current canonical payloads still require normal writer refresh. Source
+inspection found no new executor, loader binding, store or transaction
+semantics; use affected compilation/data/ignition/binary/FTB/Prism contracts,
+not a new native per lesson/recipe or a player update.
+
+**New owner continuation: optional T1 gas utilities (ADR-0190).**
+Baseline8a1a3365 remains the closed manual-policy increment. Two new isolated
+Sol6.1 Max source lanes implement existing gas-family content and the
+hydrogen fuel correction: a6d4adca owns optional selectors/one reward-free
+native lesson/exact52 lineage;7042c976 owns50-tick future H2 ignition and
+actual-energy/saved-burn/gas contracts. Existing CO400, biomass, manual
+construction, old51 IDs/rewards and mandatory first-F2 remain unchanged.
+Research68d2 supplies the bounded pinned mature-mod comparison described below.
+
+Fuel sourcec7427385/exact8a1 is now directly reviewed and normally composed,
+with all four code/check blobs preserved; no revised Java result yet.
+Only FluidLogic's future-H2 rate changes. Actual ignition/binary fixtures
+retain legacy400 duration/137 remaining ticks, physical gas/refund and
+stores/configuration; an explicit Burn0 fixture is not137 observed world ticks.
+ThermalBE/process/transport/save implementations remain byte-identical.
+Research68d2 closes source-only: GT's inspected fuel list has no H2 route,
+Mekanism's shared value is nominally neutral and its fixed-usage separator
+excludes energy-upgrade discounts. No code import or external save claim.
+
+No source outcome is qualified yet. Executor604 prepares G15 locally only;
+no PC lease, root admission, CI query, JVM, generation or deployment is
+granted. Shared documentation, product decisions and integration remain here.
+The exact baseline recovery is3200/6400FU, not a promise for unimplemented
+speed/efficiency/chassis installation. Real upgrades must preserve old full
+envelopes and paid state and need their own later capability/energy contract.
+
+**The bounded manual-normal-machine change is complete and qualified.**
+Normal final assembly is manual; operating processes remain automatable.
+Other products retain authored manual-only/machine-only/dual methods.
+G11 native proof remains onf1b9; G13 producers/live finite/43-98 remain on489;
+G14 changed checks pass on317. Normal A10d668 is integrated through
+a792f02b33c9c126ff930176c7c4739e363fca08 with all four original bytes intact.
+Independent QA d8bc verifies115/115, current S1 identities (91 classes/
+19 sources), copy invariance, five invocations and recorded clean return,
+without a material discrepancy. No additional validation or PC lease is open
+for this change. Keep original reds, dirty historical roots and all source roles.
+
+| Disclosure | Final bounded handoff |
+| --- | --- |
+| COMPLETED | Manual manufacturing policy/code, native/finite/checker proofs, normal A10 integration and independent custody closure |
+| BLOCKED | None for this bounded engineering change; broader tier/release gates are not accepted |
+| NOT EXECUTED | Player deployment/update, main/release publication or new native/producer replay |
+| NEEDS HUMAN VALIDATION | GUI/client wire, Survival, real saves, art/audio/pacing and the longitudinal campaign |
+| NEEDS MY DECISION | None for this change |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | None new |
+| DEPLOYED STATE | Player instance/world unchanged; isolated PC A10 is clean and its lease returned |
+
+This closes the first-factory/manual-policy engineering plan, not all T1.
+Continue only the separately accepted broader tier programme; a partial
+increment does not authorize an update to the owner's game or a release.
+
+**G14 delta passes are reported and the lease is RETURNED; A10 is byte-verified
+and normally composed, with the final independent115-file review closed above.**
+Checker317 runs common/tools0, regressions780/0 (R36=59/0, R35=51/0),
+repaired T0canonical2847/0 and T1canonical1655/0. No new writer/CheckOnly,
+43-98 emission, CI, Forge/native or player operation was performed.
+Original normal outputs/provenance remain489; the new wider-S1 identities
+are implementationa2ffa3e8/source937bfd1e, not old hashes relabelled.
+
+Normal A10d66881826ce34cc0d17cc70d1b2fffad0c1f1ca2 has exact parent317.
+Parent verifies bundle19754 bytes/SHA1b99c2ab, four-path scope, both Git-parsed
+contiguous trailers and EACH blob byte-for-byte against original G13 payloads.
+Only those four generated files enter the normal merge; no hand edits.
+The commit explicitly records G13 writers489/G14 checker317/no producer replay.
+
+Fresh postcustody23:54:10.0231308Z reports actualA10 CLEAN/Java0/locksfalse/
+ownGuardd985f461 removed+absent and explicit return. Capsule115/
+manifest8cbb3099 and2595 unchanged other inputs/2599 frozen final inputs
+are independently verified by QA d8bc581b. Named final stdoutb5d12b18 and progress
+stderr retain the history-only final-exit limitation. No runtime follows A10.
+Human/client/save/art/audio/pacing/campaign and whole-tier release remain open.
+
+**G14 DELTA-ONLY GO, no new result.** Sole604/checker source
+317ef1e87c54ef3ccf395ac4f569038aa7a2ef15, private inventory89b67ceb and
+preparation4d825999. The NEW custody-oracle root needs fresh admission and
+canonical clean Sync. Then materialize ONLY the four verified complete G13
+payloads into that root, byte-exact, before normal common resource binding.
+Their writer/check/provenance source remains ORIGINAL489; no new writer or
+CheckOnly is authorized. Old roots, payloads and343-file capsule stay intact.
+
+Build only the needed common/classpath and changed-check closure. Execute
+the existing regression runner with R36, repaired postT0 and the previously
+unexecuted postT1. Preserve actual new wider-S1 source/class identity and
+all four copied payload hashes/mtimes plus frozen other inputs. Raw check
+identity may change; normalized model producer inputs did not.
+
+A10 is allowed only after those real passes, exact parent317, containing
+only the identical four G13 bytes, with settled Java/locks, contiguous
+trailers and a clean local bundle. No push/runtime after data. Failure
+stops dependents and preserves DIRTY exactsubset, actual new reports and
+original producer evidence; no restore, waiver or ungranted writer replay.
+Fresh final source/guard/Java/locks/custody/explicit leaseback is required.
+No Forge/native/FTB/ABI/Blueprint/assets/package/Prism/world/provider action.
+
+**Strict oracle repair483d25d7 is complete/reviewed and normally composed;
+changed-check execution remains pending.** Exactparent489/tree0a160517,
+three files154 insertions/four deletions, both checker blobs preserved.
+Report15 has two completed manual Clay Mixer/Hand Pump/Quern batches each;
+the separate writer10 state accounts for installed1/free1 and all11
+installed construction types. No missing process15 partition is invented.
+
+The test now compares actual net delivered/produced/consumed units against
+free/locked/installed/dedicated-part units and rejects negative axes.
+It reuses existing physical aggregation, does not count reward credits twice,
+and changes no product, recipe, budget or generated payload. R36's funded
+spare/unfunded reuse/exhaustion cases are authored, not run.
+
+**Next proof selection:** preserve G13 writer/check/provenance at ORIGINAL489.
+Only two check files changed; all production/runtime code, actual authorities,
+writer code and T1's43 source pins/98 declarations are identical. Canonical
+Guidance/Economy/T1 use normalized authority facts and physical custody,
+not raw S1 implementation identities. The wider S1 source/class identity DOES
+include both changed checkers and must be freshly captured, not called equal.
+Recompile the needed common/check closure, run R36 and corrected postT0 plus
+the never-executed postT1; reuse exact four G13 writer bytes rather than
+repeating writers/CheckOnly. No transfer or execution is authorized until
+the next exact-source GO; G14 inventory89b67ceb/preparation4d825999 is local.
+
+**G13 lease is explicitly returned; all four completed writer outputs remain
+DIRTY and unaccepted because postT0 failed.** Fresh postcustody readonly
+22:45:59.6833885Z records exact489/only4 allowed mutations/Java0/locksfalse/
+ownGuardb76afae3 removed and absent. Capsule343/manifesta97bbbda and2595
+unchanged non-output inputs are independently verified by QA546, together
+with43 source pins/98 images per action,196 image copies, four output/
+mtime relationships, eleven stage receipts and final closure. Actual order
+is02,03,19,08,09,10,11,12,13,14,15;19 was before writers. No new custody gap.
+Final stdout0458acb4 and nonempty progress-stderrad84dd75 have explicit local
+pointers. Final exit0 is tool199 history, not a separate invented receipt.
+
+Actual reported regression721/0 includes R35=51/0. T1 write/check1650/0
+produces a completed564-batch witness, operations1174 to2096, spent manual
+actions178 unchanged under budget665/margin487. Writer10's separate
+predecessor has installed and free1 for clay_mixer/hand_pump/quern.
+This is NOT the missing witness dump from failing postT0 process15.
+The latter's saved audit report contains gate.pass=true but no witness_state.
+C has exact closed report/state paths to distinguish a funded spare from
+double counting without rerunning a producer or waiving conservation.
+
+No postT1/A10 exists. G14 preparation is LOCAL ONLY on a new candidate root,
+without a source/grant/lease. Do not automatically repeat successful writers:
+first review the actual source delta and prove any proposed reuse.
+
+| Disclosure | Current G13 closure |
+| --- | --- |
+| COMPLETED | Live finite Press/F1/F2, three writers/checks and43/98 provenance reported; original success/failure custody preserved and lease returned |
+| BLOCKED | PostT0 installed/free-stock invariant needs an exact-state, source-backed correction |
+| NOT EXECUTED | PostT1, A10, any new grant or player update |
+| NEEDS HUMAN VALIDATION | Client/Survival/save/campaign acceptance remains separate |
+| NEEDS MY DECISION | None from the owner; source correction and proof-reuse selection remain delegated/coordinator work |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | None new |
+| DEPLOYED STATE | Player instance/world unchanged; isolated489 root retains four complete normal outputs DIRTY |
+
+**G13 passes the live finite continuation, but a later T0 invariant blocks
+completion.** On exact489, executor reports common/tools/R35runner0,
+three normal writers/three independent CheckOnly0, actual Press/F1/F2
+pureverify0 and actual43/98 write/check emissions/copies/hash equality.
+PostEconomy14 passes. PostT0Canonical15 has2825 passes/one failure:
+`installed construction is not also free stock: expectedtrue gotfalse`.
+This is not stale equality or the previous G12 failure. First output names
+no resource/amount; do not infer double spending or waive the invariant.
+
+Source owner C1c9 investigates the exact predicate and already-emitted T0
+state from489, source-only. StdoutSHA93f4d7cb and T0 JSONa2617223/MD6f9d166d
+remain original evidence. Preserve all four actual normal outputs and their
+successful write/check/provenance receipts. No stage16/postT1, A10, restore,
+new JVM or source hotfix: only custody/fresh guard/Java/locks/return remains.
+The lease was subsequently returned as recorded above. If a strict oracle-only fix is sufficient,
+select next proof by actual dependency equivalence rather than repeating
+these successful producers; no such reuse or new GO is authorized yet.
+
+**G13 MODEL-ONLY GO, not a result.** Sole604/exact source
+489bf01fb382a907c184f6172e6c1027dcf248e9, inventory59274f4a/preparation795d130e.
+Use a NEW previously unobserved custody-carry root after fresh admission and
+canonical Sync. Preserve the G12 dirty root/114-file proof and every older
+root, world and artifact. No parent/other worker PC/cache access.
+
+The newly unproved mechanism is real continued paid-native FU funding before
+consumer activation, selected-producer refill and actual Press/F1/F2 under
+the inherited material/work state. Required common/affected tools and audit
+regressions including R35 precede normal writers with their hard pure
+checks. Reuse unchanged G11 native and G12 Factory/Guidance fixtures.
+No Forge/native/FTB/ABI/Blueprint/assets/package/Prism/world/provider action.
+
+Normal three writers, three independent CheckOnly JVMs/all four byte+mtime
+invariants, only required Guidance resource refresh/postcanonicals and actual
+43/98 source/image emissions/copies remain required. A10 is optional only
+after all passes/frozen other inputs/Java0/locksfalse, exact parent489,
+subset4, contiguous trailers/clean local bundle. No push/runtime after data.
+Any real failure stops dependents and retains actual diagnostics/partial
+outputs: DIRTY exact subset is the expected failure closure, never restored
+apparent cleanliness or budget/stock/test waiver. Fresh final guard/Java/
+locks/custody/explicit return remains required. No G13 pass is claimed.
+
+**Continuation funding source f30 is complete, directly reviewed and normally
+composed; revised execution is still pending.** Exact parentcb1e/tree858fa75,
+five files291 insertions/four deletions; four executable/check blobs remain
+exact. Private handoffSHA98de7cba is verified. Only the shared changelog
+conflicted; both histories remain. The map/ADR-0187/plan now describe the seam.
+
+Continuation funds net FU before consumer activation/allocation, refills the
+selected installed producer and rejects false independence of a producer
+consuming the loop's inventory. A transient funding-route guard rejects
+recursion without becoming persisted custody. Standalone T0, actual inputs,
+native prefix, financial carry, work, claims and physical F1/F2 remain strict.
+R35's cold native-funded fixture and absent-alias negative are authored, not
+executed. Bounded diagnostics expose an attempted result without replay or
+invented zero balances. No new source/image type or recipe/loader/BE change.
+
+G13 inventory59274f4a and plan795d130e were LOCAL preparations only.
+The exact GO above now binds source/lease without inventing execution.
+The unproved property is actual continued funding/refill and Press/F1/F2
+execution under the conserved budget. Reuse unchanged G11 native and G12
+Factory/Guidance fixtures; fresh common/changed audit/T1/model proofs are
+required. No author fixture or source review accepts the finite model.
+
+**G12 is CLOSED/BLOCKED and explicitly RETURNED, not model-green.**
+Fresh final readonly AFTER custody21:34:03.4723711Z records exactHEADcb1e,
+intentional cleanFALSE and only Guidance/Economy modified. Both actual
+partial payloads remain in place and in the114-file capsule; no restore,
+reconstruction, checkout or later producer occurred. T1JSON/MD bytes/mtimes
+and2595 other inputs stay unchanged. Owned-allJava0, work/cachelocksfalse
+and exact ownGuardf9ca2acb removal/absence close the exclusive lease.
+FinalrawSHAb70f88cd and manifest24d84ed7 bind the reported closure.
+Independent QA251d verifies114/114, originals/partials/inputs,12 source
+bindings/26 captured images, actual exits/failure and guard closure. A
+narrow follow-up verifies the existing postcustody stdout546 bytes/
+b70f88cd and stderr858 bytes/ad84dd75. The stderr has three Completed
+progress records, not errors or independent exit0 proof. No separate final
+exit receipt or observer-correction consoles exist; their history/notes are
+not promoted to raw receipts. Custody is accepted, the finite model is not.
+No new PC inspection or producer replay occurred.
+
+Reported actual checks: FactoryALLPASS; Guidance29253/0; regressions670/0,
+R34=25/0 and priorR29-R33 green. Guidance74/4973 and Economy396/17 normal
+write0 precede the strict T1 failure below. Actual43/98, CheckOnly,
+postcanonicals and A10 do not exist. Existing original4 G10 payload copies
+match initial G12 hashes read-only; neither originals nor partials are reset.
+
+C1c9 continues the source-only repair. Executor604 may prepare a NEW G13
+inventory/plan LOCALLY ONLY, preserving this failed root and every old file.
+Source/grant/lease stay null; no CI/SSH/root inspection/JVM is authorized.
+One future exact-source GO must select the final scope and untouched root.
+
+**G12 real finite-T1 failure; source repair active, PC closing only.**
+Guidance/Economy normal writers exit0 after the repaired T0 gate. T1's
+10-t1-write exits1/wrapper1 in pureverify BEFORE output/provenance:
+craft/press is unexecuted, physical assemble/relay_matrix_f2 is unexecuted,
+stone_crafting_materials has guaranteed/conditional/claimed0 against draw2
+(margin-2), inherited cumulative manual/crank_handle work is unproved,
+and mineral_aggregate/biomass/energyFU construction reserves are unknown.
+No further stock/batch/step/work balances were emitted; do not invent them.
+This is NOT a canonical-stale error or an accepted finite witness.
+
+Original stdout2916 bytes/SHA8524a44d3f3dffd70a66705d1452c1b108a424a89a8d9f71e5b32733fc71fac2
+and stderrSHAc667fed6461a34d97fc5644e665d3dba0c94b140724db91076274694302b36ca
+plus actual receipts/before-output hashes are preserved by604.
+C1c9 receives the exact cause and closed originals for SOURCE-ONLY repair
+fromcb1e on its own worktree. No source hotfix/Sync/PC/JVM permission follows.
+Preserve real funding/work/aliases and strict failures, not budget defaults.
+
+**Explicit G12 failed-run closure amendment:** retain the actual partial
+Guidance/Economy outputs in place. NO restore/reconstruction/checkout of
+those two files; final DIRTY-PARTIAL at exact HEADcb1e replaces clean.
+All other tracked inputs and T1JSON/MD stay unchanged. Preserve both produced
+and original hashes/mtimes and raw failure custody; no CheckOnly/canonical
+refresh/A10 or further JVM/producers. The recorded fresh guard/Java/lock closure and explicit return above now
+complete this failed-run preservation; they do not turn it into a model pass.
+
+| Disclosure | Current G12 failed-model boundary |
+| --- | --- |
+| COMPLETED | Repaired common/contracts and two normal writers report success; exact failed T1 originals are preserved and assigned for source repair |
+| BLOCKED | Finite T1 continuation lacks a proved Press/F2 execution, stone-tag funding and inherited work/reserve accounting |
+| NOT EXECUTED | T1 output/provenance, CheckOnly, postcanonicals, A10, any further native or player update |
+| NEEDS HUMAN VALIDATION | Client interaction, real-save continuity and the manual campaign remain open |
+| NEEDS MY DECISION | None from the owner; source diagnosis and repair belong to the coordinator and assigned worker |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | None new |
+| DEPLOYED STATE | Player instance/world unchanged; isolated G12 root intentionally retains two partial model outputs |
+
+**G12 first execution boundary reported; models still pending.** Sole604 reports
+fresh absent-root admission/VerifiedDetached Synccb1e, common/classes/classpath
+and affected tooljavac0, repaired Factory0, Guidance fixture/main0 and
+audit --regressions-only0. The21:27:10.166Z clean/Java0/locksfalse snapshot is
+between stages, NOT a leaseback or current live observation. Normal writers
+and their actual gate/finite witness continue under the same exclusive lease.
+Final raw custody and independent review remain pending.
+
+One CI decision observed runs39856429605/39855893335 still in progress:
+no CI success, reuse or five originals is claimed. The uploader's inherited
+originals5 footer was corrected to actual0 without reupload/producer replay;
+the original discrepancy is retained. No native/Forge or owner-world action.
+
+**G12 MODEL-ONLY GO.** Sole604/exact
+cb1e124173a8530e3faf205d53aeef90651c7187, private inventory1b8 and separate
+local preparation975bca14. The finite-continuation root was unobserved at
+grant; the first admitted common/tool boundary is reported above. No parent/other worker
+PC/cache access is authorized under the lease. Source/aliascb1e freezes;
+grant documentation is not the executed source.
+
+Execute repaired Factory/Guidance/auditR34 and actual T0-gate/finite-T1
+contracts through existing mains/pure exporter checks, using original exact-CI
+evidence only when assumptions match. Normal Guidance/Economy/T1 writers,
+THREE independent CheckOnly JVMs preserving four bytes/mtimes, only guidance
+resource refresh and postcanonical checks must supply actual43/98
+source/images, not authored counts. A real gate/material/path/work deficit
+stops dependents and retains diagnostics/custody; no injection, false stale
+label, waived assertion or live source hotfix.
+
+Optional normal A10 is only four existing outputs, exact parentcb1e, after
+real passes/frozen other inputs/Java0/locksfalse/contiguous trailers/clean
+local bundle. No push/runtime after data. Final raw/source/image/output/CI
+custody and fresh actual-final-SHA/own guard removal+absence/owned-allJava0/
+locksfalse/explicit return remain required.
+
+NO Forge/native/FTB/old CLI/compiler enclave/ABI/JDK fixtures/Blueprint/assets/
+package/Prism/target/owner-world/dependency/provider action. Only common
+metadata and source tests changed afterf1b9; reuse its verified G11 native
+and unchanged proofs without reexecution/retarget. No G12 model/writer or
+finite-continuation pass is established by its first common/tool boundary.
+
+**G11 native-only is complete, independently verified and returned.**
+Fresh20:49:11Z absent-root admission/VerifiedDetached Syncf1b9 precedes one
+canonical matrix-lifecycle. Actual1273 assertions,19 markers exactly once,
+PASS1/FAIL0 and harness/native-sidecar/wrapper0 are reported; launcher0 is
+derived from the canonical rejection path, not an independent server receipt.
+Natural save-stop/new diagnostic world retained. Runtime snapshot20:55:46Z
+binds tested/staged/remapped JARea327c67/2576414 bytes, only Architectury
+and Grindless. No writer/check/canonical refresh/actual43-98/A10 exists.
+
+Custody46/manifesta7e8b510 and2599 unchanged source/old-output inputs plus
+four payload byte/mtime invariance are independently verified by4390aa5b,
+including actual raw/native/JAR/CI5/guard relations and no material gap.
+Fresh final
+read-only20:59:08.9449678Z reports cleanf1b9/owned-allJava0/locksfalse/own
+guard99725563 removed/absent; rawfinalc5bc4b7f remains outside the capsule.
+The amended ruling was admitted before return. No PC task remains or new
+grant is implied. All five original CI reds remain genuine model/fixture debt.
+The1273 is an actual aggregate counter, not1273 individual log lines;
+Architectury is bound by runtime inventory, not a new copied-JAR hash check.
+Final safety is the recorded fresh snapshot, not another current PC inspection.
+
+**Factory oracle source repairf863 is normally integrated, not executed.**
+Exact parentf1b9/treefce2064a changes only VerifyFactory and its own bullet
+(43 insertions2 deletions). Parent directly reviews the complete typed bill,
+actual shipped JSON decoder, one minimumF1/control/output and four precise
+negative variants, with all other world conditions intact. Private separate
+handoff11666 bytes/SHAb0020864 is parent verified. Normal merge preserves
+its exact test blob and source/runtime/canonical files; no new compile/native
+pass or CI retarget follows.
+
+**C model repair82ac is now normally composed after direct bounded review.**
+Exactparentf1b9/tree21eaa09b,7 files157 insertions8 deletions, handoffSHA4cebe79d
+verified. Actual bench/firing_chamber consumes a manual Furnace; its inherited
+R0 controller-item declaration is false. Ten metadata lines declare that
+allowed formed controller finite BOOTSTRAP capital, retaining constructor,
+costs, operating ceramics and recurring-withdrawal failure. The hard gate,
+auditor, reserve, adapters and runtime are unchanged. Guidance's positive
+fixture uses its real producer and keeps absent craft/capital as a precise
+negative. R34 checks actual finite funding/false-R0/recurrent deficits; gate
+failures now expose their fingerprints without skipping canonical parity.
+This repairs a necessary source blocker, not an observed complete model pass.
+
+Earlier executor604 prepares G12 LOCALLY ONLY on the never-admitted model root/
+inventory1b8, preserving old preparation files. Needed common/tool images,
+repaired Factory/Guidance/auditR34, normal writers/independent checks/canonical
+refresh and actual43/98 follow one future exact-source GO. The reviewed
+repair does not change G11's native/loader/BE inputs, so do not repeat that
+native or FTB/ABI/Blueprint work. The exact GO above now supersedes that
+preparation-only hold, not the actual proof and fresh-admission requirements.
+
+**Owner decision fallback:** if the owner is unavailable for a question,
+use relevant verified GregTech/comparable technical-modpack precedent,
+adapt it to existing Grindless authorities and record a bounded decision.
+Explicit owner product choices take precedence; this is not new spending/
+credential/save-interruption/deployment/acceptance permission. Earlier
+coordinator Furnace attribution is not retroactively changed into owner
+confirmation. Current source failures still need root-cause repair, not
+a precedent-based test waiver.
+
+**G11 models are SOURCE-blocked; one independent native is authorized.** Original exactf1b9
+CI39849913599/artifact12455889777 has environment/build/tooljavac0 and real
+positive changed contracts: Sustainability2195/0 including R29-R33,
+Adapters1044/0, Registry1375/0, UI1128/0, PersistenceALLPASS,
+Recipes/Atlas/Logic/Assets and Teaching1150. These are CI source results,
+not a PC/native/whole-model pass.
+
+Five suites are red. Economy.verify77 and T1.verify120 reject the actual
+conditional T0 gate, not merely old JSON. Factory's portal-Matrix assertion
+fails at raw2776; A owns the precise typed-control oracle follow-up.
+ResourceGuidance.nullsAndHandling279 references absent craft/capital; C owns
+that fixture and actual-gate diagnosis. T0's old generated-guidance parity
+fails before its later checks, so no live T0 gate or finite-T1 pass is supplied.
+Parent verifies all five original lengths/SHA locally, behavior6c1ae6a5.
+Do not repeat the successful CI/compiler or run dependent writers as if all
+reds were canonical-stale. Necessary local classes for the separate canonical
+native are distinct from replaying failed/passed standalone suites.
+
+A/C may normally FF only to exactf1b9 for their bounded source repairs.
+Previously protected T0ConditionalGate/other-owner seams require a concrete
+coupled diagnosis before editing; no waiver, fake craft, stock/profile injection
+or weaker recurring-supply claim is authorized.
+
+The coordinator initially requests unused-window closure. After all five
+primaries and actual runtime CI greens are known, an explicit revised ruling
+supersedes that request: sole604 may fresh-admit/Sync unchangedf1b9 and execute
+ONE existing native for the independent ingredient/RecipeManager/Bench guard
+uncertainty while model repairs proceed. This is explicit coordinator scope,
+not permission inferred by the invoker. If already returned, the old lease
+cannot be resumed; no admitted command is interrupted/killed.
+No native start/root state/pass is inferred before an actual observation.
+
+G11 is now NATIVE-ONLY: no model writers, independent checks, canonical refresh,
+tracked file changes or A10. Capture original exits/JAR/inventory/save-stop/
+retained-world/native+CI5 custody, then fresh cleanf1b9/owned-allJava0/locksfalse/
+own-guard removal+absence and explicit return. Old source failures remain red;
+later repaired-model qualification can reuse an unchanged native proof if its
+assumptions actually match. Source/aliasf1b9 stays frozen until return.
+
+**Historical full G11 GO, narrowed above after original source failures:** sole604/exact
+f1b9cb3fd09efa663b2a62faa2219f0df4f4dd96 on the NEW manual-machine root,
+private inventorySHAac48df06. Source includes exact reviewed A652/Cab1e/Bdc
+blobs; all scoped source verdicts are clear, not runtime proof. Fresh private
+admission/headroom/ownership and canonical Sync must precede producers.
+No other worker/parent may access PC/cache while this lease is active.
+The source alias stays exactf1b9; grant documentation is a different coordinate.
+Current human-readable line tables now match that manual source:
+component_fabrication replaces factory_reproduction, manual Wire Mill/Washer
+construction precedes their automatic operations, and finite witness choices
+do not force every player recipe alternative. Retired-work guidance says
+unavailable credit is retained, not automatically resumed/refunded. This is
+documentation only and does not retarget G11 or supply an execution result.
+
+Compile needed common+Forge/classes/classpath/tools and execute changed
+contracts or honest exact-source CI reuse. Do not mislabel mechanism/material/
+classification failure as stale canonical equality; known stale parity follows
+normal writers. Run exactly one existing clean-source matrix-lifecycle BEFORE
+writers for the new MOD-bus ingredient/RecipeManager/crafting settlement and
+real Bench held-work/cache/generation/reopen boundary. Capture tested/staged/
+remapped JAR/inventory/primary/exits/natural save-stop/new retained world before
+later Gradle. Existing19 expectations include the new final tool markers;
+launcher0 must retain its real captured/derived basis.
+
+Then normal Guidance/Economy/T1 writes, three independent CheckOnly JVMs with
+all four bytes/mtimes invariant, only needed guidance refresh, postcanonical
+checks and ACTUAL emitted/copied source/images (authored43/98 is not evidence).
+Only four existing canonical paths may change. Optional normal A10 has exact
+parentf1b9/both contiguous trailers/actual passes/frozen nonoutputs/Java0/
+locksfalse/clean local bundle, no push or runtime after data. Return full raw/
+input/image/native/model custody and fresh actual-final-SHA/own guard hash
+removal+absence/owned and all-observedJava0/locksfalse explicit leaseback.
+
+NO source hotfix/live other-ref Sync, producer replay to fix observers, FTB/
+paid/old CLI/compiler/ABI/JDK/Blueprint/assets/package/Prism/fictitious/player/
+owner-world action or new dependency/provider/generation. Reuse unchanged
+proofs at original sources. New root remains NOT observed/admitted until the
+executor actually reports it; no compiler/suite/native/finite/A10 claim yet.
+
+**Complete manual-manufacturing SOURCE is normally composed, not executed.**
+Normal A652/Cab1e/Bdc048 are integrated with exactly40/14/10 non-changelog
+blobs respectively; only changelog conflicts and every history is retained.
+Private Amerge76b19048 and Cmergeeaa21be9 precede this final B composition.
+All four canonical files remain actual A9; no generated/app file is hand-edited.
+Publication is coherent combined WIP for required CI, not compiler/native/
+model proof. A/C/original B and same-reviewer582f's new Bench-runtime delta
+are now source-reviewed without significant issue within their exact scopes.
+At that earlier source-composition boundary no personal-PC lease was bound.
+The new exact G11 assignment above supersedes only that execution hold.
+
+**B guard SOURCEdc048 is delivered.** Normal parent63f107a9/tree6d99b25a,
+four-file322 insertions17 deletions delta; private separate handoffSHA093e2d92
+is parent verified, old46bf/c00 stay exact. It holds orphaned positive Bench
+work before matching/inspection/cache adoption, preserves owner/stores/live/
+zero/valid-Guide semantics and uses C's exact OUT_OF_BAND/menuFault text.
+The existing native aggregate adds one actual Bench while retaining19
+expectations/budget. Ten protected methods including work/workCycle/diagnosis,
+settlement and load/save are author-compared exact, not Java proof.
+Review582f receives only e960-to-dc, not a replay of old B/A/C reviews.
+It now finds no significant new-delta issue conditional on the actual A/C
+interfaces. Java/Gradle/native/model/integrated execution remains unperformed;
+there is no inferred red/green or19-expectation pass.
+
+**OWNER CORRECTION ADR-0188 is the current product authority.** Normal final
+machines are manual; their operating processes remain automatable. Components,
+materials, passive infrastructure and real multiblock controllers use authored
+manual-only, machine-only or dual methods. The owner explicitly confirms that
+automatic capability is not an obligation and not every product needs both
+recipes. The intended game is more complex/content-rich/futuristic
+GregTech-inspired industry, not a second Factorio or universal self-replication.
+
+The first clarification prompt initially returned owner unavailable; the owner
+then directly resolves infrastructure as above. There is no remaining owner
+decision on that boundary. Old automatic-machine construction objectives and
+the unissued common-model-only qualification scope are frozen. Current source
+still contains obsolete constructors until the bounded recipe migration is
+implemented; do not deploy or call the policy implemented from documentation.
+No PC/CI-query/Sync/JVM GO is issued and no actual world/paid work is touched.
+
+**Three noncompeting SOURCE lanes now execute on exact published7f9c3ba5.**
+A0b715812 uses idle-created app46fad521/shiny-parakeet for recipe retirement/
+manual bills/pure ManufacturingPolicy/Forge ingredient/adapters/recipe-Atlas-
+registry checks. B6921ada5 uses idle-created appcbce0410/fantastic-bassoon for
+selector/retired-paid-work/manual-native fixtures. C1c9a6363 continues its same
+finite-state task in b430/symmetrical-umbrella after explicitly authorized
+normal FF7f9, owning progression/manual-capital/teaching/T1Export.
+Idle app creation launches no competing CLI. Runtime tasks are sole writers;
+shared files/ownership and exact APIs are explicitly split, parent publishes.
+Normal local source commits and static checks are not Java/qualification.
+
+**B SOURCE delivered, not integrated/executed:** normal041022f7/exact7f9
+thene960c13b supplies10 paths/609 insertions259 deletions, treee27811ca.
+All nine code/carrier blobs remain exact041; e960 changes only the same
+changelog bullet. The original041 coauthor texts were blank-separated, so
+Git recognized only the last trailer; normal e960 preserves/discloses that
+failure and provides contiguous attribution, without rewriting history.
+Review582f2a82 finds no significant B fixture/native-crafting source issue,
+conditional on A's still-pending data/serializer. This is static source review,
+not compilation, integrated tests or an executed19-marker native.
+Private ignored build/private handoff is
+20720 bytes/SHA46bf0837, parent size/hash verified. No compiler/model/native/
+writer or source absorption occurred. Parent's initial PS text-pipeline/
+Unicode comparison falsely rejects the final attribution append; native Git
+trailer formatting confirms exactly one coauthor for041 and both for e960.
+Only the read-only observer changes; the original source failure stays real.
+
+B keeps19 expectations:16 original Matrix markers plus aggregate, with only
+the final two now named MATRIX-ASSEMBLER-TOOL-BLOCKED/CONSUMED-ONCE.
+They observe permitted tool work, not automatic normal-machine production.
+Actual manual control is a new real RecipeManager/Ingredient/crafting
+settlement source probe. Its source is not G10 reexecution or GUI/wire/Survival/
+owner-save proof. A/C source and combined exact-source qualification remain.
+
+The shared pure API is recipe.ManufacturingPolicy.isManualFinalMachine(String).
+Manual shaped control uses type grindless:minimum_control/tier F1, actual
+registered stacks and the existing decoder/matcher. Official Forge API research
+is qualified in the external-reference record: MOD-bus registration, NBT-aware
+isSimplefalse, no invented architectures/ordinal literals or binary attestation.
+No copied foreign implementation, new dependency or manual recipe engine.
+The first parent metadata observer misreads PowerShell's property-collection
+Count and fails before link/Git staging; explicit array capture repairs that
+read-only check without changing lane data or replaying a producer.
+
+**A/C initial source is delivered; narrow Furnace follow-ups now run.**
+A d6867960/exact7f9/treeccf2a850 reports41 owned files, normal clean source,
+manual catalogue/control/policy/replication retirement and all allowed tool
+routes, no Java/native. It explicitly leaves old vanilla Furnace autoroutes
+open rather than claiming universal closure.
+Review9219e379 checks immutable originald686 while the narrow follow-up runs;
+it must not mistake that explicitly open boundary for a hidden completed pass.
+
+**A final source652968a2 is delivered and source-reviewed.** Normal parent
+d686/tree4b020c31, narrow6-file79 insertions23 deletions; combined41 files/
+1414 insertions599 deletions from7f9. Private separate handoff21067 bytes/
+SHA7f1120bc is parent size/hash verified. It now retires both vanilla Furnace
+autoroutes and keeps manual authority/materials/operations/other basics.
+No Java/native/model or new world action occurs. Review9219 receives only the
+finished narrow delta in addition to its original immutable review.
+That review now closes with no significant A source issue across original+
+finished delta. It is not common/Forge compilation, Java/native codec,
+full-external-tag, client or world evidence.
+
+The coordinator asks that exact boundary once; the owner is unavailable and
+delegates autonomous decisions. Coordinator chooses manual-only FINAL
+minecraft:furnace, since it remains a real processor even as a Thermal input.
+This is NOT owner-confirmed Furnace preference. A withdraws only bench/furnace
+and assemble/bootstrap/furnace; preserve actual vanilla manual craft, Thermal
+material bill/raw seed, smelting, other basics and all existing placed items.
+C uses actual vanilla/minecraft:furnace authority and honest finite capital/
+manual-upstream core evidence; no claim of automatic net core supply.
+B covers retired Bench work and reports any concrete runtime-paid-work defect
+before editing an unowned engine. No speculative refund/completion/erasure.
+Its normal63f107a9/exacte960/tree60b08e08 writes actual Bench/Furnace
+retirement contracts, with separate private handoffSHAc00d5327 and original
+46bf intact. SOURCE inspection exposes actual existing fallback/adoption:
+matchingRecipe selects live bench/brick_block for orphaned positive Bench
+work; recipe then zeroes Progress/replaces WorkRecipe before power draw.
+This is a written expected-red case, NOT an executed Java/native failure.
+ADR-0189 authorizes B only the necessary shared read-only/cache/adoption
+guard in ProcessMachineBlockEntity. Preserve valid Guide compatibility,
+live/unpaid work, stores, paid fields and full work-prefix/rollback contracts.
+No extra ledger, save format, arbitrary refund or restored auto-machine row.
+Executor604 prepares a REVISED local-only future window: new manual-machine
+root, common+Forge/changed contracts and one clean-source existing matrix
+native for the genuinely new ingredient/recipe/settlement binding BEFORE
+normal writers, then independent/canonical/model/image custody. No GO or
+source binding is issued. Reuse unchanged FTB/ABI/Blueprint work, no package/
+Prism/player action or new per-recipe smoke.
+The revised private inventorySHAac48df06/planSHA02978044 are LOCAL ONLY.
+New root is NOT observed/admitted; source/grant/lease remain NULL and old
+1b8/472 preparation is byte-exact. Actual final code/guard review precedes
+one GO; no producer runs merely because a preparation file exists.
+
+**C final sourceab1e8ab0 is delivered and its narrow source review is clear.**
+It retains originald4d1/ebb and normal1d0/da82 Furnace resolution, then
+ab1e/exactda82/tree4ea5c0b8 adds only the precise locale/changelog delta.
+Combined separate handoffsSHAdc45d07a/f6b60e92 are parent verified, with e5/25e
+byte-exact. Actual vanilla manual authority and R33 distinguish finite optional
+capital subassembly from recurring feed; no finished Furnace gift/budget reset.
+Locale gui.grindless.bench.retained_work takes workRecipeId then the exact
+Double.toString(progress); B owns runtime hold. Authored43/98 remains unobserved.
+Review3c54 receives only finished ebb-toab1e seven-file142 insertions8 deletions,
+not a repeated generic/original-C review. No compiler/model/native executes.
+It now finds no significant issue in that actual delta conditional on A652.
+Actual compilation, model/runtime replay, writers/images and native/client/
+world checks remain unexecuted; B's new Bench guard still gates composition.
+
+Earlier C d4d1/ebb4a582/exact7f9/treea50fe515 supplies15 files/453 insertions129
+deletions, manual-capital annotations/strict recurring-feed negatives,
+manual progression/finite selections/teaching and authored43/98 pins.
+Private handoffSHAe5cca7f3 is parent verified; original25e handoff remains.
+33 decoded T0 bodies/51 logical paid identities stay intact;19 T1 bodies
+remain within42words. Source errors (wrong adapter path, unanchored table
+observer, runtime-ID/session-tool mismatch) are preserved with read-only
+recoveries. Review3c54e5ca finds no significant C-only source issue in that
+capital semantic delta; it does not rerun the generic-state review or execute
+typed tests/models/native. The pending narrow Furnace follow-up is not yet
+that reviewed source.
+
+Parent's policy patch initially applies the three metadata files, then stops
+at a stale ADR context. Actual partial state is inspected before completing
+only the remaining documentation hunk; no application/producer is rolled
+back, rerun or silently relabeled.
+
+Generic custody review8ef12f19 finds no significant issue in source6b within
+admission/conservation/execution/export. This does not approve automatic final
+normal-machine manufacture or execute Java/replay. Retain that reusable state
+mechanism and rebind its T1 projection to corrected manual authorities.
+Research86151eb2 checks the smallest appropriate official Forge ingredient/
+shaped-matching API, not another engine or copied implementation.
+
+**Earlier ADR-0187 intake before generic review, not the active execution scope.**
+Normal6c53b321/exactf5c2dde then6b191767 supplies nine owned paths/
+1112 insertions49 deletions, clean source treebaa360a6 and both trailers.
+Parent verifies private handoffSHA25e77bcb, preserves all seven Java blobs
+exactly and retains qualified A9's four canonical outputs without hand edits.
+Only changelog conflicts; both histories stay. Independent immutable source
+review8ef12f19 is running; published WIP/required CI is not a passing review,
+compiler, finite replay, class-image or normal-output result. Authored
+42-source/96-image expressions are not observed execution hashes.
+
+Executor604 prepares the next affected common-model path LOCALLY ONLY in a
+new isolated root. It must wait for one reviewed published exact-source GO
+and new explicit lease before PC/SSH/Sync/JVM/CI-query access. The attempted
+coordinator_instructions delivery was rejected for the inactive persistent
+relationship; an ordinary legacy-session message is accepted, without PC
+authorization. G10 native/FTB/runtime proofs stay at their old sources.
+
+**G10 is technically closed, independently audited and normally integrated.**
+Actual invocation sourcea54 supplies compiler0, UI1297/0, Persistence0, one
+canonical native1028/19 exact-once markers/PASS1/FAIL0 and normal model stages.
+QA14dbfb79 verifies278/278 custody files, all31/41 write/check source/images,
+2576 unchanged nonoutputs/2580 A9 inputs, original CI5/equivalence, exits,
+native timing and final guard/Java/lock return, with no material discrepancy.
+Parent verifies bundlee2fdcae0/1875 bytes, normal A9bb3/exacta54 parent/
+four paths/both trailers and ALL four Git blobs byte-for-byte equal actual
+normal writer payloads. A9 is normally merged in this checkpoint, not edited.
+The native source remainsa54; no runtime or package ran after data-only A9.
+
+**G10 lease explicitly returned17:04:48.5853692Z.** Fresh read-only closure
+is clean actualA9/owned and all-observedJava0/work-cache locksfalse/own guard
+hash-verified removed and absent, with no PC writes. Final stdoutSHAd036cd6f
+and stderr remain outside immutable capsuleaca883ce/278. No PC task remains;
+future access needs a new explicit guarded window, not an old grant.
+Native tested/staged/remapped JARd024a5aa/2527348 bytes was frozen before
+writers. Launcher0 is derived from the canonical harness's rejection of
+nonzero, not a separately captured server-exit receipt. No actual client
+wire/rendered/no-command/owner-save/whole-T1 result or player update follows.
+
+**Earlier G10 actual native and model stage report, before final custody:**
+Sole604 reports one canonical matrix-lifecycle on cleana54,19 expectations,
+aggregatePASS1/FAIL0, natural save-stop and retained world. Tested/staged/
+remapped JARs and inventory were frozen before subsequent Gradle. Three
+normal writers, three independent CheckOnly processes and three post-write
+canonical checks exit0, with four payload byte/mtime invariance and actual
+31/41 provenance. Last16:33:13Z Java0/locksfalse is intermediate, not returned.
+Normal A9 command157 and final raw/hash custody are still in progress; do not
+guess its SHA, assertion counts or leaseback. No replay is needed.
+
+**Historical ADR-0187 source dispatch, now completed by the runtime worker.**
+Published decisionf5c2dde fixes conservation of actual T0 witness state through
+the existing auditor/reserve, not another starter kit/planner or a world
+inventory claim. App sessionb430ff47 is created, but its CLI startup and the
+same-session delivery recovery both fail at launch_and_sdk_start/30s without
+confirmed app-worker start or message delivery. Preserve that failure, do not
+create duplicate sessions. Runtime worker1c9a6363 is the single alternative
+implementation channel on that same isolated source branch. It owns only
+the audit/reserve/T1 source, existing checks/provenance and its bounded
+map/changelog entry; no PC/JVM/writer/gameplay/save/publication permission.
+Source basef5c2dde stays exact; it may not absorb A9/future refs on its own.
+The coordinator remains architecture/product/integration owner, not coder.
+
+**Earlier G10 repaired Java boundary:** canonical Synca54 is
+VerifiedDetached in the new root; common+Forge/classes/classpath and tool
+javac exit0. Source014's MachineUi and Persistence mains both execute exit0,
+without invoker bootstrap. Counts/raw hashes await final custody; stage
+labels17/18 are not assertion counts. Intermediate16:12:17.9237387Z sourcea54
+is clean/Java0/locksfalse, not leaseback or native acceptance. Executor
+continues exactly one canonical matrix-lifecycle before normal writers.
+
+**NEW FULL G10 GO, results pending:** sole604/exact
+a54f8de2b8113a1c796183498b1a9c18c2470941, fresh inventory admission on the
+previously absent G9 root. This supersedes native-only2e BEFORE dispatch and
+does not resume an old source grant. Confirm the repaired UI/Persistence
+Java/compiler gates (or exact-source original-CI reuse), then one canonical
+matrix-lifecycle on CLEANa54 for real selection/work/NBT/menu/reentrancy/server
+registration. Snapshot native JAR/inventory/raw exits before later Gradle.
+Normal Guidance/Economy/T1 write/independent CheckOnly/resource refresh/
+canonical checks may then change only four payloads. Normal local A9 with
+exact parenta54/both trailers/frozen other inputs/Java0/locksfalse is allowed;
+no push/runtime stage after data. No source hotfix/live Sync, FTB/ABI/paid
+replay/package/Prism/target/player or whole-tier claim. All old failures stay
+bound to their original source; new actual observations are still pending.
+
+**Harness source014 is ready; native-only2e was withdrawn BEFORE dispatch.**
+The repair arrived during the native-only grant publication, before any GO
+was sent to604. Thus no native/host action or new observation is attributed to
+that superseded grant. Parent normally composes exact014/exact0ab parent:
+UI pure/index/source contracts and pure packet negatives precede real vanilla
+bootstrap only for ItemStack-bearing snapshots; malformed NaN remains
+unavailable/unspendable with vanilla typed canonical SNBT comparison; legacy
+AUTO derives currentFind from real inputs/fluids and tests identity/zero
+borrowed credit separately. Only the two suites and their changelog change;
+production and fifteen-role data stay exact. Source review is clear, but
+compiler/Java/native confirmation requires a new combined exact binding.
+
+**Historical independent native-only discriminator, never dispatched.**
+Sole604/exactbb5/new inventory root previously proved absent receives one
+canonical existing matrix-lifecycle. The exact main/Forge build already
+passes; Java UI preview bootstrap and NaN/AUTO oracles remain real failed
+source suites, not proven production failures. Native has never run for
+this selector. The new FML/BE selection/recipe-owned paid-work/menu/NBT probe
+can discriminate the production boundary while source0752 fixes its harness.
+Do not rerun failed Java suites, tool-javac, models/writers/CheckOnly/canonical,
+create A9 or write tracked files. Keep source/aliasbb5 frozen and retain the
+fresh world/JAR/inventory/raw exact outcomes, then return guard/locks/Java
+custody and the lease. A native pass would not close the separate source reds
+or prove client wire delivery/rendering/Survival/whole-tier acceptance.
+
+**G9 unused lease returned14:50:21.7730000Z and ten-file custody verified.**
+No canonical Sync, PC JVM/compiler/native/writer or A9 exists. The only PC
+action is read-only WMI/path closure without CommandLine or writes: new root
+is ABSENT, all-observed Java0/owned launches0, work/cache locksfalse, no guard
+created and expected owned guard path absent. Do not claim clean source for
+an absent checkout. Parent verifies manifestc15e6f77 and all10 originals/
+metadata/helper/closure/handoff hashes; closure stdout8a7433ff is real.
+
+Persistence's two precise bb5 failures are now known: raw4308 malformed
+state1/Double.NaN compared by CompoundTag.equals after binary reopen, not
+automatically evidence of lost bytes; raw4638 legacy AUTO's combined
+resolve==reactor ANDprogress0 predicate, without a raw actual-ID/progress
+split. Parent reads originals: malformed NaN stays explicit/unavailable and
+selection refuses; legacy balance remains reachable. Owner0752 must diagnose
+the oracles/production boundary without dropping cases, weakening zero credit,
+inventing observations or forcing a guessed output. UI and these two
+assertions are separate from three old canonical equalities. OriginalCI stays
+red. Repair is source-only; another exact published grant is required.
+
+**G9 decision-bound CI finds real source regressions before any PC stage.**
+Exactbb5/run39796002710/artifact12433053598 has environment/build0 AND
+tool-javac0: the0ab buffer-writes repair is compiler-confirmed. Suites now
+run; MachineUi assemblerWire286/main78 fails ItemStack initialization through
+unbootstrapped BuiltInRegistries. Persistence has another real red whose
+primary cause is being extracted, not assumed identical. Three other old
+canonical equalities remain separate. BehaviorSHAb4d7f48f is preserved.
+Owner0752 receives the UI harness correction with no fake carrier, skipped
+cases or bootstrap bypass of pre-boot index contracts. No PC/SSH/JVM/Sync/
+native/writer has started; unused lease closure is pending, aliasbb5 frozen.
+
+**Historical G9 GO, unused and now returned:** sole604/exact
+bb5f137b945277c04fd4042b43d121ad3552c2ff/new inventoried full root.
+All selector438/controllerccfe/fixture0ab sources are reviewed and normally
+composed, old CI red preserved. First confirm actual tool-javac and changed
+logic/recipe/Atlas/UI/persistence/registry contracts with original exact-source
+CI reuse when available. One existing canonical matrix-lifecycle on cleanbb5
+then resolves a NEW uncertainty: server registration and real selected-ID/
+recipe-owned fractional/suspended/blocked work, menu authority, NBT/reload and
+reentrant settlement. Old G4 cannot prove this new behavior. No new scenario/
+budget/quest-paid probe; retain the new diagnostic world and actual JAR/
+inventory/exits before later Gradle.
+
+After that, normal Guidance/Economy/T1 writers, independent CheckOnly/resource
+refresh/canonical checks and actual observed provenance may change only the
+four normal payloads. A local normal A9 with exact parentbb5/both trailers is
+allowed after real passes/frozen other inputs/Java0/locksfalse, with bundle
+for parent; no push or runtime stage after data. Reuse unchanged G7 FTB/ABI/
+file proof and old unrelated mechanisms. No package/Prism/target/player action.
+The native fixture's menu-player carriers do not prove rendered GUI or actual
+client wire delivery. Return raw/class/payload/native/guard custody and fresh
+explicit leaseback; no live source hotfix/Sync or whole-tier claim.
+
+**Selector CI compile red source-repaired, confirmation pending:** exactcb2d/run39791306862/
+artifact12430349463 has environment0/build0 but tool-javac fails before every
+suite at VerifyMachineUi277: chained inherited writes return ByteBuf, which
+has no writeUtf. Original behaviorSHA5ac9aff6 is preserved, Windows tooling
+succeeds and native smoke is skipped. Normal0ab654b/exact438 parent changes
+only the four typed buffer writes in that same negative plus its changelog
+disclosure. Parent directly reviews/preserves the full test blob; no cast,
+257/decoder weakening or VerifyRecipes edit. Actual new compiler confirmation
+and combined qualification remain pending; no PC grant yet.
+Parent's initial hash observer has a PowerShell pipeline
+syntax error, then recovers exact five raw hashes through array capture;
+no production/CI replay or Git/auth configuration change occurs.
+
+**Nine-controller source complete:** data58 normally composesab3 +exactcb2d
+as3045778, thenccfe2f3 finishes the precise fifteen-role check. Parent reviews
+both bounded diffs; four code/check blobs remain exactly the source. Only
+changelog conflicts and preserves both histories; selector assertions stay
+intact. This normal source integration is not actual Java/suite/acquisition
+proof, and canonical A8 remains the prior-bill result until normal writers.
+
+**PhaseB is unblocked on the actual published baselinecb2d30b.** Parent
+normally integrated reviewed selector438 with F1 and A8; exact immutable
+blobs/ancestry/trailers and the mechanical registry union are checked.
+Data58 receives the full exact SHAcb2d30be9639d66a0315efcc5f4949385710021d
+and explicit VerifyRecipes write permission. It must normally compose that
+revision into its PhaseA branch, preserve all selector tests and complete
+the exact six-plus-nine controller contract. No PC/JVM or normal-output
+permission is added; source/API/native qualification follows the final source.
+
+**Nine-controller data PhaseA is source-complete, not qualified:** normal
+ab3bd4d/exact0451122 parent/tree4ce1efad changes only ProcessGraph, Atlas/T1
+checks and the two owned documentation entries. Parent reviews the bounded
+diff: nine explicit fourth groups, old three groups/time/FU/output retained,
+generic/passive/Motor unaffected. Reported28 static/18 rejected mutations are
+not Java. VerifyRecipes is unchanged and still expects six roles on this
+partial branch; PhaseB must preserve438's selector checks on the exact
+parent-published combined baseline. No all-suite/native/acquisition claim.
+
+**Selector source normally integrated, no runtime pass:** owner0752 delivers the normal
+a89baba/30e2822/43838b8 chain, nineteen files and clean treef3c5fb19. Work/
+menu/network/persistence/visible picker and the strict workCycle profile are
+authored; static1013/independent-model804/lexical34 are not Java/AST/native/
+transport/graphical evidence. Immutable review91de0be2 finds no significant
+issue in the full source, not a compile/AST/server/packet/GUI/save proof.
+The normal parent merge combines F1/A8 and438, preserving sixteen non-registry
+code/test/locale blobs exactly and reviewing only the automatic strict
+registry-profile union. Changelog conflict retains both histories. Data58
+receives the actual published merge SHA after this checkpoint, with explicit
+VerifyRecipes write permission, not a guessed/WIP source. The native fixtures
+derive real equal Washer/Reactor inputs, not a permanent three-group count.
+No changed recipe, runtime proof or tier acceptance is inferred.
+
+**G8 bounded model outcome closed; explicit return13:25:45.6175163Z verified.**
+Source4ee common/tool compilation, changed exact-source CI reuse, actual
+31/41 write/check image receipts and all normal/canonical stages report0.
+Normal A8 is REALdee1a2ae4f90a95b4c941570358571e4597e3c37, exact parent4ee,
+only four normal payloads. Parent verifies/imports bundle9543ae63/2583bytes,
+ancestry/trailers, all four Git blob lengths/SHA/bytes against actual writer
+payloads and normally merges A8 in this checkpoint. Independent read-only
+QAa3e7323c verifies239/239 custody files including all original CI5,
+source/class hashes, independent CheckOnly invariance and guard/Java/lock
+closure. CI behavior1/three old equalities stay historical reds; actual
+1357/368/2083/25728 unaffected passes are authenticated. Pre-PC hash-display
+raw error is not supplied in the capsule, explicitly disclosed; two read-only
+QA observer errors are corrected without production replay. No required-chain
+mismatch blocks this outcome. All PC grants are returned; no target/runtime
+action occurred, and rendered/finite-T1/selector/controller-data proof is not
+inferred.
+
+**Historical G8 GO:** sole604/exact4ee24057642d2e4b2bc2cbcd28e8eb250283194b
+on a new common-only root/inventory, after the verified G7 return. The
+default-F1 source57 and coupled display are reviewed and normally integrated.
+Compile needed common/tool classes; execute actual changed authority/registry/
+guidance/T0/T1 contracts and normal Guidance/Economy/T1 writers, independent
+CheckOnly/resource refresh/canonical checks. Require observed31-source/
+41-image hashes, not authored counts. Reuse unchanged G7 FTB/ABI/native/
+managed-file proofs; no Forge backend, boot, package, plan, target/Prism or
+player action is permitted. Do not run predictable stale canonical suites
+before writers or repeat an already valid exact-source proof unnecessarily.
+
+Only four normal payloads may change. After actual passes/non-output input
+invariance/Java0/locksfalse, a normal local A8 with exact parent4ee and both
+trailers is allowed if data changes; bundle it for coordinator integration,
+no push or runtime stage. Source4ee/alias stay frozen throughout execution;
+no live hotfix or selector Sync. Return all raw/class/payload/guard custody
+and the lease explicitly. Source0752 continues its independent selector lane.
+Its reported a89baba checkpoint identifies the coupled mechanics profile.
+After F1 source57 finishes, the coordinator explicitly permits only the
+work-wrapper/workCycle prefix contract and precise negatives in the existing
+registry verifier. This preserves full guard/diagnostic shape rather than
+loosening it; F1 addDeclarations/default rule and G8/4ee stay unchanged.
+
+**ADR-0186 construction follow-up is selected, not executed:** append one
+existing minimum-F1 fourth operand to nine explicit active process
+constructors, preserve all old material groups/IDs/time/FU/output, passive/
+Motor/first-five seed and exact F2. A separate isolated data owner may start
+only noncompeting ProcessGraph/Atlas/T1 files; VerifyRecipes stays leased to
+selector0752 until explicit release. Isolated Sol6.1Max source owner
+58fac55d-8eed-4b47-96ab-e96561f3c961 now starts at0451122 on those disjoint
+files. It must checkpoint PhaseA honestly, then normally compose only the
+exact parent-supplied integrated selector baseline before shared PhaseB;
+no blind overwrite or competing VerifyRecipes edit. No source changes under G8, new item,
+generic controller tax, hand-edited canonical data or ready-tier claim.
+
+**G7 bounded engineering closed:** independent QA verifies339/339 hashes and all actual
+historical publisher/model/class-image/backend/boot/package/plan/managed51/
+protection/fresh-closure chains. It finds one documentary gap: the original
+CI5 logs are outside the339 bundle, not inside it. Parent recovers the exact
+existing artifact12423716934 from run39773265433/head41df; executor independently
+locates its original local copy and hashes. The narrow QA follow-up verifies
+all five originals: exact41df, environment/build0, behavior1 with only the
+two old committed-equality failures and actual Registry1344/Adapters323.
+The original CI stays red; its reused unaffected passes are authentic.
+No producer or CI is rerun and339manifest stays immutable.
+Parent also verifies all four A7 Git blobs equal the actual normal payload
+lengths/SHA/bytes and normally integrates A7 in this checkpoint. An initial no-commit merge
+refuses absent committer identity before any change; command-local personal
+identity repairs invocation without altering Git configuration.
+
+| Category | Current integration boundary |
+| --- | --- |
+| COMPLETED | G11 native-only1273/19/JAR/46 custody/2599 inputs/fresh return independently verified; Factoryf863 and C82ac source fixes normally composed with exact test/code blobs and old CI preserved |
+| BLOCKED | New compiler/actual model execution must confirm the source corrections and expose any remaining gate/finite deficit; native success does not close original model failures |
+| NOT EXECUTED | Revised-source compiler/model/normal writers/actual43-98/A10; no rendered/client-wire/owner-world/campaign/package/player deployment/main/release/whole-tier acceptance |
+| NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
+| NEEDS MY DECISION | None |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
+| COST / BILLING RISK | None new; no dependency/provider/generation spending |
+| DEPLOYED STATE | Only the stopped fictitious target has verified26e/51; no player update, older roots/worlds remain protected |
+
+**G7 explicitly returned at12:24:42.0730525Z.** The executor reports clean
+ApplicableSource26e/Java0/work-cache locksfalse and exact own offline-guard
+removal/absence. Parent has verified/imported the A7 Git bundle, exact41df
+parent/three normal paths/both trailers and four payload bytes; normal A7
+integration preserves those bytes. Independent read-only QA4d5c2db9 closes
+the339-file custody/native/package/plan/target/closure chain against
+manifest83edec28, plus the separately recovered original CI5, without any
+PC/JVM/replay. All execution grants are
+closed; a later exact-source window is required.
+
+**ADR-0184 source normally integrated, not Java-qualified:** normal
+a51c9d3 then57d38d6, base1e642dc, thirteen owned files, including the authorized
+display context. One pure ResourceGuidanceContext.canonicalSupply rule is
+shared by physical authority and authored display. Reported static103/111 and
+31-source/41-image list shape are not emitted provenance or rendered-client
+evidence. Independent thirteen-file review4700edfc finds no significant issue;
+the normal merge preserves the eleven code/check/exporter blobs exactly.
+Only the changelog conflicts; both histories are retained and the route map
+auto-merges both owned seams. Actual changed-model31/41 proof remains pending.
+The existing normal A7 payloads are not hand-retargeted and can now be stale
+for this new source; regenerate them only through the later normal writers.
+
+**Historical G7 progress report before final custody:** new
+publisher0cb passes both authentic historical CLI8 classpaths before Gradle.
+Exact41df CI39773265433/artifact12423716934 supplies Registry1344/0 and
+Adapters323/0; only Economy/T1 committed equalities are stale. Full existing
+FTB backend and normal writers/independent CheckOnly/three canonical checks
+report0, with actual29-source/38-image receipts. A7 is REAL
+26e22945a308a8635e8d3701ff3a3dec40a6175f, exact parent41df, only Economy
+JSON and T1 JSON/Markdown changed; Guidance stayed unchanged. Writer invocation
+is41df; clean runtime ApplicableSource is26e. Bundle325f5e33 is reported, not
+yet imported. One plain ready51 boot and subsequent package/plan/apply were
+still pending at that earlier boundary. The12:21:13Z report now closes the
+plain ready51/Done/natural-save-stop boot, real A7 package and canonical
+fictitious Prepare/Deploy0missing/0downloads. Fresh current plan reports0
+with no planning writes; managed50-to51 apply reports DefinitionsUpdated
+and the SAME plan/hash reports Unchanged, with protected files/backups/mtimes
+intact, no pending and InspectVerifiedStopped. Only the fictitious target is
+now reported A7/51 and not launched. Final custody/own-guard cleanup and
+explicit leaseback remain pending; no parent verification or whole-T1 result
+is inferred yet.
+
+**New source-detected whole-T1 blocker:** multiple Assembler constructors use
+the same casing1/motor2/plates4 inputs. ProcessLookup.find retains the last dry
+match; the machine/menu has no explicit target selection. A live selected
+Washer route or native-ready51 log therefore does not prove Survival acquisition
+or wet operation. Runtime reproduction/fix are pending. Read-only upstream
+recipe-selection research952d39a9 is active while the coordinator traces the
+existing menu/WorkRecipe/transaction contracts. Remedy in a separate source
+lane; do not alter G7, add an unrelated smoke or call its file outcome a factory
+pass. Physical controller completeness and genuine chassis work also remain
+outside that bounded file/definition outcome. ADR-0185 now selects the bounded
+existing-engine stable-ID target/menu correction, preserving recipe-owned paid
+work including fractional carry, with no new bills, slots or circuit tax.
+The pinned external pattern/limits are recorded; implementation/native/UI
+qualification remains separate and pending.
+Source owner0752df7b-209e-4fd5-afe5-b3cf7c376471 now implements ADR-0185 on
+isolated3c00af0 with Sol6.1Max, no PC/cache/JVM/SSH. It owns the existing
+lookup/process-BE/menu/screen and corresponding fixture seams, not recipes,
+FTB or the concurrent default-F1 adapter/guidance sources. Normal integration
+and an actual changed-mechanism window remain coordinator-owned.
+
+**Current source/qualification split:** G7 sole604 owns the exact41df605
+qualification/new PC root; all fresh results remain pending. A separate
+ADR-0184 source owner77889597-58d8-46f1-8c68-d5ccb4e5a0a9 starts at1e642dc
+to correct the real default-F1 projection disagreement
+using the existing decoder/authority adapters and checked registration, with
+no PC/cache/JVM/SSH or G7 retarget. Preserve generic declarations, exact higher
+ratings, all source quantities/seed draws and paid state. No synthetic
+conversion, global Resource rewrite, canonical hand edit or finite-T1 claim.
+The model correction needs its own later exact-source proof after G7 returns.
+The coordinator explicitly expands the same owner to ResourceGuidanceContext
+and existing guidance checks: raw authored display descriptors must agree with
+F1-only metadata through one pure default rule, without a broad declaration
+fallback, hover-time source I/O or changed ITEM/exact/minimum evidence.
+
+**Latest owner mandate (ADR-0178):** continue independently, without stopping
+at routine completed increments or requesting ordinary technical approval.
+Deliver each genuinely ready whole tier into the same longitudinal game through
+the guarded stopped/backup/compatibility/update path. Escalate only a serious
+blocker or an urgent owner decision. A running game defers deployment, not
+independent development; never stop/restart it. No partial increment becomes
+whole-T1 readiness or human acceptance, and no public main/release or new
+paid-generation budget follows. This supersedes old blanket no-T1-deploy holds
+only when the tier is actually ready and the operational guards pass.
+
+The owner requests continued development after the completed M/ad5b50d wave.
+Two isolated source lanes start at exactad5b50dd509b0261818101ff08e786750826161a:
+cb273782 owns an explicit stopped/hash-bound FTB46-to50 managed-definition
+update and recovery;347a1c5b owns explicit minimum-capacity control ingredients.
+Third source ownerb2fd298b starts at61fdf76 (same application baseline) and
+now supplies63142dd plus follow-up5b359a5, normally integrated here:
+four existing reusable Press dies reproduce through the ordinary Assembler
+with exact manual material/output parity. Optional `tool_reproduction` follows
+assembly without a forming/assembly cycle or new first-F2 prerequisite.
+No new item, station or bill is introduced. Expected fixture sizes become
+205 graph rows/80 Assembler/262 all Atlas rows; these are not executed counts.
+Parent catches an Atlas unit-list versus slot-count oracle before JVM;5b359a5
+checks the actual ProcessRecipe groups and preserves the material assertion.
+The coordinator retains root architecture/docs/integration/publication.
+No source worker has a PC/cache/JVM grant and no new execution has passed.
+The new604195bd lease performs fresh admission/canonical Sync to clean
+423a7c1bac80fd23e1269500f5a558bb6c3cfbdb in the NEW isolated root, preserving
+oldM/its retained diagnostic and all Prism/world state. Before launching any
+JVM it recovers exact CI39728601139: VerifyRecipes922/929 call a nonexistent
+eq(String,List,List) overload. This is a real source compile red, not stale
+canonical data or an invoker. New native smoke is SKIPPED, not passed.
+At05:53:20.2894842Z the lease explicitly returns: detached/clean423a,
+owned/all-observed Java0, work/cache locksfalse, startedJVM0. Parent verifies
+closure8d96179a and raw00348af1; no PC Java/native/writer/A2 exists.
+All PC grants are closed. Source ownera18f81ea supplies9b9c619, normally
+integrated: all affected old die/new factory lists use the existing `yes` helper
+with full ordered/value `.equals`, without weakening them. Actual compiler
+confirmation and a new exact published GO are still required; do not resume
+the released grant or relabel the old423a failure.
+
+**Historical85e grant, now returned:** only604195bd receives
+`control-factory-qualification-20261022` on exact published
+85e9078e1c03d05f32ca76fe46dad5ad13e16647. It includes4f factory content and
+the9b compiler-oracle repair; all actual new results are pending. Use the same
+new isolated inventory/root after fresh clean/lock/resource admission, not the
+oldM diagnostic or Prism. Parent/all other workers have NO PC access.
+Compile required classes/contracts, run the one new Matrix mechanism on the
+clean source before NORMAL writers, then independent CheckOnly/canonical gates.
+Expected209/84/266 and five minimum-control rows are data, not extra native
+runs. Verify the real adapter bytecode hash. All input/source changes wait for
+zero owned JVMs/locks and another exact GO; FTB provenance repair stays separate.
+
+**Current boundary:**85e admission/Sync succeeds, then exact CI39733641733
+supplies environment/build/javac0 and Recipe/Atlas/ControlMatrix/Persistence,
+inspection476/0, adapters314/0 and teaching957 passes. Three formerly pure
+rebuild contracts (MachineUi/Material/Workshop) fail because minimum-primary
+Graph.index now touches BuiltInRegistries before bootstrap. T1.verify also
+fails the obsolete wire-immediately-after-assembly oracle; this blocks its
+writer before writing, not merely a stale JSON equality. Economy/Guidance
+stale equalities remain separate. Native smoke is SKIPPED.
+At06:35:57.7150106Z604 returns clean85e/owned-all-observedJava0/locksfalse,
+startedPCJVM0, no native/writer/A2. Parent verifies original build/behavior
+and closure8363ad93; private pre-JVM invoker/observer failures remain preserved.
+No orphan is killed. All PC leases are returned. Owners347/a18 repair the
+pure index and relative line-order contracts; no fake bootstrap or suite
+exclusion may make the failures disappear. Reuse actual unaffected CI passes.
+The precise relative-order fixf1097b7 is now normally integrated: wire remains
+after assembly, with its dependency/four routes/OPTIONAL/F2 guards unchanged.
+It neither reorders gameplay nor supplies a writer/JVM pass; the pure-index
+repair remains independent. Thermal source must not reinstate another rigid
+adjacency contract.
+Pure-index follow-upa5a89a4 now normally integrates: per-family minimum-primary
+descriptors and ordinal TreeMap candidate union require no registry/bootstrap.
+Minimum candidates join nonempty keyed hits, deduplicate and retain graph order;
+wet-first/last-dry matching/count/conditions are unchanged. Nine pure pre-boot/
+index regressions and nine additional real RelayF3 primary-slot assertions in
+the existing native fixture are authored, not executed. No new marker/budget.
+Both real85e source causes are source-repaired, not yet behavior-qualified.
+
+ADR-0176 selects only the existing Wire Mill's F1 control operand as a minimum
+capacity requirement. Existing exact factories, F2 Matrix predecessor, outputs
+and native quest/reward predicates stay exact. Reuse `canControl`; propagate the
+role honestly to viewers/audits. This is control substitution, not a playable
+chassis kit or a stronger Wire Mill. Only Relay Matrix items are currently
+registered: native coverage is RelayF1-F3; cross-architecture contracts are pure,
+not a reason to register fake items. Current kinds already expose their full
+baseline envelopes; silently narrowing them to manufacture a mark ladder would
+risk existing machines and is not authorized by this wave.
+Checkpoint1ee2e73 normally integrates the typed `MatrixRole`/
+`minimumControl` contract with5b's dies. Old constructors/factories, F2
+predecessor/output and FTB exact predicates stay intact. Registered JEI
+alternatives and F1+ Atlas/inspection/teaching share the role without changing
+qualified resource IDs. Inspection writes schema3 and reads strict1/2 as EXACT,
+preserving pressure compatibility. Authority metadata explicitly treats canonical
+F1 supply as one option, not exhaustive alternate supply.
+T1 exporter source/class provenance grows accordingly; all four canonical files
+remain unchanged pending NORMAL generation on final integrated inputs.
+The existing matrix-lifecycle retains its16 original markers and adds three
+authored real-control markers, including an F3 blocked-output/complete cycle.
+No Java/native run has observed them. Independent exact-source reviewaa9e9e9a
+finds one P2: the new adapter source is fingerprinted but its executed class is
+missing. Owner follow-upf046923 adds `AuthorityAdapters.class` to the existing
+binary hash loop and a focused omission guard; it is normally integrated here.
+Require that actual class entry in the later writer receipt. No native replay
+is justified by this tool-only fix; source-only red/green is not behavior proof.
+The focused external follow-up is complete in
+`docs/design/t1-external-references.md`: actual Forge1.20.1 Mekanism snapshots
+and copies values into replacement block entities, with no rollback in the
+identified post-swap wrong-tile path. Its MIT licence is not the reason to
+import a structurally incompatible pipeline. Keep Grindless's same-object
+chassis/store model; the GT negative is explicitly bounded, not an absence proof.
+
+ADR-0177 preserves append-only/fail-closed startup while adding an explicit
+managed-file transition with known hash ownership, full preflight, backups and
+visible partial-failure recovery. Names alone do not prove management.
+Never rewrite native team/progress/paid SavedData or the owner world.
+Use real supported FTB/package/file primitives, not another quest engine.
+The author preserves preliminaryee4f504: actual Windows filesystem/tool tests
+153/20 focused and773/103 full pass, but Java/authenticdd0 publication remain
+unexecuted and a classpath follow-up is being closed. Independent reviewer
+1ce4d3be checks that exact preliminary transition/recovery source.
+
+To keep content moving during qualification, source ownera18f81ea implements
+ADR-0179 fromd840714: ordinary Assembler reproduction of Pulverizer, Arc Furnace,
+Press and Assembler with exact manual material bills and explicit F1+ control.
+Optional reproduction follows assembly; the manual first machines remain seeds.
+Thermal has five groups and stays out; no new intermediate/slots/bill or claim
+that all five machines are automated. Checkpoint4f3aae3 now normally integrates
+that data, preservingf046's provenance guard. Expected209/84/266 and five
+named minimum inputs are source shapes, not passes; its analogous new list
+assertions are source-fixed in9b9c619 before Java. This lane has no PC grant.
+Managed-FTBa7b820b adds explicit-instance/argument refusal and reports786/103
+real Windows tool assertions, but not Java/authentic old export. Independent
+review1ce4d3be identifies stale compiled classes passing origin-below-root;
+follow-up93ce975 is now normally integrated and closes that P2 **in source**:
+normal isolated offline single-worker GradleBuild/JavaCompile/remap, compilation
+receipt, exact loaded-class images and all selected-JAR payloads. Reference
+schema2 requires compilationSha256; never adopt historical build/classes.
+The same reviewer closes only this static P2. Actual build/receipt/source-file
+dd0 export/parser/real-plan consumption remain unexecuted. Parent verifies
+raw892a2f0b and unchanged a7->93 filesystem inputs to reuse786/103 honestly.
+Use the updated runbook/API, not the obsolete manual-classpath instructions.
+
+Source owner143a5650 now implements ADR-0180's separate thermal subassembly:
+one new ordinary core from the existing furnace/carbon/iron groups, then core
+plus remaining cobblestone/F1+ controller. Exact composed material parity,
+two ordinary operations, no fifth slot or hidden free ingredient. The original
+four-machine selection remains history, not a permanent automation prohibition.
+No source actor has PC/Java/generation/deployment authority.
+Thermal checkpoint8cb82bf is now normally composed with the pure-index and
+relative-order fixes. The one VerifyRecipes merge conflict mechanically keeps
+a5's first-operation pre-bootstrap call/method AND Thermal's graph() throws
+Exception for its explicit vanilla-carrier lookup tests; no assertion is dropped.
+Two three-group operations preserve the full material multiset: core from
+furnace/carbon/iron, then core+cobble5+minimumF1 controller. Each costs400ticks/
+32FU; total800ticks/25600FU. Primaries furnace/core avoid generic cobble buckets.
+New normal item/creative/model uses existing owned textures, no PNG/new provider;
+normal asset generation/GENERATED.md and canonical writers still need execution.
+Expected211/86/268, six minimum rows and865 locale keys are source shapes,
+not pass counts. Metadata first-use optionalT1/source/consumer/handling is real;
+supply class/renewable tier stay null, not an establishment claim.
+Independent read-only thermal review81b2e622 closes with no new high-confidence
+finding. Actual asset/Java/registration and artistic judgment remain unproved;
+synthetic carrier lookup and old85e passes do not provide them.
+
+**Latest G3 grant, not a result:** only604195bd receives
+`integrated-source-qualification-20261022` on exact published
+7c55d2ae14be90365183f7bbbec66ba6e40883fb. All known index/order/compiler
+source repairs, thermal component and guarded-FTB93 source are composed.
+Fresh admission/Sync/compiler/native/writer/publisher observations are pending.
+Use the same isolated control root, leave oldM/Prism/player data intact.
+Native clean-source Matrix mechanism/core-registration runs before output
+writers; normal assets then three model writers may change only GENERATED.md
+and the four canonical payloads. Compare every other asset/PNG unchanged.
+New-only managed FTB Java selector and authentic legacy source-file publication
+are authorized, using preserved dd0 source/JAR plus NEW ignored per-operation
+compiler output/receipt only; never historical classes or old diagnostic data.
+LegacyRuntime comes from the preserved package provenance, not a guessed alias.
+No package/fictitious-instance/plan apply/player deployment is granted here;
+real plan consumption remains a later clean-checkpoint qualification.
+Commit only the five actual generated outputs after all JVMs/locks close,
+bundle/custody and return the lease; parent integrates/publishes.
+Exact7c55 automatic CI39739650564/artifact12408896544 now has environment/
+build0 and behavior1 ONLY at the three committed Economy/Guidance/T1 equalities.
+Pure index, ordering, Recipe/Atlas/ControlMatrix/Machine/Material/Workshop/Assets
+and teaching957 really pass; Windows tooling succeeds. Smoke is SKIPPED.
+Parent preserves raw behavior0f3f6c05/build6b8b51a3/status6d8edfdb and sends
+those exact proofs to604 to avoid redundant pure checks. No managed-files-only
+task, compiler receipt/export or native marker is observed in that CI. The first
+artifact read expects a flat layout and fails before reading logs; nested raw
+custody is recovered, without a CI/PC replay.
+
+**Current actual G3 progress:** source7c55 Sync0; stage01 Gradle/classpath's
+original native-exit sidecar is0. Hashing its still-shared stdout fails after
+execution, not as a compile error. Recover closed raw/receipt without replay;
+only the two exact Prepare locks/source/lease/PID11508 are released after
+11508/7336 disappear and owned Java0. Stage02 selected javac then actually0.
+Native runs07:44:50.8012062Z to07:48:47.1951540Z with harness/wrapper1:
+primary FAIL at assertions66/NoSuchElementException primaryControl96, before
+minimum-primary find/capability.18/19 markers, missing only the aggregate
+GRINDLESS_MATRIX_INPUT_NATIVE_PASS; old16 plus both blocked/once-control markers
+are observed. Core real Item/registry check already passes in registered().
+Natural stop/save/all dimensions saved are real, but no separate server0 receipt
+is invented for this red. Parent verifies primary007d16b3 original hash.
+
+Source-only follow-up957613f now normally integrates a counted real vanilla
+COBBLESTONE for the input tag minecraft:stone_crafting_materials and validates
+every material through actual ProcessLookup.matches. The production output
+resolver deliberately does not support arbitrary vanilla input tags; it stays
+unchanged. No budget/marker/matcher/bill change. Do not retarget G3 to the fix:
+sole604 continues independent managed/legacy and normal generation on7c55,
+preserves red world/JAR/receipts, then closes/bundles before the next exact
+native qualification. This is a fixture failure, not evidence F3 matching failed.
+
+**New actual G3 FTB boundary:** the executor reports managed-files-only44 plus
+SYNTHETIC_STALE_CLASS_REGRESSION, Gradle/native0. The malformed-SNBT EOF message
+is an intentional negative, not a suite failure. Authentic legacy publication
+runs07:57:21.5061864Z to07:58:09.8371578Z and fails1/wrapper1 at
+verifyCompilation302, after BOTH fresh dd0 JavaCompile tasks and remap execute.
+Receipt5f911a77 is real; no reference-v2/final publication marker exists.
+Parent verifies all nine delivered custody hashes, including original stdout/
+stderr/receipt, selected29bc and fresh8a7af1e8 JARs. Each JAR has2273 entries;
+2272 common payloads match, but one309-byte generated Architectury
+PlatformMethods class has a different hash-bearing name AND payload. This is
+not just ZIP metadata. No class is ignored or equivalence assumed.
+
+Source ownercb273782 inspects the actual class bytes and repairs only that
+comparison, with independent pinned Architectury stamp research3339e4ff.
+Preserve strict source/loaded-image/payload binding and reject altered code;
+do not turn prefix exclusion into a pass. Keep the successful original compiler
+receipt/output for reuse if their inputs remain unchanged. Do not replay both
+successful compilers merely to test a comparator. This is not yet a corrected
+publisher pass or real-plan consumption.
+
+Native tested-JAR custody is frozen by the executor before later Gradle:
+staged=remapped=testedfd1b455d,2,468,180bytes; inventory only Architectury and
+Grindless, diagnostic world retained. Parent final bundle verification remains
+pending. The07:58:10Z Java0/locks0 observation closes the legacy phase, NOT
+the G3 lease. Sole604 continues normal assets/three model writers on7c55,
+restricted to the five outputs. Parent/other workers still have no PC access,
+Sync, package, fixture-instance or player action.
+
+**Asset stage, not yet accepted:** generator12c actually exits0; the subsequent
+SourceGuard fails on four extra states outputs. The executor reports no content
+numstat difference, only LF/CRLF rewrites, and closes08:09:22Z/Java0/locksfalse
+before model writers. Produced bytes, raw red and the initial warning-observer
+failure are preserved. Conditional GO permits restoring ONLY those four own
+outputs to their initial input-manifest SHA values, keeping GENERATED.md.
+Require exact hashes/content-only diagnosis; no global Git/attributes change,
+whitelist expansion or source switch. Resume post-generator checks from the
+original real exit0 without rerun or rewriting the red receipt. Restoration/
+postchecks/A3 remain unobserved. Source owner143a5650 fixes the normal twin
+writers' unchanged-content byte preservation separately, without touching G3.
+
+**Source repairs and latest writer boundary:** normal5aa56be now supplies the
+shared GenerateAssets.writeText no-op: UTF8 CRLF/LF-equivalent text preserves
+bytes/mtime and still counts one output; real content/spacing changes publish.
+Both PS/SH wrappers inherit it. The existing JDK fixture adds22 assertions;
+the author's22 source-bound non-JVM model checks are not Java execution.
+Require that one existing JDK fixture later, not a full normal-generator replay.
+
+ADR-0181 records the separate legacy comparison contract after actual inspection:
+one fixed-format/fingerprint PlatformMethods pair may vary only its self-name's
+hash64. Every other byte/name/payload remains exact; changed code/additional
+shims fail. Independent upstream source corroborates the cached checkout UUID,
+SHA256 of the input-JAR path and exact fixed Forge class template; cited commits
+are not an attested binary build mapping. Source implementation is pending.
+The old compilation receipt remains valid for reconsumption only while all its
+source/recipe/image bindings match; no new adoption API or remapper is needed.
+
+At08:24:44Z604 reports actual Guidance/Economy/T1 normal writes, three independent
+CheckOnly runs and canonical stages18/19/20 all exit0. Both T1 receipts include
+the real AuthorityAdapters/IngredientSpec/MatrixRole/ControlMatrixSpec hashes;
+every CheckOnly preserves all five outputs. The four own EOL spills restore
+exact initial hashes through existing checkout filters, without generator replay.
+Real1266-asset comparison changes only GENERATED.md, no PNG/other asset.
+An initially nested JSON-array comparison falsely reports drift; original
+before/after data and corrected observation are retained, without regeneration.
+The five-output A3 checkpoint/final custody/leaseback remain pending; parent
+still has no PC access. Native1 and legacy1 remain explicit failures.
+
+**G3 CLOSED and A3 normally integrated:** checkpoint
+e1efe47064a3e10856bd403c0e2cd60fe407283d has exact parent7c55 and only the five
+normal outputs. Parent verifies all205 custody files against manifestde198742,
+bundle3a9ac835, every imported Git blob against its delivered writer bytes,
+2573 identical non-output input hashes and the four actual production images
+against both T1 receipts. All14 T1 source inputs remain unchanged in the
+coordinator, so these model proofs are reused rather than repeated. Asset-stage
+manifests independently confirm1266 entries and only GENERATED.md changed.
+The parent's initial raw-checkout equality check fails on GENERATED.md alone:
+existing core.autocrlf converts its checkout to CRLF. All five Git blobs remain
+exact normal-writer bytes; four checkout payloads are also raw-identical.
+Strict UTF8/EOL-only comparison and Git's existing clean filter prove the fifth
+maps back exactly. Preserve that failed check; do not rewrite an output or
+change Git/attributes merely to manufacture raw checkout equality.
+
+Actual write/check results: Guidance74/5323, Economy416/17 andT1794;
+canonical Economy417, Guidance/T02908/0 andT1797. The independent CheckOnly
+runs preserve every output byte. Fresh closure08:34:07.4832542Z confirms
+cleanA3/owned-all-observedJava0/locksfalse, no client command lines read;
+the executor explicitly returns G3. No PC lease is active. Native/legacy remain
+red; JARfd1 and its retained world belong to pre-writer7c55, NOT an A3 runtime.
+Never rerun that harness in its retained root without preserving the initial
+reset boundary. Corrected source needs a new exact grant.
+
+**All bounded source repairs are composed:** normal555dbe9 adds ADR-0181's
+sealed comparison and existing Java negatives to native957 and asset5aa.
+Parent directly reviews both changed files and verifies publisher source
+0befca83 plus handoffba017c86/byteanalysis2e0c13a7/mutants0e99a00a/
+pathsa5c9a0a8. The156 actual non-JVM checks include139 fixed-byte mutations;
+they are not Java execution. Two exact devlibs path strings independently
+produce the observed64-hex stamps; private values stay outside Git.
+Recipe/init/build wiring and all14 T1 writer inputs remain unchanged.
+No comparator Java/actual reference pass is inferred. Use existing direct
+CLI8 with the original5f911a77 receipt, not another legacy GradleBuild.
+The next sole-owner window must preserve the old G3 native world and isolate
+its new native root; a real file-plan target must be outside every checkout
+because canonical Prism rejects overlapping repository/instance paths.
+
+**NEW G4 GO, not a result:** only604195bd owns
+corrected-boundary-qualification-20261022 on exact published
+271f3862182ac522ecf7cac3fde000dd1f099cce. Use the NEW explicitly inventoried
+corrected-build root; do not retarget/reset the returned G3/A3 root or its
+initial-reset-sensitive diagnostic. All new admission/Sync/execution observations
+remain pending. Parent/other workers have no PC/cache access under this grant.
+
+Close only changed properties: necessary classes, one existing corrected
+matrix-lifecycle, the new managed comparator negatives through the existing
+selector, and the existing asset JDK fixture. Reuse exact G3 model/asset/data
+and unchanged CI proofs; no normal generator/writer, paid-FTB, Blueprint or
+per-recipe native replay. Genuine old-reference publication uses direct CLI8
+and the untouched5f911a77 compiler receipt/output, not another old GradleBuild.
+
+Also authorize the remaining actual plan-consumption outcome: one verified
+current package, canonical Prepare/Deploy to a new owned stopped fictional
+instance under a separate validation instances root OUTSIDE all repositories,
+fresh current-source planner receipt/plan, apply and identical-plan Unchanged.
+One normal fresh current-source compile enclave needed by that planner is
+distinct from the forbidden legacy compiler replay. Require cached declared
+dependencies/zero missing at Prepare; no new dependency/provider install.
+Read only compatible template component metadata/pinned JARs, never copy the
+player's world/options/progress. Keep real installed protected files/runtime
+unchanged across definition apply/no-op. No server/client or synthetic paid-
+history fixture proves this file wiring. No real PrismRoot/player write.
+Do not inspect/print client command lines or stop/restart the player; defer only
+an unsafe/resource-blocked action and continue independent admitted stages.
+
+Freeze the source/integration alias; preserve exact failures, settled raw/JAR/
+reference/plan/custody evidence and explicit clean/ownedJava0/locksfalse return.
+Ordinary invoker/observer repairs stay in the assigned lane without success
+replays; app-source failures return exact evidence before any new source grant.
+
+**Actual G4 first result:**09:27:54Z sole604 reports Sync0/clean271 and the
+direct legacy CLI8 exits0 before any new Gradle. It reconsumes original5f/
+29bc/8a7a/runtime provenance, emits ARCHITECTURY_SELF_UTF8_ALIAS plus actual
+FTB_DEFINITIONS_PUBLISHED/schema2/46, and saves the new reference/hash apart.
+G3exit1 remains unchanged; no old compile/remap is repeated. That stage closes
+Java0/locksfalse, NOT the G4 lease. Necessary current-source classes are next;
+native/JDK/managed negatives/real plan and final reference custody remain pending.
+
+**Actual G4 corrected native boundary09:34:20Z:** sole604 reports clean271/
+Java0/locksfalse, necessary classes0 and ONE canonical matrix-lifecycle0.
+All19 markers appear, aggregate PASS1/FAIL0 and natural save/stop. Server0 is
+derived from the harness's explicit checked exit, not an invented standalone
+receipt. Tested/staged/remapped JAR and inventory are frozen before another
+Gradle; the new native world stays only in its new root. Final parent custody
+remains pending. The actor continues only managed files/new negatives and the
+existing22-assertion EOL fixture, then real package/plan; no model/green replay.
+
+**Next isolated source content:** ADR-0182 selects optional wet beneficiation:
+reuse existing Motor/Washer and B2/B2-R1 iron/copper authorities, default F1/
+STIRRED applicability and source-derived water/secondary outputs. Add one
+concise free native Washer-acquisition lesson without claiming possession is
+operation. No recipe/bill/MK/save change or new first-F2/seed dependency.
+Source ownerd35d3b04-9e9d-4c84-8f34-b4b150fb1b37 starts from exact
+e4cc108389ed0b58d15ed5c0678ecd27660aa103 in a new isolated source lane.
+This opens no PC/JVM/cache ownership or G4 source-alias update. The coordinator
+retains root docs/integration/publication; the worker returns a clean local
+checkpoint and authored-versus-executed proof boundaries.
+
+**G4 CLOSED, corrected proofs now parent-verified:** all176 custody files/
+2578 inputs, native19/19/PASS1/FAIL0/89/natural save, managed201 and existing
+asset JDK34/22EOL are actual. Native/tested/staged/remapped/package JAR is
+e9d1a23e; package0490f701 embeds it with source/runtime271. Authentic schema2/
+46 referenceacdf589e binds original5f/29bc and both real chapter bytes.
+No legacy compile, native, modelwriter or successful package build is replayed.
+Safe explicit leaseback09:47:57.8479522Z is clean271/Java0/locksfalse with
+the exact temporary offline guard removed/absent. No PC lease remains active.
+
+The one remaining real50-plan failure is CURRENT GradleBuild task creation
+(tasks resolves ArrayList, named(remapJar), forge/build.gradle255), before any
+current compiler/receipt/plan/apply. Source686181e now normally integrates the
+one-line project.tasks qualification. Its actual --dry-run/plan/apply are not
+run. Reuse all unchanged G4 Java/native/reference proofs; the next window needs
+only current configuration, any artifact materialization required by truthful
+new source/runtime binding, actual plan/apply/same-plan no-op. No legacy/native/
+asset/model replay. The fictitious16-file target is unchanged post-seed, no
+pending transaction, deliberately50 runtime plus46 definitions: DO NOT START.
+
+Wet source738105d4 is delivered locally (143 static/30 independent static QA,
+not Java), preserving old50 fields/order/native IDs/positions and865 locale
+values with3 new keys. It is not integrated yet. It exposes the separate51
+whitelist in publisher/planner/startup/host receipt; source51 is not deployable
+until its versioned compatibility extension is composed and qualified.
+
+**NEW G5 GO, no execution result:** only604195bd owns
+current-plan-consumption-20261022 on exact published
+98874f6254aa10c91a77dcb9312a37dc1a7c7b50 with the NEW inventoried build-only
+root. Preserve all G4/G3/M native roots/worlds/JARs. First run existing CURRENT
+prepareFtbQuestUpdate --dry-run without ftbDefinitionRoot: task actions must be
+SKIPPED; configuration success is not a compiler/plan pass.
+
+Then materialize only artifacts necessary for truthful new source/runtime/JAR
+binding, reuse the existing owned stopped fictional G4 target outside repos,
+and retain its two authentic46 chapter bytes through canonical package update.
+Existing target components/pinned JARs suffice: no real Prism/template read.
+Use authentic referenceacdf, the normal fresh CURRENT compiler receipt and real
+planner, then canonical apply and SAME-plan Unchanged with bytes/mtime/backup
+invariance. No pending journal currently exists; recovery only if a real one
+arises with its original plan. Do not force a runtime alias or relabel packageC
+as a new-source artifact. Native/JDK/legacy/model successes stay bound to G4/
+G3 and are reused; no new server/client or51 content enters this window.
+All admission/Sync/configuration/artifact/plan/apply observations remain pending.
+Keep privacy/resource/owner guards and return clean/Java0/locksfalse explicitly.
+
+**Separate51 source compatibility:** ADR-0183 assigns existing FTB ownercb273782
+to compose wet738 with the current task-container fix and close publisher/
+planner/startup/host receipt consumers. Known46/50/51 exact identity sets and
+reviewed lesson additions replace the accidental current50 assumption, not
+source/class/JAR/ownership/paid-state guards. Keep schema2/receipt-plan formats,
+authentic old source-file46 export and DD0-only unreceipted adoption. Use the
+existing focused Java/QuestDefinitions host fixtures; no PC/JVM or G5 alias
+permission. Implementation remains pending and the current50 plan window runs
+independently. The wet source owner separately closes newly relevant T1 writer
+source/executed-image provenance through the existing exporter, not new carriers.
+
+**Actual G5 configuration10:19:14Z:** new root absent/admitted and Sync9880.
+The FIRST Gradle is CURRENT prepareFtbQuestUpdate --dry-run without
+ftbDefinitionRoot: BUILD SUCCESSFUL and actions SKIPPED, closing only the
+task-container configuration property. No current compiler/receipt/plan/apply
+pass follows. The phase closes clean988/Java0/locksfalse; G5 remains exclusive
+for required artifact materialization and the existing fictitious target.
+
+Read-only paid-work research is preserved in the external-reference record:
+verified GT Modern248e1f8 Forge1.20.1 recipe trait separates origin/executable
+copy/progress/duration at cycle boundaries. Its consume-at-start behavior is
+not Grindless's completion settlement; machine-specific mutation hooks were
+not audited. No kit, balance, narrower MKI, source import or new runtime proof
+is selected by that reference. Current latent multiplier/installer gaps remain.
+
+**Reported G5 completion boundary10:23:53Z, not leaseback:** source988 stays
+clean/Java0/locksfalse. Real988 package/runtime, canonical0-missing/0-download
+package update and unchanged authentic46 bytes/mtime precede ONE real fresh
+CURRENT compile and published source/package/reference/target-bound plan.
+Planning writes0 target bytes and preserves its snapshot. Canonical first apply
+returns DefinitionsUpdated; the identical plan/hash returns Unchanged with all
+file bytes/mtimes/backup inventory stable and runtime/protected files intact.
+Inspect is VerifiedStopped, target50/50 coherent but never launched. Final
+custody/guard cleanup/explicit return are still pending; no PC ownership changes.
+
+Wet provenance follow-up338db24d is locally delivered after738: existing
+SOURCES/images grow to28/37 expressions, including actual selected enum
+implementation getClass() values, catalogue and condition/runtime dependencies.
+The byte-resource reader/hash stays unchanged. Parent reviews the two-file
+delta;101 non-JVM static checks are not emitted Java hashes/writer passes.
+It changes neither G4/G5 source nor their proofs. Future51 still needs its
+own source/projection/compatibility qualification.
+
+**G5 CLOSED and parent-verified:**87 custody files against manifest1f579957,
+2578 immutable inputs and source bundle212d779f are verified. Actual fresh
+current receiptf8bdc64b, selected runtimeb07ebf35/fresh remap28c87f43 and both
+copied loaded images match. Plan464b4292 binds source/runtime988, real package/
+target/refacdf and actual output chapter payloads. Canonical DefinitionsUpdated
+then SAME-plan Unchanged leave all24 files/mtimes/backups identical;16 runtime/
+metadata/package-backup files stay intact. Authentic46 before-chapter backups
+and installed50 after hashes match the plan; backup plan.json is byte-identical.
+The parent's first unprefixed-backup-name observer fails, then the actual
+before- filenames verify, without any producer/test replay. Inspect is stopped.
+
+Explicit safe return10:28:43.3068952Z is clean988/Java0/locksfalse with only
+the owned offline guard removed/absent and no client command lines read.
+No PC lease is active. Only the fictitious instance has genuine988/50/50;
+never launched, no player state touched. Preserve the G5 root at988 with its
+f8 receipt/classes/classpath/JARs: a later actual50 publication can reuse CLI8
+without recompiling. Do not Sync51 into that receipt's historical source root.
+
+**Wet source338/738 normally integrated, still not release-qualified:** the
+parent directly reviews the six live selections, one optional/native free
+Washer-acquisition task, appended old50-stable layout/IDs and3 new English
+keys. No recipe/power/bill/envelope/registration/save change occurs. The
+provenance follow-up uses existing lists/resource reader for28 sources and37
+image expressions including real selected-kind implementations. Source-only
+143/30QA/101 evidence is not Java execution. Actual common checks/normal
+projections and the separate51 compatibility lane remain pending. Do not run
+the still50-only publisher/planner/startup/host consumers as a qualified51
+candidate or deploy it; current50 G4/G5 proofs retain their historical sources.
+
+**NEW G6 common-only GO:** only604/fixedfcfd6e2/new inventoried wet root.
+The unproved properties are new wet F1/STIRRED/slot/water/secondary applicability,
+common quest/claim/teaching invariance and actual normal projections with28
+source/37 executed image expressions. Run needed common classes, changed
+Quest/Claims/T1Teaching/Assets checks, normal three writers, independent
+CheckOnly and canonical rechecks. The allowed tracked set is ONLY Guidance,
+Economy and T1 JSON/Markdown; GENERATED.md stays unchanged. Normal writers
+precede stale canonical equality checks; never hand-author an output.
+
+The51 publisher/planner/integration/host lane is still coding separately.
+Do not execute/bypass those unsupported guards, build a51 package, boot a
+server or touch the fictitious/player target in this window. Preserve/reuse
+all old native/JDK/transaction mechanisms. A first authentic50 reference may
+use existing CLI8/originalG5f8/classes/source988/selectedb07 before new Gradle,
+with an absent named output and actual schema2/50 marker; no46/compiler replay.
+Source988 stays pinned for that receipt. Source/API changes stay out of the
+frozen alias until clean/custody/checkpoint/ownedJava0/locksfalse leaseback.
+
+**G6 dependent writers blocked by real exact-source CI, not stale outputs.**
+CI39767021119/artifact12421176203 identifies fcfd, env/build0 and behavior1.
+Five suites fail: Economy/Registry/T0/T1 share the exact questBookAccess profile
+whose QuestCatalogue.chapter literal lacks wet; Adapters has expected50/got51
+(315passed/1failed). New teaching1133 and other independent contracts pass;
+Windows succeeds, smoke is SKIPPED, duplicate39766619498 is CANCELLED.
+Parent preserves original behavioraa4c3921/builda2c17c97/source56860bfb.
+
+Sole604 reports actual G6 commonclasspath/javac/Quest/Claims/Teaching/Assets0,
+and FIRST authentic50 CLI8 on original988/f8 with payloads matching G5 after.
+No model writer/canonical stage started; the executor stops dependent work
+without replaying the five known reds or inventing A6. Sourcefcfd stays frozen
+while independent custody/leaseback closes. No source hotfix is authorized.
+API99e280c over normal381d9ab is delivered with actual focused PS228/29, not
+Java. It updates the native Integration profile but leaves the old chapter
+literal/objective count; ownercb273782 closes that exact coupled follow-up
+before qualification, retaining strict guard/counterexample semantics.
+
+**G6 CLOSED, independent results parent-verified:**103 custody files against
+517fe076 and2574 frozen inputs are exact; source bundlef7f3fdb5 is26741bytes/
+fcfd, not A6. Authentic reference50
+3d8393e7b1a82b67bc7f20184a0a5a4b9f35961f5b0d2d180d8025bf6047487c
+binds historical988/f8/b07 and both real G5 after payloads, with actual old
+Definitions/Catalogue images copied. Common/classes/javac and Quest/Claims391/
+Teaching1133/Assets really pass. No model writer, CheckOnly, canonical check,
+new writer-provenance receipt or A6 is claimed.
+Fresh explicit return11:13:33.2105313Z is cleanfcfd/Java0/locksfalse, client
+command lines not read; no cache init guard was created. No PC lease remains.
+
+**API99 and strict follow-up07 now normally integrated as source:** the parent
+reviews known46/50/51 exact sets, complete loaded-source producer, historical
+CLI compatibility, current destination, native setup and host consumers.
+Focused host PS228/29 green9bdc9523 and original red9e809788 are hash-verified;
+new Java/native execution is not supplied. Source07 adds only the actual wet
+chapter case/negative and51 inventory with independent old50 identities; all
+other claim-source guards remain exact. The original CI5 reds are preserved,
+not relabeled stale. A new source-bound window must prove the repaired profiles,
+new API and actual normal outputs before any51 delivery.
+
+**Changed-parser provenance pin is source-integrated:** source30b151a adds only
+the outer VerifySustainabilityRegistry source/class and existing guard tokens
+after its07 profile change. Lists are authored29/38, not observed writer
+output. Normal empty31e33dc appends the missing body/trailers accidentally
+omitted from30's invocation; both trees are verified identical. Preserve30's
+historical subject-only metadata explicitly, no amend/reset/commit-tree or
+owner escalation. The parent integration carries both trailers. Actual Java/
+model/old-classpath source-file/native51/real-managed50-to51 proof is still next.
+
+**NEW G7 complete outcome GO:** only604/code41df605/new inventoried full wet
+root, after verified G6 return. First exercise the NEW publisher's historical
+46/50 ABI with unchanged original5f/f8 classpaths/receipts and actual old
+source roots/JARs; no pruning, mixed classpath or old compilation. Reuse G6
+Quest/Claims/Teaching/Assets and focused host228 when their inputs are identical.
+Run only newly changed/repaired source-profile/adapter and full existing FTB51
+Java contracts, then normal writers/independent checks/canonical checks and
+actual29-source/38-image provenance.
+
+For a coherent end-to-end outcome, a LOCAL derived A7 is explicitly allowed
+only after all writers/checks/JVMs/locks settle: exact parent41df605, changed
+paths subset of the four canonical outputs, non-output input hashes unchanged,
+both trailers and clean status. No arbitrary code/docs/ref change or push.
+The actual A7 SHA, if needed, becomes the explicit ApplicableSource for later
+stages; otherwise use41df605. Keep alias41df frozen and never Sync back over A7.
+Record writer invocation41df versus derived boot/package/plan coordinates
+truthfully. The coordinator still imports/publishes the normal data checkpoint.
+
+On that CLEAN ApplicableSource, one existing smoke-boot.ps1 direct plain boot
+uses SMOKE_QUEST_BACKEND=ftb, no commands/datapacks/paid-check probe and a ready51
+expectation. It resolves a new unproved boundary: FML setup now calls the
+publisher's known-lineage helper before installation. Preserve natural stop/
+save, exact tested/staged/remapped JAR/inventory and new diagnostic world;
+do not rerun matrix89 or native paid-history/seed scenarios. Then materialize
+only the genuine ApplicableSource package, canonical Prepare/Deploy to the
+same owned stopped fictitious target (no template/player), use authentic50
+reference3d839 plus real fresh CURRENT proof to plan/apply managed50-to51,
+and prove identical-plan Unchanged/protected files/backups. No real target
+launch. All fresh execution/custody remains pending; return the lease explicitly.
+
+| Category | Historical qualification boundary: G4/G5 closed, G6 safely returned, API51 source integrated |
+| --- | --- |
+| COMPLETED | G3/A3, verified G4/G5 current50 outcomes; G6 authentic50/common independent passes/103-file custody and safe return; reviewed wet338/API99/profile07 source and actual focused host228 |
+| BLOCKED | Current50 is closed; source07 repairs the known common guard reds but new51 Java, loader and model/output qualification remain unexecuted |
+| NOT EXECUTED | Recovery (not needed), source51 Java/writers/compatibility qualification, launching the fictitious target, player update/client campaign/main/release or whole-tier acceptance |
+| NEEDS HUMAN VALIDATION | Existing GUI/JEI/reward/appearance and longitudinal-campaign gates remain open |
+| NEEDS MY DECISION | None from the owner; bounded technical repair is delegated |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | None new; no generation/provider/dependency installation authorized |
+| DEPLOYED STATE | Playerdd0/JAR29bc/ZIP79ce and original/backup/G4/G3/M unchanged. Only the stopped fictitious target has genuine988 runtime/package with50 coherent native definitions; it was not launched |
+
+Next integrate coherent local checkpoints and select only their changed proofs.
+Any heavy qualification needs a new sole-owner lease on an exact published
+source. Preserve all previous failures and successful source-bound evidence.
+These partial increments alone authorize no immediate Prism/T0 update.
+After their qualification, continue the source-backed tier programme rather
+than treating their checkpoint as the end of the owner's request.
+The completed prior wave below remains historical proof.
+
+## Final player handover — current authoritative state
+
+The owner can continue the existing game in **Grindless-T0-FTB-Dev**.
+Source dd0b4bc/JAR29bcce43/ZIP79ce5da2 is installed and production Inspect returns
+VerifiedStopped after final copy. All36 original-world files/10,885,681bytes and
+options are copied from the untouched verified backup, NOT from the command-
+tested clone. Original F instance, backup, protected metadata and launcher
+settings remain unchanged. Do not advance both independent world copies.
+
+The retired-ID uncertainty is now resolved, not waived. A small visitor uses the
+existing Minecraft NbtIo/RegionFile APIs on a disposable backup copy, without
+Forge bootstrap:36files,2,608 parsed chunk roots,141,859 strings, actual references0,
+unknown0/read errors0. Heracles appears only in old registry/datapack/mod-list
+metadata, including level.dat_old. Accept removing those unused registrations;
+no compatibility remap, blanket ignore or raw native/owner save rewrite is needed.
+The final unbooted player copy retains all original bytes.
+
+The worker's positional PowerShell binding and the parent's initial File.Open
+overload fail before any compiler starts; preserve both. Direct native invocation
+with FileStream locks then has actual javac0/scanner0. A silent compiler/Tee
+produces no stdout file; its successful exit and real scanner result are retained,
+not replayed to manufacture a log. Final copy0 and Inspect are separately closed.
+Prior FTB/M/423a/85e grants are returned. Neither new attempt starts a PC JVM
+or accesses this T0 delivery. The closure below makes no new T0 observation.
+
+| Category | Final bounded T0 handover |
+| --- | --- |
+| COMPLETED | Genuine native FTB/concise goals and paid-history fence qualified; exact package installed; real save-clone load/save and retired-ID audit; final pristine world/options copy and VerifyStopped |
+| BLOCKED | None for this technical handover; no whole-T0 or later-source acceptance |
+| NOT EXECUTED | Actual owner login/native import, GUI/JEI/physical rewards, campaign, main/release; no new-source pass is supplied here |
+| NEEDS HUMAN VALIDATION | Native UI, real player/team/reward interactions, JEI and resumed longitudinal play |
+| NEEDS MY DECISION | None from the owner for this delivery |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
+| COST / BILLING RISK | None new; no generation/provider activation |
+| DEPLOYED STATE | Grindless-T0-FTB-Dev dd0/JAR29bc/ZIP79ce contains the pristine original-game copy; old instance/backup intact, no T1+ code deployed |
+
+## Integrated development source
+
+**The bounded engineering wave is qualified and published at
+`0a676fe2e76f5209233ce99ca6616b42e2b3f3c0` (M).** Its normal parents are
+e260d4750cbbb26841f1b4309d7dc651b2345fc8 and
+85069e71dabfe4da819ed49fe5329a2b396c0692 (A). Earlier426/ab4/492/535,
+the component/F1 Wire Mill/pressure source and Blueprint4550+d073 are preserved.
+This is not the installed T0 artifact, complete T1, a playable MK2 or T3 acceptance.
+
+Actual426 normal Guidance/Economy/T1 writes and independent CheckOnly pass;
+the three former red suites and FTB50/pack contracts close. A contains only the
+four normal generated outputs, byte-unchanged during CheckOnly. The parent
+verifies the bundle, payload/provenance hashes and unchanged generator inputs.
+Their execution source remains426, never A/M or this documentation checkpoint.
+Keep the original joined-argument guidance invoker red and empty-process observer
+failure; no successful preparation or green contract was replayed.
+
+Follow-upd073 fixes stateful `BlockEntityTag` construction stock and intersects
+platform/player/item permissions at every target. Actual e260 CI compiles the
+Forge probe and passes its new Blueprint/Planner contracts; those passes are reused.
+After explicit writer leaseback, canonical Sync advances cleanA to exactM.
+The only PC native run is `blueprint-interaction`, UTC21:49:21.5617966 to
+21:51:21.1790129:1,182 assertions, exactly one PASS/no FAIL, harness0/server0,
+natural stop and all dimensions saved. Official non-OP FakePlayer/ServerLevel
+item-use proves capture/stamp, protected stock, real false-placement refund,
+blocked/unloaded/per-target permission refusal, codec and bounds.
+Throwing callbacks still do not promise global rollback or universal zero loss.
+
+Parent custody verifies the receipt SHA-256
+`ae24b613ca916ddc103a2687bca53428b07161e92a88ee278c74c34fe645c8a5`
+and all ten original raw/runtime files. Tested, staged and remapped JARs match:
+2,416,319 bytes, SHA-256
+`c70e08e97a21c6f60f18126f7adf75c364993686d1a1fd8372480f6d86991be2`.
+This base diagnostic has only Grindless/Architectury; it is not an extra FTB
+boot, graphical player login, Blueprint save/reopen or owner-world update.
+The diagnostic world and private raw evidence are retained, not committed.
+
+Exact-M automatic CI39681018324 succeeds in verify, Windows tooling and all six
+smoke shards. Duplicate automatic39681008933 remains FAILURE: smoke6 starts a
+server but misses DRILL-OK; its other seven jobs pass. Preserve that failed
+attempt and unknown trigger. The independent exact-source success includes
+smoke6; no manual rerun, Drill repair or relabeling is performed.
+
+**All PC/cache leases are returned.** Last fresh custody at
+21:56:31.4465559Z reports cleanM, owned/all-observed Java0 and work/cache locks0.
+No client command lines were read and no game was stopped. There is no automatic
+next execution grant. Do not touch Prism/T0, repeat green proofs or retarget their
+provenance to a documentation-only descendant.
+
+| Category | Closed bounded development wave |
+| --- | --- |
+| COMPLETED | Normal integration/publication M, four generated outputs and source-bound contracts/models; real Blueprint interaction1,182; ten-file native custody and full exact-M CI39681018324 success; duplicate failed CI retained |
+| BLOCKED | None for this bounded engineering outcome; managed46-to50 delivery and real family upgrades remain separate future work |
+| NOT EXECUTED | Green-proof replays, owner-client/GUI/JEI/campaign, Blueprint save/reopen, managed46-to50 migration, T1 package/deploy, PR/main/release |
+| NEEDS HUMAN VALIDATION | Native player/team/rewards/JEI and longitudinal campaign; Blueprint UX/pacing and pressure presentation; no T0 freeze or whole-tier acceptance |
+| NEEDS MY DECISION | None for closure; future product/upgrade/migration choices remain coordinator-owned |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
+| COST / BILLING RISK | None new; no paid generation/provider/service activation or native replay |
+| DEPLOYED STATE | Last verified player delivery remains dd0/JAR29bc/ZIP79ce pristine-game copy with original/backup intact; this wave neither re-inspects nor modifies it. M JAR exists only on the diagnostic server |
+
+Use [the route map](../docs/AGENT-MAP.md#optional-process-pressure),
+[validation ledger](../docs/testing/latest-validation.md#integrated-development-source)
+and [completed first-factory increment](../plan/feature-t1-first-factory-1.md).
+Further development is authorized under ADR-0173/0174 but is not unfinished
+qualification of this wave. Preserve the fail-closed managed native46-to50
+configuration boundary, exact-versus-capacity Matrix semantics, real in-place
+upgrade work and unused saved-vein derivation pin as future programme limits.
+The following older records preserve intermediate results, not current holds,
+active leases or permission to repeat successful execution.
+
+## Latest design and actual source progression
+
+ADR-0174 records the owner's clarification: basic families start at T1; later
+tiers grow exponentially in meaningful lines/content and improve real family
+capabilities, with specialized multiblocks. Reuse compatible external work with
+exact provenance/notices when it fits; neither endless paper research nor
+unnecessary framework/code imports satisfy the direction.
+
+T1 b38bc5a is a clean public normal merge of2f anddd0: native50/old46 IDs and
+receipts, two automatic component routes and18 concise JEI-first T1 bodies.
+It is the first-factory increment, not complete T1. Automatic CI39664910629
+has environment/build0 and behavior1 solely at the three existing canonical
+economy/guidance/T1 equality checks. Actual source-bound CI passes are distinct
+from still-unexecuted normal writers; no manual JSON or rerun repairs them.
+
+T2 e265eb2 normally merges its bounded5ff data withb38. The new F2 ingredient
+still emits the same default F1/MK I Wire Mill: ec7c traces no transported tier,
+equal narrow/full process envelopes, static regulation, immutable buffer limits
+and no playable chassis/module installation callers. Existing saved MK/modules
+and relocation are useful seams, not a working upgrade. Preserve this source;
+do not deploy or call it the final first-family placement under ADR-0174.
+After that trace, ec7c now implements a bounded F1 baseline Wire Mill (fourth
+physical F1 operand, same400/32/bill/output, optional wire forming after assembly).
+No new first-F2 prerequisite, matcher/storage change or fictitious MK II is
+authorized; source checkpoint and actual execution remain pending.
+
+The8210 researcher lacked `send_session_message`/artifact output; its real
+13-tier dossier is recovered from `session.task_complete.data.summary`, not its
+empty assistant message. It separates later models/prototypes from missing
+runtime and identifies bounded blueprint preflight, optional pressure, explicit
+Matrix roles and managed FTB updates. No audit is relaunched or tier accepted.
+New isolated code owners51366 andb823 implement the first two shared increments
+onb38, source-only/local commits; publication/integration remain serialized.
+
+## Actual owner-save clone result and remaining disposition
+
+The admitted backup-derived clone starts/saves/stops naturally atdd0:
+harness/server0, all22 copied custody artifacts hash-verified by parent.
+Original backup36files/10,885,681bytes and prior synthetic world remain identical.
+Initial13/1 is preserved: a same-invocation cache-bound Gradle daemon was still
+settling before server start; bounded observed-zero admission fixes only that
+guard, not startup/assertions/shutdown. No successful server run is replayed.
+
+Forge logs three unidentified **registry errors** for Heracles barrier block/
+item and quest-book item, then explicitly processes the world. Seven missing
+mod-datapack warnings include performance mods absent only from this seven-jar
+diagnostic, not the complete final Prism profile. This is technical load/save
+evidence, not an accepted lossless migration or real player login.
+
+After explicit clone-lease return,980e99a3 now exclusively owns
+`ftb-retired-id-audit-20261021`: read-only backup NBT/region inspection to
+distinguish actual item/block/player references from old registry metadata.
+No new server, original/Prism access or modification is authorized. Parent/all
+other workers make no PC action until return. Decide from that evidence, then
+use the untouched backup for final copy; never adopt the tested clone.
+
+## Latest owner scope — T1 and the remaining tiers
+
+ADR-0173 records explicit permission to continue T1 and begin the other tiers
+while completing the questbook/Prism handover. Development/research through T15
+is open; no tier acceptance/release or later-tier deployment follows. Active
+isolated lanes:2a93 T1 native-baseline integration, ec7c first physical F2
+Wire Mill manufacturing,8210 source-backed T3-T15 frontiers;82bed9 external
+mature-source research. Root architecture/integration remain coordinator-owned.
+
+Keep two uncovered boundaries visible: current ingredient matching is exact
+despite intended stronger-Matrix substitution; installed native46 definitions
+cannot acquire source50 through the current strict preflight. Neither authorizes
+a global matcher change under one data recipe or raw quest-world replacement.
+The T1 owner preserves fail-closed config handling; explicit managed-definition
+backup/hash migration precedes a future T1 update.
+
+The coordinator temporarily assigns runtime980e99a3 the exclusive
+`ftb-owner-clone-20261021` PC/cache lease for only the backup-derived diagnostic
+load. Parent/all other workers make no PC action until explicit return.
+Original/backup are not opened as a running world; final Prism copy remains
+parent-owned and comes from the untouched verified backup.
+
+## Current delivery checkpoint
+
+Backend source `dd0b4bc93187fe172fd336bfa330987220bd7be4` normally merges
+coordinator c353e14 and exact persistence-oracle correction ef00402. Real
+Persistence passes all three old and three native binary reloads, UUID/fence
+and four malformed cases. Final ZIP79ce5da2 (1,913,205 bytes) is BuiltVerified,
+still `restricted-playable-profile-not-rc`. Its extracted JAR29bcce43 is
+byte-identical to the actual ff610 native-tested runtime: only two test files
+and documentation changed. Do not rebuild/reboot for evidence-only updates.
+
+The parent verifies all25 transferred raw/receipt/harness/disk/package files,
+their complete hashes, actual first/reopen/natural-stop markers and the embedded
+runtime hash. The first origin and current phase2 save are distinct evidence.
+The backend explicitly returns its exclusive lease at19:16:27Z with Java0,
+owned helpers0/locks0; it will make no further PC actions. The coordinator now
+exclusively owns guarded delivery, not another backend worker.
+
+Production Deploy installs exact dd0 into new owned `Grindless-T0-FTB-Dev`
+without modifying the old F instance or global launcher settings. Fresh19:21:50Z
+inspection finds Java0, old F/JAR95bf unchanged with one world/options, and the
+new target JAR29bc with no world/options. The digest-bound custody helper then
+snapshots and backs up all36 files/10,885,681 world bytes plus options, preserving
+original metadata/source bytes. Full paths, ownership IDs, world identity and
+receipts remain private. This is backup verification, not a migrated-player pass.
+
+Next: admit a separate backup-derived diagnostic clone for actual changed-mod
+load, then use the untouched verified backup for the final new-instance copy.
+Never run the normal resetting harness against a player save, loosen the
+synthetic native origin or adopt the command-tested clone as the reference.
+No other PC/cache worker may resume before the delivery lease is returned.
+
+| Category | Current protected delivery |
+| --- | --- |
+| COMPLETED | Native backend/common/standalone/persistence/package qualified; all25 custody files and exact runtime checked; new owned target deployed; stopped original world/options backed up and source unchanged |
+| BLOCKED | None external; diagnostic clone-load and final pristine copy still need execution |
+| NOT EXECUTED | Owner-save clone technical load, final target world copy, actual client/login/JEI/rewards, main merge or release |
+| NEEDS HUMAN VALIDATION | Native presentation, actual login/individual rewards/JEI and resumed campaign |
+| NEEDS MY DECISION | None within the directed fix |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | None new; no generation or paid service |
+| DEPLOYED STATE | Exact dd0/JAR29bc/ZIP79ce in new isolated FTB instance, still no copied player world; original F and verified backup preserved |
+
+## Preserved implementation and qualification progression
+
+The following snapshots retain the actual sequence; the current delivery
+checkpoint above supersedes their former pending tests and resource ownership.
+
+## Current player blocker — genuine framework and concise quests
+
+The owner reports being unable to continue: they asked for BetterQuesting/FTB
+Quests, reject the custom/Heracles book experience and reject exhaustive,
+impersonal guide prose. ADR-0171 selects supported Forge1.20.1 FTB Quests native
+graph/screens/tasks/rewards, JEI-first ordinary recipes and brief human goals.
+Do not solve this with the same custom widget in another window.
+
+Parallel owners: backend/pack/migration ac50334e, copy4766813a, source/API
+research17ef3 and independent migration oracles7971553c. The two app sessions
+recovered their original startup timeout on the existing worktrees; the lost
+kickoffs were resent completely. Do not create duplicate replacement sessions.
+Root decisions/handoffs remain coordinator-owned.
+
+Copy190a024 reduces46 titles/34 bodies from2821 to1113 words with placeholders,
+other locale values, logical IDs and gameplay data preserved. Incremental
+2bd1326/00ef421 align visible tooltips and native separate reward semantics.
+Source/native-claim ownership fences are authored in the backend lane.
+Exact official FTB binaries and the required native JEI provider are now
+[verified](../docs/design/ftb-questbook-integration.md). Actual native data
+loading/migration and the new package still need execution.
+
+Initial integrated source1736736 has a real Forge compile red (two static
+Matrix-spec calls and EventActor return); common compilation/four definition
+publisher bytes alone pass. Corrective a181b9e is under actual recompilation.
+Independent source reviews also require explicit missing-backend handling, exact
+smoke composition and exclusion of the new backend-only case from shared batch.
+No native/client or upgrade pass is inferred until the actual receipts return.
+
+**Later actual qualification:** [the native record](../docs/testing/t0-ftb-native-qualification.md)
+now binds ff610 to real registered Forge graph/filter/import1099, actual persistent
+seed56 and a second process reopening the same retained diagnostic world58,
+with both natural stops/harness0. Parent reads the complete transport and source
+reopen method (no reseed); direct server-log/receipt transfer verification is next.
+This is not real player login/inventory delivery, GUI/JEI or owner-world upgrade.
+Tool-onlyd731 completes2352 standalone data/surrogate assertions and152 pack
+contracts; no production recompile/native replay is required for that test delta.
+
+The completed ff610 Linux workflow has one old `Players`-only persistence-root
+oracle failure after the intentional native-owner field extension. Preserve that
+red and assert the new exact schema; no arbitrary root-key acceptance. Final
+package, stopped source backup, separately admitted owner-save clone and delivery
+remain outstanding. The private custody helper is source-reviewed/digest-bound
+with local fixtures only; original DevF world remains untouched.
+
+Old `QuestProgress` is paid history: import native individual receipts before
+admitting claims, do not treat objective completion as reward payment, and fence
+delayed legacy minting. Use the actual supported API, not raw framework save
+rewrites or guessed signatures. Native granular claims/overflow must be described
+and tested honestly; no claim of the old atomic no-drop behavior.
+
+Fresh read-only pre-migration inventory at17:12:20Z identifies the relevant Dev
+instance: exact F/95bf, one world with one legacy quest ledger, client log updated
+16:53:50Z and0Java. The separate old preparation instance still has its old
+79b5 JAR/world and18October log. Do not adopt that old exploratory world.
+This proves actual F play started, not save/reconnect or campaign completion.
+No source, instance, world, launcher or configuration was changed by inventory.
+
+The T1 executor returned its lease and preserves local523b3ab with its four
+normal outputs and bounded qualification, not a native-FTB or human acceptance
+pass. Only ac50334e now owns the new `ftb-native-blocker-20261021` isolated PC/cache
+qualification outcome. Parent/other workers must not execute concurrently there.
+No worker may deploy, access owner worlds or restart the player's game.
+
+| Category | Current blocker wave |
+| --- | --- |
+| COMPLETED | Actual feedback/source identified; concise copy and legacy ownership fence authored; independent migration oracles and native API research available; exact played F instance distinguished from old preparation |
+| BLOCKED | Final exact persistence schema oracle/package and safe world delivery remain; old red/cancelled attempts are retained rather than relabeled |
+| NOT EXECUTED | New package/deployment, real owner backup/copy/upgrade or FTB client acceptance; actual diagnostic native load/restart is now recorded separately |
+| NEEDS HUMAN VALIDATION | Native questbook presentation and ability to resume play after the qualified fix |
+| NEEDS MY DECISION | None for assigned outcomes; native default-team/individual-receipt and overflow behavior must be explicit, not hidden |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new; existing official binary metadata/downloads are being verified |
+| COST / BILLING RISK | No new generation/provider budget or paid activation; owner authorizes purposeful parallel agents |
+| DEPLOYED STATE | Installed F remains unchanged; the owner has one actual Dev world and paid-history file to preserve; no FTB candidate is declared deployed |
+
+Independent T1 work is also preserved: public2f4eee1 adds the two ordinary
+Assembler component recipes under ADR-0172, with tests authored but no new JVM/
+writer pass. It inherits normal-output base523b3ab; the parent verifies all
+13closed receipts/58raw hashes and preserves the four real native reds/two
+interrupted zero-byte raws. Source inventory/references are in the
+[T1 map](../docs/tiers/t1-development-map.md). This does not share the FTB cache.
+
+## Continuing owner loop — play T0 while developing T1
+
+The loop remains active; the reported blocker above is its current priority.
+
+The owner explicitly chooses to start the installed T0 game as the intended
+longitudinal run and directs ongoing T1 research, brainstorming and development
+of routes, machines, components and processing lines (ADR-0170). This is the
+continuing project loop, not a request for another permission queue or disposable
+campaign. Record actual play observations when supplied, not invented passes.
+
+Reported bugs that stop play preempt new T1 work. Implement and qualify the
+bounded fix, preserve the world/previous artifact and use the stopped-instance/
+backup/update contract; never stop/restart the player's game. When the owner
+reports reaching the T0 end, incorporate final conclusions and finish T0 polish.
+The earlier readiness diagnosis remains visible debt, not a continuing start veto.
+
+Corea94 resumes the preserved20c88ff/ef9 first-factory outcome under the **new**
+exclusive `t1-owner-play-loop-20261021` assignment, not the returned old lease.
+Finish normal T1/Guidance/Economy generation, protected-fact comparison and
+canonical rechecks, reusing unchanged successful compilation/backend/affected
+proof. Use fresh resource/ownership locks and yield to gameplay. Parent/other
+workers must not run concurrent PC/cache/JVM operations. No Prism/Deploy/world/
+launcher/server/package/native/generation/config/auth action belongs to this lane.
+
+Read-only parallel research owns actual T1 route/component gaps (b0973eb7),
+mature factory patterns (d85f88fe) and longitudinal deposit patterns (f6e8e015).
+Reports are evidence/proposals, not new gameplay authority or licence to import.
+Root decisions/docs/handoff stay coordinated and shared edits/publication serialize.
+
+| Category | Current resumed wave |
+| --- | --- |
+| COMPLETED | Owner's durable play/development/feedback loop recorded; existing T1 source and bounded proof preserved; new scoped execution/research ownership assigned |
+| BLOCKED | None for T1 source/research; each new heavy stage still needs actual fresh headroom/ownership |
+| NOT EXECUTED | Final normal canonical output gate at this checkpoint, new client/save observations, T1 deployment/release or T0 acceptance |
+| NEEDS HUMAN VALIDATION | Owner's real T0 play feedback, blocking-bug reports and final conclusions; no completed run inferred |
+| NEEDS MY DECISION | None within the assigned outcomes; architecture/product proposals remain coordinator decisions |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | No new generation/provider/model allowance or paid activation |
+| DEPLOYED STATE | F298988d/95bf/3e5a remains the last verified installed artifact; owner may now be playing, so old stopped/0Java observations are historical, not live assertions |
+
+## Preserved readiness investigation — completed before the owner start instruction
+
+The following investigation/pause snapshots precede ADR-0170. Their actual
+observations survive; their temporary execution/start restrictions do not override
+the new owner instruction above.
+
+The owner clarifies that the intended game is longitudinal and asks whether the
+installed build is prepared, why not if it is not, and how the gaps will be fixed.
+Read [the investigation](../docs/testing/t0-longitudinal-readiness.md).
+Campaign human acceptance follows the game; it is not a prerequisite to begin it.
+Do not confuse a missing observation with a demonstrated corrupting bug.
+
+The T1 core owner explicitly returned its exclusive PC lease at16:28:20Z:
+sourceef9d670 clean,0Java/owned/unknown/focused helpers and no worktree/cache locks.
+T1 stays suspended; do not reuse that lease. Its evidence handoff20c88ff is a
+local preserved object, not a published/qualified/deployed T1 completion.
+Normal canonical T1/Guidance/Economy outputs and their rechecks remain open.
+
+The coordinator then performs read-only Inspect of F and bounded state observation
+at16:30:22Z: exact298988d/95bf47c4/3e5ad1fb, `VerifiedStopped`, no Prism/Java,
+0worlds with `level.dat`, no client log/options and unchanged launcher metadata.
+No launch, deployment, world/configuration change or new credential/access occurs.
+The current local UI tools do not expose the personal-PC Prism desktop.
+
+Independent read-only pack QA99cb8106 confirms the actual Survival login/book/
+free eleven-stack starter route and consistent seven selected pins. No initial
+functional blocker is demonstrated. The delivered guide still describes old
+Overworld preparation, the official world-selection contract is not closed,
+and client-prep/starter-recovery prose contains stale statements. Correct the
+delivery/instructions without inventing missing trees/villages or another kit.
+
+Save/registry/claim contracts provide useful evidence, but no actual client
+save/reopen is supplied by those tests. A real forward-update gap is identified:
+`VeinData` saves `DerivationVersion`, while scanner/extractors regenerate from
+the current version and live materials, ignoring that saved pin. This is not a
+demonstrated new-F-world corruption; it must be addressed before a conflicting
+generation/catalogue update and verified on a preserved reference-save copy.
+
+| Category | Current investigation |
+| --- | --- |
+| COMPLETED | Fresh exact-F installation/state, independent pack/entry/pin review and source-bound save safeguards checked; real vein-version gap and stale distributed instructions identified; no new-world corruption demonstrated |
+| BLOCKED | Objective client start/save-reopen remains unobserved; no exposed approved personal-PC GUI target |
+| NOT EXECUTED | Client/world creation/reload, real copy-upgrade, compatibility-code repair, RC publication, T1 normal-output completion or deployment |
+| NEEDS HUMAN VALIDATION | Controlled client observations, then actual longitudinal campaign quality/acceptance |
+| NEEDS MY DECISION | None for the investigation; no gate waiver or automatic world adoption |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | Approved graphical execution route or owner's controlled observations; no credential value requested |
+| COST / BILLING RISK | No generation, paid services, model installation or new access |
+| DEPLOYED STATE | Exact F/95bf/3e5a unchanged and stopped,0worlds observed; T1 remains separate and undeployed |
+
+## Preserved owner direction — parallel T1
+
+The following source/lease snapshots precede the priority/lease return above.
+They preserve what was assigned then and do not reauthorize a resumed PC worker.
+
+The owner explicitly requests T1 development and documentation of reusable
+systems/production lines while testing the T0 dev build (ADR-0168/0169).
+Use [the first-factory plan](../plan/feature-t1-first-factory-1.md).
+This later instruction supersedes development holds only, not missing T0 graphical/
+human acceptance or release criteria. Do not reinterpret prior blocked records as
+new passes or claim the normal longitudinal campaign completed/began from intent.
+
+Baseline source is a64d44f/PR56, with unchanged installed F298988d/95bf/3e5a.
+The isolated code lanes own T1 contract/line/export development (a94c3085) and
+T1 shared quest teaching (ac4962d5). Documentation worker0ad28462 confirmed
+read-only rg/glob with no editor/view/shell/Git: no docs, checks or SHA were
+produced. That writing assignment is withdrawn without relaunching it; the
+coordinator owns the handbook/map, not application implementation.
+The [handbook](../docs/architecture/reusable-systems.md) and
+[line map](../docs/tiers/t1-development-map.md) now document the existing authorities,
+extension invariants, production boundaries and affected proofs. They are
+source-based documentation, not new Java/runtime or player acceptance evidence.
+No old worker is silently repurposed. Existing processors/native stores/grid/
+quest ledgers remain authoritative; no new quantity catalogue or execution kernel.
+
+The first-factory contract selects mandatory power/milling/reduction/glass/forming/
+assembly and the physical F2 exit, with extraction/logistics/storage/Kiln/Factory
+World explicitly optional. Preserve all T0 tasks/recipes/claim formats and all old
+T1 IDs/rewards. The industrial-matrix exit must not depend on optional Factory World.
+Code/data classification does not claim complete T1 renewable establishment.
+
+**The owner's Prism game/worlds must not change.** No deployment, launcher action,
+restart, player-process termination or private configuration change. Build-only
+work may use an explicit isolated execution root under fresh headroom/ownership
+guards and must yield to gameplay.
+
+**Current source/lease:** isolated T1 branch
+`ezequiel24123z-t1-primera-fabrica` is published/clean at
+`c7278940d4b42999f1f128e560095fe3fb1329dc`. The core ownera94c3085 alone now
+holds Sync/JVM/cache execution for compile common/Forge/classpath/backend,
+affected checks and normal export/CheckOnly/twins. Use its dedicated private
+T1 inventory/surface, not the default PC inventory or any T0 source/instance.
+The coordinator and other workers must not perform concurrent SSH/cache/JVM work
+until that lease returns. Owned corrective descendants use coherent checkpoints,
+normal publication and forward Sync only after active stages/locks finish.
+No package, server/native smoke, Prism action, client/world or generation is allowed.
+
+Static QA70185190 reviewed the final source: normalized committed `snapshotHash`
+and raw ignored provenance are correctly separated. Its one physical/ENERGY
+verifier P1 is now **CLOSED by static recheck** on74ccb36: exclude only that
+pseudo-input from physical comparisons, assert authoritative FU separately and
+retain route/report energy without mutation. It was repaired before the owner's
+PC JVM stages; no test red/green is invented for the source-only finding.
+
+Current execution source is `74ccb36be90d12717a862f1a3d09fc201dd60f0e`.
+The core reports common/Forge/classpath/backend Gradle exit0, followed by a private
+helper observation failure (incidental output mixed with its integer return)
+before javac/selectors. Closed raws/receipt are retained; independent bytes are
+pending. Repair the observer and continue remaining stages only, no successful
+Gradle/backend replay. Read [the ledger](../docs/testing/latest-validation.md).
+No final executable qualification is accepted before exact receipts return.
+
+| Category | Current T1 authorization checkpoint |
+| --- | --- |
+| COMPLETED | ADR-0168/0169, handbook/line map and integrated sourcec727/repair74: live line/export/model API,50 tasks/18 T1 teachings/four reward-free lessons with T0/old IDs/rewards preserved; independent static QA finding closed. |
+| BLOCKED | Private helper observation failed after reported Gradle/backend0, before selectors. Core repairs only the observer/remaining stages; closed bytes await verification. No owner decision needed. |
+| NOT EXECUTED | No accepted new Java/export pass until exact receipt returns. Package, deployment, server/native/client campaign, real saved-world migration, T0 acceptance and T1 release are outside this lease. |
+| NEEDS HUMAN VALIDATION | Owner's separate T0 play feedback; future T1 clarity/pacing/appearance/audio acceptance. |
+| NEEDS MY DECISION | None within the approved first-factory scope. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new. The single existing guarded build surface/cache is leased exclusively to corea94. |
+| COST / BILLING RISK | No generation or paid-service requests. |
+| DEPLOYED STATE | F298988d/95bf/3e5a retained in Dev unchanged by T1 work; only the isolated source/build surface is leased. No current stopped/client/save state or T1 deployment is inferred. |
 
 ## Active owner-directed follow-up
+
+**Current delivery is exact F, not the old747 or a rebuilt documentation JAR.**
+`298988d500dccf0823fb2eab52fbe57bff8fe831`, JAR95bf47c4/2305405 bytes and
+ZIP3e5ad1fb/1869976 bytes are now installed in `Grindless-T0-Dev`.
+Coordinator Sync/Deploy/Inspect/repeat return `VerifiedDetached/Deployed/
+VerifiedStopped/Unchanged`, with no downloads or new pins.
+Postcheck21:39:19Z confirms six original-instance/save files and two Dev metadata
+files unchanged, exact installed hash and0Java/Python. The21:44:11Z addendum
+confirms no protected Dev game paths existed before or after. This is preservation,
+not an old-world/client migration pass.
+
+Read [the exact Prism handoff](../docs/testing/t0-experience-prism-deployment.md),
+[Phase A](../docs/testing/t0-experience-source-qualification.md) and
+[Phase B](../docs/testing/t0-experience-package-native.md).
+Actual full52/backend776 and affected2088/package88/native26 pass. The parent
+independently verifies the closed raw outputs and all26 primary-log predicates
+exactly once with natural save/stop; original reds remain preserved.
+Both quest renderers use the same six-port roles/positions/faces/limits/Atlas
+teaching. New PR56 remains draft; no release, ready promotion or main merge is
+implied by installation. Fresh exact-F workflows39501647923/39501654467
+both finish SUCCESS: all16 actual verify/Windows/six-native-shard jobs pass.
+The redundant documentation-branch cancellation is not promoted to pass.
+
+**Do not start the longitudinal game.** Actual graphical launch/new and backed-up
+old-world/input/HUD/audio/save-reconnect checks remain required and blocked by
+unavailable authorized graphical access. No service/security/login workaround
+was enabled. Owner unavailability is not a waiver. All execution leases are
+released; no worker may restart old GOs or redeploy using a default inventory.
+
+## Preserved experience execution timeline
+
+The source/time-bound snapshots below retain their original pending state.
+They do not override the current deployed F or reassign a released lease.
+
+**New master scope active: T0 experience before longitudinal play (ADR-0161–0163).**
+Use [the executable plan](../plan/feature-t0-experience-1.md) and
+[source-bound starting inventory](../docs/reviews/t0-experience-inventory.md).
+Mainb8bd5e8 is verified; actual Inspect still finds stopped747/c08/9cee.
+The previous engineering completion below is preserved baseline evidence, not
+completion of the new required gate.
+
+Six isolated feature lanes own quests/Guide/T1 presentation, in-kind barter/
+pacing/aggregate telemetry, tank/T0 interfaces, optional machine inspection,
+physical audio and visual presets. New integration owner6c714156 owns its fresh
+surface; parent owns architecture/contracts and final deployment. Root documents
+and publication are serialized. Old sessions are not resumed.
+
+Source-wave compute leases are released; the executed Phase A closeout below
+observes0Java/0Python/no build-cache locks. Phase B must take the exclusive lease
+and make fresh guards before heavy work; no old source lane may self-resume.
+The earlier16:39:44Z visual snapshot (0Java/Python,6.095GiB physical/29.020GiB
+commit free) is historical, never a later execution guard. Sound ceiling8POSTs
+(initial6/3 families) and local visual6 candidates/3 targets do not reset ledgers.
+
+**Latest: Phase B package/native is actually qualified on exact F298988d.**
+Read [the complete result](../docs/testing/t0-experience-package-native.md).
+Source/runtime `298988d500dccf0823fb2eab52fbe57bff8fe831`, JAR95bf47c4 and
+ZIP3e5ad1fb pass playable88/88, common/Forge0, affected ports2088 and the real
+26-marker isolated scenario, harness0/natural server0 in70.932seconds.
+Preserve the original25/26 G red and subsequent16/26 fixture-observer red;
+both exact worlds/JARs/ZIPs/logs remain, with all16 receipts/32 rawlogs.
+Actual copied-world NBT disproves tank loss; ordinary landing support and
+real entity-ready admission repair the fixture without weakening assertions.
+
+**Do not retarget the package to this evidence-only documentation commit.**
+The retained PC stays clean on tested F, with the exact F ZIP for the parent's
+DevDeploy/Inspect/Unchanged/old-six-file and new-user-config preservation.
+Do not rebuild or swap its JAR after proof. No Prism/push/PR/main action is
+performed by the executor. Fresh hosted F CI remains the publication gate.
+Graphical launch/world/interaction/save remains BLOCKED, not waived;
+no longitudinal campaign or T0/RC acceptance follows.
+
+The new client/world/interaction/save smoke is required and unobserved; local
+Computer Use window discovery exposes no target Minecraft/Prism window. Continue
+safe implementation while finding an authorized real graphical path. Do not
+start the normal longitudinal campaign or silently waive the gate.
+
+Actual early progress: visual source1969 passes256MiB javac/two identical
+selective stages/negative modes/protected art and releases0Java; only Python CPU
+continues there. Tank759 is published via integration265 and assigned to native
+task879ba2ba for focused common/Forge/JDK qualification. Sound actually spends
+six new requests, allHTTP200/no retries; selects water/extraction, rejects both
+fire sources and uses native furnace feedback without reroll (about720credits).
+No new visual inference is needed for the proven color-only state-mask defect.
+Barter628 adds a real menu and dirt-priced pre-producer recovery so the shop
+does not assume the water/base it must help recover.
+
+ADR-0164/0165 and [external references](../docs/design/t0-external-references.md)
+record bounded controller proxies/identity retirement/quota admission and original
+optional native inspection. Jade's CC-BY-NC-SA profile inclusion remains deferred.
+The owner is unavailable after the graphical-access question; this does not approve
+waiving the required client gate. Continue implementation, not the campaign.
+
+**Executed Phase A:** read [the exact source qualification](../docs/testing/t0-experience-source-qualification.md).
+Published26ac is actually compiled/generated/repaired. Full52 suites exit0 in
+526seconds; final clean-source common/Forge/resources/classpath/Heracles776 exit0.
+Complete generated checkpointdb5a8e9 contains45 raw-hash-verified normal outputs,
+including six real model/state/loot sets,73 guidance declarations, the fresh
+canonical economy and25/71/281 visual inventory. Thirteen protected sprites and
+four Oggs remain exact. Source/build/classes and23 receipts/46 rawlogs are retained;
+actual closeout observes0Java/0Python/no root-cache locks and original clean70901.
+The final containing handoff commit is proof/context-only, not another runtime run.
+
+The real AST/manual-work repair and ten negatives pass, as do both renderer
+teaching hooks and2075 port/model/component contracts. The standalone intrusive
+fixture attempts really fail; do not force registry flags or fake items.
+Positive registered Guide settlement, public physical-F1 claim and port
+state/collision assertions now remain required in the existing Forge probe:
+original23 markers plus3 additions =26, **NOT EXECUTED until Phase B on the same G**.
+The original356 P2 callback fence and raw750/quota750 predicates remain there,
+not proved by old Tank120. Same-G package/native/Prism/Inspect/idempotency and
+fresh full hosted/SH CI are the next publication/deployment boundary.
+Required graphical launch/world/interaction/save gate is still BLOCKED, not waived;
+do not start longitudinal play or claim the full readiness status.
+
+Offline695 proof is reused only after17 exact input-blob comparisons; actual
+current Windows47+30 and Java audio101 pass. Batch3cases/98 and unchanged old48
+proof remain source-bound; historical full33/51 timeout FAIL is preserved.
+The independent economy author's retained surface/private proof is untouched.
+Its released source5002 proof is not copied as the final composed JSON: fresh
+canonical writer/check416/17 and full Economy417/Shop33230 are the new evidence.
+
+## Previous qualified testing handoff
 
 **Engineering testing candidate747 is qualified, deployed and stopped.**
 Read [RETURN-HANDOFF](../RETURN-HANDOFF.md) for the eight disclosure categories,

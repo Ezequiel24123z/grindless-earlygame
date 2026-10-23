@@ -28,7 +28,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0014](#adr-0014--consolidate-the-orphaned-session-branches-into-one-history) | Consolidate the orphaned session branches | Accepted |
 | [0015](#adr-0015--fluids-are-modelled-as-state-not-as-items) | Fluids are modelled as state, not as items | Accepted |
 | [0016](#adr-0016--pipes-early-the-phase-network-late) | Pipes early, the Phase Network late | Accepted |
-| [0017](#adr-0017--machines-above-t1-are-manufactured-never-hand-crafted) | Machines above T1 are manufactured, never hand-crafted | Accepted |
+| [0017](#adr-0017--machines-above-t1-are-manufactured-never-hand-crafted) | Machines above T1 are manufactured, never hand-crafted | Normal-machine rule superseded by ADR-0188; industrial component chains retained |
 | [0018](#adr-0018--one-container-contract-with-auto-void-off-by-default) | One container contract, auto-void off by default | Accepted |
 | [0019](#adr-0019--design-machines-before-recipes) | Design machines before recipes | Accepted |
 | [0020](#adr-0020--recipes-are-parameterised-by-process-conditions) | Recipes are parameterised by process conditions | Accepted |
@@ -74,7 +74,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0060](#adr-0060--first-factory-is-lane-data-a-survey-and-an-unpowered-belt) | First factory is lane data, a survey and an unpowered belt | Accepted |
 | [0061](#adr-0061--the-machine-state-smoke-runs-as-one-function) | The machine-state smoke runs as one function | Accepted |
 | [0062](#adr-0062--first-fluids-are-millibuckets-gravity-clay-and-a-named-co-sink) | First fluids are millibuckets, gravity clay and a named CO sink | Accepted |
-| [0063](#adr-0063--the-factory-builds-the-factory-at-t1) | The factory builds the factory at T1 | Accepted |
+| [0063](#adr-0063--the-factory-builds-the-factory-at-t1) | The factory builds the factory at T1 | Final-machine automation superseded by ADR-0188; shared processing retained |
 | [0064](#adr-0064--energy-spanning-is-distance-and-storage-not-coverage) | Energy spanning is distance and storage, not coverage | Accepted |
 | [0065](#adr-0065--t1-kiln-is-roast-and-so-not-the-acid-line) | T1 Kiln is roast and SO₂, not the acid line | Accepted |
 | [0066](#adr-0066--the-t1-atlas-is-a-live-lookup-not-the-solver) | The T1 Atlas is a live lookup, not the solver | Superseded in part by ADR-0115 |
@@ -88,7 +88,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0074](#adr-0074--the-wire-mill-is-t2-and-does-not-wait-for-acid) | The Wire Mill is T2 and does not wait for acid | Accepted |
 | [0075](#adr-0075--the-contact-process-is-air-vanadia-and-a-pickle) | The contact process is air, vanadia and a pickle | Accepted |
 | [0076](#adr-0076--the-washer-batch-is-eight-crushed-and-the-next-metal) | The washer batch is eight crushed and the next metal | Accepted |
-| [0077](#adr-0077--water-splits-in-the-buffer-air-yields-oxygen-only) | Water splits in the buffer; air yields oxygen only | Accepted |
+| [0077](#adr-0077--water-splits-in-the-buffer-air-yields-oxygen-only) | Water splits in the buffer; air yields oxygen only | Gas mechanics retained; tier/manufacture superseded by0174/0188 and H2 fuel rate by0190 |
 | [0078](#adr-0078--the-fluid-well-is-powered-chunk-water) | The Fluid Well is powered chunk water | Accepted |
 | [0079](#adr-0079--melt-is-144-mb-at-1000-c-and-the-arc-still-makes-ingots) | Melt is 144 mB at 1000 °C, and the arc still makes ingots | Accepted |
 | [0080](#adr-0080--flotation-is-an-integer-batch-and-the-magnet-splits-by-name) | Flotation is an integer batch, and the magnet splits by name | Accepted |
@@ -172,6 +172,37 @@ history — the reasoning that was wrong is itself useful information.
 | [0158](#adr-0158--delegate-end-to-end-outcomes-with-proportional-validation) | Delegate end-to-end outcomes with proportional validation | Accepted |
 | [0159](#adr-0159--start-t0-with-one-free-generous-starter-quest) | Start T0 with one free generous starter quest | Accepted |
 | [0160](#adr-0160--merge-the-testing-ready-t0-candidate-and-close-superseded-prs) | Merge the testing-ready T0 candidate and close superseded PRs | Accepted |
+| [0161](#adr-0161--prepare-the-t0-experience-before-longitudinal-human-play) | Prepare the T0 experience before longitudinal human play | Accepted |
+| [0162](#adr-0162--quests-own-t0-teaching-and-the-per-player-f1-transition) | Quests own T0 teaching and the per-player F1 transition | Accepted |
+| [0163](#adr-0163--use-physical-barter-and-local-evidence-before-economic-rebalancing) | Use physical barter and local evidence before economic rebalancing | Accepted |
+| [0164](#adr-0164--extend-native-tank-custody-and-bounded-controller-backed-t0-ports) | Extend native tank custody and bounded controller-backed T0 ports | Accepted |
+| [0165](#adr-0165--provide-original-optional-inspection-without-a-new-pack-dependency) | Provide original optional inspection without a new pack dependency | Accepted |
+| [0166](#adr-0166--retire-synthesized-distribution-with-physical-families-and-intentional-silence) | Retire synthesized distribution with physical families and intentional silence | Accepted |
+| [0167](#adr-0167--make-state-and-port-art-readable-without-color-or-normal-build-generation-services) | Make state and port art readable without color or normal-build generation services | Accepted |
+| [0168](#adr-0168--develop-t1-in-parallel-with-owner-t0-testing-without-changing-the-dev-game) | Develop T1 in parallel with owner T0 testing without changing the dev game | Accepted |
+| [0169](#adr-0169--make-the-first-t1-factory-a-live-source-contract-not-another-execution-engine) | Make the first T1 factory a live source contract, not another execution engine | Accepted |
+| [0170](#adr-0170--develop-the-next-tier-alongside-longitudinal-play-and-prioritize-player-blockers) | Develop the next tier alongside longitudinal play and prioritize player blockers | Accepted |
+| [0171](#adr-0171--replace-the-player-blocking-book-with-native-ftb-quests-and-concise-jei-first-content) | Replace the player-blocking book with native FTB Quests and concise JEI-first content | Accepted |
+| [0172](#adr-0172--automate-recurrent-t1-casings-and-flux-cells-through-the-existing-assembler) | Automate recurrent T1 casings and Flux Cells through the existing Assembler | Accepted |
+| [0173](#adr-0173--develop-later-tiers-in-parallel-with-protected-t0-play) | Develop later tiers in parallel with protected T0 play | Accepted |
+| [0174](#adr-0174--grow-tier-complexity-around-basic-machine-families-from-t1) | Grow tier complexity around basic machine families from T1 | Accepted |
+| [0175](#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts) | Carry optional absolute process pressure through existing contracts | Accepted engineering contract; model/native gates separate |
+| [0176](#adr-0176--distinguish-exact-matrix-evidence-from-minimum-controller-capacity) | Distinguish exact Matrix evidence from minimum controller capacity | Accepted engineering scope; source integrated, qualification pending |
+| [0177](#adr-0177--update-managed-native-quest-definitions-only-through-an-explicit-guarded-transition) | Update managed native quest definitions only through an explicit guarded transition | Accepted engineering scope; source/P2 repair integrated, JVM proof pending |
+| [0178](#adr-0178--continue-autonomously-and-deliver-ready-tiers-to-the-longitudinal-game) | Continue autonomously and deliver ready tiers to the longitudinal game | Accepted direct owner operating mandate |
+| [0179](#adr-0179--reproduce-four-slot-fit-first-factory-machines-without-repricing-bootstrap) | Reproduce four-slot-fit first-factory machines without repricing bootstrap | Historical engineering retained; automatic final machines withdrawn by ADR-0188 |
+| [0180](#adr-0180--reproduce-the-thermal-generator-through-an-honest-two-stage-subassembly) | Reproduce the Thermal Generator through an honest two-stage subassembly | Component may remain; automatic final generator withdrawn by ADR-0188 |
+| [0181](#adr-0181--compare-one-generated-platform-shim-by-exact-self-name-equivalence) | Compare one generated platform shim by exact self-name equivalence | Source555dbe9 integrated; G4 managed201/authentic publication0 custody verified |
+| [0182](#adr-0182--expose-existing-wet-beneficiation-as-an-optional-t1-baseline-line) | Expose existing wet beneficiation as an optional T1 baseline line | G7 actual models29/38/A7 verified; acquisition shadowing remains under ADR-0185 |
+| [0183](#adr-0183--version-known-native-catalogue-lineage-without-weakening-provenance) | Version known native catalogue lineage without weakening provenance | G7 actual ABI/backend/ready51/package/managed51/custody and original CI evidence verified |
+| [0184](#adr-0184--project-authored-default-matrices-through-their-real-physical-rating) | Project authored default Matrices through their real physical rating | G8 actual31/41/changed contracts/normal A8/239 custody verified; not rendered or finite-T1 proof |
+| [0185](#adr-0185--choose-assembler-recipes-explicitly-without-repricing-or-losing-work) | Choose Assembler recipes explicitly without repricing or losing work | G10 actuala54 Java/native1028/models/A9/278 custody verified; no rendered/client-wire/owner-world pass |
+| [0186](#adr-0186--supply-physical-baseline-control-to-nine-existing-process-families) | Supply physical baseline control to nine existing process families | G10 combined representative mechanism/normal A9/custody verified; no per-family runtime or whole-tier acceptance |
+| [0187](#adr-0187--continue-the-finite-first-factory-witness-with-conserved-t0-custody) | Continue the finite first-factory witness with conserved T0 custody | Generic source review clear; T1 authority revision under ADR-0188 and actual Java/replay pending |
+| [0188](#adr-0188--assemble-normal-machines-manually-and-author-manufacturing-modes-per-product) | Assemble normal machines manually and author manufacturing modes per product | Complete A/B/C source normally composed; actual integrated qualification pending |
+| [0189](#adr-0189--hold-orphaned-paid-bench-work-before-ordinary-recipe-fallback) | Hold orphaned paid Bench work before ordinary recipe fallback | Guard f1b9 CI/Persistence/native1273 and46-file custody verified; owner-world compatibility unproved |
+| [0190](#adr-0190--add-optional-t1-gas-utilities-with-lossy-hydrogen-recovery) | Add optional T1 gas utilities with lossy hydrogen recovery | Accepted bounded development scope; source and qualification in progress |
+| [0191](#adr-0191--verify-native-quests-after-the-framework-startup-bridge) | Verify native quests after the framework startup bridge | Installed-dd0 hotfix source reviewed; executable qualification and guarded delivery pending |
 
 ---
 
@@ -528,6 +559,10 @@ builds.
 ## ADR-0017 — Machines above T1 are manufactured, never hand-crafted
 
 *2026-09-30 · Accepted*
+
+**Current qualification (2026-10-22):** ADR-0188 supersedes the prohibition on
+manual final normal-machine assembly. The original rationale below is
+historical; advanced component processing remains part of the design.
 
 **Context.** In Factorio the factory builds the factory: you hand-craft the first burner drill and
 essentially nothing else. Minecraft tech mods usually discard that loop by letting a player with a
@@ -2430,6 +2465,10 @@ in this slice.
 
 *2026-10-03 · Accepted*
 
+**Current qualification (2026-10-22):** ADR-0188 supersedes automatic final
+normal-machine manufacture and the last-crafting-table-machine rule. Keep the
+shared Press/Assembler/component mechanisms and their actual proof history.
+
 **Context.** ADR-0017 forbids crafting-table recipes past the bootstrap. ADR-0058 scheduled
 slice D as Press, Machine Casing, Assembler, and the T2 fabrication gate. Two documents
 disagree about *when* those machines exist.
@@ -3014,6 +3053,12 @@ that starts the Electrolysis Cell here is skipping M.
 
 *2026-10-04 · Accepted*
 
+**Later scope.** ADR-0174/0188 places ordinary baseline families atT1 with
+manual final construction. ADR-0190 replaces only future hydrogen400-tick
+ignition with50 ticks while retaining CO400 and already-paid saved burns.
+The following original slice remains historical; its fluid quantities and
+shared storage/capture mechanics are retained.
+
 **Context.** BUILD-OUT slice M is the Electrolysis Cell and the Atmospheric Intake: split
 water, take N₂/O₂, and give hydrogen and oxygen a named sink. `PROCESSES.md` quotes
 chlor-alkali (`1 B brine → 0.5 B chlorine + 0.5 B hydrogen + 1 B sodium hydroxide`) and
@@ -3439,6 +3484,18 @@ slice; pulling items out of the flux network before the drone bay exists.
 blueprint is duplicating items. A successor that pulls from the network
 here is starting slice AC. A successor that writes blueprints to disk is
 inventing a share format the item already is.
+
+**Source-only qualification note, 2026-10-21.** Checkpoint4550b975 retains this
+record's ordinary missing-item/blocked-cell none-spent preflight boundary and
+legacy payload/bounds. It also rechecks targets and settles bounded inventory
+payment around actual placements. If a later callback fails, already placed
+cells are not rolled back. An explicit false result restores the attempted
+payment; a throwing callback may already have changed the world, so that attempt
+stays paid while unattempted resources are refunded and the error propagates.
+This uncompiled source does not establish global rollback, crash atomicity or
+universal zero loss. Coordinator review, affected contracts and representative
+capture/stamp/load evidence remain pending; the old `first-blueprint` smoke only
+observes an item and cannot supply that proof. No drone/network framework is added.
 
 ---
 
@@ -7552,3 +7609,1811 @@ Keep existing branches/worktrees and their evidence. Closing superseded PRs is
 not permission to delete unknown work, rewrite owned branches or modify repository
 protection. The inspected older PR chains have no native stack metadata; do not
 invent or dissolve a stack to clean them up.
+
+---
+
+## ADR-0161 — Prepare the T0 experience before longitudinal human play
+
+**Status.** Accepted owner master prompt, 2026-10-20.
+
+**Decision.** The next work is the explicit T0 experience programme in
+[the executable plan](../plan/feature-t0-experience-1.md), not another claim that
+engineering testing readiness already satisfies the longitudinal gate. It includes
+quest-led instruction, harmless Guide migration, recovery barter, balance evidence,
+usable tanks, functional interfaces for the two actual T0 structures, optional
+inspection, physical audio and reusable visual production.
+
+This scope explicitly opens bounded T0 ports/shop work previously held in the
+route map. It does not open unrestricted T1 production or replace the physical
+five-F1-Matrix exit. Preserve old IDs/claims/contents/default builds and provenance.
+Keep independent feature ownership, one new integration surface and one shared
+mutating PC execution owner. Do not reuse retired workers as an unbounded pool.
+
+The new sound purpose permits at most8 new POSTs across at most4 justified
+families, initially6 requests/3 families. The new local visual purpose permits
+at most6 candidates/3 demonstrated weak targets. These are ceilings, not targets
+or resets of historical ledgers. Existing selected Quern/Mixer/Multitool sources
+remain preserved; paid images, account changes and model downloads are not selected.
+
+Required client launch/world/interaction/save smoke is distinct from headless
+server/fixture proof. The status `TECHNICALLY PREPARED FOR LONGITUDINAL HUMAN
+VALIDATION` requires the owner's complete gate, not just successful compilation.
+No normal longitudinal campaign, final T0/RC release/tag, acceptance/freeze or
+unrestricted T1 development follows from this authorization. A coherent bounded
+slice may be preserved if blocked, but required gate items are not silently deferred.
+
+---
+
+## ADR-0162 — Quests own T0 teaching and the per-player F1 transition
+
+**Status.** Accepted implementation direction under ADR-0161.
+
+**Decision.** Extend the canonical quest catalogue with typed reward-free teaching
+lessons and concise machine/process/placement/troubleshooting content. Preserve
+all26 old IDs and rewards; old claims remain in the same player/Overworld ledger.
+An explicit lesson can record acknowledgment without pretending item possession
+proves successful operation or inventing material reward fallbacks.
+
+New `relay` claims require five valid physical Relay Matrices rated F1 through
+the existing rated-item evidence. The claim unlocks a distinct actual T1 chapter
+in both native and Heracles presentation, not an unrelated menu/item or global
+machine permission. Historical relay claims remain authoritative: their past
+rating evidence was not stored and cannot honestly be reconstructed or reset.
+Keep later prototype IDs/progress, but never label them completed T0 content.
+
+Retain `field_guide` as a registered harmless deprecated compatibility item whose
+use routes to current quest instruction. Remove its normal recipe/required role,
+not the saved ID. Process Atlas remains the authoritative recipe viewer.
+Recover only the utility Quest Book on normal entry/respawn when absent, including
+after the starter was used; never duplicate the valuable starter or other claims.
+
+Both quest renderers request the one shop network entry. The shop service owns
+server validation and barter; do not create a second hook/packet/economy ledger.
+Shared recipe details must derive from canonical definitions; text is instruction,
+not another quantity catalogue.
+
+---
+
+## ADR-0163 — Use physical barter and local evidence before economic rebalancing
+
+**Status.** Accepted reversible direction under ADR-0161.
+
+**Decision.** The recovery shop uses direct in-kind exchanges of existing items.
+Do not add a currency item, mint, wallet, rare-structure dependency or mandatory
+economy mod. This meets the requested production-surplus/recovery role without
+the fundamentally new currency that would require an owner decision.
+
+One machine-readable offer catalogue owns input/output quantities, prerequisite
+claims, role and risk metadata. Server-side native inventory staging must prove
+the complete input withdrawal and complete output capacity before a single commit.
+Reject stale/replayed menu actions; never debit partially, drop valuable remainder
+or trust a client-selected price. Include process conversions in cycle/arbitrage
+checks rather than considering only a buy/sell pair.
+
+Emergency/convenience/terrain/food/container/fuel offers are optional. No shop
+offer sells a machine, Core, Calibrated Core, Relay Matrix or advanced critical
+component. The production route must work without the shop. Preserve the generous
+existing starter until measured evidence justifies a separate balance change.
+
+Export live recipe bills, sufficient construction witness and assumptions
+separately; do not call a sufficient witness a globally minimal route or turn
+configured ticks into observed playtime. Opt-in local developer telemetry records
+only aggregate causal process/manual/claim/shop/recovery/state events and relative
+times. It is off by default and records no names, UUIDs, coordinates, credentials
+or external analytics. Manual accepted work and committed processes count, not
+attempts or repeated polling.
+
+---
+
+## ADR-0164 — Extend native tank custody and bounded controller-backed T0 ports
+
+**Status.** Accepted under the owner's explicit ADR-0161 infrastructure scope.
+
+**Decision.** Extend the existing Basic Tank, `FluidEndpoint` and
+`NativeFluidStore` authority rather than replace their16B/`Fluid` save contract.
+Stage real container handlers on copies and settle the whole native fluid/item
+exchange with owner-controlled compensation. Preserve fluid custody through
+breaking/rotation/relocation; reject hot/unrepresentable/tagged/invalid/stale
+Forge operations rather than silently treating them as cold valid input.
+
+Implement only justified item/fluid roles in the two existing T0 shapes:
+Firing candidate cells(1,0,0)/(1,1,0) accept at most one item input/output each
+while at least five ordinary bricks remain. Trough channel(0,0,1) accepts one
+item/fluid input variant; screen(0,0,2) accepts one item/fluid output variant.
+Keep original geometry, rotation and open-air requirements, with exposed relative
+sides and understandable role/fault markings. Default old builds remain valid
+and direct controller interfaces remain available.
+
+Ports own zero independent contents. Every operation validates loaded world,
+current formed shape, compatible role/face and unique controller block-entity
+identity; captured accesses to an old controller/store must fail after replacement
+at the same position. Rebind on each reform, invalidate on every retirement path,
+and never force-load chunks or create cross-dimensional links.
+
+Output quota is a real visibility/withdrawal bound, not just a displayed amount.
+Native reservations must respect that bound across aliases and recheck it at
+commit. Reuse the same backing store identity; do not manufacture a second store
+or copied tank to hide reserved input stock. Limit any shared API extension to
+this boundary and rerun its affected transaction/rollback proofs.
+
+[Pinned mature-source research](design/t0-external-references.md) supports
+role/count predicates, zero-storage primitive proxies, relative sides and identity
+retirement. Their generic kernels solve variable-scale systems unnecessary for
+seven known cells/two known parts; no GT/Mekanism implementation is copied.
+Controller ownership is structural, not a new player UUID/security system.
+
+---
+
+## ADR-0165 — Provide original optional inspection without a new pack dependency
+
+**Status.** Accepted under ADR-0161; Jade pack inclusion remains deferred.
+
+**Decision.** Add immutable bounded loaded-target inspection snapshots that read
+the real current process/progress/energy/fluid/environment/structure authorities.
+Use descriptive display reasons without reordering serialized machine-state
+enums. Show unknown/absent when a native fact is unavailable; do not invent a
+specific starvation cause from an ambiguous status.
+
+Present those snapshots through a small original optional native aimed-machine
+overlay using existing networking/client-rendering patterns. Keep client-only
+render classes out of dedicated-server initialization. Validate target, distance,
+rate and payload bounds on the server; no world scans, forced chunks, retained
+world references or personal logging. Text/shape must accompany color cues.
+Offer a clear client control and avoid duplicate overlays when another provider
+is present.
+
+Exact Jade11.13.3 API research establishes a compatibility target, not distribution
+permission. Its pinned CC-BY-NC-SA licence and ADR-0149 omission must not become
+an unreviewed mandatory dependency or a silently changed playable pack. Deliver
+the original native equivalent first; no Jade jar/API class/implementation is
+copied or shaded. Owner-approved integration or alternative overlay selection can
+extend the neutral snapshot later without replacing machine execution.
+
+---
+
+## ADR-0166 — Retire synthesized distribution with physical families and intentional silence
+
+**Status.** Accepted T0 experience strategy; implementation/runtime/client
+qualification and human listening remain separate.
+
+**Decision.** Remove the five legacy synthesized Oggs from distribution and their
+periodic hum/click/chirp fallback callers. Preserve their seven existing registered
+event identities: unused hums are deliberately silent, legitimate interaction
+events resolve to native physical game sounds. Do not copy vanilla sound assets.
+Keep Quern A and Mixer A byte-identical; add only justified physical families.
+
+The new finite six-request purpose produces six HTTP200 sources without retries
+or ambiguity. Water B and extraction B pass technical decoding/normalization and
+are selected. Neither generated fire candidate is suitable; preserve the actual
+failed adaptation and use native furnace crackle rather than reroll for sunk cost.
+About720 credits is an estimate, not an account charge or guaranteed USD quote.
+The spent6/6 ledger and rejected sources remain immutable/private as appropriate.
+
+Use one existing tracker and one loaded-nearby-chunk scan, with at most eight
+nearest managed sources and short process-appropriate new-family ranges/gains.
+Retain identity/kind/family separation, clean retirement, pause/mute/reload/
+dimension/removal handling and bounded observation of late-start sources.
+No independent second loop manager or unbounded queue is introduced.
+
+Biology, Bench, calibration, storage, structure parts and ordinary logistics can
+be intentionally quiet; a material or block does not require a permanent sound.
+New ports are six structural silence rows, not aliases of their controller's
+working family. Ten event definitions/aliases must resolve or explicitly represent
+unused silence, with no synthesized runtime resurrection by normal conversion.
+
+Source/codec/lifecycle and one/eight/mixed-workshop listening are different proofs.
+No artistic approval, audible native lifecycle, fatigue or final mix follows from
+technical selection. Preserve the raw generation/audition worktree until its
+private evidence has been retained; never archive it merely because source is clean.
+
+---
+
+## ADR-0167 — Make state and port art readable without color or normal-build generation services
+
+**Status.** Accepted deterministic visual direction under ADR-0161.
+
+**Decision.** Preserve the incumbent original T0 material/geometry world. Fix the
+observed shared blocked/out-of-band mask by giving the five machine states distinct
+shape marks, not just different colors. Apply the justified change to62 T0 fronts;
+retain the other519 baseline PNGs, protected nine material/core sprites, three
+books and canonical Multitool. Four original role overlays serve six port variants
+without a duplicated texture set per orientation/casing.
+
+A rear surface only two model units high cannot carry an entire16px role glyph
+legibly. Retain it as a secondary cue and add the same role texture on the existing
+open bed's readable top area before the screen bars. The approved planar bounds/
+UV crop preserve base/collision geometry and do not open an automation face.
+Human in-world distance/light/readability still requires real client review.
+
+Comfy source generation remains optional development-only work. Extend reusable
+item/face/family/palette/mask/contact-sheet presets and their reservation/model/spec
+bindings, but do not spend diffusion to fix a deterministic mark defect. This
+wave needs no new inference/model download/paid image service. The old Multitool
+2/2 generation record remains untouched.
+
+Normal runtime artwork generation stays JDK-only and deterministic; approved
+source bytes are validated/copied before output. Python/Pillow tools inventory
+and process candidates, not the normal mod build. Contact sheets explicitly show
+actual source pixels/native1x/nearest8x/light-dark, not Minecraft screenshots.
+Refresh the manifest only after composed models exist; do not relabel an old
+19-block projection as the new25-block/port model result.
+
+---
+
+## ADR-0168 — Develop T1 in parallel with owner T0 testing without changing the dev game
+
+**Status.** Accepted direct owner instruction, 2026-10-21.
+
+**Decision.** The owner explicitly requests T1 development and documentation of
+reusable systems/production lines while testing the current T0 dev build. Open
+that development now through [the first-factory plan](../plan/feature-t1-first-factory-1.md).
+This later instruction supersedes the old T1-development hold in ADR-0144 and
+the T0 experience programme only for concurrent development; do not infer a
+completed graphical smoke, longitudinal start, T0 acceptance/freeze or RC release.
+
+Use isolated branches depending on the actual current T0 experience source
+a64d44f/PR56, not older main. Preserve the pending T0 review and all source-bound
+proofs. Leave the installed F298988d/95bf47c4/3e5ad1fb candidate, launcher,
+player worlds/options and running game untouched. No T1 deployment, Prism restart,
+release/tag or main merge is authorized by "begin development".
+
+Build-only SSH work may proceed on a separate explicit execution root if fresh
+headroom and shared-cache ownership permit, with gameplay taking priority.
+A legitimate player-client JVM is not permission to kill it or a reason to
+pretend an unknown build is safe. No competing agent Gradle process or source
+switch under a running build is allowed. If capacity is insufficient, continue
+independent source/docs and use applicable hosted proof rather than lowering guards.
+
+Keep the T0 graphical/human feedback lane distinct from T1 code progress.
+T0 fixes remain integration dependencies when owner feedback changes a shared
+assumption; do not re-label a T1 test as a retroactive T0 player pass.
+
+---
+
+## ADR-0169 — Make the first T1 factory a live source contract, not another execution engine
+
+**Status.** Accepted first-increment direction under ADR-0168.
+
+**Decision.** T1 Voltaic is the existing first-factory chain made explicit and
+usable: F1 thermal power/distribution; milling/reduction and renewable glass;
+Press/dies/coils/casings; Assembler reproduction of the five-F1 batch; and the
+physical rated F2 Relay Matrix. Select actual craft/process/fuel authorities by
+stable identity and dependency, supplying no duplicate quantities or new global
+machine permission.
+
+Implement one loader-neutral line contract consumed by both runtime quest
+teaching and a source-derived exporter/checks. Separate mandatory lines, optional
+branches and the exit. Finite extraction, optional logistics/storage, Kiln and
+Factory World cannot become an unmentioned renewable supply guarantee or an
+unrelated required F2 gate. Preserve their existing IDs/claims and useful optional
+roles. New first-factory teaching replaces generic preview text only for the
+implemented selected routes, not every registered later-tier prototype.
+
+The physical F2 recipe remains `assemble/relay_matrix_f2` in the real Assembler;
+its current F1 Matrix/casing/glass/Flux Cell inputs are read from live definitions.
+The final `industrial_matrix` claim still requires valid physical F2 evidence,
+but no longer requires optional Factory World access. Preserve old claim/reward
+records and the exact T0/F1 chapter boundary.
+
+Recurring inputs inherit the mod-owned T0 base or retain explicit honest
+dependency findings. Do not author a T1 renewable label solely because a recipe
+is repeatable or a finite vein exists. Reuse `SustainabilityAudit`,
+`AuthorityAdapters`, construction reserves and source projections where applicable;
+an early source contract is not a claim of complete T1 closure or optimal pacing.
+
+Document the shared machine/process/condition/power, transaction/persistence,
+capability/interface, quest/guidance, inspection, telemetry and asset/proof
+mechanisms with actual authority/invariant/extension seams. The project's
+already-proven infrastructure is the solved-problem-first choice; there is no
+new need for a generic processor, transfer rollback engine, multiblock kernel,
+quest ledger, currency or content-copying dependency in this first increment.
+
+---
+
+## ADR-0170 — Develop the next tier alongside longitudinal play and prioritize player blockers
+
+**Status.** Accepted direct owner instruction, 2026-10-21.
+
+**Context.** The owner clarifies that the installed T0 game is intended to be
+longitudinal, not an indefinitely disposable test. After the source-bound
+[readiness investigation](testing/t0-longitudinal-readiness.md), the owner
+explicitly chooses to begin that game and asks the agent to continue T1 research,
+brainstorming and development while play proceeds.
+
+**Decision.** Adopt this continuing project loop:
+
+1. The owner plays the current T0 candidate as the intended reference game.
+   Record actual observations/feedback when supplied; the statement of intent
+   is not a completed launch, save/reopen, campaign or human-acceptance pass.
+2. Develop the next authorized tier, currently T1, on isolated dependent branches.
+   Cover actual routes, machines, components, processing lines, renewable inputs,
+   automation and reusable systems. Inspect mature implementations before new
+   infrastructure design. Research and brainstorm proposals are not automatically
+   accepted gameplay, quantities or additional tiers.
+3. A reported issue that interrupts play has priority over new T1 work. Reproduce
+   the actual defect, make a coherent fix and run its affected proof set. Preserve
+   the original save and previous artifact. Use the existing stopped-instance
+   deployment/update contract; no agent may stop or restart the player's game.
+4. When the owner reaches the end of T0, incorporate the reported conclusions to
+   fix and finish T0 polish. Do not equate development progress or an agent's
+   judgement with the owner's acceptance. Continue the same feedback/development
+   pattern for later tiers when their development is authorized.
+
+This instruction supersedes the temporary T1 investigation pause and earlier
+disposable-only start restriction for the owner's manual play. It does not
+relabel unobserved client/retained-world checks as passed, publish an RC, merge
+main, deploy T1, open T2 or guarantee an untested future migration.
+
+T0's installed F artifact and the owner's running instance/worlds remain stable
+during T1 work. Build-only execution has one explicit owner, fresh headroom and
+worktree/cache locks, and yields to gameplay. A legitimate client JVM is not a
+reason to terminate it or falsify a global-zero-Java requirement. Source, docs
+and useful research continue if heavy execution must wait.
+
+Before an update, compare changed IDs, persisted meanings, world derivation,
+recipes/configuration and dependencies; test applicable compatibility on a
+verified copy while preserving the reference original. The identified unused
+vein-version pin remains explicit work before a conflicting resource-generation
+update, not a claimed repair or reason to remap old surveys silently.
+
+**Alternatives rejected.** Waiting for the owner to finish T0 before useful T1
+work contradicts the instruction. Repeatedly demanding a disposable playthrough
+or invented prior human acceptance defeats longitudinal play. Updating the live
+instance continuously, skipping copy-based compatibility, inventing completed
+passes, or spending an unlimited generation allowance is not authorized.
+
+---
+
+## ADR-0171 — Replace the player-blocking book with native FTB Quests and concise JEI-first content
+
+**Status.** Accepted direct owner feedback; implementation/qualification pending,
+2026-10-21.
+
+**Context.** The owner cannot continue playing with the delivered questbook.
+They explicitly requested an established BetterQuesting or FTB Quests integration,
+not an original book or a large custom teaching widget. The owner also rejects
+the exhaustive, impersonal guide prose and asks for brief explanations when JEI
+already shows the recipe. This is a real play blocker under ADR-0170.
+
+**Framework decision.** Use the supported Forge1.20.1 FTB Quests native experience:
+chapter/quest graph, normal task/reward presentation, navigation, completion and
+claim interaction. Verify exact published artifacts, required dependency closure,
+licences and actual APIs before pinning them. Dependency use is not permission
+to copy third-party source, assets or another pack's quest writing.
+
+This supersedes the native-book/Heracles-only presentation and permanently empty
+native-reward choices in ADR-0088/0100/0142/0149/0162 for this replacement. Do not
+port the same custom guide, buttons, giant recipe panel or alternate navigation
+into an FTB container and call that framework adoption.
+
+Keep the registered Grindless Quest Book and legacy Guide identities safe for
+existing saves, but route normal use to the genuine framework. Standalone or
+missing-backend failures must be explicit; the official pack must not silently
+fall back to the rejected screen.
+
+**Content decision.** Ordinary quests have a useful title and one or two short,
+natural English sentences: the immediate goal and, where useful, why it matters.
+Use native task/reward item displays and JEI rather than duplicating ingredients,
+energy, timing or every operating rule in prose. Preserve indispensable unusual
+facts such as source-site placement, a non-obvious structure/side, renewable versus
+finite supply and physical Matrix rating. A little in-world personality is welcome;
+forced jokes, generic motivational prose and developer audit disclaimers are not.
+
+The initial copy lane preserves all46 logical task IDs, rewards, prerequisites,
+evidence and other locale values. It changes presentation, not recipes, starter
+quantities or resource balance. Native definitions still derive from canonical
+catalogue data instead of becoming a second handwritten recipe/quest authority.
+
+**Progress and reward ownership.** The old Overworld per-player claim set is paid
+history, not a list of newly claimable rewards. Import native individual reward
+receipts before admitting native claims; opening the new book must not pay the
+starter or any old reward again. Preserve partial/historical claim sets, including
+claims whose current prerequisites are absent. Reconstruction grants no items.
+
+Use one live grant authority. Once native ownership is established, delayed legacy
+packets cannot continue minting through the old engine. Keep legacy paid-history
+separate from derived native completion: completing an objective is not proof that
+its reward has already been collected. Login/retry must not overwrite newer native
+progress with a frozen legacy snapshot or reset another pack's quests.
+
+Prefer supported native progress/reward APIs and ordinary tasks. A narrow native
+task or compatibility adapter is justified for exact Matrix NBT or once-only import,
+not another quest engine or UI. Do not preserve incidental requirements such as
+holding the custom book at reward time merely because the old handler did so.
+
+Native individual reward claims may replace the former single batch button.
+Define and test exact delivered/claimed/pending outcomes, including full inventory
+and the two non-stackable buckets. Do not advertise atomic no-drop refusal if the
+chosen native operation actually uses overflow delivery. Team progress and
+individual paid receipts are different: preserve individual reward history, do
+not create parties automatically, and document/test actual native team behavior
+rather than silently asserting the old projection has identical semantics.
+
+**Migration and delivery.** Preserve the actual reference world and previous
+artifact. Do not adopt the separate old exploratory save or rewrite raw framework
+progress files to simulate a migration. Use an exact stopped-world backup/copy,
+supported loading/import APIs and idempotent retry/failure tests. New dependency
+pins/configuration must pass the existing package/ownership protections; if the
+pin change requires a new isolated instance, retain the original and migrate a
+verified copy rather than weakening the deployment guard.
+
+Backend/API/pack work, content editing and independent verification run in
+parallel on owned surfaces. Shared build/cache, source changes during execution
+and final deployment remain serialized. Qualify the actual native definitions,
+old-claim import, individual reward receipts, Matrix evidence, affected tooling
+and one representative changed loader/binding. No recipe-per-instance smoke or
+new custom validation framework is justified. Client presentation and the owner's
+ability to resume remain distinct from a headless/server pass.
+
+**Alternatives rejected.** Another original questbook, a re-skinned custom
+Heracles widget, unchanged guide prose inside FTB, a second reward-paying ledger,
+discarded progress, manual pin guesses, or an untested in-place dependency
+replacement do not address the feedback.
+
+---
+
+## ADR-0172 — Automate recurrent T1 casings and Flux Cells through the existing Assembler
+
+**Status.** Accepted coordinator implementation decision within the owner's
+authorized T1 scope; source2f4eee1 authored, execution qualification pending,
+2026-10-21.
+
+**Evidence.** The sourceef9d670 route inventory identifies two actual recurrent
+F2 component gaps: Machine Casing and Flux Cell have manual crafts but no
+automatic process producer. This does not prevent the first manually assisted
+F2. Their materials already have declared inherited supply boundaries, and both
+batches fit the existing four-input Assembler.
+
+**Decision.** Add ordinary `assemble/machine_casing` and `assemble/flux_cell`
+data routes using the existing Assembler executor, conditions, output reservation
+and save format. Match the actual manual catalogue/JSON material batches and
+outputs; preserve both manual crafts for first construction and compatibility.
+Do not add charged-Cell requirements, new catalysts, motors, Wire Mill, machines,
+ports, slots, inventory formats or a crafting engine.
+
+Use the existing `FabricationLogic.ASSEMBLE_TICKS` and `FU_PER_TICK` conventions
+for both processes rather than another timing/configuration authority. At the
+reviewed source these are400ticks and F1 nominal32FU/t. The old eight-second
+casing design prose did not describe an implemented automatic route; reconcile
+it with this explicit ordinary-Assembler decision rather than silently borrowing
+an unproved prototype value.
+
+Keep manual casing construction before the first Assembler and place automatic
+reproduction after assembly exists. Do not create a forming/assembly bootstrap
+cycle or change physical F1/F2 quest evidence. Select/explain the new recurrent
+routes through the existing T1 contract/report; implemented repeatability is not
+by itself a global renewable-establishment, power/autonomy or minimum-stock proof.
+
+Validate the two exact batches against live catalogues/JSON, unique IDs, family,
+arity, existing timing/FU constants and Atlas projection. Keep manual F1 five-unit
+bootstrap and the existing F2 recipe/rating unchanged. Reuse unchanged executor/
+NBT/native binding proof; ordinary item recipes need no native run per recipe.
+Canonical generation and affected checks still precede a qualified delivery.
+
+This independent source lane does not compete with the urgent ADR-0171 PC/cache
+owner and must not deploy T1 into the owner's T0 game. Thermal's five distinct
+construction ingredients exceed the current four-input Assembler and are not
+an excuse to expand the engine or auto-project every `T1Recipes` entry here.
+
+---
+
+## ADR-0173 — Develop later tiers in parallel with protected T0 play
+
+**Status.** Accepted direct owner development instruction, 2026-10-21.
+
+**Context.** While the native questbook is finished and prepared in Prism, the
+owner explicitly asks to continue all agreed T1 work and start work on the other
+tiers. The accepted aligned T0/F0-T15/F15 campaign already defines their themes
+and terminal frontiers; it does not make the registered later prototypes
+survival-ready. The questbook remains the current play blocker.
+
+**Decision.** Open isolated source development, research and dependency-backed
+implementation for T2-T15 alongside T1. This supersedes ADR-0108's sequential
+development hold and the T1-only limits of ADR-0168/0170, not sequential tier
+acceptance, real-play feedback, release or protected deployment requirements.
+Do not wait for T0 campaign acceptance to investigate or implement later content.
+Do not infer that every tier is implemented, accepted or deployable from this grant.
+
+Keep the coordinator responsible for architecture, product, route/sustainability
+graphs, migrations and final integration. Assign coherent implementation and
+research outcomes on isolated dependent branches. Current bounded work is:
+
+- Integrate the qualified native FTB baseline into the existing T1 factory/
+  component branch, retaining both automatic routes,50 quests, old IDs/rewards
+  and the normal canonical writers.
+- Begin physical T2 manufacturing with the existing Wire Mill/Assembler seam:
+  one F2 Matrix is the fourth grouped construction operand, not a new machine,
+  executor, slot expansion or acid requirement. Motor's existing component
+  recipe and the T1 Press-coil/bootstrap routes remain unchanged.
+- Ground T3-T15 work in actual source authorities/dependencies and choose useful
+  T3/T4 and cross-tier mechanism increments; use pinned mature-mod source as
+  precedent, not a copied balance calendar or licence to import foreign code.
+
+The source trace finds no implicit F2 injection: the existing Wire Mill bill has
+three groups. It also exposes a separate compatibility gap: `IngredientSpec`
+and `ProcessLookup.sameItem` currently match matrix ratings exactly, although
+`ControlMatrixSpec.canControl` and intended README policy allow stronger control.
+The bounded source-only F2 operand preserves the current matcher; it does not
+claim stronger-rating ingredient substitution works. Resolve that shared
+mechanism/role distinction explicitly before accepting the completed T2 frontier,
+without relaxing exact quest/upgrade receipt predicates or changing global
+matching under cover of one recipe.
+
+The native46-to50 configuration transition is also a distinct future boundary.
+Current `FtbQuestFiles.ensure/preflight` deliberately rejects a managed existing
+chapter missing the new quest/task IDs. Preserve that fail-closed behavior.
+A later stopped, hash-bound managed-definition update must preserve all old IDs,
+paid receipts/progress and edited-file refusals; the four reward-free lessons
+start incomplete. Never implement it as raw native world-data replacement.
+
+**Operational limits.** Finish the protected T0 questbook delivery first; report
+and fix further play blockers before taking its execution capacity. PC/cache/
+build/source synchronization remains single-owner with fresh guards and a new
+explicit lease. Source parallelism is not concurrent JVM or deployment authority.
+Preserve the original game and backup; never deploy T1+ into the owner's T0
+instance as an incidental integration step. No new generation allowance, paid
+service, credentials, release, main merge or acceptance is implied.
+
+**Rejected alternatives.** Waiting for every earlier human campaign before any
+later source work contradicts the direct request. Activating every registered
+prototype, inventing fifteen independent engines, balancing unreviewed routes
+or treating a proposal/fixture as accepted content does not satisfy it either.
+
+---
+
+## ADR-0174 — Grow tier complexity around basic machine families from T1
+
+**Status.** Accepted direct owner design clarification, 2026-10-21.
+
+**Context.** The owner reiterates that tiers must become exponentially more
+complex, with more processing lines and content; T1 is where the basic machines
+are made, in GregTech's family-based spirit. Later upgrades enable further
+recipes, alongside specialized multiblocks. The owner also explicitly expects
+research to lead to actual external reuse/adaptation when permitted.
+
+**Decision.** T1 introduces the baseline ordinary machine families. The initial
+five-machine factory remains a coherent implementation increment, not the whole
+T1 tier. Do not distribute every first basic machine over later tiers merely to
+fill a roadmap. Later tiers broaden the production network, introduce genuinely
+new domains and specialized multiblocks, and improve existing families through
+real chassis, control, condition, tooling, efficiency and logistics capabilities.
+Ordinary baseline availability does not make every advanced process available
+at T1; the later duty still needs its actual material/condition/control/energy
+requirements.
+
+This supersedes old first-introduction placement where it contradicts the owner
+clarification, including a Wire Mill available only as a first T2 basic machine.
+It preserves the acid-free first coil/mill intent and the functioning early Press
+route. Source e265/5ff is retained as an actual bounded checkpoint, not discarded,
+but a fourth F2 ingredient alone does not prove an upgraded Wire Mill: its output
+must carry and use a real changed capability. Select baseline-F1 versus upgrade
+construction only after tracing existing shared chassis/persistence seams.
+Do not silently change every ingredient rating, recipe bill or saved machine.
+
+The subsequent source trace confirms the emitted item and placed kind remain
+F1/MK I; no upgraded capability follows from the F2 ingredient. The next bounded
+implementation therefore makes the **baseline T1 Wire Mill** consume one F1
+Matrix as its fourth grouped operand, keeping its casing/coil/plate bill,
+400ticks/32FU, normal output and acid-free entry. Connect optional wire forming
+after the first Assembler without adding a prerequisite to the initial F2 batch.
+Do not change matching/storage or advertise MK II. Actual higher-capability
+upgrades remain a separate shared-mechanism implementation, not this recipe.
+
+Use the already accepted two-dial chassis-mark/modules design in MACHINES and
+ADR-0027/0028/0030. Upgrade in place with stable block/save identity and preserve
+stored items/fluids, configuration, links and ownership; specify treatment of an
+active process rather than resetting it. Widen only a family's genuine physical
+capabilities. Do not turn an ordinary furnace into a fusion chamber, create
+fifteen executors or implement upgrades as an unexplained power-cost multiplier.
+Whether each target seam already implements these requirements remains a source/
+execution question, not a declaration of completion.
+
+**Content growth.** Every tier proposal must show its increased set of useful
+lines, alternative routes, interacting material/chemistry/control/energy domains,
+conditions, byproduct/recovery decisions, logistics and signature projects against
+the previous tier. The owner requires exponential growth in meaningful complexity
+and content. No arbitrary numeric multiplier, recipe-count quota or timer/cost
+inflation is selected by this clarification. Better automation and compression
+of earlier work must keep manual burden from growing with the network.
+
+**External work.** Prefer established implementations/public APIs over recreating
+mature infrastructure. Reuse or adapt compatible work when it actually meets the
+requirements, with exact source/version/licence/scope, required notices and
+distribution consequences recorded before import. Pattern-only references are
+not a promise of implementation; code availability is not a licence grant.
+FTB's public binary/API integration remains valid reuse, not permission to copy
+its visible-source implementation. No new paid service or generation allowance
+follows, and no foreign balance calendar is authoritative.
+
+**Boundaries.** Keep T0 native questbook delivery and original-save preservation
+first. Broad later-tier development is still authorized by ADR-0173, not
+acceptance/release/deployment. The source-only first-factory/F2 checkpoints,
+unexecuted canonical writers, exact-versus-capacity matching gap and managed
+native46-to50 migration stay explicit; none proves complete T1 or T2.
+
+---
+
+## ADR-0175 — Carry optional absolute process pressure through existing contracts
+
+**Status.** Accepted coordinator engineering contract for source541cf6c9,
+2026-10-21. Direct review confirms the optional pair/legacy constructors and
+strict schema boundary; actual integrated426 CI compiles and passes the affected
+noncanonical contracts. Normal model generation and the changed Blueprint native
+boundary remain separate. This is not accepted gameplay, a production pressure
+recipe, a tier upgrade or another PC execution grant.
+
+**Context.** `ProcessRecipe` previously carried temperature, atmosphere and
+agitation while the existing `ProcessConditions` / `ConditionBand` mechanism
+already evaluates pressure. The source increment needs to carry a declared
+process-pressure requirement through that same mechanism and its read-only
+projections without changing existing recipes.
+
+`ConditionBand.relative(0)` explicitly rejects a zero-width band. Zero absolute
+MPa is nevertheless a meaningful optimum, distinct from no requirement.
+Substituting ambient pressure or an epsilon would invent a physical requirement
+or conceal that distinction. The inspection transport also needs to distinguish
+a new required-pressure band from schema1's existing observed/tank pressure.
+
+**Decision.**
+
+1. Carry optional `pressureMPa` and `pressureHalfWidthMPa` in `ProcessRecipe`.
+   Both are `NaN` when unnamed; all four old constructor signatures retain that
+   absence. A named optimum is finite/nonnegative, its explicit half-width is
+   finite/positive, and the resulting tolerance bounds must remain finite.
+   Zero is never an absence sentinel.
+2. Convert once through `ProcessLookup.conditionsOf` and the existing
+   `ProcessConditions.Builder.pressure(optimum, halfWidth)` /
+   `ConditionBand.absolute`. Reuse existing eligibility, speed and named faults;
+   do not add another evaluator or change machine envelopes/executors.
+3. Project the same values through Atlas, `AuthorityAdapters`, machine inspection
+   and JEI. No existing production recipe starts requiring pressure, and no
+   machine capability, Matrix matcher, work owner or item/fluid save format changes.
+4. Write inspection schema2. Read strict schema1 with no required process-pressure
+   band while preserving its existing observed/tank pressure fields. Reject
+   unknown versions, orphan optimum/half-width and required-pressure fields
+   mislabeled as schema1. Keep the existing protocol's explicit `MALFORMED`
+   outcome instead of retaining an old successful observation.
+
+**Alternatives not used by the source.** A relative band around zero cannot
+represent the intended boundary. Ambient/epsilon defaults alter old recipes.
+Another condition engine duplicates the existing mechanism. Silently discarding
+new required fields under schema1 hides malformed data; schema2 without strict
+schema1 reading needlessly loses old pressure-absent observations. None requires
+foreign code, a dependency import or another persisted machine schema.
+
+**Qualification boundary.** Source541cf6c9 is normally integrated in42654eb and
+published M0a676fe. Exact CI39674226306 compiles/runs the affected contracts,
+retaining three then-stale canonical failures. Actual426 NORMAL writers and
+independent CheckOnly subsequently close those projections; A85069 carries only
+the four generated outputs into M without retargeting writer provenance.
+The separate Blueprint eligibility/probe change passes its new contracts at
+e260 and one real native interaction at M; unchanged pressure proofs are reused.
+The [validation ledger](testing/latest-validation.md#integrated-development-source)
+records those distinct sources, exact-M full CI success and the duplicate
+DRILL-OK observation failure without concealing it. All PC/cache leases are
+returned. No production pressure recipe, native/client pressure presentation,
+actual save compatibility or human acceptance is inferred from this contract.
+
+---
+
+## ADR-0176 — Distinguish exact Matrix evidence from minimum controller capacity
+
+**Status.** Accepted coordinator engineering scope under the owner's continued
+development instruction and ADR-0173/0174, 2026-10-22. Source1ee2e73 is normally
+integrated; independent review and changed executable proofs remain pending.
+No recipe balance, playable chassis upgrade or deployment
+is accepted by this record.
+
+**Context.** README permits a higher physical Matrix to replace lower controller
+capacity. `ControlMatrixSpec.canControl` already expresses that across legitimate
+architectures, but `IngredientSpec.matrix` / `ProcessLookup.sameItem` require an
+exact item/rating. The F2 predecessor, explicit output and native exact-F1 quest
+are different roles and must not silently become minimum-capacity tests.
+
+**Decision.** Introduce an explicit typed minimum-control input alongside the
+existing exact contract. Preserve old constructor/factory semantics, count rules
+and exact item/rating identities. Only the existing `assemble/wire_mill` F1
+control operand selects the minimum role in this increment. Leave the F2 Matrix
+predecessor, all outputs and quest/reward evidence exact.
+
+Validate genuine `ControlMatrixItem` data through the existing strict NBT/spec
+mechanism and `canControl`. Wrong/ordinary items, lower/invalid ratings, malformed
+or spoofed data cannot satisfy the role. Hopper admission may ignore batch count;
+execution/consumption still requires and debits the real full batch.
+Propagate the distinction consistently through Atlas/JEI, inspection/teaching
+where affected, audit authorities and exporters. Preserve canonical qualified
+resource identities; a human-readable minimum label is not a new catalogue ID.
+A canonical lower-rating supply remains one legitimate accepted input, not a
+claim that every alternate architecture has the same production route.
+Only Relay Matrix items are currently registered. Exercise RelayF1-F3 in real
+registered-item proofs and other architectures in pure spec contracts; do not
+introduce fake registrations or advertise those contracts as native coverage.
+
+**Source realization, not executed acceptance.** `IngredientSpec.MatrixRole`
+keeps old factories/constructors EXACT; `minimumControl` selects the new role.
+Registered viewer alternatives share the actual matcher. Atlas/teaching and
+inspection distinguish F1+ without inventing resource IDs. Inspection writes
+schema3, reads strict schema1/2 with EXACT by absence, preserves schema2 pressure
+and rejects old-version role fields/invalid roles/minimum outputs.
+The audit records canonical F1 as one accepted supply option, not every
+alternate architecture's supply. T1 exporter provenance binds role/spec/adapter
+sources and classes. Normal writers are still required; old426 outputs/proofs
+are not relabeled. The extended existing matrix-lifecycle fixture retains its
+old cases/budgets and has no observed new marker until actual execution.
+
+**Reuse and alternatives.** Reuse the project's existing physical spec,
+ingredient selection and executor. The pinned GT exact-circuit versus capacity
+precedent supports explicit roles, not importing GT's ingredient/voltage engine
+or globally relaxing equality. A recipe-ID special case would hide semantics
+from viewers/audits. Replacing exact quest predicates would break progression
+evidence. A new higher ingredient bill producing the same block is not a real
+chassis upgrade.
+
+**Limits.** Actual in-place family upgrades remain a separate shared-state
+implementation. Current processor kinds expose their existing full envelopes;
+silently narrowing them to construct an apparent mark ladder risks legacy
+capability/save behavior. Do not invent new kit bills or envelope numbers here.
+The closed426/e260/M proofs retain their sources; run focused changed-role,
+projection and registered-item proofs, not an unrelated Blueprint/pressure replay.
+
+---
+
+## ADR-0177 — Update managed native quest definitions only through an explicit guarded transition
+
+**Status.** Accepted coordinator engineering scope under ADR-0171/0173 and the
+owner's continued development instruction, 2026-10-22. Source93ce975 is normally
+integrated; unchanged-input Windows786/103 is actual file/tool evidence.
+Independent provenance P2 closes in source only. Subsequent G3 managed44/
+stale-class contract passes and actual fresh compiler/remap receipt are real;
+old publication fails on a generated Architectury payload difference.
+Corrected publication/plan-consumption qualification remains pending; no
+player instance update is authorized.
+
+**Context.** The installed native baseline has46 logical quests; current source
+has50 with four reward-free lessons. `FtbQuestFiles.ensure/preflight` deliberately
+refuses existing chapters missing required IDs and otherwise preserves compatible
+user files. Normal startup must not become an implicit overwrite merely because
+the source adds definitions.
+
+**Decision.** Provide an explicit stopped-target, hash-bound managed-definition
+update through the existing production publisher/deployment/file mechanisms.
+Retain append-only/fail-closed startup. Management must derive from verifiable
+known source/version/hash ownership, never filenames, ID counts or an agent's
+guess. Unknown or edited/malformed/unsafe files are refused before mutation;
+an existing unreceipted baseline needs demonstrated known provenance or refusal,
+not silent adoption.
+
+Complete preflight for the entire owned definition set before writing.
+Preserve and verify previous bytes/metadata in a bounded backup, stage new
+known bytes and record an interrupted/partial operation explicitly. Failure
+recovery must not overwrite foreign concurrent changes or return success while
+the transition is incomplete. Repeated successful update is a no-op. Existing
+compatible user-file preservation is not replaced by unconditional byte management.
+
+All historical logical/native quest/task/reward IDs stay stable. Definitions
+may add the four reward-free lessons, not infer their completion or mint a new
+starter. Native team/progress/claim SavedData, owner worlds and the legacy-paid
+minting fence are never rewritten by this file transition. Reuse supported FTB
+and ordinary safe-file/package primitives, with existing Windows/shell twins.
+
+**Source realization and provenance correction.** Normal93ce975 preserves the
+explicit UpdateQuestDefinitions/RecoverQuestDefinitions host actions, current
+package-before-definition ordering, full preflight, backups/journal and startup
+refusal while pending. Reference publication schema2 requires a fresh normal
+Gradle JavaCompile/remap receipt, source/input hashes, actual loaded class images
+and all selected-JAR payloads. A clean checkout, correct selected JAR and
+historical classes merely located below the root are not sufficient. Source-only
+independent review closes that concrete P2. G3 subsequently executes both fresh
+compilers/remap and emits the authentic receipt, but selected-JAR equality
+rejects one309-byte generated Architectury class's changed name/payload.
+The2272 other common payloads match; this does not authorize ignoring a class
+or assuming semantic equivalence. Investigate the exact pinned generator and
+actual bytes before selecting a narrow fail-closed repair. Corrected export
+and real-plan execution remain separate unproved properties. Preserve the
+successful compilation for input-bound reuse rather than repeating it merely
+for a comparator change. The prior real786/103 filesystem evidence is reused
+only because its inputs are exactly unchanged.
+
+**Rejected alternatives and proof.** Startup overwrite, accepting a filename as
+ownership, raw progress replacement and ignoring user edits all violate the
+save/paid-state contract. A private one-off migration script does not deliver
+the repeatable production boundary. Verify actual filesystem46-to50/idempotence,
+full-preflight refusal, drift and partial-failure recovery; use native execution
+only for a newly uncovered loader/state property. Old native paid-history proofs
+remain reusable when their implementation/assumptions are unchanged. No blanket
+claim of crash atomicity, whole-T1 readiness, client acceptance or release follows.
+
+---
+
+## ADR-0178 — Continue autonomously and deliver ready tiers to the longitudinal game
+
+**Status.** Accepted direct owner operating mandate, 2026-10-22.
+
+**Context.** After requesting continued development, the owner explicitly
+clarifies that work should proceed independently, stopping only for a serious
+blocker or an urgently needed owner decision. Whenever a new tier is ready, it
+should be incorporated into the longitudinal game so play can continue.
+Stopping after each bounded engineering increment would not meet that direction.
+
+**Decision.** Keep the development, integration, risk-based qualification and
+delivery loop moving autonomously. Ordinary implementation choices, coherent
+checkpoints and new sole-owner validation assignments are coordinator decisions,
+not repetitive owner approvals. Escalate serious blockers or genuinely urgent
+owner-only decisions; a temporary resource wait or a running player game does
+not stop independent source work.
+
+When a whole next tier is genuinely ready as a coherent playable candidate,
+incorporate it into the existing longitudinal game. Readiness includes actual
+content/lines/family progression, supply and bootstrap/recovery, useful teaching
+and discovery, suitable polish, pinned installation and applicable changed-
+mechanism/forward-save qualification under ADR-0144/0174. A partial first factory,
+registered prototype, generated report or green compile is not a ready tier.
+Do not freeze/accept a tier or fabricate a completed campaign to justify delivery.
+
+Use the owned stopped-instance workflow, fresh ownership/resource guards,
+verified backup and applicable copy-based compatibility checks. Preserve the
+actual world identity, contents, existing paid quest progress and the original
+backup. Managed-definition updates follow ADR-0177; do not substitute a newly
+staged world, reset progress or overwrite raw native claim data. Verify installed
+runtime/pins and leave launcher/client interaction to the owner.
+
+If the player game is running, wait to deploy without stopping/restarting it.
+Continue unrelated development during that wait. An unknown or unsafe target,
+failed backup/compatibility/recovery or unreconciled source change blocks that
+delivery and must be reported honestly, not bypassed to preserve momentum.
+
+**Precedence and limits.** This later explicit mandate supersedes blanket
+development-only/no-later-tier-deployment holds for genuinely ready candidates.
+It does not waive technical/manual/save gates, authorize premature partial-tier
+updates, infer human acceptance, grant new paid/provider generation or credentials,
+or independently request a public release/main merge. Existing isolated lanes,
+single PC/cache owner and serial publisher rules remain. Preserve historical
+receipts and earlier authority labels; apply this mandate prospectively.
+
+---
+
+## ADR-0179 — Reproduce four-slot-fit first-factory machines without repricing bootstrap
+
+**Superseded product scope (2026-10-22):** ADR-0188 withdraws automatic final
+normal-machine reproduction. Preserve the source/proof history below; it is
+not the current manufacturing goal or permission to deploy those recipes.
+
+**Status.** Accepted bounded acquisition scope under ADR-0174/0178, 2026-10-22.
+Implementation and qualification are pending; not all first-factory machinery
+or the whole T1 tier is declared automated or ready.
+
+**Context.** The first manual factory is intended to reproduce useful machines,
+not require repeated hand crafting forever. Existing T1 shaped catalogues and
+JSON already define the material bills. The Assembler has four grouped input
+slots; the Thermal Generator's manual bill has five distinct groups.
+
+**Decision.** Select ordinary Assembler reproduction of the existing Pulverizer,
+Arc Furnace, Press and Assembler only. Derive exact material multiplicities and
+ordinary outputs from their existing manual source/JSON; retain all manual
+bootstrap recipes. Reuse the existing fabrication cycle/FU and grouping helper
+with an explicit whitelist, not automatic projection of every future craft.
+
+Each new machine route declares its F1 controller as minimum capacity through
+ADR-0176's existing typed API. This is a new explicit opt-in for those four
+routes, not relaxation of old exact constructors, F2 predecessors, outputs or
+quest/reward evidence. Higher valid stock still yields the same ordinary
+baseline machine; it does not upgrade a chassis or its saved state.
+
+An optional reproduction line follows assembly. Manual first machines seed
+that line; it cannot become a mandatory bootstrap/first-F2 cycle. Existing die
+reproduction and retained catalysts remain intact. New route IDs are unique,
+and Atlas/JEI/audit use the shared role/projection rather than a parallel engine.
+Trace construction inputs honestly; an unresolved input is not a renewable-
+establishment certificate.
+
+**Not selected.** Keep Thermal reproduction separate because its five groups
+do not fit. Do not enlarge slots, invent a compressed ingredient/intermediate,
+discount a bill or claim all five machines automatically reproduced. Broader
+families, genuine capability upgrades and complete tier readiness remain work.
+Ordinary new rows reuse the proven executor/role mechanism: exhaustive data and
+affected normal projections, not one native smoke per machine.
+
+---
+
+## ADR-0180 — Reproduce the Thermal Generator through an honest two-stage subassembly
+
+**Superseded product scope (2026-10-22):** ADR-0188 withdraws automatic final
+generator manufacture. The ordinary core remains an eligible component if it
+has a real manual final consumer; the original raw manual seed is preserved.
+
+**Status.** Accepted separate bounded acquisition scope under ADR-0178/0179,
+2026-10-22. Implementation and qualification are pending; no whole-tier readiness
+or player update is implied.
+
+**Context.** ADR-0179 deliberately selects only four manual machines whose
+material groups fit the Assembler. Thermal has five groups, so simply adding
+it to that whitelist would either exceed slots or conceal/drop an input.
+The owner's ongoing programme calls for completing useful factory automation,
+not making that initial exclusion permanent.
+
+**Decision.** Add one ordinary Thermal Generator Core component and two real
+Assembler operations. The core consumes the furnace, carbon and iron groups
+from the existing manual recipe. Final assembly consumes exactly one core,
+the remaining cobblestone and one explicitly minimum-F1 controller. Derive
+multiplicities from the live manual catalogue/JSON and prove composed parity:
+the current five cobblestone, furnace, carbon, iron and Relay Matrix are neither
+discounted nor duplicated. Each stage fits three groups within the existing four.
+
+Both stages pay the existing ordinary fabrication cycle/FU. Their combined
+cost is two operations, not a claim of one operation's energy/time. Preserve
+the manual first generator as the factory seed. Extend optional reproduction
+after assembly; no new mandatory first-F2 edge, world gate or bootstrap cycle.
+The final output remains the ordinary unchanged F1 generator, not a chassis
+upgrade, new fuel rule or modified saved inventory.
+
+Register the one ordinary item with proper existing asset/discovery and
+resource metadata. Prefer existing owned/vanilla resource references or the
+project's deterministic asset mechanism; no third-party asset copying or paid
+generation is authorized. Source-backed component production/consumption is
+not automatic proof of global renewable establishment or artistic acceptance.
+
+**Rejected shortcuts and proof.** Do not widen slots, hide an ingredient in a
+matcher exception, price the machine differently or automatically project every
+future manual craft. This is an explicit productive subassembly, not a general
+recipe engine. Verify exact cancellation of the intermediate, counts, roles,
+bulk-input selection against generic Assembler recipes, optional acyclicity,
+registry/model validity and unchanged manual/claim/F2 contracts. Reuse the shared
+execution/Matrix mechanism proof; add only genuinely uncovered registration
+or adapter observations, not repeated native cycles for ordinary content.
+
+---
+
+## ADR-0181 — Compare one generated platform shim by exact self-name equivalence
+
+**Status.** Accepted bounded source-repair contract under ADR-0177/0178,
+2026-10-22. Upstream source independently corroborates the measured class
+structure and path-dependent name; two exact declared devlibs path strings
+produce both observed stamps without PC access or path-variant guessing.
+Source555dbe9 is normally integrated; actual G4 direct publisher0 reuses the
+original receipt. Parent verifies final referenceacdf and managed201 including
+new Java negatives. The original G3 publication failure stays real;
+no player update or reference publication follows from this decision.
+
+**Context.** G3 genuinely compiles/remaps the preserved dd0 source in a fresh
+normal enclave. Receipt5f911a77 is authentic. Selected JAR29bcce43 and fresh
+JAR8a7af1e8 each have2273 entries;2272 common payloads are byte-identical.
+The remaining309-byte Architectury PlatformMethods class differs in its entry
+and internal self-name. Both compiler successes must not be repeated merely
+to test a changed comparator.
+
+The source owner inspects both actual classes without a JVM: ClassFile52.0,
+flags0x0011, constant-pool count10, self UTF8 at#1 and Class#1 at#2/this_class,
+Object superclass, no interfaces/fields. The only method is public static
+getCurrentTarget()Ljava/lang/String;, max_stack1/max_locals0, exactly ldc#8
+(`forge`)/areturn, with no exceptions/other attributes. Only self UTF8 differs;
+every other byte matches. The reported SELF-representation SHA-256 is
+`0a84a9c64d4531a5942f7fab6de29d225f189424344d81b42e4642cb468923d6`.
+Upstream source independently corroborates the generator below. The source
+owner also confirms both actual stamps from the two declared input paths
+locally; private path values stay outside Git and no PC reexecution is inferred.
+
+**Decision.** Preserve ordinary exact comparison first. Only for one unmatched
+pair may the publisher accept this exact recognized class format/fingerprint
+with internal name equal to its JAR entry. Preserve the module prefix,32-hex
+identity and artifact suffix across the pair; permit only the64-hex component
+of the self-name to differ. Validate/hash the fixed structure and all remaining
+bytes, not merely its method's answer. All other JAR names/payloads remain exact.
+
+An extra shim, missing/extra other resource, inconsistent entry/internal name,
+changed instruction, flags, descriptor, constant pool or other byte fails closed.
+This is a comparison of one concrete generated structure, not prefix exclusion,
+arbitrary class normalization, a parser/compiler/remapper framework or blanket
+binary reproducibility. Keep selected-JAR and fresh-compilation identities
+distinct, and expose the applied comparison/names/fingerprint in the existing
+publication evidence. Source/input/recipe/loaded-image/compilation hashes,
+reference schema2 and stale-class rejection remain mandatory.
+
+**Established implementation and scope.** Running pins are plugin3.4.164 and
+Loom1.7.423. The plugin's [project identifier implementation][181-project]
+persists a32-hex UUID in the checkout's ignored `.gradle` cache; it is not
+versioned project source. Its [generated package function][181-package]
+combines that identifier with SHA256 of the UTF8 input-JAR path string and
+the legalized filename. The [Forge wiring][181-forge] uses that function.
+An isolated build directory therefore changes the path-derived64-hex segment,
+not necessarily any application code or the checkout UUID.
+
+The transformer's [platform-method generator][181-transformer] corroborates
+the exact52.0/public-final/single constant-return method measured above.
+These cited implementations are MIT-licensed; no code/assets are imported.
+The plugin release-to-source-commit association is date-correlated evidence,
+not an attested binary build mapping. Keep actual artifact versions and cited
+source commits distinct; exact observed bytes/fingerprint still bound the
+exception. No claim about every possible Gradle task override is needed.
+
+Changing the compiler recipe to force a historical absolute path/namespace
+would invalidate the successful fresh receipt and risk old output custody.
+Compare the already-proved narrow generated structure instead. A different
+checkout UUID, changed filename identity or unknown generator shape remains a
+visible refusal, not a general historical-JAR recovery guarantee.
+
+**Reuse and limits.** The existing eight-argument source-file publisher already
+accepts the authentic compilation receipt and validates its immutable inputs.
+Reconsume that receipt/output after source repair if those bindings still match;
+do not add an adoption flag, rebuild the legacy source by assumption or alter
+historical outputs. Exact and recognized-rename positives plus changed-body,
+identity, additional-entry and other-resource negatives belong in the existing
+contract. Retain the upstream corroboration and qualify the corrected publisher
+on the actual preserved pair. A source-only
+fixture is not that real export or managed-plan consumption.
+
+[181-project]: https://github.com/architectury/architectury-plugin/blob/3b9bbb8bbf2cd7507193a0ca447a80afc4f9039f/src/main/kotlin/dev/architectury/plugin/TransformingTask.kt#L121-L155
+[181-package]: https://github.com/architectury/architectury-plugin/blob/3b9bbb8bbf2cd7507193a0ca447a80afc4f9039f/src/main/kotlin/dev/architectury/plugin/ArchitecturyPluginExtension.kt#L517-L539
+[181-forge]: https://github.com/architectury/architectury-plugin/blob/3b9bbb8bbf2cd7507193a0ca447a80afc4f9039f/src/main/kotlin/dev/architectury/plugin/ModLoader.kt#L65-L89
+[181-transformer]: https://github.com/architectury/architectury-transformer/blob/2698278e63d0afea4969b5fd6c96a68fb64432f2/src/main/java/dev/architectury/transformer/transformers/TransformExpectPlatform.java#L59-L87
+
+---
+
+## ADR-0182 — Expose existing wet beneficiation as an optional T1 baseline line
+
+**Status.** Accepted bounded content selection under the owner's ADR-0174/0178
+direction, 2026-10-22. Source738/338 is normally integrated; G7 later supplies
+actual common/backend, normal29/38 outputs and ADR-0183 file/loader proof,
+source-bound separately in the validation ledger. This does not resolve the
+subsequently detected Assembler target shadowing: ADR-0185 must establish
+actual Washer acquisition before claiming that Survival route.
+This adds a real basic processing branch beyond first-factory reproduction;
+it neither completes T1 nor deploys a partial tier.
+
+**Context.** First-factory power/forms/assembly now have actual source/model
+evidence, but that initial set is not the owner's complete T1 contract.
+The existing Chemical Washer already uses the default F1 ProcessMachineKind,
+held STIRRED conditions and ProcessLogic's F1 FU rate. Its real B2 batch
+consumes crushed feed and water, preserves washed primary feed and produces
+the pack-derived secondary ingot; B2-R1 consumes the washed feed. Older T2
+comments in the source inventory do not veto the later basic-family direction.
+
+This mechanism, Motor/Washer construction, slots, assets, fluid settlement and
+source-derived secondary ring already exist. No new engine or borrowed
+implementation is needed. Reuse ProcessGraph/ProcessLogic/secondaryOf and the
+shared progression/Atlas/quest/export seams rather than copying recipe values.
+
+**Decision.** Add optional line `wet_beneficiation` after assembly, selecting
+the existing `assemble/motor`, `assemble/chemical_washer`, `b2/iron`,
+`b2/copper`, `b2_r1/iron` and `b2_r1/copper` authorities. Preserve every existing
+recipe ID, ingredient, quantity, FU/t, duration, output and construction bill.
+In particular, do not add a controller or change a pending batch's bill merely
+because other newly selected assembly routes explicitly use minimum control.
+Existing F1 power/conditions must really support the selected branch.
+
+Add one concise reward-free optional native quest with stable logical ID
+`wet_beneficiation`, after the existing Assembler lesson, for acquiring the real
+Washer. Its goal must match that possession task; live JEI/Atlas teaching
+explains the water/washed/secondary/reduction chain without claiming possession
+proves operation or duplicating a long shopping list. Preserve all existing50
+quest/native/task/reward IDs and rewards, finite starter and paid-history fence.
+Do not add this branch to the initial F2 prerequisites or five-Matrix seed draw.
+
+Both output streams and water use remain explicit through actual recipe
+projection. Trace water/feed provenance honestly; optional selection is not a
+renewability, net-surplus or finite-establishment certificate. Do not relabel a
+secondary as discardable waste or invent its consumer. Basic family exposure is
+not an in-place chassis upgrade or permission to narrow a legacy envelope.
+
+**Proof and execution boundary.** Verify all six live route/Atlas identities,
+real F1/STIRRED applicability, optional acyclicity, unchanged mandatory/F2
+selection, old quest/reward/value invariance and the new short native lesson.
+Use existing projection/quest checks and later normal writers; no hand-edited
+canonical files or new fixture-as-gameplay authority. Reuse unchanged machine,
+fluid, save and native quest mechanisms; require runtime only for a concrete
+uncovered assumption. Source work stays isolated while G4 owns PC/cache and
+its frozen271f386 alias; never retarget that executor or access player data.
+
+---
+
+## ADR-0183 — Version known native catalogue lineage without weakening provenance
+
+**Status.** Accepted bounded compatibility scope under ADR-0177/0178/0182,
+2026-10-22. Source738105d4 provides51 quests but cannot publish/update/start
+through the current46/50 guards. Implementation of this extension is now
+normally integrated through99/07 with verified focused host
+228/29. G7 later supplies actual historical ABI/backend, normal models, plain
+native-ready51 linkage, package and real managed50-to51/idempotence through
+339-file verified custody. The separately recovered original CI5 is verified
+without replay; its two stale committed-equality failures remain historical.
+Current50 evidence stays bound to988; no paid-world, Washer operation or
+whole-tier/human pass follows from catalogue/file proof.
+
+**Context.** Native catalogue content evolves while reference schema2, managed
+receipt/plan formats and file transaction semantics stay unchanged. Hardcoded
+current50 checks occur in publisher, planner, native integration and host
+receipt validation. Planner history currently treats any prior50 as the
+entire current catalogue, which becomes false when the optional wet node exists.
+Simply allowing every count or treating names/counts as provenance is unsafe.
+
+**Decision.** Recognize only the known46/50/51 catalogue lineage through explicit
+logical/native identity sets and reviewed additions. The first transition adds
+first_grid/forming_dies/copper_coil/flux_cell; the next adds only
+wet_beneficiation. Derive a historical identity set from that known lineage for
+validation, never generate an allegedly authentic old publication by deleting
+nodes from the current runtime. Actual publication must still use the complete
+loaded generator/catalogue bound to its real source/classes/JAR/compilation
+receipt. Keep the historical source-file CLI compatible with authentic old
+compiled catalogues rather than imposing current51 on a real46 producer.
+
+The planner's destination must be the actual current source-bound generator,
+not a literal50. Old46 and50 references must match their exact known identity
+set; current51 must match its complete set. Refuse unknown counts/versions,
+replacement or missing IDs despite equal counts, inconsistent document counts,
+changed retained tasks/rewards/tags/chapter identities and nonfree additions.
+Only the known original DD0/JAR29bc/46 provenance may establish an unreceipted
+baseline. Later managed predecessors require matching real ownership/receipt
+and caller-selected publication hashes. No adoption by filenames or subsets.
+
+Wire schema2 and existing receipt/plan versions need not change merely for one
+new content node. Update every real consumer, including FtbQuestIntegration
+and host receipt validation, with the same bounded known-lineage contract.
+Retain unknown-schema/type, source/runtime/JAR, actual loaded-image, safe-file,
+backup/journal, stopped-target and partial-recovery guards. The Bash twin must
+continue forwarding the same host contract; no second engine or migration flag.
+Old50 logical/native/reward identities and the finite starter stay unchanged;
+the new optional acquisition has no reward and cannot enter first-F2 dependencies.
+
+**Proof.** Extend existing Java/native-parser and focused QuestDefinitions host
+fixtures for authentic-shaped46-to51, managed50-to51 and completed51 no-op;
+also reject unknown/partial/equal-count-wrong-ID catalogues, reward/task drift,
+source/hash mismatch and unknown ownership. Label synthetic file fixtures as
+such, not authentic historical publication or played survival. Reuse unchanged
+transaction/native-paid mechanisms and G4/G5 evidence under the same inputs;
+select a new real runtime boundary only when its changed assumption requires it.
+Do not retarget the active current50 executor to this51 source.
+
+---
+
+## ADR-0184 — Project authored default Matrices through their real physical rating
+
+**Status.** Accepted bounded model-correctness scope under ADR-0135/0169/0178,
+2026-10-22. Sourcea51/57, including the coupled display context, is normally
+integrated after a thirteen-file review with no significant issue. G8 later
+executes actual31/41 provenance, changed authority/display fixtures, normal
+writers/independent CheckOnly/canonical checks on exact4ee, with239-file
+verified custody and normal data A8dee. G7/A7 is not retargeted. No rendered
+GUI, finite establishment, runtime predicate, bill/seed/reward or human/
+gameplay acceptance change is inferred.
+
+**Context.** The real registered Relay Matrix decodes an absent Rating through
+ControlMatrixNbt.load(RELAY, null) as F1. Manual and automatic F1 manufacture
+author untagged outputs, while the F2 recipe explicitly consumes F1. The audit
+currently projects those as different physical resources. Quest projection
+compensates in the opposite direction with a raw-resource special case, and
+T1Sustainability correctly discloses the resulting unresolved producer link.
+It is a model disagreement with existing runtime semantics, not a missing
+conversion recipe, free controller or permission.
+
+The repository already solves the display analogue: ResourceGuidanceClient
+uses the validated Matrix spec and the same NBT default when looking up a
+declaration. Reuse the common decoder and checked registration facts in the
+authority projection; do not import another identity/transaction engine or
+depend on client/loader registries in the common audit.
+
+**Decision.** Project authored physical default Matrix items at their actual
+decoded default rating through the existing authority adapters. Apply one
+consistent rule to real craft/process inputs and outputs, quest subjects and
+rewards, and their T0/T1 metadata consumers. Bind only an actual registered
+Matrix architecture; currently this permits the Relay default, not fabricated
+Integrated or other item IDs. Existing explicit F1/F2/higher ratings retain
+their exact identity. An explicit invalid Rating never becomes a default.
+
+Keep generic registration declarations distinct from authored physical stacks.
+Do not change Resource equality/key/serialization, invent a zero-cost alias or
+conversion route, add stock, rewrite a runtime recipe/NBT/claim, or broaden
+minimum-control substitution into exact-evidence matching. Ordinary items,
+tags, fluids, other registries and unsupported architecture IDs stay unchanged.
+Reuse an existing adapter seam rather than build a parallel normalized graph.
+
+The manual/automatic five-controller batch, five first-machine construction
+draws, source quantities, paid rewards and physical F2 output remain unchanged.
+Source-model consumers must agree on the corrected physical F1 identity
+without weakening the conditional T0 gate or hiding an unknown declaration.
+Update only the resolved default-identity disclosure and producer evidence;
+keep finite T1 establishment, net renewable closure, autonomy, native/client,
+whole-tier readiness and human acceptance explicitly unproved.
+
+**Proof.** Extend existing adapter/registry/T0/T1 contracts with the actual
+decoder/default, explicit-rating separation, non-Matrix/wrong-axis/unknown-ID
+counterexamples, unchanged material/output quantities, seed custody and no
+new route or reward. Pin newly used decoder/architecture sources and actual
+class images through existing provenance lists, not a generic transitive
+framework. Source-only checks are not Java or writer results. After G7 returns,
+qualify changed model mechanisms and normal projections on a new exact source;
+reuse unchanged FTB/native/machine proofs. Never retarget G7 or hand-edit
+canonical payloads to make the correction appear executed.
+
+**Rejected.** A synthetic raw-to-F1 recipe manufactures an authority that does
+not exist. Global Resource equality changes erase meaningful rating axes.
+Normalizing every Matrix-shaped name invents registrations. Merely deleting
+the limitation conceals the defect. A complete T1 reserve replay cannot be
+claimed by fixing one identity link; carrying prior-tier finite custody remains
+a separate unproved property of the existing establishment machinery.
+
+**Coupled display scope.** Source implementation identifies a concrete consumer
+regression: ResourceGuidanceContext still projects unrated authored operands
+and matrix_line subjects as raw0, while the corrected declaration is F1-only.
+The coordinator explicitly includes that existing context and its existing
+VerifyResourceGuidance contracts in this same outcome. Reuse one pure default
+rule; do not run source builders/I/O from a hover or add a broad fallback in
+ResourceGuidanceClient.declaration. This is a canonical display/supply option,
+not a change to ITEM evidence, generic ingredient admission, exact/minimum
+predicates or validated physical-stack decoding. No client appearance pass is
+inferred from the source correction.
+
+---
+
+## ADR-0185 — Choose Assembler recipes explicitly without repricing or losing work
+
+**Status.** Accepted bounded correction under ADR-0020/0043/0174/0178,
+2026-10-22. Source tracing establishes the ambiguity; normal sourcea89/30e/438
+is composed with the reviewed F1/A8 baseline after a nineteen-file review with
+no significant issue. G10 subsequently qualifies exacta54 compilation,
+UI1297/Persistence and one real server/menu-state/native mechanism1028/19,
+then normal models31/41/A9bb3 through independently verified278-file custody.
+Normal integration preserves all four actual writer bytes. Real client-wire,
+rendered interface and owner-save compatibility remain unproved. G7/G8 retain
+their separate source-bound scope; they are not retargeted as this proof.
+
+**Context.** Chemical Reactor, Washer, Electrolysis Cell, Atmospheric Intake
+and numerous machineCraft rows share casing1/motor2/plates4. ProcessLookup.find
+keeps the last matching dry recipe. ProcessMachineBlockEntity and its existing
+menu expose no explicit recipe target, so naming a live Washer route in a
+progression catalogue is not proof that a player can manufacture it. Reordering
+recipes merely changes the inaccessible output; adding more content magnifies
+the defect. Recipe selection is already part of the Process Card design, but
+a new card item or complete card system is not required to correct this path.
+
+**Prior art and fit.** The pinned Forge GT and Mekanism references in
+the external-reference record supply persisted configuration, server-side
+revalidation and recipe-cache patterns. GT's circuit ingredient/configurator
+does not directly choose among this existing set of identical bills; importing
+its recipe/UI framework or adding a circuit operand would change the problem.
+Mekanism's formula stores an ingredient grid rather than our existing recipe ID,
+and its different-formula progress reset is incompatible with preserving paid
+work. Reuse those limited patterns through Grindless's existing lookup/menu/
+WorkRecipe machinery and vanilla/Architectury APIs; copy no third-party code.
+
+**Decision.** Add an explicit persistent stable-ID target to the existing
+Assembler, not another executor, new recipe, manufacturing bill, slot, global
+permission or controller tax. Resolve the selected ID against the CURRENT
+catalogue, require the correct family and all actual inputs/fluids/conditions,
+and use the same completion transaction. A selected unavailable/mismatching
+recipe waits with a visible reason; it never silently manufactures another
+output. Only legacy/unselected AUTO mode retains its existing selection rules.
+No index, recipe object or guessed version becomes a saved identity.
+
+Set the choice through the existing menu surface with server authority:
+validate the current menu/host, live block, player access, family and exact
+recipe identity before mutation. Reuse existing menu/network primitives rather
+than build a protocol framework. Stale/unknown/foreign requests must refuse
+visibly without consuming, clearing or publishing success. Keep client display
+and authoritative selection coherent across reload and menu reopening.
+
+**Paid work and persistence.** Keep selected configuration distinct from
+recipe-owned paid work. Preserve existing position, BE/store objects, contents,
+fluids, configuration, connections, energy, progress and completion rollback.
+Do not transfer one recipe's work to another, discard it on a click, or redraw
+power for a completed blocked batch. Fractional carry can remain after a
+successful batch; an idle-only test that permanently strands that carry is not
+a complete switching solution. When needed, retain suspended work by stable
+recipe ID inside the existing machine's work state, with exactly one active
+executor, exact nonduplicating save/reload and no invented inputs/outputs/FU.
+Unknown saved work is retained but cannot be spent on another recipe. Legacy
+saves without the optional selection/work extension retain existing meanings.
+Validate malformed state explicitly; no destructive or success-shaped fallback.
+
+**Interface.** Extend the incumbent Minecraft machine screen in Operate mode:
+native font, familiar controls, output names/icons, explicit AUTO/selected/
+unavailable state, keyboard/focus support and a usable bounded picker rather
+than dozens of blind cycling clicks. Preserve slots, status readability,
+tooltips, generator/F0 layouts and inventory geometry. Show authoritative
+selection and failure, not a client guess. No generated art or visual-system
+replacement is authorized; graphical quality remains a human judgment.
+
+**Proof and limits.** Extend existing lookup/logic/UI/persistence contracts and
+the smallest fitting native fixture. Prove at least two real identical-bill
+outputs independently, targeted matching/refusal, cache generation, legacy/
+unknown state, partial and fractional paid work, completed-blocked no-redraw,
+save/reopen and authorized/unauthorized menu requests. Reuse unchanged exact/
+minimum Matrix, FTB/paid-reward and settlement mechanisms where assumptions
+remain valid. A later exact-source window must execute the new mechanism;
+authoring or G7 ready51 is not that proof. Do not change recipes or accept
+later-tier prototypes merely because a target can now be selected. Physical
+controller completeness, whole-T1 supply/autonomy and human acceptance remain
+separate work.
+
+**Coupled mechanics-profile scope.** The selector's reentrancy wrapper moves
+the unchanged structure/site prefix from work(long,List) to workCycle(List).
+After the F1 source owner finishes57d, the coordinator explicitly assigns
+only that work/workCycle contract and its precise negatives in
+VerifySustainabilityRegistry to the selector owner. Preserve full normalized
+wrapper shape, same-tick deduplication, processing/settlement/loading exclusion,
+one cycle call and finally release, plus diagnosis/return before recipe/draw.
+Do not replace the profile with broad string presence, skip it, alter the F1
+registration/default rule or retarget G8's immutable4ee source.
+
+---
+
+## ADR-0186 — Supply physical baseline control to nine existing process families
+
+**Status.** Accepted bounded construction-data follow-up under ADR-0107/0174/
+0176/0178, 2026-10-22. Sourceab3/304/ccfe is normally composed after serialized
+file release and direct bounded data/check review. G10 subsequently closes
+the combined sourcea54 compiler/contracts, one representative real native,
+normal models31/41/A9bb3 and278-file custody. Unchanged contract successes
+are explicitly reused from original bb5 CI, not relabeled a54 executions.
+This does not retarget G8, require a native per recipe or make any family a
+ready tier, genuine chassis upgrade or played acquisition.
+
+**Context.** Nine functional F1 ProcessMachineKind families have existing
+Assembler constructors with casing1/motor2/plates4 and no physical controller:
+Chemical Reactor, Chemical Washer, Electrolysis Cell, Atmospheric Intake,
+Induction Furnace, Caster, Flotation, Boiler and Condenser. Motor/casing
+subassemblies contain no Matrix either. That inherited prototype bill does not
+satisfy the accepted active-machine control contract. ADR-0182 intentionally
+preserved the Washer bill for one bounded content increment; it was not a
+permanent exception. Recipe-target choice under ADR-0185 remains a separate
+mechanism: adding a common controller operand cannot disambiguate equal bills.
+
+**Decision.** Append exactly one existing minimum-F1 physical Matrix operand
+as the fourth item group of these nine existing construction recipes. Retain
+each existing ID, first three groups and quantities, output, time, FU,
+informational milestone, machine tier/envelope and processing recipe.
+Reuse IngredientSpec.minimumControl and the already-proven matching/menu/
+viewer path. Stronger legitimate control is optional substitution, not a
+higher chassis rating or improved output machine.
+
+Select the nine calls explicitly through existing recipe data/helpers; do not
+tax every generic machineCraft result. Motors/components, passive grid/
+storage/transport, wearables, other prototypes and all unrelated bills stay
+unchanged. No new item, engine, slot, recipe, arbitrary cost/timer, F2 exact
+predecessor/output change or first-five-controller seed dependency is added.
+The existing four-slot Assembler fits these four groups without expansion.
+Existing placed machines/NBT are not rewritten or charged retroactively;
+future release/copy-compatibility gates still govern actual owner updates.
+
+**Ownership and proof.** A new isolated data owner may work on ProcessGraph,
+existing Atlas/T1 progression contracts and only the necessary map/changelog
+entry. VerifyRecipes remains owned by the active selector until its explicit
+file release; serialize that edit, then retain both selector and data guards.
+Update the existing exact minimum-role identity set from its six old entries
+to precisely those six plus the nine additions. Replace the old bounded
+Washer-no-Matrix assertion with exact fourth-role/count and unchanged-prefix
+checks, while Motor stays controller-free. Check all nine structurally,
+unchanged remaining recipes, seed/F2, viewer roles, counts and slot fit.
+
+Native proof is mechanism-level: reuse the existing minimum-control executor
+contract, then combine representative selected real colliding constructions
+with ADR-0185's new selection/persistence proof when their final sources are
+composed. No per-recipe native matrix or FTB/catalogue replay follows.
+Canonical payloads require normal writers on the final source; never hand-edit
+them or reuse G8's old bill projection as this result. No finite T1 closure,
+runtime acquisition, whole-tier or human acceptance is inferred from data.
+
+---
+
+## ADR-0187 — Continue the finite first-factory witness with conserved T0 custody
+
+**Status.** Accepted bounded source scope under ADR-0131/0140/0174/0178,
+2026-10-22. At authorization, G10 reported repaired Java/native/model stages;
+it later closes sourcea54/normal A9/278-file custody and fresh lease return
+separately. Normal source6c53/6b19 is subsequently composed with A9, preserving
+seven Java blobs and the source-only42/96 provenance declarations. Independent
+generic review8ef subsequently finds no significant custody/admission/
+conservation/execution/export issue; actual Java/model qualification remains
+pending and the T1 projection must follow ADR-0188. This decision
+authorizes the source outcome, not another PC window, new gameplay, a completed
+finite replay or whole-T1 readiness.
+
+**Context and existing solution.** T1Sustainability honestly leaves finite
+establishment unproved. Its five-controller allocation and direct producer
+links are not an executable transition from the T0 base. ConstructionReserve
+already executes real batches, protects catalysts/installed structures,
+accounts for manual work and prevents a reward from funding its own claim.
+However, each current witness starts independently from terminals, and
+TierResult.retainedInventory exposes locked catalysts rather than all free
+stock, installed parts and claim history. Starting another independent witness
+or reconstructing five controllers from an exit count would not prove
+longitudinal material custody.
+
+**Decision.** Extend that same finite executor with an immutable, source-bound
+continuation of its completed state. Retain actual free stock, locked
+catalysts, installed machines and installation parts, claimed one-shot routes
+and consumed manual-work custody. Preserve the distinction between physical
+stock and cumulative delivery/accounting facts. Do not replenish bootstrap
+terminals, replay a paid reward, release an installed part as consumable stock
+or reset spent work at the tier boundary.
+
+Admit a continuation only from the applicable completed conditional T0
+witness under its stated authority and environmental assumptions. Reject
+missing, failed, unknown or mismatched proof state explicitly. This is an
+in-process audit witness, not a loadable world-save format, arbitrary caller
+inventory, generic receipt protocol or evidence that the player's inventory
+matches the model. Keep the current standalone T0 entry/replay contract and
+its existing findings intact.
+
+Use current T1Progression mandatory selections and live authority batches to
+establish the first factory, reproduce physical F1 supply and execute the
+real F2 exit. The inherited five-controller batch must fund construction only
+once; further controllers need actual reproduction. Preserve default-F1
+normalization, exact F2 operands/outputs, retained dies, optional branches,
+all material quantities, FU/time, recipes and runtime saves. Reuse the
+existing audit/reserve mechanism rather than invent another fixed-point
+engine or import a machine framework for an already implemented problem.
+
+Expose the finite result and its precise limits through T1Sustainability and
+the existing exporter. Report actual execution batches and blocking findings;
+do not replace hardcoded false with an unsupported true. Finite establishment,
+recursive renewable closure, continuous power/routing, night/restart recovery,
+the broader T1 family contract and human/world acceptance remain separate
+properties. A real model failure is a useful result, not authorization to
+invent stock, alter canonical classifications or rebalance gameplay.
+
+**Proof.** Extend existing audit/T1 checks for exact carry, spent-work and
+already-claimed preservation, installed/locked separation, five-controller
+allocation, actual reproduction before additional withdrawals and real F2
+production. Negative cases must reject missing/incompatible predecessor
+state, duplicate gifts/rewards, exhausted stock and fabricated goal stock.
+Keep T0 regressions and source/class provenance strict through existing
+exporter lists. Source/static checks are not Java or a successful replay.
+Later exact-source execution selects affected model proofs and normal
+writers; it does not repeat unchanged native/FTB mechanisms or retarget G10.
+
+**Observed continuation failure and bounded correction.** G12 on cb1e
+passes the repaired T0 gate and two normal writers, then fails strict finite
+Press/F2 establishment. Preserve that result and its two partial outputs;
+neither missing balances nor a new work allowance can be inferred from it.
+Source f30a5f79 repairs the existing executor's funding order: finance net FU
+before marking the consuming route active or allocating its inputs, so
+an already-paid native circulation can execute the necessary producer.
+A transient funding-route guard rejects true recursive funding; it is not
+new persisted custody. Refill the actual installed selected producer, and
+do not classify a producer consuming loop inventory as independent startup
+supply. Standalone T0, financial carry, budgets, claims, catalysts and real
+batch quantities remain unchanged. Completed paid sub-batches remain
+recorded if the later consumer fails. R35 and bounded actual-result
+diagnostics cover this correction without inventing another planner or
+turning synthetic regression rows into gameplay. Revised execution is still
+required; source review is not an accepted finite witness.
+
+**Installed units versus spare copies.** G13 then executes the actual finite
+Press/F1/F2 route and all normal writers/independent checks, but a later test
+wrongly requires zero free stock for every installed resource identity.
+Installation reserves one unit, not every same-type unit. The strict oracle
+must compare independently funded net physical units with free, retained,
+installed and dedicated-part quantities and reject negative axes. A second
+paid copy is allowed; releasing or counting the installed unit twice is not.
+The checker-only483d25d7 correction reuses the existing aggregation and adds
+R36, with no producer or budget change.
+
+Under ADR-0140, preserve the verified G13 normal outputs and writer/check/
+43-98 provenance at their original489 source instead of repeating producers
+for that test-only delta. Normalized model facts/custody are unchanged.
+Wider S1 implementation hashes include the changed checks and must be new,
+not suppressed or relabelled. Recompile/run the changed checks and both
+outstanding canonical boundaries before any byte-exact data integration
+into the new source; the next guarded grant must name both source roles.
+
+**Rejected.** A new EntryProfile containing finished T0 machines/controllers
+would invent manual acquisition authorities and hide the transition cost.
+Adding synthetic terminals or a free conversion route duplicates custody.
+Re-running an independent T0 establishment inside T1 can replenish finite
+supplies and claims. A new planner duplicates the existing executor while
+still failing to preserve its actual state. A fixture or proposed report
+cannot supply accepted survival inventory or a saved-world compatibility pass.
+
+---
+
+## ADR-0188 — Assemble normal machines manually and author manufacturing modes per product
+
+**Status.** Accepted direct owner correction and subsequent infrastructure
+clarification, 2026-10-22. Complete A652/Cab1e/Bdc source is subsequently
+normally composed with exact owned blobs; integrated qualification remains
+pending. The former model-only execution plan is frozen before any GO; no
+new PC action, source binding, owner update or acceptance is inferred.
+
+**Context.** The owner rejects the assumption that every product, including
+ordinary Assembler blocks, should be manufactured automatically. The intended
+game is GregTech-inspired with greater meaningful complexity/content and
+futuristic industrial systems, not a second Factorio. This is the owner's
+product direction, not a factual claim about GregTech's own recipe rules.
+The earlier self-replicating-factory interpretation overextended automation.
+
+The owner further confirms that infrastructure can have manual and machine
+methods, while other products may deliberately have only one. An available
+automatic route does not oblige a player to automate it or require a duplicate
+manual route for every item.
+
+**Decision.** Normal machines have manual FINAL manufacture. Keep their
+operating processes, input/output logistics and appropriate component/material
+production automatable. Actual multiblock controllers may be manufactured in
+Assemblers or other suitable multiblocks. Use real runtime structure/control
+contracts for that exception, not the word controller, a proposed later-tier
+diagram or an ordinary machine renamed as a component.
+
+Other products use their authored per-product methods: MANUAL_ONLY,
+MACHINE_ONLY or BOTH. These describe actual recipe authorities, not a new
+global manufacturing engine. Belts, pipes, tanks and storage may support
+manual and machine manufacture. Preserve valid existing methods unless an
+individual design calls for change; do not impose universal Assembler-only
+production, universal dual recipes or universal automatic conversion.
+
+**Owner-unavailable decision rule.** The owner subsequently directs that,
+when unavailable to answer a question, the coordinator should reason from
+how GregTech or comparable technical modpacks solve it. Use a relevant
+verified precedent as the default, adapt it to the project's established
+mechanisms and record the bounded decision instead of waiting for ordinary
+approval. This does not override an explicit Grindless product choice,
+retroactively confirm earlier coordinator decisions or authorize copying
+without licence checks, new spending or unsafe save/deployment actions.
+
+**Coordinator Furnace boundary decision.** A reports that the old
+bench/furnace and assemble/bootstrap/furnace routes still automatically output
+the vanilla furnace. The coordinator asks that exact scope once; the owner is
+unavailable and delegates autonomous decisions. Apply manual-only FINAL
+minecraft:furnace as the conservative interpretation for a real standalone
+processor, rather than creating an implicit exception because it is also a
+Thermal component. This is a coordinator decision, not a separately confirmed
+owner Furnace preference. Keep the existing vanilla manual craft, exact
+Thermal bill/raw seed, smelting operations, other valid basics and all placed
+items. Use the actual vanilla/minecraft:furnace authority in finite capital
+proof, not an invented craft/furnace route. A machine-only local core process
+with a manually supplied furnace is not automatic net renewable core supply.
+
+Complexity belongs in increasingly interdependent materials, circuits,
+mechanical parts, chemical/thermal/energy conditions and specialized
+multiblocks. Manual final assembly must still require the actual industrial
+components. Higher tiers do not bypass their production chains with raw
+ingots, nor simply print more complete normal machines per minute. Existing
+in-place chassis/module upgrade and save-identity obligations remain.
+
+**Source correction.** Withdraw live automatic normal-machine outputs from
+ProcessGraph, BootstrapAssembly and any other manufacturing/replication path;
+hiding them from JEI is insufficient. Keep components, retained tools and
+eligible controller/infrastructure routes according to their actual methods.
+Do not reinterpret stock-consuming Blueprint/drone placement as manufacture.
+Retire automatic final Thermal assembly while preserving its useful core
+and a genuine manual consumer, without repricing the first manual generator.
+
+Use existing manual catalogues and shaped JSON for accepted ordinary-machine
+counterparts. Preserve actual material multiplicities, seed quantities,
+ratings and tier/component gates; do not promote unaccepted prototypes or
+invent cheaper bills simply because final assembly becomes manual.
+Identical quantity bills need distinct actual crafting patterns: mirrored/
+offset-equivalent recipes must not hide another output. Do not add a new
+manual recipe engine, workstation or global research permission.
+
+Preserve valid physical minimum-control semantics in manual ingredients,
+including untagged real default F1 and legitimate higher stock, while refusing
+malformed/unsupported data. Reuse the existing Matrix decoder/matcher and
+appropriate official Forge ingredient APIs; do not substitute an unvalidated
+bare item or duplicate the matching policy. Common stays loader-neutral.
+
+**Resource proof.** Mandatory basic feed/consumable supply still needs honest
+mod-owned renewable routes, not a permanent manual-mining dependency.
+Manual final capital-machine construction is not an automatic-renewability
+claim and does not require a machine that manufactures itself. Distinguish
+quantity-sufficient manual construction from recurring automatic supply in
+the existing audit/reserve. Do not label a manually assembled machine as an
+automatic net resource, waive a real consumable deficit or turn machines into
+recurrent feed to evade this distinction. The generic conserved-custody source
+remains useful; its T1 authority projection must follow the corrected routes.
+
+**Compatibility.** Keep block/item identities, placed machines, stores,
+fluids, connections, configuration, quest IDs/rewards/starter and paid work.
+Do not delete, transfer, silently refund or invent completion for work attached
+to a retired recipe. Retained unavailable work is not proof of a completed
+owner-save migration. Applicable copy-based inspection/handling remains a
+pre-deployment gate if the actual world contains affected jobs.
+
+**Proof and delivery.** Add exhaustive source/data coverage for every live
+automatic producer and accepted manual counterpart, per-product mode fidelity,
+control admission and nonambiguous shapes. Retarget selector fixtures to real
+allowed component/controller recipes; removed normal recipes can be explicit
+legacy/unavailable negatives, never live fabrication witnesses. Preserve
+generic matching/paid-work guards and all old G10 evidence at its true source.
+
+A new ingredient/loader binding needs one representative real native proof
+through an existing carrier, alongside common/Forge compilation and affected
+contracts. Normal writers, independent checks and observed source/images
+follow on one reviewed exact source; never hand-edit canonical reports or
+run a smoke per machine. No old common-model grant, whole-tier/player
+deployment, main/release, new dependency or paid-generation budget follows.
+
+**Supersedes and retains.** Supersede ADR-0017/0063's universal final-machine
+manufacturing rule and ADR-0179/0180's automatic ordinary-machine outputs.
+ADR-0186's automatic constructor instances must move to the proper manual
+authority without weakening physical control. Retain the reusable processing,
+selection, exact/minimum-control, settlement and custody mechanisms; their
+historical tests remain historical evidence, not approval of the retired
+product objective.
+
+---
+
+## ADR-0189 — Hold orphaned paid Bench work before ordinary recipe fallback
+
+**Status.** Accepted narrow correctness repair coupled to ADR-0188 retirement,
+2026-10-22. Source inspection plus a written expected-red contract identify the
+path; source repairdc048 and its contracts are subsequently normally composed.
+Narrow source review582f finds no significant issue. Integratedf1b9 then passes
+actual CI UI/Persistence and one representative native aggregate1273/19 with
+independently verified46-file custody and clean return. The initial defect
+was identified by source inspection, not an executed pre-fix red. This does
+not establish actual client/owner-world compatibility or resolve separate
+model failures.
+This is not permission to restore automatic normal-machine recipes or change
+an actual owner's world.
+
+**Context.** An old Assembly Bench can retain positive Progress owned by a
+withdrawn bench/furnace or bench/quern recipe. The current matchingRecipe
+falls through to an unrelated permitted row such as bench/brick_block.
+recipe then zeroes progress and replaces WorkRecipe before drawing power.
+That silently discards already-paid work as a consequence of recipe retirement.
+Inspection can reach the same adoption path, so a tick-only check is insufficient.
+
+**Decision.** Hold unresolved positive paid Bench work fail-closed before
+ordinary lookup, cached return or new-owner adoption can erase/transfer it.
+Preserve its exact owner/credit and physical stores through inspection,
+cache/generation changes, ticks and binary reopen, including supported old
+Recipe-only ownership. Do not consume inputs, draw power, refund, clear,
+transfer or invent completion for the retired normal machine.
+
+Reuse the existing owner fields, resolver and unavailable-status mechanisms;
+add no job ledger, recipe registration, save schema or second executor.
+Keep current live Bench work and genuine zero/unpaid ordinary lookup functional.
+The existing valid LegacyGuideAssembly paid-guide exception remains exactly
+its own compatibility path; arbitrary unknown normal IDs must not complete a
+Guide, nor may a competitor consume that Guide's credit.
+
+Limit the runtime change to the necessary read-only resolution/cache/adoption
+seam in ProcessMachineBlockEntity. Preserve other families, Assembler's
+recipe-keyed work, settlement/rollback and the full work/workCycle reentry/
+physical-diagnosis contract. Use existing explicit blocked/unavailable
+presentation; any required new text is a small localized status, not a UI
+redesign or a success-shaped idle fallback.
+
+**Proof.** Existing typed persistence contracts use an actual retained
+bench/brick_block competitor and real Bench/NBT/store state, not an empty
+lookup false positive or fake registered recipe. Cover fractional/completed
+old work, supported legacy owner loading, inspection/cache/generation/reopen,
+no draw/stock change and live/unpaid/valid-Guide nonregression.
+One representative real Bench state joins the existing command-gated native
+aggregate for the new guard semantics; do not add a scenario/budget or run a
+per-retired-ID native matrix. Exact-source compiler/regressions/native/model
+custody remains required after review and normal composition.
+
+**Limits.** A safe hold is not a completed migration/recovery of the actual
+longitudinal save. Copy-based pre-deployment inspection must still identify
+affected real jobs and any necessary recovery decision. Do not silently
+delete the paid state merely to keep a machine productive. Historical source/
+native proofs remain bound to their original code and are not relabeled.
+
+---
+
+## ADR-0190 — Add optional T1 gas utilities with lossy hydrogen recovery
+
+**Status.** Accepted bounded coordinator decision under the owner's renewed
+development instruction and ADR-0174/0178/0188, 2026-10-23. Source baseline
+8a1a3365 closes the preceding manual-machine increment. This decision opens
+two isolated source lanes, not another PC lease or a player update.
+Hydrogen sourcec7427385 and content5c34ea38 are normally composed after direct
+review. Original G15 fuel/content proofs, repaired981b oracles and actual
+G16 contracts/models qualify the bounded increment; A11 is normally
+integrated at43fbb3ac and independent402-file/recovery QA is closed.
+This is not deployment, whole-tier or human acceptance.
+
+**Context and existing solution.** The first factory is not all T1. Existing
+manual Electrolysis Cell, Atmospheric Intake and Chemical Reactor constructors,
+the ordinary process executor, gas buffers, adjacent tanks and real
+electrolysis/oxygen/recombination recipes can form a useful optional branch.
+They do not require another machine, fluid, network or processing framework.
+
+The baseline water-electrolysis authority spends 200 ticks at32 FU/t and
+retains2000 mB hydrogen. Current FluidLogic treats hydrogen like400-tick
+CO fuel; two1000 mB batches at32 FU/t nominally return25600 FU after spending
+6400. This is a source-derived baseline energy gain, not an observed
+closed factory. It must not be promoted as a free energy loop.
+
+**Decision.** Add one optional gas-utilities line after assembly, selecting
+the existing manual constructors, Motor precursor, water electrolysis,
+atmospheric oxygen, powered water recombination and actual hydrogen fuel
+authority. Keep mandatory first-F2 selection, biomass power, all material
+quantities and the normal-machine manufacturing policy unchanged.
+
+Decouple future hydrogen ignition from CO: one1000 mB hydrogen batch burns
+50 ticks at existing32 FU/t, returning1600 FU; the two batches from normal
+electrolysis recover3200 of6400 FU. This50-percent baseline trade is a bounded
+Grindless choice, not a figure attributed to GregTech or a thermodynamic
+simulation. Keep CO400, item/biomass fuel, fluid volumes and electrolysis
+cost/time unchanged. Recombination remains a powered water-recovery route,
+not generation. Reuse the authoritative fuel projection rather than add
+another price table.
+
+Saved already-ignited Burn/Duration is paid work and remains intact. Future
+ignitions use the new value; stored gas, partial buckets and return escrow
+retain their physical identities and quantities. No automatic world rewrite,
+revaluation of paid ticks, refund ledger or destructive migration follows.
+
+Append one concise reward-free T1 lesson through native FTB and existing
+catalogue/teaching/Atlas selection. Preserve all51 old logical/native IDs,
+starter, rewards and claim state. The lesson's item objective proves
+acquisition, not fluid processing. Extend exact known lineage to52 while
+retaining46/50/51 and fail-closed managed/startup rules. Recipes belong in
+JEI/Atlas; explain only gas capture, adjacent supply and the recovery loss.
+
+**Proof scope and limits.** Test the real electrolysis/fuel authorities,
+actual generator ignition, single-bucket conservation and binary saved-burn/
+gas preservation. Qualify optional selector/quest lineage and affected
+normal projections using existing entrypoints. Reuse unchanged native
+transport, settlement and FTB mechanisms; a new data row or lesson alone is
+not a reason for another native smoke. A distinct changed runtime binding
+would require its own representative proof before acceptance.
+
+The recovery comparison is for supported unmodified T1 machines. Machine
+upgrade installation is not implemented; the existing ProcessMachine
+timeMultiplier path does not yet implement UpgradeSet's full energy trade.
+Future speed/efficiency/chassis work must qualify its own processing-energy
+contract before inheriting any all-loadout recovery claim. Do not silently
+rewrite that engine, narrow legacy full envelopes or advertise an in-place
+upgrade under this bounded fuel/content change.
+
+**Reuse and alternatives.** Existing catalogues/stores/ignition/persistence
+already solve the required infrastructure. Independent pinned GT/Mekanism
+source comparison informs the energy-storage pattern; no code, assets or
+dependency are imported, and no external ratio is asserted before reading
+its actual source. Keeping the positive baseline loop, removing hydrogen
+inventory, resetting paid burns, creating a new generator or making gas
+processing mandatory for F2 are rejected. Whole-T1 sustainability, client
+quality, save-copy qualification and human acceptance remain separate.
+
+The completed pinned comparison is recorded in
+[the external reference record](design/t1-external-references.md#hydrogen-energy-and-upgrade-boundary).
+GT's inspected canonical fuel file has no hydrogen input at its pin; this
+is not an exhaustive claim about addons or other routes. Mekanism ties
+separator cost and hydrogen output to one shared value and blocks energy
+upgrades from discounting that separator cost. Those are useful patterns,
+not copied implementation. Grindless keeps its existing paid-burn fields;
+the study does not prove external saved-burn compatibility.
+
+---
+
+## ADR-0191 — Verify native quests after the framework startup bridge
+
+**Status.** Accepted urgent installed-T0 correctness repair, 2026-10-23.
+Owner reports both world creation and load crashing. Two original reports
+bind the failure to installeddd0/JAR29bc, not undeployed T1.
+
+**Cause.** FTB Quests2001.4.22 creates ServerQuestFile before startup but
+loads chapters inside Architectury SERVER_STARTED. Grindless verified in
+the same listener loop, whose registration order depends on mod startup.
+Verification first sees the empty singleton, throws and prevents FTB's
+loader from running. Both chapter files exist; missing metadata files are
+not mandatory in the pinned chapter loader. Earlier dedicated-server
+passes did not establish this adverse integrated-server ordering.
+
+**Decision.** Register only Grindless verification at Forge
+ServerStartedEvent LOWEST. Pinned Architectury9.2.14 dispatches its whole
+framework loop at HIGH; Forge47.4.23 finishes this event before enabling
+logins. Keep full native definition verification and explicit errors.
+Store the verified native file identity, require the same server/singleton
+on admission, and clear readiness before start, on stop and before every
+verification attempt. Never reload FTB ourselves, delay by arbitrary ticks,
+sleep, catch-and-ignore the failure, fabricate files or reset progress.
+
+Hotfixe50ab463 is a direct child of the actual installeddd0 baseline,
+retaining46 quest IDs/rewards, dependencies, definitions and save schema.
+Only Integration, its existing native carrier and strict AST guard change.
+Carry the fix separately into development without deploying T1 or52 quests.
+The small merge preserves development's existing dynamic-count logging
+and publisher checks while adopting the file-identity gate.
+
+**Proof and delivery.** The existing opt-in native carrier reproduces the
+old verifier-before-loader failure, then uses real Forge buses and the
+production hook in both registration orders, plus singleton/reset/invalid
+definition negatives. It is not actual integrated-client play. Run targeted
+compiler/AST/backend and representative native startup, preserve source/JAR
+identity, then qualify a copy of the current stopped player's save before
+a recoverable owned-instance update with verified backups. Do not stop the
+player, overwrite the original save with a tested copy, or call server
+evidence a successful client create/load. Human confirmation remains distinct.

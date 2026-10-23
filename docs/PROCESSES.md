@@ -740,7 +740,11 @@ buffer is 2 B of one fluid, and nitrogen and argon have no consumer. MK I drinks
 stores `2 B oxygen` in 10 s — the oxygen cut of the 10 s separation, rounded to the buffer.
 Nitrogen, argon and liquid nitrogen wait until something in the graph spends them. Water
 electrolysis, which this section does not number, is `2 B water → 2 B hydrogen + 1 B oxygen`
-in 10 s. Hydrogen burns like CO. Oxygen recombines: `2 B hydrogen + 1 B oxygen → 2 B water`.
+in 10 s at32 FU/t. Under ADR-0190 a newly ignited hydrogen bucket burns50 ticks,
+not CO's400: the two hydrogen buckets recover3200 of the6400FU spent by an
+unmodified cell. Already-paid saved burns retain their remaining work.
+This is the baseline energy-storage trade, not a qualified upgrade-loadout
+contract. Oxygen recombines: `2 B hydrogen + 1 B oxygen → 2 B water`.
 
 ### Nitrogen fixation
 
@@ -950,7 +954,7 @@ question, matching the [Fusion Reactor](MACHINES.md#fusion-reactor) brief.
 ## Components and machine fabrication
 
 The README's
-[component table](../README.md#fabrication-the-factory-builds-the-factory) gates each component on
+[component table](../README.md#fabrication-industrial-supply-and-manual-machine-assembly) gates each component on
 a fluid. Those gates, with the processes behind them:
 
 | Component | Tier | Process | Fluid gate |
@@ -1035,7 +1039,7 @@ can only void is not a byproduct, it is a disposal chore — and chores are
 | **Cracker offgas** | catalytic cracking | Fuel; hydrogen recovery over a palladium membrane. |
 | **Depleted uranium** | enrichment | Dense plating; reactor reflector; breeder feed. |
 | **Elemental sulfur** | plasma dissociation | Straight back into the acid line, skipping the roaster. |
-| **Hydrogen** | water electrolysis, later chlor-alkali | Thermal Generator (1 B burns like 1 B CO). Oxyhydrogen recombination returns it to water. Ammonia, direct reduction and fusion still wait. |
+| **Hydrogen** | water electrolysis, later chlor-alkali | Thermal Generator: future1 B ignition burns50 ticks/1600FU, giving50-percent unmodified water-electrolysis recovery (ADR-0190). Paid existing burns persist. Oxyhydrogen recombination returns it to water. Ammonia, direct reduction and fusion still wait. |
 | **Oxygen** | Atmospheric Intake, water electrolysis | Oxyhydrogen recombination. T1 roast does not require it. |
 | **Black liquor** | organics | Surfactant for flotation; alkali recovery. |
 | **Anything else** | anywhere | **Deconstructor → Matter**, the universal backstop. |

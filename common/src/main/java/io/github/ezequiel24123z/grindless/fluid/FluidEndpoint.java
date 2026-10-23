@@ -48,6 +48,11 @@ public interface FluidEndpoint {
         return null;
     }
 
+    /** Transient access generation for a proxy whose formation/owner/face policy can be rebound. */
+    default long nativeAccessRevision() {
+        return 0L;
+    }
+
     /** Current contents, for Forge's tank view. Temperature and pressure are Grindless-only. */
     FluidState contents();
 

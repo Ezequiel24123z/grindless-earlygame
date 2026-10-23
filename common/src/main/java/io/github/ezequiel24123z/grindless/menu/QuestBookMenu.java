@@ -6,6 +6,7 @@ import io.github.ezequiel24123z.grindless.quest.QuestEvidence;
 import io.github.ezequiel24123z.grindless.quest.QuestInventoryEvidence;
 import io.github.ezequiel24123z.grindless.quest.QuestLogic;
 import io.github.ezequiel24123z.grindless.quest.QuestProgress;
+import io.github.ezequiel24123z.grindless.registry.ModItems;
 import io.github.ezequiel24123z.grindless.registry.ModMenus;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -32,8 +33,15 @@ public final class QuestBookMenu extends AbstractContainerMenu {
     public QuestBookMenu(int id, Inventory inventory) {
         super(ModMenus.QUEST_BOOK.get(), id);
         this.player = inventory.player;
-        this.state = new SimpleContainerData(QuestCatalogue.tasks().size() * 2);
+        this.state = new SimpleContainerData(QuestCatalogue.tasks().size() * 2 + 1);
+        for (int task = 0; task < QuestCatalogue.tasks().size(); task++) {
+            state.set(task, QuestLogic.Status.UNMET.ordinal());
+        }
         addDataSlots(state);
+    }
+
+    public boolean chapterUnlocked(QuestCatalogue.Chapter chapter) {
+        return chapter == QuestCatalogue.Chapter.T0 || state.get(QuestCatalogue.tasks().size() * 2) == 1;
     }
 
     public QuestLogic.Status status(int index) {
@@ -59,7 +67,9 @@ public final class QuestBookMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return QuestClaimService.holdingBook(player);
+        return QuestClaimService.holdingBook(player)
+                || player.getMainHandItem().is(ModItems.FIELD_GUIDE.get())
+                || player.getOffhandItem().is(ModItems.FIELD_GUIDE.get());
     }
 
     @Override
@@ -89,6 +99,7 @@ public final class QuestBookMenu extends AbstractContainerMenu {
         QuestProgress progress = QuestProgress.get(server);
         Set<String> claimed = progress.claimed(server.getUUID());
         List<QuestCatalogue.Task> tasks = QuestCatalogue.tasks();
+        state.set(tasks.size() * 2, QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1, claimed) ? 1 : 0);
         for (int i = 0; i < tasks.size(); i++) {
             QuestCatalogue.Task task = tasks.get(i);
             int held = held(server, task);

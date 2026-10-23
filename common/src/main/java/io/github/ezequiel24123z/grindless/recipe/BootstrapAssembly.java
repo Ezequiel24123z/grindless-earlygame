@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Automatic primitive construction projects existing crafting quantities instead of duplicating them. */
+/** Automatic components/infrastructure project existing crafts, never final normal machines. */
 public final class BootstrapAssembly {
     private BootstrapAssembly() {
     }
@@ -13,6 +13,9 @@ public final class BootstrapAssembly {
     public static List<ProcessRecipe> recipes(MachineFamily family, int ticks, long power) {
         List<ProcessRecipe> result = new ArrayList<>();
         for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {
+            if (ManufacturingPolicy.isManualFinalMachine(craft.result())) {
+                continue;
+            }
             Map<String, Integer> inputs = new LinkedHashMap<>();
             for (String row : craft.pattern()) {
                 for (char symbol : row.toCharArray()) {
@@ -24,13 +27,15 @@ public final class BootstrapAssembly {
             result.add(assemble(family, craft.name(), inputs, craft.result(), craft.resultCount(), ticks, power));
         }
         for (BootstrapRecipes.Shapeless craft : BootstrapRecipes.shapeless()) {
+            if (ManufacturingPolicy.isManualFinalMachine(craft.result())) {
+                continue;
+            }
             Map<String, Integer> inputs = new LinkedHashMap<>();
             craft.ingredients().forEach(input -> inputs.merge(input, 1, Integer::sum));
             result.add(assemble(family, craft.name(), inputs, craft.result(), 1, ticks, power));
         }
         result.add(assemble(family, "chest", Map.of(BootstrapRecipes.PLANKS, 8), "minecraft:chest", 1, ticks, power));
         result.add(assemble(family, "crafting_table", Map.of(BootstrapRecipes.PLANKS, 4), "minecraft:crafting_table", 1, ticks, power));
-        result.add(assemble(family, "furnace", Map.of(BootstrapRecipes.COBBLE, 8), "minecraft:furnace", 1, ticks, power));
         result.add(assemble(family, "brick_block", Map.of("item:minecraft:brick", 4), "minecraft:bricks", 1, ticks, power));
         return List.copyOf(result);
     }

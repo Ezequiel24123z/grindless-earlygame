@@ -26,7 +26,265 @@ Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitud
 release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
 revision8/PA-0007 task graph now control the queue.
 
-Next: owner client testing on the qualified/deployed747 candidate and
+**Current operating mandate (ADR-0178):** continue independently after routine
+checkpoints and integrate each genuinely ready whole-tier candidate into the
+same longitudinal game. Escalate only serious blockers/urgent owner decisions.
+Keep stopped/owned-target, backup, copy-compatibility and recoverable update
+guards; never stop the player's game. Partial increments are not whole-tier
+readiness, and no public release/main merge or automatic acceptance follows.
+
+**Latest product correction (ADR-0188):** normal final machines are manually
+assembled; their processes remain automatable. Other products, including
+infrastructure, follow authored manual-only/machine-only/dual methods, not
+universal self-replication or mandatory Assembler use. The obsolete automatic
+constructors are retired, manual authorities/teaching/fixtures are aligned
+and the bounded finite proof is qualified. Initial A652/Cab1e/Bdc intake
+preserves exact40/14/10 owned blobs; later corrections and their actual proof
+sequence remain below. Preserve historical failures, worlds and unavailable
+paid work rather than restarting those completed windows.
+
+**Current next (2026-10-23):** the bounded first-factory/manual-policy plan
+is complete through A10 integration ata792f02b and independent G14 custody.
+The owner's renewed instruction now selects ADR-0190: optional T1 gas
+utilities using existing Cell/Intake/Reactor families and a lossy hydrogen
+baseline, with one reward-free native lesson. This increment is now complete:
+G15/G16 qualified proofs, byte-exact A11 integration at43fbb3ac and final
+independent custody/recovery closure. Existing proofs are not reset. The wider
+family and genuine in-place-upgrade contract remains in the
+[tier map](tiers/t1-development-map.md), not silently implemented by a fuel
+number or a higher control ingredient. No PC or deployment grant is active.
+
+**Latest actual boundary:** G11 native-only on f1b9 is closed through1273
+assertions/19 markers and independent46-file custody, with the fresh lease
+returned. Original CI compile/named contract successes coexist with five
+model/fixture reds. Normal Factoryf863 and C82ac source corrections preserve
+the hard gate and exact runtime: finite Firing Chamber construction is not
+automatic R0 controller-item renewal. Next is the newly bound model-only
+qualification after source composition, not another native or player update.
+G12 then passes repaired T0 and two normal writers but fails the finite
+Press/F2 continuation; its two partial outputs and114-file returned custody
+are independently verified. Reviewed sourcef30 fixes existing continuation
+funding/refill/independence without a new budget or planner. Next is actual
+fixed-source model qualification, including R35 and the live physical exit.
+G13 then qualifies the real finite route and all writers/checks/43-98, with
+343-file custody verified, but a later type-wide installed/free-zero test
+fails. Reviewed checker-only483d replaces that false predicate with strict
+paid-unit conservation/R36. Next is the changed-check/postT0/postT1 delta
+and byte-exact integration of the original489 writer outputs, not another
+producer/native run. G14 then closes R36/T0/T1 with verified115-file custody,
+new checker S1 identities and byte-exact original489 data. Normal A10d668/
+exact317 is integrated ata792f02b; its clean PC lease is returned. This is
+the bounded engineering closure, not a player update or whole-tier acceptance.
+
+**Earlier execution snapshot (2026-10-22, historical):** G7 is technically closed with verified339
+artifacts plus separately recovered original CI5, actual writer41df/normal
+A726e/29-source38-image provenance and real managed50-to51 idempotence in
+the stopped fictitious target. All PC/cache leases are returned. A7 is normally
+integrated throughd49ca60, followed by reviewed ADR-0184 source57d with its
+coupled display context. G8 now closes actual31/41, changed contracts and
+normal A8dee through239-file custody; no rendered or finite-T1 proof follows.
+Preserve all older failures and the player instance.
+Read the active handoff for actual results/lease ownership.
+ADR-0185 explicit Assembler recipe-choice source is now normally composed
+with F1/A8 after independent review. ADR-0186's serialized shared recipe
+sourceccfe is complete and normally composed. Exactbb5 CI confirms the0ab
+tool-javac repair but exposes UI preview bootstrap and two Persistence
+NaN/AUTO oracle failures. Reviewed source014 repairs those harness boundaries;
+G10 on exacta54 closes actual compiler/UI1297/Persistence/one canonical native
+1028/19 and normal writer/independent/canonical model stages0. Independent
+QA verifies278-file custody and fresh17:04:48Z leaseback; parent verifies all
+four exact writer Git blobs and normally integrates A9bb3. Do not repeat
+successful stages or retarget the a54 native binary to its data-only child.
+ADR-0187's conserved finite T0-to-first-factory source6c53/6b19 is now normally
+composed with A9; seven Java blobs remain exact and only changelog conflicts.
+Independent source review and actual compiler/typed model/replay/normal
+writers42/96 are pending. The executor prepares locally only; preserve G10
+inputs/player state and wait for the reviewed exact-source model-only grant.
+It must preserve paid/fractional work and saved stores.
+Use the bounded mature-mod reference and existing menu/transaction, not a
+circuit tax, repricing or a new engine. A source-only selected wet route and
+G7's ready51 loader proof do not establish that acquisition path.
+
+The following next-slice snapshots are historical, not live execution grants.
+Earlier next: execute the owner's continued-development instruction on isolated
+ad5b50d descendants. ADR-0176 adds an explicit minimum-capacity control-input
+role for the Wire Mill while retaining exact Matrix manufacturing/quest evidence.
+ADR-0177 adds a stopped/hash-bound managed FTB46-to50 definition update with
+backups, edit refusal and recovery, without changing append-only startup or paid
+world data. A third source lane adds four retained-die Assembler reproduction
+routes with exact manual bills and an optional post-assembly line; preserve
+manual bootstrap and avoid a forming/assembly cycle. Separate source owners
+are named in the active handoff; no PC/JVM grant or executed pass exists for this
+new wave. Integrate, then qualify only
+the newly changed boundaries. Real chassis kits/envelope balance stay separate;
+do not narrow legacy machines or call control substitution a chassis upgrade.
+The four-die checkpoint63142dd plus Atlas slot-oracle correction5b359a5 is now
+normally integrated with control-role1ee2e73. Independent mechanism review and
+affected Java/writers/native remain pending. Qualifier604195bd reports local
+READY and now owns the NEW fixed423a `control-role-qualification-20261022`
+window initially for this changed mechanism/content. Fresh Sync passes, but the
+exact CI compile failure at two nonexistent List-equality overloads stops before
+all PC JVMs;604195bd returns clean/Java0/locks0. Source9b9c619 repairs old/new
+Recipe/Atlas list calls with precise boolean equality; publish a new exact GO
+and obtain actual compiler confirmation. Source4f
+normally integrates ordinary factory reproduction while all actual contracts/
+writers/native remain unexecuted. Preserve the separate FTB publisher stale-class
+provenance finding; do not confuse tool-fixture greens with authentic publication.
+The new exact85e9078 GO now assigns only604195bd the
+`control-factory-qualification-20261022` window. Re-admit/Sync the isolated root
+fresh, prove the changed mechanism once and generate actual normal outputs.
+No source switch or parent/other-worker PC access occurs under that lease.
+That85e window has now returned before any PC JVM: exact CI main/tool compilation
+and affected greens are real, but three pure rebuilds hit the newly introduced
+registry index and T1.verify hits the obsolete immediate wire-order assertion.
+Owners repair them without fake bootstrap/suite exclusions; all PC grants are closed.
+Managed-FTB93ce975 is normally integrated with its P2 source-bound compiler
+repair and static review closure, not actual old export or Java qualification.
+Continue thermal reproduction source under ADR-0180; select the next fixed
+qualification only after the genuine source regressions close.
+Thermal8cb82bf is now normally composed with a5/f109: two exact-material
+operations and one real component/model, not hidden five-group compression.
+The mechanical test merge preserves pre-bootstrap checks plus the broader
+exception signature needed by carrier lookup. Wait for the bounded thermal
+review, then qualify the actual211/86/268 source/model/asset contracts and normal
+writers; do not infer native registration from carrier tests or old85e passes.
+The fully composed7c55d2a now has a NEW sole604195bd G3 window: fresh guards/
+Sync, repaired/new contracts, the one real mechanism/registration probe,
+normal assets and models, new-only FTB Java and authentic old publication.
+All results are pending; preserve old proofs/source boundaries and leave
+package/target/real-plan application for a later explicit clean-source window.
+G3 now has actual compile/javac0 and new managed-files44/stale-regression0.
+Its one native is a preserved carrier red, repaired only in future source957.
+Authentic old compilers/remap really execute, but publication fails on one
+309-byte generated Architectury class name/payload while2272 common entries
+match. Preserve the original successful compilation and both failed scenarios.
+The FTB source owner and pinned upstream research resolve that comparison;
+no prefix exclusion or assumed equivalence is authorized. Sole604 continues
+only the five normal outputs on frozen7c55 before checkpoint/custody/leaseback.
+Corrected native/publication and real managed-plan consumption follow later,
+not by live Sync or redundant successful compiler execution.
+The control review's one P2 is source-repaired inf046923: include executed
+AuthorityAdapters bytecode as well as source. Real writer receipt verification
+remains required. Parallel source work now selects four ordinary machine
+reproduction routes under ADR-0179; do not delay independent content just
+because these mechanism checks are being prepared.
+
+The protected native FTB handover under ADR-0171 is technically complete:
+Grindless-T0-FTB-Dev has exactdd0/29bc/79ce and the pristine existing-world/options
+copy. Actual save-clone load/save and metadata-only retired-ID inspection pass;
+the original/backup remain intact. Let the owner continue play, collect blocking
+feedback. The bounded development wave is now qualified on published
+M0a676fe: normal426 models, affected contracts and one actual Blueprint native
+interaction pass. All PC/cache leases are returned. Further family/upgrade work
+under ADR-0173/0174 needs a separate bounded assignment; no actual GUI/login/
+rewards/campaign or complete-T1 acceptance follows.
+
+**Latest owner scope (ADR-0173):** continue T1 and start the remaining tiers while
+finishing the Prism questbook handover. Isolated source/research work is open
+through T15; prior one-tier-at-a-time/T1-only development holds are superseded.
+Keep acceptance/release sequential and do not deploy later tiers into T0.
+Published M0a676fe normally preserves native-baseline T1, corrected F1
+Wire Mill/optional forming, optional process pressure, Blueprint4550+d073 and
+the four normal outputs fromA85069. The superseded F2 construction
+cost remains in e265/5ff history, not the current baseline recipe or a real upgrade.
+Further T3-T15 increments derive from actual accepted design/source.
+Do not recreate existing Motor/Wire Mill implementations or invent recipe bills.
+Record the exact-rating versus stronger-control substitution gap and future
+managed native46-to50 definition migration separately from source completion.
+
+**Latest design clarification (ADR-0174):** T1 must introduce the basic families,
+not just its first five-machine increment. Later tiers grow exponentially in
+meaningful lines/content/interdependence and upgrade actual family capabilities,
+with specialized multiblocks. Preserve e265's bounded F2 source as evidence, not
+the final first-Wire-Mill placement or a real MK upgrade. Source3a79a1f now
+implements the baseline F1 fourth operand and optional four-route forming branch
+after assembly, without changing the initial F2 dependency. Real upgrade work
+still needs existing chassis, store ownership, conditions and persistence plus
+compatible external implementation precedent.
+Do not invent another executor, mutate the player's save or multiply timers.
+
+Final FTB package dd0/JAR29bc/ZIP79ce and the pristine36-file world/options copy
+are installed and VerifyStopped. The temporary clone/audit leases have returned;
+the parser finds no actual/unknown retired Heracles reference or read error.
+The final integrated-development lease also returns at21:56:31Z, cleanM with
+owned/all-observed Java0 and work/cache locks0. Read the active handoff, not old
+ownership/pending-delivery snapshots below. No new execution grant exists.
+
+The three new source units are technically qualified within their bounded scope.
+Actual426 normal writers/independent CheckOnly and canonical rechecks pass;
+new Blueprint/Planner contracts compile/pass at e260. One canonical exact-M
+`blueprint-interaction` proves real capture/stamp/refusal/refund with1,182
+assertions and natural harness/server0 shutdown. Parent verifies all ten
+native evidence files and the exact tested/staged/remapped JARc70e08e9.
+Exact-M automatic CI39681018324 succeeds in verify/Windows/all six smoke shards;
+duplicate39681008933 retains its DRILL-OK observation FAILURE and unknown trigger.
+No manual replay or change to the Drill boundary is used to conceal it.
+Read the bounded seams through [the route map](AGENT-MAP.md#optional-process-pressure),
+[first-factory plan](../plan/feature-t1-first-factory-1.md) and
+[source validation ledger](testing/latest-validation.md#integrated-development-source).
+Accepted engineering ADR-0175 documents pressure optimum/half-width and strict
+observation schema compatibility without selecting new gameplay. Blueprint preflight retains
+ordinary none-spent refusal; later throwing placement callbacks remain ambiguous,
+not globally rolled back. No client presentation, Blueprint retained-world
+reopen, managed46-to50 update, T1 deployment, whole-tier acceptance or release
+is supplied. Do not rerun closed green proofs or retarget426/M provenance to
+a documentation-only descendant.
+
+T1 source/research remains independent under the owner's explicit longitudinal-play / feedback loop
+(ADR-0170). The owner chooses to start T0 while routes, machines, components,
+processing lines and reusable-system work proceed independently. The normal
+T1/Guidance/Economy outputs and affected canonical checks are closed for this
+wave; select the next implementation slice from source-backed
+inventory and mature-mod research. Reported T0 play blockers preempt new work;
+final T0 conclusions drive remaining polish.
+
+The following earlier execution snapshots preserve their original checkpoints,
+not the next slice, an active PC lease or a reason to replay the closed wave.
+
+The [readiness investigation](testing/t0-longitudinal-readiness.md) is complete.
+Its actual client/save/update gaps remain visible, not a disposable-only stop
+instruction or an invented pass. The T1 owner-play lease has now returned for the reported blocker. Only the
+explicit FTB blocker lease may execute on its isolated build surface/cache;
+there is no concurrent PC publisher or implicit reuse of an old grant.
+No launcher/world/deployment action was performed by the investigation.
+
+The separately authorized queue remains: execute the owner's explicit [parallel T1 first-factory development](../plan/feature-t1-first-factory-1.md)
+under ADR-0168/0169 while the owner tests the T0 dev build. This later instruction
+opens development, not a retroactive T0/client acceptance or a T1 release. Use
+isolated branches based on the current T0 experience source, document reusable
+mechanisms/line authorities and preserve the installed F/Prism/worlds unchanged.
+Production contracts, differentiated T1 guidance and source-derived graphs proceed
+in parallel; no replacement execution engine or arbitrary balance inflation.
+The source is integrated atc727894 on the separate first-factory branch; next
+qualify common/Forge/backend, affected selectors and normal export/CheckOnly under
+the single core-owner lease. Independent static QA closes the verifier ENERGY/
+physical-component correction on74ccb36 without dropping report energy.
+Keep actual qualification pending until source-bound receipts are verified;
+the private observer failure does not justify replaying successful Gradle work.
+Its later sourceef9 and local evidence handoff20c88ff are preserved. Normal-path
+T1/Guidance/Economy outputs and their canonical rechecks are still open; the
+read-only longitudinal investigation does not complete or deploy that branch.
+
+The independent T0 task remains: close the required controlled **graphical** smoke of the
+[installed experience candidate F](testing/t0-experience-prism-deployment.md).
+The implementation, normal generation,52 suites/Heracles776,2088 affected port/
+teaching checks, package88 and actual26 native predicates pass. Exact-F
+DevDeploy/Inspect/Unchanged and old-save/config preservation are observed.
+Do not re-run those unchanged mechanisms or rebuild to retarget a documentation
+commit. Read live PR56/hosted F status; leave it draft while the explicit graphical
+gate is blocked. No longitudinal start, release/tag, T0 acceptance/freeze or
+unrestricted T1 follows from that engineering installation alone; concurrent
+development is now separately authorized by ADR-0168.
+
+The completed safe technical slice was: execute the owner's [T0 experience plan](../plan/feature-t0-experience-1.md)
+under ADR-0161–0163. Mainb8bd5e8 and installed747/c08 remain the source/runtime
+baseline, not a pass of the new longitudinal-readiness requirements. Quests/Guide
+migration, physical barter, usable tanks/T0 interfaces, optional inspection and
+audiovisual coherence proceed in independent owned branches; integrate and prove
+changed mechanisms before the required controlled client gate. Do not start the
+longitudinal campaign or unrestricted T1. The older completed queue follows.
+
+Previous next step: owner client testing on the qualified/deployed747 candidate and
 ADR-0160's final live-GitHub main integration/PR cleanup. The first free starter
 quest, canonical guidance, real Mixer/Multitool assets, applicable executable
 contracts, package88 and representative production boot are complete. The exact

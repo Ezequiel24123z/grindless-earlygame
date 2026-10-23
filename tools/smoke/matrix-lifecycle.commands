@@ -1,2 +1,6 @@
 forceload add 0 0
 function grindless_matrix:begin
+# One loaded manual shaped Ingredient/result settlement plus permitted-tool selection/work/menu carriers.
+grindless_matrix_input_checks
+# Retain the existing timing budget/helper paths, with explicitly renamed tool-backpressure expectations.
+function grindless_matrix:control_begin

@@ -10,7 +10,17 @@ The [read-only PC addendum](#read-only-pc-addendum-2026-10-20) supersedes the in
 offline checkpoint's unexecuted-Inspect/unspecified-target statements only.
 Client launch, rendering, interaction and listening remain NOT EXECUTED.
 
-## Current testing target — qualified747
+## Current testing target — qualified experience F
+
+Use source/runtime `298988d500dccf0823fb2eab52fbe57bff8fe831`, JAR95bf47c4
+and ZIP3e5ad1fb in the stopped `Grindless-T0-Dev` instance. The
+[exact deployment](t0-experience-prism-deployment.md) verifies the native-qualified
+artifact, preservation and the current controlled-smoke steps, including both
+renderers' six-port teaching, Shop, buckets/flow, F8 inspection and sound.
+Source/native checks are not a clicked/rendered/client save-reconnect result;
+that graphical gate remains blocked, not waived.
+
+## Previous source-bound testing target — qualified747
 
 The coordinator subsequently deploys source/runtime
 `747ebcacdb063f6faa3c69c7eb9b45c407f32bdd` to the same owned stopped instance:

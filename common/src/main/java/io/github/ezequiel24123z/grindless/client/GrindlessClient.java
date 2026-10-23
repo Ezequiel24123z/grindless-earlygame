@@ -10,6 +10,8 @@ import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceRuntime;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
 import io.github.ezequiel24123z.grindless.registry.ModEntities;
 import io.github.ezequiel24123z.grindless.registry.ModMenus;
+import io.github.ezequiel24123z.grindless.menu.AssemblerSelectionNetwork;
+import io.github.ezequiel24123z.grindless.shop.client.ShopScreen;
 import io.github.ezequiel24123z.grindless.vein.SurveySync;
 
 /**
@@ -25,10 +27,12 @@ public final class GrindlessClient {
         ResourceGuidanceRuntime.initialize(GrindlessClient.class.getClassLoader(), Grindless.LOG::warn);
         T0MachineAudio.register();
         SurveySync.register();
+        AssemblerSelectionNetwork.registerClient();
         MenuRegistry.registerScreenFactory(ModMenus.PROCESS_MACHINE.get(), ProcessMachineScreen::new);
         MenuRegistry.registerScreenFactory(ModMenus.PROCESS_ATLAS.get(), ProcessAtlasScreen::new);
         MenuRegistry.registerScreenFactory(ModMenus.LANDING_MAP.get(), LandingMapScreen::new);
         MenuRegistry.registerScreenFactory(ModMenus.QUEST_BOOK.get(), QuestBookScreen::new);
+        MenuRegistry.registerScreenFactory(ModMenus.RECOVERY_SHOP.get(), ShopScreen::new);
         MenuRegistry.registerScreenFactory(ModMenus.FIELD_GUIDE.get(), FieldGuideScreen::new);
         EntityRendererRegistry.register(ModEntities.SURVEY_ROCKET, SurveyRocketRenderer::new);
         EntityRendererRegistry.register(ModEntities.SUPRALUMINAL_STATION, SupraluminalStationRenderer::new);

@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The in-game guide (ADR-0100).
+ * Retained legacy Guide keys and the shared lossless pager.
  *
- * <p>Pages of the T0-to-T1 survival route the quest book tracks.
- * Readable whether or not a task is claimed. Not advancements, not a config screen, and
- * not a translation: the English strings live in {@code en_us}.
+ * <p>Gameplay teaching now belongs to {@link QuestTeaching}. Legacy key identities remain
+ * available for compatibility; no current Guide screen reads these route pages.
  */
 public final class GuideCatalogue {
 

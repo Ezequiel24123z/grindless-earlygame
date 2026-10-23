@@ -12,7 +12,10 @@ concurrency:
 jobs:
   prism-tooling-windows:
     runs-on: windows-latest
-    timeout-minutes: 5
+    # The managed quest-definition contracts no longer fit in five minutes
+    # once both the PowerShell and Git Bash twins run. This is a budget, not
+    # a waiver: a hung or failing contract still fails the job.
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 

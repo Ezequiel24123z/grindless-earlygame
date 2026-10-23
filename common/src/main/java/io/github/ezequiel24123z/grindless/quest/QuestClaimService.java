@@ -2,6 +2,7 @@ package io.github.ezequiel24123z.grindless.quest;
 
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.registry.ModItems;
+import io.github.ezequiel24123z.grindless.telemetry.dev.DevTelemetry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -29,7 +30,8 @@ public final class QuestClaimService {
         BOOK_REQUIRED,
         UNKNOWN_TASK,
         INVALID_REWARD,
-        INVENTORY_FULL
+        INVENTORY_FULL,
+        NATIVE_BACKEND
     }
 
     private QuestClaimService() {
@@ -53,6 +55,7 @@ public final class QuestClaimService {
             Grindless.LOG.error("Rejected quest claim {} from {}: {}", taskId, player.getUUID(), result);
         }
         if (result == Result.CLAIMED) {
+            DevTelemetry.milestone(player.level(), taskId);
             player.inventoryMenu.broadcastChanges();
             player.displayClientMessage(Component.translatable("chat.grindless.quest.claimed",
                     Component.translatable("gui.grindless.quest.task." + taskId)), false);
@@ -70,6 +73,9 @@ public final class QuestClaimService {
         if (task == null || player == null) {
             return Result.UNKNOWN_TASK;
         }
+        if (progress.usesNativeClaims(player)) {
+            return Result.NATIVE_BACKEND;
+        }
         Set<String> claimed = progress.claimed(player);
         if (claimed.contains(taskId)) {
             return Result.ALREADY_CLAIMED;
@@ -83,6 +89,12 @@ public final class QuestClaimService {
         }
         if (status != QuestLogic.Status.CLAIMABLE) {
             return Result.UNMET;
+        }
+        if (task.type() == QuestCatalogue.Type.LESSON) {
+            if (!task.rewards().isEmpty()) {
+                return Result.INVALID_REWARD;
+            }
+            return progress.claim(player, taskId) ? Result.CLAIMED : Result.ALREADY_CLAIMED;
         }
         if (task.rewards().isEmpty()) {
             return Result.INVALID_REWARD;

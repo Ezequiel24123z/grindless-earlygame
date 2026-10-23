@@ -155,6 +155,7 @@ public final class DashboardProjection {
         for (ResourceClass value : ResourceClass.values()) {
             entries.add(classification(lower(value), "resource", switch (value) {
                 case BOOTSTRAP -> "Finite establishment supply, not recurring renewable production.";
+                case MANUAL_CAPITAL -> "Manually assembled durable capital, not an automatic recurring item supply.";
                 case RENEWABLE -> "Declared unlimited mod-owned supply; the model must prove upstream closure.";
                 case CLOSED_LOOP -> "Protected circulating inventory, not an unlimited net source.";
                 case CATALYTIC -> "Non-consumed requirement; availability and replacement remain distinct.";

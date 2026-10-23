@@ -1,0 +1,2 @@
+# Same two-batch tool bill: one paid blocked batch settles once; this is not manual-ingredient evidence.
+execute if data block 8 76 8 {SelectedRecipe:"assemble/blueprint_tool",Items:[{Slot:0b,id:"grindless:machine_casing",Count:1b},{Slot:1b,id:"grindless:motor",Count:2b},{Slot:2b,id:"grindless:iron_plate",Count:4b},{Slot:4b,id:"grindless:blueprint_tool",Count:1b}]} unless data block 8 76 8 Items[{Slot:3b}] unless data block 8 76 8 Items[{Slot:4b}].tag run say MATRIX-ASSEMBLER-TOOL-CONSUMED-ONCE

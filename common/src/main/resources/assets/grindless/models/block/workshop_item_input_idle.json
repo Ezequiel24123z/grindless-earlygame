@@ -1,0 +1,37 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "brick": "minecraft:block/bricks",
+    "particle": "minecraft:block/bricks",
+    "port": "grindless:block/port_item_input"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 16, 16],
+      "faces": {
+        "up": { "texture": "#brick" },
+        "down": { "texture": "#brick" },
+        "north": { "texture": "#brick" },
+        "south": { "texture": "#brick" },
+        "east": { "texture": "#brick" },
+        "west": { "texture": "#brick" }
+      }
+    },
+    {
+      "from": [3, 3, -0.01],
+      "to": [13, 13, -0.01],
+      "faces": {
+        "north": { "texture": "#port", "uv": [0, 0, 16, 16], "rotation": 0 }
+      }
+    },
+    {
+      "from": [16.01, 3, 3],
+      "to": [16.01, 13, 13],
+      "faces": {
+        "east": { "texture": "#port", "uv": [0, 0, 16, 16], "rotation": 0 }
+      }
+    }
+  ]
+}

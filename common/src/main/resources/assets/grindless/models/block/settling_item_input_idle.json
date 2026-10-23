@@ -1,0 +1,72 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "base": "grindless:block/casing_side",
+    "cap": "grindless:block/casing_top",
+    "front": "grindless:block/channel_front_idle",
+    "top": "grindless:block/channel_top",
+    "side": "grindless:block/casing_side",
+    "particle": "grindless:block/casing_side",
+    "port": "grindless:block/port_item_input"
+  },
+  "elements": [
+    {
+      "from": [1, 2, 0],
+      "to": [15, 4, 16],
+      "faces": {
+        "up": { "texture": "#top" },
+        "down": { "texture": "#top" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "east": { "texture": "#side" },
+        "west": { "texture": "#side" }
+      }
+    },
+    {
+      "from": [1, 4, 0],
+      "to": [3, 10, 16],
+      "faces": {
+        "up": { "texture": "#cap" },
+        "down": { "texture": "#cap" },
+        "north": { "texture": "#base" },
+        "south": { "texture": "#base" },
+        "east": { "texture": "#base" },
+        "west": { "texture": "#base" }
+      }
+    },
+    {
+      "from": [13, 4, 0],
+      "to": [15, 10, 16],
+      "faces": {
+        "up": { "texture": "#cap" },
+        "down": { "texture": "#cap" },
+        "north": { "texture": "#base" },
+        "south": { "texture": "#base" },
+        "east": { "texture": "#base" },
+        "west": { "texture": "#base" }
+      }
+    },
+    {
+      "from": [0.99, 3, 4],
+      "to": [0.99, 10, 12],
+      "faces": {
+        "west": { "texture": "#port", "uv": [0, 0, 16, 16], "rotation": 0 }
+      }
+    },
+    {
+      "from": [15.01, 3, 4],
+      "to": [15.01, 10, 12],
+      "faces": {
+        "east": { "texture": "#port", "uv": [0, 0, 16, 16], "rotation": 0 }
+      }
+    },
+    {
+      "from": [3.01, 4.01, 0.01],
+      "to": [12.99, 4.01, 6.99],
+      "faces": {
+        "up": { "texture": "#port", "uv": [2, 3, 14, 10], "rotation": 0 }
+      }
+    }
+  ]
+}

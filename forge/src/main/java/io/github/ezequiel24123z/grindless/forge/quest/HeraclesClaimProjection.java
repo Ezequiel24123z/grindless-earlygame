@@ -20,6 +20,7 @@ public final class HeraclesClaimProjection {
     public static List<String> reconcile(QuestsProgress nativeProgress, Set<String> legacyClaims,
                                          Map<String, Quest> definitions) {
         List<String> changed = new ArrayList<>();
+        Map<String, Boolean> claimedProjection = QuestProjection.claimed(legacyClaims);
         for (QuestProjection.Entry entry : QuestProjection.entries()) {
             Quest quest = definitions.get(entry.id());
             if (quest == null || !(quest.tasks().get(QuestProjection.CLAIM_TASK) instanceof GrindlessClaimTask task)
@@ -27,7 +28,7 @@ public final class HeraclesClaimProjection {
                     || !quest.rewards().isEmpty() || quest.settings().autoClaimRewards() || quest.settings().repeatable()) {
                 throw new IllegalStateException("Unsafe native Grindless definition: " + entry.id());
             }
-            boolean claimed = legacyClaims.contains(entry.task().id());
+            boolean claimed = claimedProjection.get(entry.id());
             QuestProgress current = nativeProgress.progress().get(entry.id());
             var currentTask = current == null ? null : current.tasks().get(QuestProjection.CLAIM_TASK);
             if (current != null && current.isComplete() == claimed && current.claimedRewards().isEmpty()

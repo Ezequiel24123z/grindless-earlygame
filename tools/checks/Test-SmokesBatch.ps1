@@ -4,18 +4,21 @@ Bounded, no-server contracts for the native Bash shared-world batch runner.
 Usage: powershell -NoProfile -File tools/checks/Test-SmokesBatch.ps1 [-BashPath <installed Bash>]
        pwsh -NoProfile -File tools/checks/Test-SmokesBatch.ps1
 
-Only the batch entrypoints are copied, byte-for-byte, into temporary fixtures.
+Only the batch and isolated entrypoints are copied, byte-for-byte, into temporary fixtures.
 Every possible fixture launch target is a safe fake; the real smoke-boot, JVM,
 Gradle, SSH, network, saves and private PC configuration are never invoked.
 The current PowerShell reference is copied from the selected RepositoryRoot.
-Its probes cover ordinary selection/aggregation/exit and A01 fresh-world isolation.
+Its probes cover selection/aggregation/exit and fresh-world/native backend isolation.
+The Forge composition source contract is checked without evaluating Gradle;
+the transition fixture models one Sync over synthetic jars, not the Gradle engine.
 Handshake, process ownership and cleanup inside smoke-boot remain its contract,
 not server behavior proved by these fake launch-boundary tests.
 #>
 [CmdletBinding()]
 param(
     [string]$RepositoryRoot,
-    [string]$BashPath
+    [string]$BashPath,
+    [string]$CaseFilter
 )
 
 $ErrorActionPreference = 'Stop'
@@ -34,7 +37,7 @@ $script:FixtureId = [Guid]::NewGuid().ToString('N')
 $script:TestTemp = Join-Path ([IO.Path]::GetTempPath()) ('grindless-smokes-batch-' + $script:FixtureId)
 $script:EnvironmentNames = @(
     'SMOKE_COMMANDS', 'SMOKE_EXPECT_FILE', 'SMOKE_LOG', 'SMOKE_DATAPACK',
-    'SMOKE_OPTIONAL_DATAPACK', 'SMOKE_TIMEOUT', 'SMOKE_EXPECT_TIMEOUT',
+    'SMOKE_OPTIONAL_DATAPACK', 'SMOKE_QUEST_BACKEND', 'SMOKE_TIMEOUT', 'SMOKE_EXPECT_TIMEOUT',
     'SMOKE_PORT', 'GRINDLESS_ACCEPT_EULA', 'CI', 'JAVA_HOME', 'SMOKE_EXPECT', 'CDPATH'
 )
 $script:CallerEnvironment = @{}
@@ -168,6 +171,7 @@ record_environment() {
     record_env SMOKE_LOG "${SMOKE_LOG+x}" "${SMOKE_LOG-}"
     record_env SMOKE_DATAPACK "${SMOKE_DATAPACK+x}" "${SMOKE_DATAPACK-}"
     record_env SMOKE_OPTIONAL_DATAPACK "${SMOKE_OPTIONAL_DATAPACK+x}" "${SMOKE_OPTIONAL_DATAPACK-}"
+    record_env SMOKE_QUEST_BACKEND "${SMOKE_QUEST_BACKEND+x}" "${SMOKE_QUEST_BACKEND-}"
     record_env SMOKE_TIMEOUT "${SMOKE_TIMEOUT+x}" "${SMOKE_TIMEOUT-}"
     record_env SMOKE_EXPECT_TIMEOUT "${SMOKE_EXPECT_TIMEOUT+x}" "${SMOKE_EXPECT_TIMEOUT-}"
     record_env SMOKE_PORT "${SMOKE_PORT+x}" "${SMOKE_PORT-}"
@@ -225,6 +229,8 @@ function New-Fixture([string]$Manifest = "alpha`nbeta`ngamma`n",
     $entry = Join-Path $entryRoot 'tools/run-smokes-batch.sh'
     [IO.File]::WriteAllBytes($entry, $script:BatchBytes)
     [IO.File]::WriteAllBytes((Join-Path $entryRoot 'tools/run-smokes-batch.ps1'), $script:ReferenceBytes)
+    [IO.File]::WriteAllBytes((Join-Path $entryRoot 'tools/run-smokes.sh'), $script:IsolatedBashBytes)
+    [IO.File]::WriteAllBytes((Join-Path $entryRoot 'tools/run-smokes.ps1'), $script:IsolatedPowerShellBytes)
     Write-FixtureText (Join-Path $root 'tools/smoke-boot.sh') $script:FakeBoot
     Write-FixtureText (Join-Path $root 'tools/smoke-boot.ps1') "throw 'Only the safe intercepted launch is allowed.'"
     $token = 'selected-fixture-' + $script:Cases
@@ -251,6 +257,7 @@ function New-Fixture([string]$Manifest = "alpha`nbeta`ngamma`n",
         SMOKE_LOG = ($nativeHome + '/unused inherited.log')
         SMOKE_DATAPACK = 'synthetic inherited datapack'
         SMOKE_OPTIONAL_DATAPACK = 'synthetic inherited optional datapack'
+        SMOKE_QUEST_BACKEND = 'synthetic inherited backend must not select a runtime'
         SMOKE_TIMEOUT = '073'
         SMOKE_EXPECT_TIMEOUT = '019'
         SMOKE_PORT = '25421'
@@ -311,7 +318,7 @@ function Assert-Dispatch($Fixture, $Result, [int]$ExitCode = 0) {
             ($Fixture.NativeRoot + '/forge/run/smoke-batch.' + $pair[1])) "fixed selected-root $($pair[0]) path"
         Assert-Test ([IO.File]::Exists((Join-Path $Fixture.Run ('smoke-batch.' + $pair[1])))) "retained .$($pair[1]) artifact"
     }
-    foreach ($name in @('SMOKE_DATAPACK', 'SMOKE_OPTIONAL_DATAPACK')) {
+    foreach ($name in @('SMOKE_DATAPACK', 'SMOKE_OPTIONAL_DATAPACK', 'SMOKE_QUEST_BACKEND')) {
         Assert-Test (-not $environment[$name].Present) "$name is unset, not merely empty, at boot"
     }
     Assert-CallerPreserved $Fixture
@@ -336,10 +343,13 @@ function Assert-Refused($Fixture, $Result, [string]$Message = '') {
     Assert-CallerPreserved $Fixture
 }
 
-function Invoke-PowerShellReference($Fixture, [string]$Only) {
+function Invoke-PowerShellReference($Fixture, [string]$Only, [switch]$Isolated) {
     $environment = @{}
     foreach ($key in $Fixture.Environment.Keys) { $environment[$key] = $Fixture.Environment[$key] }
     $environment['GRINDLESS_SMOKES_REFERENCE_SCRIPT'] = Join-Path $Fixture.EntryRoot 'tools/run-smokes-batch.ps1'
+    if ($Isolated) {
+        $environment['GRINDLESS_SMOKES_REFERENCE_SCRIPT'] = Join-Path $Fixture.EntryRoot 'tools/run-smokes.ps1'
+    }
     $environment['GRINDLESS_SMOKES_REFERENCE_ROOT'] = $Fixture.Root
     $environment['GRINDLESS_SMOKES_REFERENCE_CAPTURE'] = $Fixture.Capture
     $environment['GRINDLESS_SMOKES_REFERENCE_ONLY'] = $Only
@@ -349,12 +359,14 @@ function Invoke-PowerShellReference($Fixture, [string]$Only) {
     return $result
 }
 
-function Assert-ReferenceRefused($Fixture, [string]$Only) {
+function Assert-ReferenceRefused($Fixture, [string]$Only,
+        [string]$Message = 'fresh datapack world', [string]$Redirect = '') {
     $result = Invoke-PowerShellReference $Fixture $Only
     Assert-Test ($result.ExitCode -ne 0) 'current PS twin refuses an isolated selection'
     Assert-Test (-not [IO.File]::Exists((Join-Path $Fixture.Capture 'reference.calls'))) 'isolated PS selection never reaches even the fake boot'
     $diagnostic = Format-SafeEvidence ($result.Out + $result.Err)
-    Assert-Test ($diagnostic.Contains('fresh datapack world')) ("PS refusal identifies the fresh-world requirement; actual: " + $diagnostic)
+    Assert-Test ($diagnostic.Contains($Message)) ("PS refusal identifies $Message; actual: " + $diagnostic)
+    if ($Redirect) { Assert-Test ($diagnostic.Contains($Redirect)) "PS refusal redirects to $Redirect" }
 }
 
 function Invoke-OrdinaryReference($Fixture, [string]$Only, $NativeResult) {
@@ -364,6 +376,7 @@ function Invoke-OrdinaryReference($Fixture, [string]$Only, $NativeResult) {
     Assert-Test ($result.ExitCode -eq $NativeResult.ExitCode) ("ordinary PS reference and Bash propagate the same fake exit; PS=" +
         $result.ExitCode + '; Bash=' + $NativeResult.ExitCode + '; PS stderr=' + (Format-SafeEvidence $result.Err))
     Assert-Test ((Read-FixtureText (Join-Path $Fixture.Capture 'reference.calls')) -ceq 'one safe intercepted launch') 'ordinary PS launch was intercepted exactly once'
+    Assert-Test ((Read-FixtureText (Join-Path $Fixture.Capture 'reference.backend')) -ceq '') 'ordinary PS dispatch clears an inherited quest backend'
     Assert-Test ((Read-FixtureText (Join-Path $Fixture.Run 'smoke-batch.commands')).Replace("`r`n", "`n") -ceq
         $commands) 'ordinary PS and Bash command aggregation agree (platform newlines normalized)'
     Assert-Test ((Read-FixtureText (Join-Path $Fixture.Run 'smoke-batch.expect')).Replace("`r`n", "`n") -ceq
@@ -373,6 +386,9 @@ function Invoke-OrdinaryReference($Fixture, [string]$Only, $NativeResult) {
 }
 
 function Invoke-Case([string]$Label, [scriptblock]$Body) {
+    if ($CaseFilter -and $Label -notlike $CaseFilter) {
+        return
+    }
     $script:Cases++
     try {
         & $Body
@@ -391,6 +407,8 @@ try {
     $script:PowerShellExecutable = (Get-Process -Id $PID).Path
     $script:BatchBytes = [IO.File]::ReadAllBytes((Join-Path $RepositoryRoot 'tools/run-smokes-batch.sh'))
     $script:ReferenceBytes = [IO.File]::ReadAllBytes((Join-Path $RepositoryRoot 'tools/run-smokes-batch.ps1'))
+    $script:IsolatedBashBytes = [IO.File]::ReadAllBytes((Join-Path $RepositoryRoot 'tools/run-smokes.sh'))
+    $script:IsolatedPowerShellBytes = [IO.File]::ReadAllBytes((Join-Path $RepositoryRoot 'tools/run-smokes.ps1'))
     $probePath = Join-Path $script:TestTemp 'runtime-probe.sh'
     Write-FixtureText $probePath @'
 set -eu
@@ -415,16 +433,25 @@ printf '%s\n' "$BASH_VERSION" "$OSTYPE" "$(pwd -P)"
     Write-FixtureText $script:ReferenceDriverPath @'
 $ErrorActionPreference = 'Stop'
 function global:powershell {
-    if ($args.Count -ne 7 -or $args[0] -cne '-NoProfile' -or
-            $args[1] -cne '-ExecutionPolicy' -or $args[2] -cne 'Bypass' -or
-            $args[3] -cne '-File' -or $args[5] -cne '-Root' -or
-            $args[4] -cne (Join-Path $env:GRINDLESS_SMOKES_REFERENCE_ROOT 'tools/smoke-boot.ps1') -or
-            $args[6] -cne $env:GRINDLESS_SMOKES_REFERENCE_ROOT) {
+    $expected = @('-ExecutionPolicy', 'Bypass', '-File',
+        (Join-Path $env:GRINDLESS_SMOKES_REFERENCE_ROOT 'tools/smoke-boot.ps1'),
+        '-Root', $env:GRINDLESS_SMOKES_REFERENCE_ROOT)
+    if ([IO.Path]::GetFileName($env:GRINDLESS_SMOKES_REFERENCE_SCRIPT) -ceq 'run-smokes-batch.ps1') {
+        $expected = @('-NoProfile') + $expected
+    }
+    if ($args.Count -ne $expected.Count) {
         throw 'Unexpected PowerShell launch boundary; real boot is forbidden.'
+    }
+    for ($i = 0; $i -lt $expected.Count; $i++) {
+        if ($args[$i] -cne $expected[$i]) {
+            throw 'Unexpected PowerShell launch boundary; real boot is forbidden.'
+        }
     }
     $capture = Join-Path $env:GRINDLESS_SMOKES_REFERENCE_CAPTURE 'reference.calls'
     if ([IO.File]::Exists($capture)) { throw 'More than one reference boot launch.' }
     [IO.File]::WriteAllText($capture, 'one safe intercepted launch')
+    [IO.File]::WriteAllText((Join-Path $env:GRINDLESS_SMOKES_REFERENCE_CAPTURE 'reference.backend'),
+        [string]$env:SMOKE_QUEST_BACKEND)
     $global:LASTEXITCODE = [int]$env:GRINDLESS_SMOKES_TEST_EXIT
 }
 try {
@@ -513,6 +540,115 @@ done
         Assert-Aggregate $f "say BATCH-BEGIN alpha`n  say $word  `n`tsay tabs`t`nsay tail`nsay BATCH-END alpha`nsay BATCH-BEGIN beta`nsay beta # inline hash stays`nsay BATCH-END beta`n" "BATCH-END alpha`n  ^$word$  `n#literal regex`n`t^tabs`t$`nfinal regex`nBATCH-END beta`n"
         Invoke-OrdinaryReference $f '' $result
     }
+    Invoke-Case 'native smoke composition source contract and legacy-to-native-to-base mocked Sync inventory' {
+        $build = Read-FixtureText (Join-Path $RepositoryRoot 'forge/build.gradle')
+        $preparation = [regex]::Match($build,
+            '(?ms)^// Test the distributable jars.*?(?=^sourceSets \{)').Value
+        Assert-Test ($preparation -match 'tasks\.register\("prepareSmokeServer", Sync\)') 'one complete Sync owns smoke preparation'
+        Assert-Test ($preparation -match 'tasks\.register\("prepareQuestSmokeServer"\)') 'native preparation is an alias, not a second Copy/Sync'
+        Assert-Test ([regex]::Matches($preparation, 'into smokeServer\.dir\("mods"\)').Count -eq 1) 'only the owned smoke-server/mods destination is synchronized'
+        Assert-Test ([regex]::Matches($preparation, '\bfrom\s*\(').Count -eq 3) 'the complete composition has exactly remap, base and optional native inputs'
+        Assert-Test ($preparation -match 'from\(tasks\.named\("remapJar"\).*?archiveFile' -and
+            $preparation -match 'rename \{ "grindless\.jar" \}' -and
+            $preparation -match 'from\(configurations\.smokeMods\)' -and
+            $preparation -match 'rename \{ "architectury\.jar" \}') 'base Grindless and Architectury are always in the same composition'
+        Assert-Test ($preparation -match 'gradle\.taskGraph\.whenReady' -and
+            $preparation -match 'graph\.hasTask\("\$\{project\.path\}:prepareQuestSmokeServer"\)' -and
+            $preparation -match 'inputs\.property\("questBackend", nativeQuests \? "ftb" : "none"\)' -and
+            $preparation -match '(?s)if \(nativeQuests\) \{\s*from\(configurations\.questSmokeMods\)\s*\}') 'the ready task graph explicitly selects and fingerprints the native input'
+        Assert-Test ($preparation -match 'dependsOn prepareSmokeServer, tasks\.named\("verifyFtbPublisherArtifacts"\)' -and
+            $preparation -match 'mustRunAfter "verifyFtbPublisherArtifacts"') 'native publisher verification remains a dependency ordered before the Sync'
+        $baseCoordinates = @([regex]::Matches($build, '(?m)^\s*smokeMods "([^"]+)"') |
+            ForEach-Object { $_.Groups[1].Value })
+        Assert-Test (($baseCoordinates -join "`n") -ceq
+            'dev.architectury:architectury-forge:${rootProject.architectury_api_version}') 'the base dependency input contains only the pinned Architectury artifact'
+        $coordinates = @([regex]::Matches($build, '(?m)^\s*questSmokeMods "([^"]+)"') |
+            ForEach-Object { $_.Groups[1].Value })
+        $expectedCoordinates = @(
+            'curse.maven:ftb-quests-289412:${rootProject.ftbquests_curse_file}',
+            'curse.maven:ftb-library-404465:${rootProject.ftblibrary_curse_file}',
+            'curse.maven:ftb-teams-404468:${rootProject.ftbteams_curse_file}',
+            'curse.maven:ftb-xmod-compat-889915:${rootProject.ftbxmodcompat_curse_file}',
+            'mezz.jei:jei-1.20.1-forge:${rootProject.jei_version}'
+        )
+        Assert-Test (($coordinates -join "`n") -ceq ($expectedCoordinates -join "`n")) 'native additions are exactly Quests, Library, Teams, XModCompat and JEI with existing properties'
+        # Model Gradle Sync semantics on fixture bytes only; never execute the build file.
+        $f = New-Fixture
+        $mods = Join-Path $f.Root 'forge/run/smoke-server/mods'
+        $library = Join-Path $f.Root 'forge/run/smoke-server/libraries/keep.jar'
+        Write-FixtureText $library 'untouched installed runtime'
+        foreach ($name in @('grindless.jar', 'architectury.jar', 'heracles.jar', 'resourcefullib.jar')) {
+            Write-FixtureText (Join-Path $mods $name) "old fixture $name"
+        }
+        $base = @('grindless.jar', 'architectury.jar')
+        # Synthetic resolver filenames are derived from the real configured native artifacts.
+        $native = @($coordinates | ForEach-Object { ($_ -split ':')[1] + '.jar' })
+        foreach ($selected in @(@($base + $native), @($base))) {
+            foreach ($file in [IO.Directory]::GetFiles($mods)) {
+                if ($selected -notcontains [IO.Path]::GetFileName($file)) { [IO.File]::Delete($file) }
+            }
+            foreach ($name in $selected) { Write-FixtureText (Join-Path $mods $name) "current fixture $name" }
+            $inventory = @([IO.Directory]::GetFiles($mods) | ForEach-Object { [IO.Path]::GetFileName($_) } | Sort-Object)
+            Assert-Test (($inventory -join "`n") -ceq (($selected | Sort-Object) -join "`n")) 'mocked Sync has the exact selected inventory, no stale or missing jars'
+            foreach ($name in $base) {
+                Assert-Test ((Read-FixtureText (Join-Path $mods $name)) -ceq "current fixture $name") 'both base jars remain present and current'
+            }
+            Assert-Test ((Read-FixtureText $library) -ceq 'untouched installed runtime') 'Sync ownership does not extend to the installed runtime'
+        }
+        Assert-Test (-not [IO.File]::Exists((Join-Path $f.Capture 'boot.calls'))) 'composition fixture launches no harness or JVM'
+    }
+    Invoke-Case 'native-quests only is refused by both shared twins with an isolated FTB redirect' {
+        $f = New-Fixture "alpha`nnative-quests`nbeta`n" 'selected native only root & spaces'
+        Write-FixtureText (Join-Path $f.Root 'tools/smoke/native-quests.commands') "say MUST-NOT-BATCH native-quests`n"
+        Write-FixtureText (Join-Path $f.Root 'tools/smoke/native-quests.expect') "MUST-NOT-EXPECT native-quests`n"
+        $only = ' NATIVE-QUESTS,native-quests,unknown '
+        $result = Invoke-Batch $f -Arguments @($f.NativeRoot, '--only', $only)
+        Assert-Refused $f $result 'isolated FTB backend'
+        Assert-Test (($result.Out + $result.Err).Contains('tools/run-smokes.sh')) 'Bash refusal names the isolated runner'
+        Assert-ReferenceRefused $f $only 'isolated FTB backend' 'tools\run-smokes.ps1'
+        Assert-Test (-not [IO.File]::Exists((Join-Path $f.Run 'smoke-batch.commands'))) 'native-only refusal happens before writing a shared command aggregate'
+    }
+    foreach ($selection in @('named', 'default-all')) {
+        Invoke-Case "native-quests $selection selection is announced and omitted from both shared twins" {
+            $f = New-Fixture "alpha`nnative-quests`nbeta`n" 'selected native mixed root & spaces'
+            Write-FixtureText (Join-Path $f.Root 'tools/smoke/native-quests.commands') "say MUST-NOT-BATCH native-quests`n"
+            Write-FixtureText (Join-Path $f.Root 'tools/smoke/native-quests.expect') "MUST-NOT-EXPECT native-quests`n"
+            $only = ''
+            if ($selection -eq 'named') {
+                $only = 'BETA,NATIVE-QUESTS,ALPHA,alpha,unknown'
+                $result = Invoke-Batch $f -Arguments @($f.NativeRoot, '--only', $only)
+            } else { $result = Invoke-Batch $f }
+            Assert-Test ($result.Out.Contains('Skipped native-quests: requires the isolated FTB backend (tools/run-smokes).')) 'native omission and isolated runner are announced explicitly'
+            Assert-Dispatch $f $result
+            Assert-Test ($result.Out.Contains('Running 2 shared-world')) 'only ordinary scenarios enter the batch'
+            Assert-Aggregate $f "say BATCH-BEGIN alpha`nsay alpha`nsay BATCH-END alpha`nsay BATCH-BEGIN beta`nsay beta`nsay BATCH-END beta`n" "BATCH-END alpha`nPASS alpha`nBATCH-END beta`nPASS beta`n"
+            Invoke-OrdinaryReference $f $only $result
+        }
+    }
+    foreach ($twin in @('Bash', 'PowerShell')) {
+        Invoke-Case "native-quests remains registered and dispatches ftb in the isolated $twin runner (fake boot only)" {
+            $manifest = Read-FixtureText (Join-Path $RepositoryRoot 'tools/smoke/scenarios.txt')
+            Assert-Test ($manifest -match '(?m)^native-quests\s') 'the real isolated/CI manifest still includes native-quests'
+            $f = New-Fixture "alpha`nnative-quests`nbeta`n" 'selected isolated native root & spaces'
+            Write-FixtureText (Join-Path $f.Root 'tools/smoke/native-quests.commands') "say synthetic native probe`n"
+            Write-FixtureText (Join-Path $f.Root 'tools/smoke/native-quests.expect') "synthetic native result`n"
+            if ($twin -eq 'Bash') {
+                $f.Entry = $f.Entry.Replace('run-smokes-batch.sh', 'run-smokes.sh')
+                $result = Invoke-Batch $f -Arguments @($f.NativeRoot, '--only', 'native-quests')
+                Assert-Test ($result.ExitCode -eq 0) ("isolated Bash dispatch succeeds with the fake: " + $result.Err)
+                Assert-Test ((Read-FixtureText (Join-Path $f.Capture 'boot.calls')) -ceq "call`n") 'isolated Bash dispatches exactly one fake boot'
+                $environment = Read-CapturedEnvironment $f
+                Assert-Test ($environment.SMOKE_QUEST_BACKEND.Present -and
+                    $environment.SMOKE_QUEST_BACKEND.Value -ceq 'ftb') 'isolated Bash selects ftb instead of the inherited invalid backend'
+                Assert-CallerPreserved $f
+            } else {
+                $result = Invoke-PowerShellReference $f 'native-quests' -Isolated
+                Assert-Test ($result.ExitCode -eq 0) ("isolated PS dispatch succeeds with the fake: " + $result.Err)
+                Assert-Test ((Read-FixtureText (Join-Path $f.Capture 'reference.calls')) -ceq 'one safe intercepted launch') 'isolated PS dispatches exactly one fake boot'
+                Assert-Test ((Read-FixtureText (Join-Path $f.Capture 'reference.backend')) -ceq 'ftb') 'isolated PS selects ftb instead of the inherited invalid backend'
+            }
+        }
+    }
     foreach ($isolatedName in @('foreign-providers', 'states', 'recipe-cache-reload')) {
         Invoke-Case "fixed isolated-only refusal: $isolatedName (no optional path required)" {
             $f = New-Fixture ("alpha`n" + $isolatedName + "`n")
@@ -547,7 +683,7 @@ done
             Invoke-OrdinaryReference $f $only $result
         }
     }
-    foreach ($freshName in @('first-fluids', 'first-harness')) {
+    foreach ($freshName in @('first-fluids', 'first-harness', 'workshop-ports', 'blueprint-interaction')) {
         Invoke-Case "$freshName only selection refuses both current twins without an optional sibling" {
             $f = New-Fixture ("alpha`n" + $freshName + "`nbeta`n") 'selected observation only root & spaces'
             Assert-Test (-not (Test-Path -LiteralPath (Join-Path $f.Root "tools/smoke/$freshName-optional"))) 'observation isolation is fixed, not dependent on an optional sibling'
@@ -576,6 +712,43 @@ done
             }
         }
     }
+    Invoke-Case 'blueprint-interaction source carrier names one real console probe, never an echoed pass' {
+        $commands = (Read-FixtureText (Join-Path $RepositoryRoot 'tools/smoke/blueprint-interaction.commands')).Replace("`r`n", "`n").Trim()
+        Assert-Test ($commands -ceq "forceload add 1600 1600`ngrindless_blueprint_checks") 'one owned chunk and one actual console probe, no synthetic pass emitter'
+        $expected = (Read-FixtureText (Join-Path $RepositoryRoot 'tools/smoke/blueprint-interaction.expect')).Trim()
+        Assert-Test ($expected -ceq 'GRINDLESS_BLUEPRINT_NATIVE_PASS blocks=2 capture=1 stamp=1 known_false=1 blocked=1 unloaded=1 permissions=1 codec=1 limits=1 assertions=[1-9][0-9]*') 'one complete native marker is required'
+        $source = Read-FixtureText (Join-Path $RepositoryRoot 'forge/src/main/java/io/github/ezequiel24123z/grindless/item/BlueprintInteractionChecks.java')
+        Assert-Test ($source.Contains('Commands.literal("grindless_blueprint_checks")') -and
+            $source.Contains('source.getEntity() == null && source.hasPermission(4)')) 'the real carrier is console-only with permission four'
+        Assert-Test ($source.Contains('FakePlayerFactory.get(level, PROFILE)') -and
+            $source.Contains('getItem().useOn(context(clicked))') -and
+            $source.Contains('BlueprintItem.preflight(')) 'the probe uses native profile creation and the existing item/preflight paths'
+        Assert-Test ([regex]::Matches($source, 'LOG\.info\("GRINDLESS_BLUEPRINT_NATIVE_PASS').Count -eq 1) 'there is only one source success emitter'
+        Assert-Test (-not [IO.File]::Exists((Join-Path $RepositoryRoot 'tools/smoke/blueprint-interaction.timeout'))) 'the native case retains the existing assertion budget'
+    }
+    foreach ($twin in @('Bash', 'PowerShell')) {
+        Invoke-Case "blueprint-interaction remains registered and dispatches in the isolated $twin runner (fake boot only)" {
+            $manifest = Read-FixtureText (Join-Path $RepositoryRoot 'tools/smoke/scenarios.txt')
+            Assert-Test ($manifest -match '(?m)^blueprint-interaction\s') 'the real isolated/CI manifest includes the native blueprint interaction'
+            $f = New-Fixture "alpha`nblueprint-interaction`nbeta`n" 'selected isolated blueprint root & spaces'
+            Write-FixtureText (Join-Path $f.Root 'tools/smoke/blueprint-interaction.commands') "say synthetic blueprint dispatch`n"
+            Write-FixtureText (Join-Path $f.Root 'tools/smoke/blueprint-interaction.expect') "synthetic blueprint result`n"
+            if ($twin -eq 'Bash') {
+                $f.Entry = $f.Entry.Replace('run-smokes-batch.sh', 'run-smokes.sh')
+                $result = Invoke-Batch $f -Arguments @($f.NativeRoot, '--only', 'blueprint-interaction')
+                Assert-Test ($result.ExitCode -eq 0) ("isolated Bash dispatch succeeds with the fake: " + $result.Err)
+                Assert-Test ((Read-FixtureText (Join-Path $f.Capture 'boot.calls')) -ceq "call`n") 'isolated Bash dispatches exactly one fake boot'
+                Assert-Test ((Read-FixtureText (Join-Path $f.Capture 'at-launch.commands')).Contains('synthetic blueprint dispatch')) 'isolated Bash forwards the selected command file'
+                Assert-Test (-not (Read-CapturedEnvironment $f).SMOKE_QUEST_BACKEND.Present) 'isolated blueprint dispatch uses the ordinary backend'
+                Assert-CallerPreserved $f
+            } else {
+                $result = Invoke-PowerShellReference $f 'blueprint-interaction' -Isolated
+                Assert-Test ($result.ExitCode -eq 0) ("isolated PS dispatch succeeds with the fake: " + $result.Err)
+                Assert-Test ((Read-FixtureText (Join-Path $f.Capture 'reference.calls')) -ceq 'one safe intercepted launch') 'isolated PS dispatches exactly one fake boot'
+                Assert-Test ((Read-FixtureText (Join-Path $f.Capture 'reference.backend')) -ceq '') 'isolated blueprint dispatch clears an inherited backend'
+            }
+        }
+    }
     Invoke-Case 'default-all with only fixed isolated scenarios including A01 refuses both current twins' {
         $f = New-Fixture "extractor-backpressure`nstates`nrecipe-cache-reload`nforeign-providers`nfirst-fluids`nfirst-harness`n" 'selected A01 isolated root & spaces'
         $result = Invoke-Batch $f
@@ -592,19 +765,21 @@ done
             Assert-Refused $f $result 'fresh datapack world'
         }
     }
-    Invoke-Case 'mixed fixed/dynamic isolation announces all skips and retains ordinary manifest order' {
-        $f = New-Fixture "foreign-providers`nalpha`naddon-dir`nstates`nbeta`nrecipe-cache-reload`naddon-file`ngamma`n"
+    Invoke-Case 'mixed fixed/dynamic/native isolation announces all skips and retains ordinary manifest order' {
+        $f = New-Fixture "foreign-providers`nalpha`naddon-dir`nstates`nbeta`nrecipe-cache-reload`nnative-quests`naddon-file`ngamma`n" 'selected mixed isolation root & spaces'
         [IO.Directory]::CreateDirectory((Join-Path $f.Root 'tools/smoke/addon-dir-optional')) | Out-Null
         Write-FixtureText (Join-Path $f.Root 'tools/smoke/addon-file-optional') 'not a directory'
-        foreach ($name in @('foreign-providers', 'states', 'recipe-cache-reload', 'addon-dir', 'addon-file')) {
+        foreach ($name in @('foreign-providers', 'states', 'recipe-cache-reload', 'native-quests', 'addon-dir', 'addon-file')) {
             Write-FixtureText (Join-Path $f.Root "tools/smoke/$name.commands") "say MUST-NOT-BATCH $name`n"
             Write-FixtureText (Join-Path $f.Root "tools/smoke/$name.expect") "MUST-NOT-EXPECT $name`n"
         }
         $result = Invoke-Batch $f
         Assert-Dispatch $f $result
         Assert-Test ($result.Out.Contains('Skipped fresh-world datapack scenario(s): foreign-providers, addon-dir, states, recipe-cache-reload, addon-file.')) 'skip list follows manifest order and names every isolated selection'
+        Assert-Test ($result.Out.Contains('Skipped native-quests: requires the isolated FTB backend (tools/run-smokes).')) 'native backend omission is distinct from the unchanged fresh-world skip list'
         Assert-Test ($result.Out.Contains('Running 3 shared-world')) 'only ordinary scenarios contribute to batch count'
         Assert-Aggregate $f "say BATCH-BEGIN alpha`nsay alpha`nsay BATCH-END alpha`nsay BATCH-BEGIN beta`nsay beta`nsay BATCH-END beta`nsay BATCH-BEGIN gamma`nsay gamma`nsay BATCH-END gamma`n" "BATCH-END alpha`nPASS alpha`nBATCH-END beta`nPASS beta`nBATCH-END gamma`nPASS gamma`n"
+        Invoke-OrdinaryReference $f '' $result
     }
     foreach ($bootExit in @(2, 47)) {
         Invoke-Case "exact boot exit $bootExit; artifacts retained and inherited optional environment restored" {
@@ -730,6 +905,9 @@ done
             Assert-Refused $f $result
         }
     }
+    if ($script:Cases -eq 0) {
+        throw "No contract cases matched the requested filter: $CaseFilter"
+    }
     if ($script:Failures.Count -gt 0) {
         throw ("FAILED: " + $script:Failures.Count + '/' + $script:Cases + ' cases; ' +
             $script:Assertions + " assertions attempted.`n" + ($script:Failures -join "`n"))
@@ -748,5 +926,7 @@ done
 Write-Output ("ALL SMOKES BATCH CONTRACTS PASSED: " + $script:Cases + ' cases; ' +
     $script:Assertions + ' assertions; ' + $script:NativeRuns + ' native Bash CLI runs; ' +
     $script:ReferenceRuns + ' PowerShell reference CLI comparisons (safe intercepted launch boundary).')
+if ($CaseFilter) { Write-Output ("Scope: selected case filter '" + $CaseFilter + "'; not the full suite.") }
 Write-Output 'No real smoke harness, JVM, Gradle, SSH, network, save or private PC configuration was used.'
 Write-Output 'Boundary: fake launch tests do not prove SMOKE-READY/handshake, server assertions or real harness process cleanup.'
+Write-Output 'Boundary: the source-bound composition transition models Sync over fixture bytes; it does not execute Gradle.'

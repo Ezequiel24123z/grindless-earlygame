@@ -1,5 +1,10 @@
 package io.github.ezequiel24123z.grindless.recipe;
 
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -9,7 +14,7 @@ public final class VerifyAtlas {
 
     private static int failures = 0;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         List<ProcessGraph.MaterialView> materials = List.of(
                 new ProcessGraph.MaterialView("iron", true, true, true, true, true, true, true, true, true),
                 new ProcessGraph.MaterialView("gold", true, false, false, true, true, true, true, true, false),
@@ -18,18 +23,27 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        // ADR-0133 adds 12 RenewableProcesses rows and 28 BootstrapAssembly rows per station.
-        eq("atlas lists every generated recipe", 189, rows.size());
+        eq("atlas lists every allowed generated recipe", 168, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
-        eq("the first assembler row is the intake", "assemble/atmospheric_intake",
+        eq("the first assembler row is the alphabetically first allowed tool", "assemble/blueprint_tool",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        // The 28 assemble/bootstrap/* projections supplement the 41 existing Assembler routes.
-        eq("sixty-nine reachable assembler crafts in this set", 69,
+        // Twenty-two allowed primitive projections supplement thirty-two other Assembler routes.
+        eq("fifty-four reachable allowed assembler crafts in this set", 54,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
-        // The 68 generated additions plus five new BootstrapRecipes crafts extend the old 167.
-        eq("atlas includes every machine, Bootstrap craft and calibration route", 240, allRows.size());
+        yes("old process and supplemental routes acquire no pressure or implicit ambient band",
+                allRows.stream().allMatch(row -> Double.isNaN(row.pressureMPa())
+                        && Double.isNaN(row.pressureHalfWidthMPa())));
+        pressure();
+        // The existing Flux Cell JSON now has the same catalogue/Atlas projection as other T1 crafts.
+        eq("atlas includes every process, owned manual craft and calibration route", 242, allRows.size());
+        yes("the real vanilla Furnace has no automatic Atlas producer",
+                AtlasLogic.producing(recipes, "minecraft:furnace").isEmpty());
+        no("vanilla manual authority is not replaced with an invented Grindless craft",
+                allRows.stream().anyMatch(row -> row.id().equals("craft/furnace")));
+        yes("the retired Guide has no craft or machine route", allRows.stream().noneMatch(row ->
+                row.outputs().contains("item:grindless:field_guide")));
         for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {
             AtlasLogic.Entry row = route(allRows, "craft/" + craft.name());
             eq(craft.name() + " exposes its complete output batch", craft.resultCount(), row.outputs().size());
@@ -70,6 +84,108 @@ public final class VerifyAtlas {
         yes("the compact line retains both physical ratings",
                 AtlasLogic.line(industrialRelay).contains("relay_matrix [F1]")
                         && AtlasLogic.line(industrialRelay).contains("relay_matrix [F2]"));
+        AtlasLogic.Entry fluxCell = route(allRows, "craft/flux_cell");
+        eq("the physical power-coupling craft is visible in the same Atlas", "CRAFTING_TABLE", fluxCell.station());
+        eq("the Flux Cell row matches its existing shaped ingredient grouping",
+                "8x ingots/copper + ingots/iron", AtlasLogic.describe(fluxCell.inputs()));
+        yes("the Flux Cell row produces its actual existing item",
+                fluxCell.outputs().equals(List.of("item:grindless:flux_cell")));
+        for (String component : List.of("machine_casing", "flux_cell")) {
+            AtlasLogic.Entry manual = route(allRows, "craft/" + component);
+            AtlasLogic.Entry automatic = route(allRows, "assemble/" + component);
+            eq(component + " keeps its manual bootstrap/compatibility recipe", "CRAFTING_TABLE", manual.station());
+            eq(component + " exposes its automatic Assembler route", "ASSEMBLER", automatic.station());
+            yes(component + " projects the exact crafting input multiset",
+                    manual.inputs().stream().sorted().toList().equals(automatic.inputs().stream().sorted().toList()));
+            yes(component + " projects the exact ordinary output batch", manual.outputs().equals(automatic.outputs()));
+            yes(component + " has no invented die or catalyst", automatic.catalysts().isEmpty());
+            eq(component + " exposes the actual shared Assembler duration",
+                    FabricationLogic.ASSEMBLE_TICKS, automatic.durationTicks());
+            eq(component + " exposes the actual shared Assembler draw",
+                    FabricationLogic.FU_PER_TICK, automatic.fuPerTick());
+            yes(component + " is discoverable through ordinary output lookup",
+                    ids(AtlasLogic.producing(recipes, "grindless:" + component))
+                            .equals(List.of("assemble/" + component)));
+        }
+        for (String die : List.of("plate_die", "rod_die", "gear_die", "coil_die")) {
+            AtlasLogic.Entry manual = route(allRows, "craft/" + die);
+            AtlasLogic.Entry automatic = route(allRows, "assemble/" + die);
+            ProcessRecipe automaticProcess = recipes.stream()
+                    .filter(recipe -> recipe.id().equals(automatic.id())).findFirst().orElseThrow();
+            eq(die + " remains available from its crafting-table bootstrap", "CRAFTING_TABLE", manual.station());
+            eq(die + " is reproduced by the existing Assembler", "ASSEMBLER", automatic.station());
+            yes(die + " preserves the exact authored ingredient multiset",
+                    manual.inputs().stream().sorted().toList().equals(automatic.inputs().stream().sorted().toList()));
+            yes(die + " preserves the authored output batch", manual.outputs().equals(automatic.outputs()));
+            yes(die + " fits the existing four Assembler input slots",
+                    automaticProcess.itemInputs().size() <= 4);
+            yes(die + " adds no consumed-recipe catalyst", automatic.catalysts().isEmpty());
+            eq(die + " uses the existing Assembler duration",
+                    FabricationLogic.ASSEMBLE_TICKS, automatic.durationTicks());
+            eq(die + " uses the existing F1 draw", FabricationLogic.FU_PER_TICK, automatic.fuPerTick());
+            yes(die + " is discoverable through ordinary output lookup",
+                    ids(AtlasLogic.producing(recipes, "grindless:" + die)).equals(List.of("assemble/" + die)));
+        }
+        for (String machine : List.of("pulverizer", "arc_furnace", "press", "assembler")) {
+            AtlasLogic.Entry manual = route(allRows, "craft/" + machine);
+            eq(machine + " remains available from its crafting-table authority", "CRAFTING_TABLE", manual.station());
+            no(machine + " is no longer manufactured automatically",
+                    allRows.stream().anyMatch(row -> row.id().equals("assemble/" + machine)));
+            eq(machine + " displays its controller as minimum F1 capacity",
+                    1L, manual.inputs().stream().filter(input -> input.endsWith(" [F1+]")).count());
+            yes(machine + " preserves the ordinary machine output",
+                    manual.outputs().equals(List.of("item:grindless:" + machine)));
+            eq(machine + " has no invented processing cycle", 0, manual.durationTicks());
+            eq(machine + " has no invented process energy", 0L, manual.fuPerTick());
+            yes(machine + " is absent from generated automatic production lookup",
+                    AtlasLogic.producing(recipes, "grindless:" + machine).isEmpty());
+        }
+        AtlasLogic.Entry thermalManual = route(allRows, "craft/thermal_generator");
+        AtlasLogic.Entry thermalCore = route(allRows, "assemble/thermal_generator_core");
+        AtlasLogic.Entry thermalFinal = route(allRows, "craft/thermal_generator_from_core");
+        eq("the Thermal core is made by the existing Assembler", "ASSEMBLER", thermalCore.station());
+        eq("the ordinary Thermal is finished manually", "CRAFTING_TABLE", thermalFinal.station());
+        yes("the core displays exactly its furnace, carbon and iron", thermalCore.inputs().equals(List.of(
+                "item:minecraft:furnace", "tag:grindless:carbon", "tag:forge:ingots/iron")));
+        yes("the core is one ordinary discoverable component", thermalCore.outputs().equals(
+                List.of("item:" + FabricationLogic.THERMAL_GENERATOR_CORE)));
+        eq("the final Thermal displays seven physical units, not seven occupied slots", 7,
+                thermalFinal.inputs().size());
+        yes("the manual final operation displays the one physical minimum-F1 controller",
+                thermalFinal.inputs().stream().filter(input -> input.endsWith(" [F1+]")).toList()
+                        .equals(List.of("item:grindless:relay_matrix [F1+]")));
+        List<String> composedThermalInputs = new java.util.ArrayList<>(thermalCore.inputs());
+        composedThermalInputs.addAll(thermalFinal.inputs());
+        yes("the displayed bill consumes exactly the single manufactured core",
+                composedThermalInputs.remove("item:" + FabricationLogic.THERMAL_GENERATOR_CORE)
+                        && !composedThermalInputs.contains("item:" + FabricationLogic.THERMAL_GENERATOR_CORE));
+        yes("the two visible steps compose to the full manual material multiset",
+                thermalManual.inputs().stream().sorted().toList().equals(composedThermalInputs.stream().sorted().toList()));
+        yes("the final output has no invented rating or chassis", thermalManual.outputs().equals(thermalFinal.outputs()));
+        for (AtlasLogic.Entry stage : List.of(thermalCore)) {
+            ProcessRecipe process = recipes.stream().filter(row -> row.id().equals(stage.id())).findFirst().orElseThrow();
+            eq(stage.id() + " uses only three grouped Assembler slots", 3, process.itemInputs().size());
+            eq(stage.id() + " displays one normal Assembler cycle", FabricationLogic.ASSEMBLE_TICKS,
+                    stage.durationTicks());
+            eq(stage.id() + " displays the existing F1 draw", FabricationLogic.FU_PER_TICK, stage.fuPerTick());
+            yes(stage.id() + " adds no retained catalyst", stage.catalysts().isEmpty());
+        }
+        eq("only the core operation exposes twenty seconds of process work", 400,
+                thermalCore.durationTicks() + thermalFinal.durationTicks());
+        eq("only the core operation exposes 12800 FU process demand", 12_800L,
+                thermalCore.durationTicks() * thermalCore.fuPerTick()
+                        + thermalFinal.durationTicks() * thermalFinal.fuPerTick());
+        yes("the core is discoverable by ordinary production lookup",
+                ids(AtlasLogic.producing(recipes, FabricationLogic.THERMAL_GENERATOR_CORE))
+                        .equals(List.of("assemble/thermal_generator_core")));
+        yes("the core's actual consumer is discoverable",
+                allRows.stream().filter(row -> row.inputs().contains("item:" + FabricationLogic.THERMAL_GENERATOR_CORE))
+                        .map(AtlasLogic.Entry::id).toList().equals(List.of("craft/thermal_generator_from_core")));
+        yes("the ordinary Thermal output has no automatic final step",
+                AtlasLogic.producing(recipes, "grindless:thermal_generator").isEmpty());
+        yes("a stronger Relay lookup discovers final Thermal without changing the core",
+                thermalFinal.inputs().stream().anyMatch(input -> AtlasLogic.names(input, "grindless:relay_matrix [F2]"))
+                        && !thermalCore.inputs().contains("item:grindless:relay_matrix [F1+]"));
         yes("the detail pane distinguishes the bootstrap and Industrial outputs",
                 !AtlasLogic.describe(assembledRelay.outputs())
                         .equals(AtlasLogic.describe(industrialRelay.outputs())));
@@ -83,6 +199,22 @@ public final class VerifyAtlas {
         yes("bare Matrix consumption still finds the upgrade",
                 ids(AtlasLogic.consuming(recipes, "item:grindless:relay_matrix"))
                         .contains("assemble/relay_matrix_f2"));
+        yes("bare Matrix consumption discovers the mill's physical operand",
+                route(allRows, "craft/wire_mill").inputs().stream()
+                        .anyMatch(input -> AtlasLogic.names(input, "grindless:relay_matrix")));
+        yes("rated F1 consumption discovers the base mill",
+                route(allRows, "craft/wire_mill").inputs().stream()
+                        .anyMatch(input -> AtlasLogic.names(input, "item:grindless:relay_matrix [F1]")));
+        yes("the minimum-control mill is discoverable for a stronger Relay",
+                route(allRows, "craft/wire_mill").inputs().stream()
+                        .anyMatch(input -> AtlasLogic.names(input, "grindless:relay_matrix [F2]")));
+        no("stronger-controller lookup never relaxes the exact F2 predecessor",
+                ids(AtlasLogic.consuming(recipes, "grindless:relay_matrix [F2]"))
+                        .contains("assemble/relay_matrix_f2"));
+        no("the minimum capacity label cannot admit F0",
+                AtlasLogic.names("item:grindless:relay_matrix [F1+]", "grindless:relay_matrix [F0]"));
+        no("an exact output never becomes a minimum-capacity output",
+                AtlasLogic.names("item:grindless:relay_matrix [F2]", "grindless:relay_matrix [F1+]"));
         no("an F1 query never matches an F2 output",
                 AtlasLogic.names("item:grindless:relay_matrix [F2]", "grindless:relay_matrix [F1]"));
         no("rating display does not turn another item into a Matrix",
@@ -91,7 +223,7 @@ public final class VerifyAtlas {
         AtlasLogic.Entry factoryPortal = route(allRows, "craft/factory_portal");
         eq("factory portal is a crafting-table route", "CRAFTING_TABLE", factoryPortal.station());
         yes("factory portal consumes its physical Matrix",
-                factoryPortal.inputs().contains("item:grindless:relay_matrix"));
+                factoryPortal.inputs().contains("item:grindless:relay_matrix [F1+]"));
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
         // RenewableProcesses bootstrap/reduce_iron adds primitive reduction to the seven old routes.
@@ -117,41 +249,62 @@ public final class VerifyAtlas {
         eq("seven roast routes vent SO2", 7, so2.size());
         eq("MK2 is the assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:flux_pylon_mk2").size());
-        eq("the mill is an assembler output", 1,
+        eq("the mill is not an automatic output", 0,
                 AtlasLogic.producing(recipes, "grindless:wire_mill").size());
+        AtlasLogic.Entry assembledMill = route(allRows, "craft/wire_mill");
+        eq("the mill names the crafting table", "CRAFTING_TABLE", assembledMill.station());
+        eq("the mill exposes all eight consumed units", 8, assembledMill.inputs().size());
+        eq("the base mill displays its complete live bill and minimum F1 capacity",
+                "4x plates/iron + 2x copper_coil + machine_casing + relay_matrix [F1+]",
+                AtlasLogic.describe(assembledMill.inputs()));
+        yes("the mill displays one ordinary block output",
+                assembledMill.outputs().equals(List.of("item:grindless:wire_mill")));
+        eq("the mill invents no process cycle", 0, assembledMill.durationTicks());
+        eq("the mill invents no process draw", 0L, assembledMill.fuPerTick());
+        yes("the mill displays no unconsumed catalyst", assembledMill.catalysts().isEmpty());
+        yes("the mill's compact line distinguishes capacity from exact manufacturing",
+                AtlasLogic.line(assembledMill).contains("relay_matrix [F1+]"));
         eq("the motor is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:motor").size());
-        eq("the reactor is an assembler output", 1,
+        eq("the component motor retains its Matrix-free displayed bill",
+                "machine_casing + 2x copper_coil + rods/iron",
+                AtlasLogic.describe(route(allRows, "assemble/motor").inputs()));
+        baselineProcessControls(recipes, allRows);
+        for (String item : List.of("motor")) {
+            no(item + " has no handcraft route in either catalogue", allRows.stream().anyMatch(row ->
+                    row.station().equals("CRAFTING_TABLE") && row.outputs().contains("item:grindless:" + item)));
+        }
+        eq("the reactor is not an automatic output", 0,
                 AtlasLogic.producing(recipes, "grindless:chemical_reactor").size());
-        eq("the washer is an assembler output", 1,
+        eq("the washer is not an automatic output", 0,
                 AtlasLogic.producing(recipes, "grindless:chemical_washer").size());
-        eq("the cell is an assembler output", 1,
+        eq("the cell is not an automatic output", 0,
                 AtlasLogic.producing(recipes, "grindless:electrolysis_cell").size());
-        eq("the intake is an assembler output", 1,
+        eq("the intake is not an automatic output", 0,
                 AtlasLogic.producing(recipes, "grindless:atmospheric_intake").size());
-        eq("the well is an assembler output", 1,
+        eq("the well is not an automatic output", 0,
                 AtlasLogic.producing(recipes, "grindless:fluid_well").size());
-        eq("the induction furnace is an assembler output", 1,
+        eq("the induction furnace is not an automatic output", 0,
                 AtlasLogic.producing(recipes, "grindless:induction_furnace").size());
-        eq("the caster is an assembler output", 1,
+        eq("the caster is not an automatic output", 0,
                 AtlasLogic.producing(recipes, "grindless:caster").size());
         eq("the ingot mould is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:ingot_mould").size());
         eq("the plate mould is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:plate_mould").size());
-        eq("the flotation cell is an assembler output", 1,
+        eq("the flotation cell is not an automatic output", 0,
                 AtlasLogic.producing(recipes, "grindless:flotation_cell").size());
         eq("the magnet is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:magnetic_separator").size());
-        eq("the solar array is an assembler output", 1,
+        eq("the solar array is not an automatic output", 0,
                 AtlasLogic.producing(recipes, "grindless:solar_array").size());
-        eq("the boiler is an assembler output", 1,
+        eq("the boiler is not an automatic output", 0,
                 AtlasLogic.producing(recipes, "grindless:boiler").size());
-        eq("the condenser is an assembler output", 1,
+        eq("the condenser is not an automatic output", 0,
                 AtlasLogic.producing(recipes, "grindless:condenser").size());
         eq("the pressure pipe is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:pressure_pipe").size());
-        eq("the electric pump is an assembler output", 1,
+        eq("the electric pump is not an automatic output", 0,
                 AtlasLogic.producing(recipes, "grindless:electric_pump").size());
         eq("the industrial tank is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:industrial_tank").size());
@@ -165,7 +318,7 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:filter_manipulator").size());
         eq("the signal cable is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:signal_cable").size());
-        eq("the logic controller is an assembler output", 1,
+        eq("the logic controller is not an automatic output", 0,
                 AtlasLogic.producing(recipes, "grindless:logic_controller").size());
         eq("the redstone interface is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:redstone_interface").size());
@@ -177,9 +330,9 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:blueprint_tool").size());
         eq("the planner is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:deconstruction_planner").size());
-        eq("the scanner is an assembler output", 1,
+        eq("the scanner is not an automatic output", 0,
                 AtlasLogic.producing(recipes, "grindless:pattern_scanner").size());
-        eq("the deconstructor is an assembler output", 1,
+        eq("the deconstructor is not an automatic output", 0,
                 AtlasLogic.producing(recipes, "grindless:deconstructor").size());
         eq("matter is not produced", 0,
                 AtlasLogic.producing(recipes, "grindless:matter").size());
@@ -307,8 +460,14 @@ public final class VerifyAtlas {
         }
         yes("slag fires into that brick",
                 ids(AtlasLogic.consuming(recipes, "grindless:slag")).contains("ceramic/refractory_brick"));
-        yes("the plate die is a catalyst, not an input",
-                ids(AtlasLogic.consuming(recipes, "grindless:plate_die")).contains("press/plate/iron"));
+        for (String[] pressDie : List.of(
+                new String[]{"plate_die", "press/plate/iron"},
+                new String[]{"rod_die", "press/rod/iron"},
+                new String[]{"gear_die", "press/gear/iron"},
+                new String[]{"coil_die", "press/coil/copper"})) {
+            yes(pressDie[0] + " remains a retained Press catalyst, not a consumed input",
+                    ids(AtlasLogic.consuming(recipes, "grindless:" + pressDie[0])).contains(pressDie[1]));
+        }
 
         AtlasLogic.Entry roast = kiln.stream()
                 .filter(row -> row.id().equals("roast/iron"))
@@ -323,14 +482,94 @@ public final class VerifyAtlas {
         yes("the roast line names oxidising", line.contains("OXIDISING"));
         no("the stub line does not quote a target rate", line.contains("/min") || line.contains("machines"));
 
+        jeiProjection();
         System.out.println(failures == 0
                 ? "ALL ATLAS CHECKS PASSED"
                 : failures + " ATLAS CHECK(S) FAILED");
         System.exit(failures == 0 ? 0 : 1);
     }
 
+    private static void baselineProcessControls(List<ProcessRecipe> recipes, List<AtlasLogic.Entry> rows) {
+        for (String machine : List.of("chemical_reactor", "chemical_washer", "electrolysis_cell",
+                "atmospheric_intake", "induction_furnace", "caster", "flotation_cell", "boiler", "condenser")) {
+            String id = "craft/" + machine;
+            AtlasLogic.Entry row = route(rows, id);
+            no(id + " has no automatic final-machine counterpart",
+                    recipes.stream().anyMatch(recipe -> recipe.id().equals("assemble/" + machine)));
+            eq(id + " names the existing crafting table", "CRAFTING_TABLE", row.station());
+            eq(id + " displays all eight consumed units", 8, row.inputs().size());
+            yes(id + " displays the unchanged actual bill with physical control, independent of shape order",
+                    row.inputs().stream().sorted().toList().equals(List.of(
+                            "item:grindless:machine_casing", "item:grindless:motor", "item:grindless:motor",
+                            "tag:forge:plates/iron", "tag:forge:plates/iron", "tag:forge:plates/iron",
+                            "tag:forge:plates/iron", "item:grindless:relay_matrix [F1+]").stream().sorted().toList()));
+            yes(id + " displays only the actual fourth-role controller",
+                    row.inputs().stream().filter(input -> input.endsWith(" [F1+]")).toList()
+                            .equals(List.of("item:grindless:relay_matrix [F1+]")));
+            yes(id + " retains its one ordinary baseline machine output",
+                    row.outputs().equals(List.of("item:grindless:" + machine)));
+            eq(id + " invents no process cycle for a manual action", 0, row.durationTicks());
+            eq(id + " invents no process draw for a manual action", 0L, row.fuPerTick());
+            yes(id + " consumes the controller rather than exposing a retained catalyst", row.catalysts().isEmpty());
+            yes(id + " is discoverable for legitimate stronger control without upgrading its output",
+                    row.inputs().stream().anyMatch(input -> AtlasLogic.names(input, "grindless:relay_matrix [F2]")));
+        }
+        for (String normal : ManufacturingPolicy.manualFinalMachines()) {
+            yes(normal + " has no automatic Atlas primary/secondary output",
+                    recipes.stream().flatMap(recipe -> recipe.outputs().stream()).noneMatch(output -> output.id().equals(normal)));
+        }
+    }
+
+    private static void jeiProjection() throws IOException {
+        Path jei = Path.of("forge/src/main/java/io/github/ezequiel24123z/grindless/forge/jei");
+        String plugin = Files.readString(jei.resolve("GrindlessJeiPlugin.java"));
+        String category = Files.readString(jei.resolve("GrindlessProcessCategory.java"));
+        yes("JEI projects the live recipe graph (source contract)",
+                plugin.contains("ProcessLookup.recipes().stream()"));
+        yes("JEI projects grouped inputs into the existing physical slots (source contract)",
+                category.contains("new ArrayList<>(recipe.itemInputs())")
+                        && category.contains("MachineMenuLayout.itemSlots(menuKind)")
+                        && category.contains("addInput(slot, inputs.get(index))"));
+        yes("JEI uses the shared registered Matrix alternatives (source contract, not rendering)",
+                category.contains("ProcessLookup.matrixInputs(spec)"));
+        yes("JEI explains minimum control separately from exact physical evidence (source contract)",
+                category.contains("spec.isMinimumControl()")
+                        && category.contains("\"recipe.grindless.minimum_control\""));
+        String manual = Files.readString(Path.of(
+                "forge/src/main/java/io/github/ezequiel24123z/grindless/forge/recipe/MinimumControlIngredient.java"));
+        yes("vanilla crafting/recipe-book/JEI candidates use only the existing registered Matrix matcher (source)",
+                manual.contains("ProcessLookup.matrixInputs(requirement).toArray(ItemStack[]::new)")
+                        && manual.contains("stack != null && ProcessLookup.matches(requirement, stack)")
+                        && manual.contains("public boolean isSimple()")
+                        && manual.contains("return false;"));
+    }
+
     private static List<String> ids(List<AtlasLogic.Entry> rows) {
         return rows.stream().map(AtlasLogic.Entry::id).toList();
+    }
+
+    private static void pressure() {
+        AtlasLogic.Entry legacy = new AtlasLogic.Entry("fixture/legacy", "PRESS", MachineFamily.PRESS,
+                List.of(), List.of(), List.of(), Double.NaN, null, null, 80, 4);
+        yes("the old Atlas row constructor leaves pressure unnamed", Double.isNaN(legacy.pressureMPa())
+                && Double.isNaN(legacy.pressureHalfWidthMPa()));
+        no("an unnamed pressure is not printed as ambient", AtlasLogic.line(legacy).contains("MPa"));
+        for (double optimum : new double[] {0.0, 1.25, 0.000001}) {
+            ProcessRecipe recipe = new ProcessRecipe("fixture/pressure", MachineFamily.PRESS,
+                    List.of(IngredientSpec.item("fixture:feed", 2)),
+                    List.of(OutputSpec.item("fixture:product", 3)), Double.NaN, optimum, 0.0000001,
+                    null, null, 80, 4, List.of(), null);
+            AtlasLogic.Entry row = AtlasLogic.entry(recipe);
+            yes("Atlas retains the exact pressure optimum " + optimum, row.pressureMPa() == optimum);
+            yes("Atlas retains the exact pressure band " + optimum, row.pressureHalfWidthMPa() == 0.0000001);
+            yes("Atlas labels absolute MPa and the optimal, not hard-cutoff, band " + optimum,
+                    AtlasLogic.line(row).contains(Double.toString(optimum) + " MPa absolute (optimal +/- "
+                            + Double.toString(recipe.pressureHalfWidthMPa()) + " MPa)"));
+            yes("output lookup preserves the same pressure projection " + optimum,
+                    AtlasLogic.producing(List.of(recipe), "fixture:product").equals(List.of(row)));
+            yes("input lookup preserves the same pressure projection " + optimum,
+                    AtlasLogic.consuming(List.of(recipe), "fixture:feed").equals(List.of(row)));
+        }
     }
 
     private static AtlasLogic.Entry route(List<AtlasLogic.Entry> rows, String id) {

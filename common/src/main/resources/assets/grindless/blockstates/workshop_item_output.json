@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "grindless:block/workshop_item_output_idle" },
+    "facing=east": { "model": "grindless:block/workshop_item_output_idle", "y": 90 },
+    "facing=south": { "model": "grindless:block/workshop_item_output_idle", "y": 180 },
+    "facing=west": { "model": "grindless:block/workshop_item_output_idle", "y": 270 }
+  }
+}

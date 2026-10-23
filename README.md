@@ -31,11 +31,29 @@ particle accelerator, out past orbit, and on to that black hole. Arriving is the
 > prototype/test infrastructure, not an Industrial shortcut. The current revision-bound evidence
 > is in [the validation record](docs/testing/latest-validation.md).
 >
-> **Active development:** `1389ebb` is the T0 engineering candidate. The next deliverable is
+> **Active development:** `1389ebb` is historical engineering evidence; the installed
+> original T0 experience candidate F (`298988d`) is preserved. The native FTB
+> correction `dd0b4bc` is installed in a separate owned Prism instance with a
+> verified pristine copy of that game; real owner/client acceptance remains open.
+> The release target is
 > the first **T0 Playable Release Candidate**: a curated, configured and versioned pack with
 > deliberate Superflat progression, real sprite/art and sound passes, coherent quests and
 > forward-save compatibility. Existing S2, runtime, UI and packaging proofs are reused within
-> their limits; they do not already establish that product. T0 is the only active tier.
+> their limits; they do not already establish that product. The owner's
+> [longitudinal-readiness investigation](docs/testing/t0-longitudinal-readiness.md)
+> distinguishes actual save/update gaps from missing client observations. Campaign
+> acceptance is an outcome of real play, not a prerequisite to beginning it.
+> ADR-0168 separately opens isolated T1 development; it is not a T1 deployment.
+> ADR-0170 establishes the ongoing loop: the owner starts intended longitudinal
+> T0 play, T1 development/research continues, reported blockers are fixed first,
+> and final T0 conclusions drive polish. Actual observations/acceptance are not
+> inferred from that start instruction; the installed game is not updated live.
+> ADR-0173 now explicitly opens isolated development/research of the remaining
+> tiers alongside T1 while the native questbook is delivered. This is not
+> acceptance, release or permission to add later-tier code to the player's T0 game.
+> ADR-0174 clarifies the content contract: basic machine families start at T1;
+> later tiers upgrade real capabilities and add exponentially broader production
+> networks/content and specialized multiblocks. The first factory is not all T1.
 > Sol 6.1 has received checkpoint17ae8b0 in its clean isolated coordinator (ADR-0147);
 > decisions and integration follow the [active handoff](.agent/handoff.md).
 > **Execution is SSH-first (ADR-0151):** this conversation stays local; heavy work runs
@@ -103,7 +121,7 @@ and the [current gaps and execution plan](plan/process-t0-playable-release-1.md)
 - [Energy: Flux Units](#energy-flux-units)
 - [Processing chain](#processing-chain)
 - [Progression: Control Matrices and research](#progression-control-matrices-and-research)
-- [Fabrication: the factory builds the factory](#fabrication-the-factory-builds-the-factory)
+- [Fabrication: industrial supply and manual machine assembly](#fabrication-industrial-supply-and-manual-machine-assembly)
 - [Containers: buffers, filters and voiding](#containers-buffers-filters-and-voiding)
 - [Block and item catalogue](#block-and-item-catalogue)
 - [Compatibility strategy](#compatibility-strategy)
@@ -796,7 +814,7 @@ points on that curve is a different resource with a different job:
 | **Supercritical water** | >374 °C, >22 MPa | reactor primary loop | carries several times the heat per unit volume |
 | **Ore slurry** | ambient, dense | Pulverizer fed with water | the wet processing line |
 | **Leachate** | corrosive | Chemical Washer | strips byproducts; destroys the wrong pipe |
-| **Etching acid** | corrosive | Chemical Washer | circuit boards — see [Fabrication](#fabrication-the-factory-builds-the-factory) |
+| **Etching acid** | corrosive | Chemical Washer | circuit boards — see [Fabrication](#fabrication-industrial-supply-and-manual-machine-assembly) |
 | **Ultrapure water** | ambient, filtered | Cryogenic Plant, Vacuum Furnace | integrated circuits, crystal growth |
 | **Coolant** | cryogenic | Cryogenic Plant | reactor loops, superconductors |
 | **Liquid oxygen / nitrogen** | cryogenic | air separation | rocket fuel, cryo lines, life support |
@@ -884,7 +902,7 @@ Two hooks make fluids load-bearing rather than decorative, and both are delibera
    materially better yields and recover byproducts that the dry line simply loses.
 2. **Each frontier consumes fluid-made components.** T2 pumps need polymer seals, T4 controllers
    need etchant and ultrapure water, and later matrices need cryogens, plasma media and life-support
-   loops. That is the [fabrication](#fabrication-the-factory-builds-the-factory) rule.
+   loops. That is the [fabrication](#fabrication-industrial-supply-and-manual-machine-assembly) rule.
 
 Neither hook is a wall. The dry chain keeps working forever, so a player who hates plumbing is
 slowed, never stopped.
@@ -1422,11 +1440,18 @@ Old routes remain valid. New architectures trade greater infrastructure for lowe
 larger batches or higher throughput. A higher-rated matrix can substitute for a lower one,
 but is rarely economical.
 
+The source implementation separates minimum **controller capacity** from exact
+**manufacturing evidence** (ADR-0176). Only an explicitly declared minimum input
+may use a stronger legitimate Matrix; existing exact predecessor/output and
+quest/reward predicates do not become inequalities. Using costlier control
+stock in a baseline machine does not upgrade that machine. This new1ee2e73 role
+is integrated for qualification, not proved by the completed M Blueprint run.
+
 | Tier | Theme | Braided progression and signature scale |
 | --- | --- | --- |
 | **T0 — Bootstrap** | Escape velocity | A connected workshop and mod-owned geological/biological source base culminate in physical calibration and the manual five-F1-Matrix exit. |
-| **T1 — Voltaic** | First factory | Milling, reduction, renewable glass/silica, ceramic insulation, coils and thermal power culminate in the Assembler and T2 Relay Matrix. |
-| **T2 — Industrial** | Closed loops | Steel and wet beneficiation feed sulfur, electrolysis and resin loops; motors, discrete control, steam and solar turn them into a multi-line factory. |
+| **T1 — Voltaic** | Basic machine families | The first milling/reduction/forms/power/Assembler factory expands into baseline ordinary processing families. Early F2 manufacture is an increment, not proof that all T1 lines are complete. |
+| **T2 — Industrial** | Expanded closed loops | Upgraded family capabilities braid steel/wet beneficiation, sulfur, electrolysis/resin, control and power into a broader integrated factory rather than withholding every first basic machine. |
 | **T3 — Arc** | Powered construction | Refractories, hot metal, Arc Cells and industrial control feed the Arc Reactor and Construction Drones. |
 | **T4 — Precision** | Purity and control | Pressure chemistry, ultrapure water, electronic silicon, lithography and the Research Station produce Integrated Matrices and reusable advanced patterns. |
 | **T5 — Nuclear** | Designed cores | Fuel chemistry, isotope cascades, reactor alloys and radiation-hard control converge in parametric fission. |
@@ -1441,9 +1466,10 @@ but is rarely economical.
 | **T14 — Galactic** | Self-expanding industry | Antimatter, singularity power, distributed computation and abstract replication reach Type III. |
 | **T15 — Event Horizon** | The galactic centre | Relativistic shielding, final navigation and galactic power reach Sagittarius. Arrival is victory; black-hole exploitation is postgame. |
 
-Later tiers are approximately longer and contain more meaningful content than earlier ones.
-The growth is in interacting routes, conditions, logistics and projects — never merely larger
-stacks or longer timers. Automation grows with the burden: Assembler, Process Cards,
+Later tiers must grow exponentially in meaningful complexity, processing lines
+and content (ADR-0174). The growth is in branching/interacting routes, conditions,
+logistics and projects — never merely larger stacks or longer timers. This is
+not an arbitrary recipe-count multiplier. Automation grows with the burden: Assembler, Process Cards,
 construction drones, Assembly Fields, abstract colonies and self-replicating infrastructure.
 
 The old **Research Terminal** is not discarded. At T4 it becomes the **Research Station**:
@@ -1474,7 +1500,9 @@ survival or sustainability gate. See the [T0 contract](docs/tiers/t0.md) and
 
 ### Mechanical tier gate
 
-Development closes one tier completely before opening the next (ADR-0108). A tier is complete only
+Tier acceptance and release remain sequential (ADR-0108/0144); the owner's later
+ADR-0173 explicitly opens isolated development of later tiers before earlier
+human acceptance. A tier is complete only
 when a survival player can enter from the previous frontier, run every required material, chemical,
 control and energy line, automate the machines and logistics, handle byproducts and normal failure
 states, and manufacture the next Control Matrix or terminal objective without commands or hidden
@@ -1542,29 +1570,91 @@ stage with its conditions, times and ratios, and the twenty routes they compose 
 
 ---
 
-## Fabrication: the factory builds the factory
+## Fabrication: industrial supply and manual machine assembly
 
-In Factorio you never hand-craft a factory. You hand-craft the first burner drill, and from then
-on the factory produces everything else, including itself. That loop is the entire reason the game
-is compelling, and almost every Minecraft tech mod throws it away by letting the player assemble a
-fusion reactor in a 3×3 grid from a full inventory.
+Grindless aims for increasingly complex, futuristic industrial networks, not
+universal factory self-replication. The owner's current rule (ADR-0188) is:
 
-The single most important structural rule in Grindless:
+> **Automate materials and components. Assemble normal machines manually.**
 
-> **Past the bootstrap, machines are not crafted. They are manufactured.**
+Normal machines still automate their operating processes. The final
+construction of an ordinary Assembler, Press, generator or similar standalone
+machine is a deliberate player action using its real industrial components.
+An inventory of raw ingots must not bypass the processing lines that produce
+those components. Higher tiers deepen those lines, conditions and dependencies,
+not the rate at which a factory prints complete normal machines.
+
+Actual multiblock controllers may be manufactured in Assemblers or later
+multiblocks. Other products follow their actual recipe modes: manual-only,
+machine-only or both. Infrastructure such as belts, pipes, tanks and storage
+may support manual and machine manufacture, but no universal dual-recipe rule
+is implied. An available automated route is an option, not an obligation for
+the player to automate it.
+
+When the owner is unavailable, unresolved design questions default to relevant,
+verified GregTech or comparable technical-modpack precedent. Adapt it to
+Grindless's actual authorities and record the decision; explicit owner choices
+such as manual normal-machine assembly still take precedence. Inspiration is
+not an instruction to copy every external recipe or automate every product.
+
+A structural casing, circuit, Motor, Matrix or upgrade module is a
+component; a complete functional normal machine is not made a component merely
+by changing its name. Blueprint/drone placement may consume already-owned
+machines without manufacturing them.
+
+T1 introduces the ordinary basic machine families, not only the five machines
+of its initial factory increment (ADR-0174). Later tiers improve those families'
+real capabilities and add specialized multiblocks. Existing prototype-era labels
+must not be mistaken for a rule withholding every basic machine until T2+.
+Chassis marks widen condition envelopes and enable new recipes while modules tune
+trade-offs; use the in-place identity/store-preserving design in
+[MACHINES](docs/MACHINES.md#chassis-marks-and-upgrades), not identical machines
+with a higher ingredient price. The mapping is a design contract, not a claim
+that every family or upgrade is already implemented.
 
 | Tier | How you obtain the machine |
 | --- | --- |
-| **T0** | Crafting table and a limited Assembly Bench for Bootstrap/four vanilla basics. The Bench does not make a Relay Matrix. |
-| **T1** | Crafting table or Press. Every active processing, generation or extraction machine consumes a T1 Relay Matrix; passive grid, storage and transport infrastructure does not. The first five-Matrix batch builds the Thermal Generator, Pulverizer, Arc Furnace, Press and Assembler, which then automates the same batch. |
-| **T2–T8** | **Assembler** and specialised fabricators — physical Control Matrix, components, FU and time. |
-| **T9** | **Quantum Assembler** — long component chains and programmable matter resolved in one plant. |
-| **T10–T12** | **Orbital Assembly Bay** and **Assembly Field** — vacuum, zero gravity and blueprint-scale construction. |
-| **T13–T15** | Distributed Assembly Fields — systems manufacture and deliver megastructure sections rather than individual blocks. |
+| **T0** | Manual first machines; the bounded Bench may produce allowed components/basic crafts or genuine multiblock controllers, never ordinary-machine copies. The first Relay Matrix remains manual. |
+| **T1** | Manual final machines from real components/control. The five-Matrix batch funds the first Thermal Generator, Pulverizer, Arc Furnace, Press and Assembler; the Assembler reproduces Matrices/components, not those five machines. |
+| **T2–T8** | Manual final normal machines from increasingly specialized industrial components; Assemblers/fabricators may produce those components and actual multiblock controllers. |
+| **T9** | Quantum manufacturing supplies advanced components and eligible controllers; ordinary final-machine assembly remains manual. |
+| **T10–T12** | Orbital/field processing supplies specialized components, controllers and structural sections under real environmental constraints. |
+| **T13–T15** | Distributed production and construction of enormous systems; no automatic normal-machine output is implied. |
 
-A machine above T1 has **no crafting-table recipe at all**. Not a hidden one, not a deliberately
-expensive one — none exists. The only way to obtain it is to run the process, which means owning
-and feeding a production line.
+These are product boundaries, not claims that every later-tier line exists.
+The older no-hand-crafting-above-T1 rule is superseded. Existing valid passive
+infrastructure recipes remain unless their individual design requires a change;
+neither universal Assembler-only production nor a manual duplicate of every
+automatic recipe follows from this policy.
+Installed machines and paid progress are not removed by a manufacturing-policy
+change. Runtime recipe retirement and save compatibility must be qualified
+before any owner update.
+
+### Assembler target selection
+
+**Development source, not the installed T0 build:** the Assembler's
+**Assembly target** panel lets you search output names or IDs and select a
+named recipe before loading its JEI ingredients. This remains useful for
+component and eligible-controller recipes sharing inputs; ordinary machine
+targets are absent from the corrected development source under ADR-0188.
+**AUTO (from inputs)** deliberately keeps
+the legacy input-based choice; it does not guarantee the output you intended.
+
+The selected recipe still needs its actual inputs, fluids, power, conditions
+and output space. An unavailable target waits rather than substituting another
+output. Switching retains paid work under its original recipe ID; a still-valid
+target can resume that work when its requirements are met. A retired target's
+credit stays retained and unavailable, not transferred or automatically refunded.
+This is not the full Process Card or chassis-upgrade
+system. See the current source-bound qualification limits in the
+[validation ledger](docs/testing/latest-validation.md); native completion and
+rendered usability must not be inferred from these instructions.
+
+The Assembly Bench likewise holds positive paid work when its owner recipe is
+unavailable and displays that retained owner/balance. Supplying another valid
+recipe must not clear the old credit. This development safeguard is not an
+instruction to modify a save or a claim that the actual player's old jobs
+have been migrated; copy-based pre-deployment inspection remains required.
 
 ### Components — the intermediate economy
 
@@ -1706,10 +1796,10 @@ needed to manufacture it.
 | --- | --- | --- |
 | Arc Furnace | T1 | Smelting. |
 | Pulverizer | T1 | Ore → dust. |
-| Chemical Washer | T2 | Purification and byproducts. |
+| Chemical Washer | T1 basic; expanded T2 duty | Baseline family, then wider purification and byproduct lines. |
 | Assembler | T1 | Multi-ingredient crafting. |
 | Lithography Unit | T4 | Wafers, masks and Integrated Matrix batches. |
-| Centrifuge | T5 | Isotopes, enrichment, deuterium. |
+| Centrifuge | T1 basic; specialized T5 duty | Baseline separation is distinct from isotope/enrichment cascades and deuterium production. |
 | Cryogenic Plant | T6 | Deep liquefaction and superconductors. |
 | Fusion Reactor support plant | T7 | Fuel cleanup and blanket processing. |
 | Particle Accelerator (multiblock) | T8 | Transmutation, exotics and sample irradiation. |
@@ -2002,7 +2092,7 @@ Summarised here; each one is recorded in full — with the alternatives that wer
 | Mojmap + Parchment mappings | Readable names, permissively licensed, standard on 1.20.1. |
 | Fluids carry temperature and pressure | The same substance in different states is a different resource; closing a heat loop becomes a layout puzzle instead of bookkeeping. |
 | Pipes early, Phase Network late | Same trade as belts versus drones: pay in layout or pay in power, never forced to switch. |
-| Machines above T1 cannot be hand-crafted | The factory builds the factory. Closes the full-inventory bypass that makes tech mods trivial in big packs. |
+| Normal machines have manual final assembly | Complex industrial components gate construction; factories process materials/components and eligible multiblock controllers, not ordinary machines in bulk (ADR-0188). |
 | One container contract, auto-void off by default | Learn the interface once; the release valve a tag-driven system needs must never silently delete things. |
 | Conduits cost power, belts do not | Keeps belts correct for bulk forever, so the universal network never deletes the best part of the mod. |
 | Named conduit networks, not coloured channels | Sixteen colours stop being readable long before a base stops growing. |
@@ -2138,7 +2228,8 @@ and only happens once.
 
 The Forge 1.20.1 repository contains systems spanning T0–T2 and later travel/world prototypes.
 Their implementation and historical smoke coverage are not acceptance of an Industrial or
-space-era survival campaign. **T0 is the only active tier; no tier is accepted.**
+space-era survival campaign. **T0 is the installed playable candidate; isolated T1
+development is owner-authorized, and no tier is accepted.**
 
 **Historical prototype claim:** the earlier roadmap described automated iron in under fifteen
 minutes without hand-mining. That statement is not a current source-bound playtime measurement
@@ -2222,6 +2313,20 @@ one.
 ---
 
 ## Implementation plan
+
+The owner's current execution mandate (ADR-0178) is continuous independent
+development, qualification and safe delivery: incorporate every genuinely ready
+whole tier into the same longitudinal game, not a fresh save. Routine checkpoints
+do not end that programme. Deploy only while the owned game is stopped, after
+verified backup/applicable copy-compatibility and managed-file guards; never
+interrupt play. Partial increments remain partial, and human acceptance/public
+release are separate. Escalate only serious blockers or urgent owner decisions.
+
+ADR-0188 supersedes automatic final-normal-machine reproduction in historical
+rows below. Its source/proof history remains valid for what was actually tested,
+not an accepted gameplay goal or permission to deploy the obsolete recipes.
+Other products keep deliberate manual-only, machine-only or dual methods;
+automation capability does not require the player to automate everything.
 
 Historical completions below are source-scoped, not current-WIP acceptance. The active
 [work plan](.agent/work-plan.json) permits renewable implementation and production auditing
@@ -2327,6 +2432,31 @@ is preserved and integration/release gates still control acceptance.
 | 56 | **Fresh-Superflat starter quest** | implemented/qualified/deployed747 under ADR-0159 — first quest FREE with generous finite supplies in11 legal stacks, initial book recovery, one ledger and complete native delivery; full inventory defers without drops/partial claim. Both projections preserve old25 IDs/progress. Actual common/Forge/Heracles454/Quest421/Claims206/persistence/sustainability/guidance, canonical parity, package88, production boot and same-JAR deployment pass. [Proof boundaries](docs/testing/t0-starter-kit.md); real player interaction remains human, no village/shop/new worldgen debate |
 | 57 | **Clay Mixer wet-work integration** | qualified/deployed747:2 real ElevenLabs200 candidates, technicalA normalized mono44100/3s, exact Ogg2c052c; Quern811b unchanged. One tracker/one loaded9-chunk scan, passive TANK feedback corrected. Offline sound and actual PC audio84/full-assets, exact archive, production registry boot and same-artifact deployment pass. Human listening/1–8-machine mix remains pending |
 | 58 | **Testing-ready main and PR cleanup** | ADR-0160 delivery —747 is technically qualified/deployed and all16 hosted jobs pass. The [consolidation PR](https://github.com/Ezequiel24123z/grindless-earlygame/pull/55) records live main/cleanup state; all13 old heads are preserved, branches/worktrees retained. Proof-only documentation reuses unchanged runtime inputs. No forced merge, invented RC, T0 acceptance/freeze or T1 activation |
+| 59 | **T0 experience before longitudinal play** | implemented and [deployed exact F](docs/testing/t0-experience-prism-deployment.md):46 quests/32 T0/14 gated T1, shared six-port teaching, Guide migration,17 barter offers, tank/hatches, optional F8 inspection, physical sound and deterministic visual presets. [Phase A](docs/testing/t0-experience-source-qualification.md) full52/Heracles776 and [Phase B](docs/testing/t0-experience-package-native.md) ports2088/package88/native26 pass. DevDeploy/Inspect/idempotency and six old files/two launcher metadata hashes pass. Hosted F CI is recorded separately. Required graphical gate BLOCKED; no longitudinal campaign, T0 acceptance/freeze, RC or T1 activation |
+| 60 | **Parallel T1 first-factory development** | Bounded increment qualified in published M0a676fe — [plan](plan/feature-t1-first-factory-1.md), [line map](docs/tiers/t1-development-map.md), [reusable-system handbook](docs/architecture/reusable-systems.md). Actual426 normal writers/independent CheckOnly, canonical rechecks and FTB50/pack contracts pass; exact outputs enter M through A85069. Original ef9/523b evidence remains source-bound; not complete T1 or deployed |
+| 61 | **Longitudinal-start readiness** | [source-bound investigation](docs/testing/t0-longitudinal-readiness.md): fresh read-only Inspect confirms installed F/95bf/3e5a; no client log/options/world observed. Separate missing client save/reopen proof and baseline/update delivery from a real unused vein-version pin. Do not demand a completed T0 campaign before its first reference world or claim an unobserved client pass |
+| 62 | **Longitudinal play / development feedback loop** | ADR-0170 — owner-authorized intended T0 game, parallel T1 route/machine/component/line research and development, priority fixes for reported play blockers, then T0 polish from final feedback. Preserve the reference save and stopped-game update boundary; no invented pass, automatic T1 deployment or T2 activation |
+| 63 | **Native quest framework and concise content** | ADR-0171 — genuine native FTB and short JEI-first goals preserve46 IDs/paid history. Exact dd0/JAR29bc/ZIP79ce installed; actual save clone loads/stops, retired Heracles IDs are metadata-only, and pristine36-file world/options copy passes Inspect in Grindless-T0-FTB-Dev. Original F/backup stay intact; owner login/GUI/JEI/rewards and T0 acceptance remain human observations |
+| 64 | **Recurrent T1 component automation** | ADR-0172 — source2f4eee1 adds ordinary Assembler casings/Flux Cells, manual-equivalent material batches and existing timing/FU. Manual bootstrap, four slots, F1/F2 ratings and executor/NBT stay intact. Included through426/A85069 in M; actual contracts and normal model gates pass. [Inventory/references](docs/tiers/t1-development-map.md) retain establishment/prototype limits; not deployed |
+| 65 | **Parallel later-tier development** | ADR-0173/0174 — owner opens development throughT15 alongside T1; basic families start atT1. [Current T1 map](docs/tiers/t1-development-map.md) distinguishes actual G3/A3 results, frozen G4 changed proofs and remaining family/finite-custody work; [pinned mechanism research](docs/design/t1-external-references.md) is prior art, not accepted gameplay. No later-tier player deployment, acceptance or release is inferred |
+| 66 | **Basic families and growing tier complexity** | ADR-0174 — F1 Wire Mill and optional four-route forming do not gate firstF2. Exact CI contracts and actual426 normal Guidance/Economy/T1 writers, independent CheckOnly and three former red suites pass; four exact outputs merge asA85069 ancestry. [Concrete Forge upgrade comparison](docs/design/t1-external-references.md#concrete-upgrade-transfer-comparison) rejects replacement-BE imports for the same-object contract. No MK2, whole-T1 or installed update |
+| 67 | **Optional process-pressure contract** | [ADR-0175](docs/DECISIONS.md#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts) — optional absolute optimum/half-width, existing evaluator, consistent Atlas/audit/inspection/JEI and strict schema1/2. Actual compilation/contracts and normal model gates pass; no new production pressure recipe, client observation or tier acceptance |
+| 68 | **Bounded Blueprint preflight** | Source4550+d073 qualified on exact M0a676fe: new Blueprint/Planner contracts and one real Forge capture/stamp/refusal/refund interaction pass1,182 assertions, harness/server0 and natural save/stop. Relocated BE stock is protected and permissions are checked per target. [Source-bound evidence and both CI outcomes](docs/testing/latest-validation.md#integrated-development-source); no drones/global rollback/client acceptance or installed update |
+| 69 | **Explicit controller capacity** | ADR-0176 — minimum-control/registered alternatives/F1+ views and strict inspection schema3 preserve exact evidence. Actual7c55 contracts/A3 models and G4 native19/19/PASS1/FAIL0/89/natural stop/server0 by harness are parent-verified. Original18/19 red preserved; no chassis kit, envelope rebalance or player update |
+| 70 | **Managed native quest-definition updates** | ADR-0177/0181 — actual G4 managed201/reference/native/package custody and G5 CURRENT dry-run/fresh compiler/plan/DefinitionsUpdated→same-plan Unchanged are parent-verified.24 target files/mtimes/backups and16 protected files stable; safe leaseback, only stopped fictitious988/50/50. Original reds retained; no player update |
+| 71 | **Automatic retained-tool reproduction** | Source63142dd+5b359a5: four existing Press dies reproduce with exact manual materials/output. Manual dies seed forming; optional `tool_reproduction` follows assembly without a first-F2 dependency. Actual7c55 contracts and normal A3 projections pass. No new items, wear, bill, native engine or whole-T1 readiness |
+| 72 | **First-factory machine reproduction** | ADR-0179 — Pulverizer, Arc Furnace, Press and Assembler reproduce with manual-equivalent materials, explicit F1+ control and ordinary outputs. Actual7c55 contracts and normal A3 projections pass; corrected shared native proof remains pending. Thermal's five-group boundary is separately resolved by row73, not a slot expansion or complete-tier claim |
+| 73 | **Complete thermal reproduction** | ADR-0180 — two-stage core/final operation preserves manual bill/seed,400tick/32FU each and owned textures. Actual7c55 registration/assets/contracts/A3 data, corrected G4 native and5aa JDK34/22EOL custody pass. Original reds preserved; no new PNG/provider, slot change, chassis upgrade or ready-tier acceptance |
+| 74 | **Optional baseline wet processing** | ADR-0182 — actual41df normal writers/CheckOnly/canonical checks and29/38 images verified; normal A726e has only three changed payloads and unchanged Guidance. G7 boot proves ready51 linkage, not Washer acquisition: same-bill Assembler shadowing is corrected separately under ADR-0185. No complete-T1/player pass |
+| 75 | **Known native catalogue lineage** | ADR-0183 — G7 actual new publisher against authentic46/50, backend234/2788, ready51/package/current plan67c and managed50-to51/same-plan no-op verified through339 custody. Recovered original CI5 is verified; its two old equality reds stay historical. Fictitious26e/51 stays stopped; no player/human acceptance |
+| 76 | **Physical default-F1 model identity** | ADR-0184 — source57/4ee and actual G831/41, changed authority/display fixtures, normal writers/independent checks/canonical proof and239 custody verified; normal A8dee preserves all four payload bytes. No runtime predicate/bill/seed/reward change, renderedGUI or finite-T1 acceptance |
+| 77 | **Reachable Assembler outputs** | ADR-0185 — actual G10/a54 compile/UI1297/Persistence/one native1028/19/normal models31-41 and278-file custody independently verified; normal A9bb3/four exact writer payloads integrated. Original source reds stay red; native menu carriers are not actual client-wire/rendered/owner-world or whole-tier acceptance |
+| 78 | **Baseline process-family controllers** | ADR-0186 — nine explicit minimum-F1 fourth groups/exactfifteen-role contract preserve old bills/FU/time/output/passive/Motor/seed/F2 and selector guards. G10 verifies combined representative native/normal models/A9/custody; no per-family runtime, real chassis upgrade or whole-tier claim |
+| 79 | **Finite first-factory continuation** | ADR-0187 — G13 on489 executes564 funded batches through actual Press/F1/F2; manual actions remain178 under the inherited665 budget. Actual43/98 write/check provenance and343-file custody verified; G14 closes the corrected conservation/canonical checks. Conditional engineering proof, not autonomy/whole-tier/world acceptance |
+| 80 | **Manual normal-machine manufacture** | ADR-0188 — bounded implementation/qualification complete: G11 native, G13 finite/writer/check/43-98 and G14 R36/T0/T1/115-file custody verified. Normal A10d668/exact317 integrated ata792 with original489 bytes intact. No owner update or whole-T1 acceptance |
+| 81 | **Retired paid Bench ownership** | ADR-0189 — exactf1b9 UI1128/Persistence and native1273/19/JAR/custody verified, with no ledger/schema/refund. Native carriers do not prove actual client-wire/GUI/owner-save compatibility |
+| 82 | **Optional T1 gas utilities** | ADR-0190 — bounded engineering complete: G15 fuel/content proofs plus G16 exact52 backend/TEMP host contracts, normal45/103 models and402-file/recovery QA verified. Byte-exact A11cf66/exactfb846 integrated at43fbb. Old51 IDs/rewards and firstF2 preserved; no player update, actual Minecraft52, upgrade-energy or whole-T1 acceptance |
+| 83 | **Installed T0 world-entry hotfix** | ADR-0191 — reviewed isolatede50/exactdd0 verifies after the HIGH framework bridge at LOWEST, with identity-bound readiness and order regressions. Qualification and stopped/backup/copy-compatible delivery pending; development also carries the fix. No world reset or later-T1 deployment |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2353,7 +2483,8 @@ checks, documentation and 39 smoke scenarios. That historical statement is not e
 new checkout; see the revision-bound [current validation](docs/testing/latest-validation.md).
 The repository contains implementation inventory extending through T2, including extraction,
 logistics, fluids, fabricated machines, tools and matter scanning. Those systems and later
-prototypes are not accepted T1/T2 survival progression; T0 is the only active tier.
+prototypes are not accepted T1/T2 survival progression. T0 remains the installed
+candidate; parallel T1 source development is separately authorized by ADR-0168.
 
 Luna, the Drift, the survey rocket, the supraluminal station, Sagittarius and the original quest
 book remain implemented in the repository; historical tests are not current campaign acceptance.
@@ -2409,7 +2540,13 @@ mark a box of at most 32 on an edge. The mark stays on the item. The tool
 does not break blocks. The Multitool relocate is still the pickup. The Blueprint Tool is in
 (ADR-0085): Assembler-manufactured from visible components. Two corners
 capture a box of at most 32 on an edge and 512 blocks. The blueprint keeps
-facing and drops status. Stamping spends the inventory, all or nothing.
+facing and drops status. Stamping uses the player's inventory, not the network.
+Source4550b97 adds read-only loaded-cell, permission and full-material preflight:
+ordinary missing-material or blocked-cell refusal spends nothing. If later
+placement fails, already placed cells remain; unused materials are returned.
+A throwing callback is ambiguous and its attempted cell may remain paid.
+This is not global rollback or universal zero loss. The new capture/stamp path
+is unqualified source; the old item-existence smoke is not interaction proof.
 Drones still wait. The Flux Drill and the Drill Cell
 are in (ADR-0084): Assembler-manufactured from visible components. The
 drill spends 32 FU a block and holds two cells of 3,200 FU. Sneak-use cycles

@@ -25,9 +25,9 @@ public record SustainabilityAnnotations(Map<Resource, ResourceMetadata> resource
         ledger = sortedMap(ledger);
     }
 
-    /** The seven ADR-0131 resource classes. */
+    /** ADR-0131 supply classes plus ADR-0188's explicitly nonrenewable durable manual capital. */
     public enum ResourceClass {
-        BOOTSTRAP, RENEWABLE, CLOSED_LOOP, CATALYTIC, LOSSY_LOOP, FINITE_OPTIONAL,
+        BOOTSTRAP, MANUAL_CAPITAL, RENEWABLE, CLOSED_LOOP, CATALYTIC, LOSSY_LOOP, FINITE_OPTIONAL,
         FORBIDDEN_DEPENDENCY
     }
 

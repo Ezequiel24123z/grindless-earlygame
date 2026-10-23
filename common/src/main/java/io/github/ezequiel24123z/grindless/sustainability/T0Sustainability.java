@@ -3,7 +3,9 @@ package io.github.ezequiel24123z.grindless.sustainability;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.recipe.BootstrapProcesses;
 import io.github.ezequiel24123z.grindless.recipe.BootstrapRecipes;
+import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
 import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
+import io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy;
 import io.github.ezequiel24123z.grindless.recipe.RenewableProcesses;
 import io.github.ezequiel24123z.grindless.research.ResearchLogic;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
@@ -101,6 +103,8 @@ public final class T0Sustainability {
         unlock(policies, "craft/relay_matrix", false);
         REQUIRED_QUESTS.forEach(id -> unlock(policies, "quest/" + id, false));
         OPTIONAL_QUESTS.forEach(id -> unlock(policies, "quest/" + id, true));
+        policies.put("assemble/thermal_generator_core", new RoutePolicy(1, true, Set.of()));
+        policies.put("craft/thermal_generator_from_core", new RoutePolicy(1, true, Set.of()));
 
         Map<String, Machine> machines = new TreeMap<>(sourceFacts.machines());
         machines.put("CRAFTING_TABLE", new Machine("CRAFTING_TABLE", item("minecraft:crafting_table"), 0));
@@ -143,11 +147,51 @@ public final class T0Sustainability {
         renewable.put(item("grindless:slag"), "bootstrap/reduce_copper");
         for (Route route : snapshot.routes().values()) {
             if (MachineFamily.ASSEMBLY_BENCH.name().equals(route.family())) {
-                route.retainedOutputs().keySet().forEach(resource -> renewable.putIfAbsent(resource, route.id()));
+                route.retainedOutputs().keySet().stream()
+                        .filter(resource -> !ManufacturingPolicy.isManualFinalMachine(resource.id()))
+                        .forEach(resource -> renewable.putIfAbsent(resource, route.id()));
             }
         }
         renewable.forEach((resource, route) -> metadata.put(resource, new ResourceMetadata(ResourceClass.RENEWABLE,
                 null, used.contains(resource) ? 0 : null, 0, route, List.of(), null, null, null, null)));
+        Set<Resource> capitals = new TreeSet<>();
+        machines.values().forEach(machine -> capitals.add(machine.construction()));
+        for (Route route : snapshot.routes().values()) {
+            RoutePolicy policy = policies.get(route.id());
+            if (policy != null && Integer.valueOf(0).equals(policy.unlockTier())) {
+                // Some durable normal blocks (for example transport/extraction equipment) are
+                // quest subjects rather than a process-family construction binding.
+                capitals.addAll(route.retainedOutputs().keySet());
+            }
+        }
+        for (Resource capital : capitals) {
+            if (capital.kind() == Kind.ITEM && capital.rating() == 0
+                    && ManufacturingPolicy.isManualFinalMachine(capital.id())) {
+                // Select the actual existing manual authority, never invent a construction bill.
+                String id = "craft/" + capital.id().substring(capital.id().indexOf(':') + 1);
+                Route craft = snapshot.routes().get(id);
+                if (craft == null || craft.automatable() || craft.oneShot()
+                        || !craft.retainedOutputs().containsKey(capital)) {
+                    // External capital can use its already allowlisted vanilla authority. In
+                    // particular the Furnace is vanilla/minecraft:furnace, not craft/furnace.
+                    craft = snapshot.routes().get("vanilla/" + capital.id());
+                }
+                String canonical = craft != null && !craft.automatable() && !craft.oneShot()
+                        && craft.retainedOutputs().containsKey(capital) ? craft.id() : null;
+                metadata.put(capital, new ResourceMetadata(ResourceClass.MANUAL_CAPITAL, null, 0, null,
+                        canonical, List.of(), new Handling(Action.STORE, true, false, null, null), null, null, null));
+            }
+        }
+        Machine firing = machines.get(MachineFamily.FIRING_CHAMBER.name());
+        if (firing != null) {
+            // The allowed automatic controller recipe consumes a manually supplied Furnace.
+            // It establishes finite installed capital, not unlimited controller-item supply.
+            // Its operating ceramic/metal routes can still be renewable after construction.
+            Resource controller = firing.construction();
+            metadata.put(controller, new ResourceMetadata(ResourceClass.BOOTSTRAP, null, 0, null,
+                    renewable.get(controller), List.of(), new Handling(Action.STORE, true, false, null, null),
+                    null, null, null));
+        }
         Resource grog = item(BootstrapProcesses.GROG);
         metadata.put(grog, new ResourceMetadata(ResourceClass.RENEWABLE, SideStreamClass.BYPRODUCT_CURRENT,
                 0, 0, renewable.get(grog), List.of(), new Handling(Action.REUSE, true, false, null, null),
@@ -171,9 +215,13 @@ public final class T0Sustainability {
             metadata.put(resource, new ResourceMetadata(ResourceClass.BOOTSTRAP, null, 0, null,
                     null, List.of(), null, null, null, null));
         }
-        Resource exit = item(QuestCatalogue.byId("relay").subject());
+        Resource exit = snapshot.objectives().get(QuestCatalogue.T0_COMPLETION).subject();
         metadata.put(exit, new ResourceMetadata(ResourceClass.BOOTSTRAP, null, 0, null,
                 "craft/relay_matrix", List.of(), null, null, null, null));
+        metadata.put(item(FabricationLogic.THERMAL_GENERATOR_CORE), new ResourceMetadata(null, null, 1, null,
+                "assemble/thermal_generator_core", List.of(), new Handling(Action.STORE, true, false, null, null),
+                null, null, "Assembler component consumed by manual craft/thermal_generator_from_core. "
+                + "Its Furnace input needs manual capital supply; an automatic core recipe is not automatic net renewable supply."));
         for (Terminal terminal : snapshot.terminals().values()) {
             if (terminal.kind() == TerminalKind.ENVIRONMENT && terminal.unlockTier() == 0
                     && Set.of("environment/water_source", "environment/geological_bed",

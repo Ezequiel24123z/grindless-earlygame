@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "scope": "two-existing-fixed-T0-workshop-structures",
+  "authority": "common/src/main/java/io/github/ezequiel24123z/grindless/structure/WorkshopPortContract.java",
+  "projection_checked_by": "VerifyWorkshopPorts",
+  "source_baseline": "b8bd5e885aef598bf888d7e390b297a34cbb7d52",
+  "tank": {
+    "block": "grindless:basic_tank",
+    "block_entity": "grindless:basic_tank",
+    "fluid_key": "Fluid",
+    "capacity_mB": 16000,
+    "maximum_temperature_C": 40,
+    "maximum_pressure_MPa": 0.1,
+    "native_sides": ["down", "up", "north", "south", "west", "east"],
+    "ordinary_break_preserves_fluid": true,
+    "relocation_uses_existing_BlockEntityTag": true,
+    "overcapacity_legacy_stock": "retain-and-extract-never-clip"
+  },
+  "roles": ["ITEM_INPUT", "ITEM_OUTPUT", "FLUID_INPUT", "FLUID_OUTPUT"],
+  "variants": [
+    {"id": "grindless:workshop_item_input", "family": "BRICK", "role": "ITEM_INPUT", "texture": "port_item_input"},
+    {"id": "grindless:workshop_item_output", "family": "BRICK", "role": "ITEM_OUTPUT", "texture": "port_item_output"},
+    {"id": "grindless:settling_item_input", "family": "CHANNEL", "role": "ITEM_INPUT", "texture": "port_item_input"},
+    {"id": "grindless:settling_fluid_input", "family": "CHANNEL", "role": "FLUID_INPUT", "texture": "port_fluid_input"},
+    {"id": "grindless:settling_item_output", "family": "SCREEN", "role": "ITEM_OUTPUT", "texture": "port_item_output"},
+    {"id": "grindless:settling_fluid_output", "family": "SCREEN", "role": "FLUID_OUTPUT", "texture": "port_fluid_output"}
+  ],
+  "structures": [
+    {
+      "name": "FIRING_CHAMBER",
+      "legacy": "controller plus seven minecraft:bricks in the existing 2x2x2 volume",
+      "minimum_plain_bricks": 5,
+      "maximum_ports": 2,
+      "maximum_each_role": {"ITEM_INPUT": 1, "ITEM_OUTPUT": 1, "FLUID_INPUT": 0, "FLUID_OUTPUT": 0},
+      "slots": [
+        {"offset": [1,0,0], "family": "BRICK", "roles": ["ITEM_INPUT","ITEM_OUTPUT"], "local_horizontal_faces": [0,1]},
+        {"offset": [1,1,0], "family": "BRICK", "roles": ["ITEM_INPUT","ITEM_OUTPUT"], "local_horizontal_faces": [0,1]}
+      ]
+    },
+    {
+      "name": "SETTLING_TROUGH",
+      "legacy": "same-facing ordinary channel then screen, both open above",
+      "minimum_plain_bricks": 0,
+      "maximum_ports": 2,
+      "maximum_each_role": {"ITEM_INPUT": 1, "ITEM_OUTPUT": 1, "FLUID_INPUT": 1, "FLUID_OUTPUT": 1},
+      "slots": [
+        {"offset": [0,0,1], "family": "CHANNEL", "roles": ["ITEM_INPUT","FLUID_INPUT"], "local_horizontal_faces": [1,3]},
+        {"offset": [0,0,2], "family": "SCREEN", "roles": ["ITEM_OUTPUT","FLUID_OUTPUT"], "local_horizontal_faces": [1,2,3]}
+      ]
+    }
+  ],
+  "ownership": {
+    "meaning": "structural-controller-not-player-permission",
+    "persistent_owner_link": false,
+    "independent_item_storage": false,
+    "independent_fluid_storage": false,
+    "same_dimension_only": true,
+    "force_chunk_loads": false,
+    "require_unique_current_controller_identity": true,
+    "revalidate": ["every-access", "rotation", "neighbour-change", "bounded-server-tick", "load", "removal"],
+    "retained_capability_view": "captured transient revision must match after current-owner revalidation",
+    "native_output_store": "actual-controller-NativeFluidStore-with-role-bound-Access-limit",
+    "output_limit": "produced-quota-minus-any-primary-batch-reservation",
+    "alias_limit": "maximum legitimate access to one backing owner, never sum aliases",
+    "null_port_face": "deny",
+    "default_controller_interfaces": "unchanged-and-public"
+  },
+  "transfer": {
+    "simulation": "same-face-role-limit-as-execute-without-mutation",
+    "native_transfer": "existing-NativeBatch-snapshots-withdrawal-compensation-and-deferred-notifications",
+    "partial_transfer": "only-actual-acceptance-debited",
+    "foreign_rollback": "not-claimed",
+    "crash_atomicity": "not-claimed",
+    "fluid_output_push_mB_per_four_ticks": 50,
+    "item_output": "existing-vanilla-sided-inventory-and-T0-manipulator"
+  },
+  "presentation": {
+    "shared_original_role_textures": 4,
+    "functional_side_labels": "full-UV-on-the-approved-exposed-horizontal-faces",
+    "settling_primary_role_label": "zero-volume-UP-plane-on-existing-bed-before-screen-bars",
+    "settling_role_label_uv": [2,3,14,10],
+    "settling_role_label_minimum_glyph_model_units": 4,
+    "collision_changed": false,
+    "upward_automation_enabled_by_label": false,
+    "rear_screen_strip": "secondary-marker-not-primary-role-explanation",
+    "human_appearance_accepted": false
+  },
+  "world_compatibility": {
+    "existing_ids_or_schemas_removed": false,
+    "trusted_formed_NBT": false,
+    "ports_drop_controller_contents": false,
+    "ports_relocate_controller_contents": false,
+    "T1_opened": false
+  },
+  "validation": {
+    "source_contracts": "authored",
+    "java_execution": "pending-coordinator-runner",
+    "forge_native_binding_and_lifecycle": "pending-coordinator-runner",
+    "native_probe": "grindless_workshop_checks 2 280 13 within the single workshop-ports smoke",
+    "native_probe_mode": "console-only-permission4-loaded-empty-owned-region-and-dedicated-non-OP-FakePlayer",
+    "native_probe_markers": "logged-only-after-real-registered-BE-bucket-capability-and-ownership-predicates",
+    "actual_chunk_unload_reload": "not-executed-by-this-probe",
+    "client_container_and_art_quality": "needs-human-validation"
+  }
+}

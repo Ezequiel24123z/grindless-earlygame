@@ -1,5 +1,246 @@
 # Return handoff
 
+## Current player handover — native FTB ready in Prism
+
+Use **Grindless-T0-FTB-Dev** to continue the existing game. Exactdd0/JAR29bc/ZIP79ce
+passes post-copy production Inspect. Its36-file world and options are the pristine
+verified backup copy, not the booted clone; original instance/backup remain intact.
+Do not advance the old and new copies in parallel.
+
+| Category | Current outcome |
+| --- | --- |
+| COMPLETED | Native FTB qualified/installed; actual clone load/save, metadata-only retired-ID audit and final pristine world/options copy verified |
+| BLOCKED | None for bounded player handover |
+| NOT EXECUTED | Actual player login/GUI/JEI/rewards/campaign, release/main; no new-source qualification pass supplied here |
+| NEEDS HUMAN VALIDATION | Resumed play and native player interactions; T0 is not accepted/frozen |
+| NEEDS MY DECISION | None from owner |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
+| COST / BILLING RISK | None new |
+| DEPLOYED STATE | New FTB instance dd0/29bc/79ce with same-world copy; original/backup preserved, later-tier source not deployed |
+
+## Closed integrated development wave
+
+Published **M0a676fe2e76f5209233ce99ca6616b42e2b3f3c0** normally merges e260 and
+A85069, preserving all four normal generated outputs and the complete source
+ancestry. Actual426 writers/independent CheckOnly and three former red suites
+pass; their provenance stays426. Accepted engineering ADR-0175 adds no production
+pressure recipe. Component automation and baseline F1 Wire Mill remain partial
+T1 content, not a real MK2 or completed tier.
+
+One canonical PC `blueprint-interaction` on exactM closes the new world/inventory
+boundary:1,182 assertions, PASS1/FAIL0, harness/server0 and natural saved-world
+stop. Parent verifies the receipt and all ten original evidence files.
+Tested/staged/remapped JARc70e08e9 is identical. Exact-M CI39681018324 passes all
+eight jobs; duplicate39681008933 remains FAILURE at the missing DRILL-OK
+observation, with its unknown trigger preserved and no manual replay.
+
+| Category | Bounded development outcome |
+| --- | --- |
+| COMPLETED | Published M source/normal outputs, affected contracts/models, real Blueprint interaction1,182, verified native custody and independent full exact-M CI success |
+| BLOCKED | None within this engineering wave |
+| NOT EXECUTED | Client/GUI/JEI/campaign, Blueprint save/reopen, managed46-to50 migration, T1 package/deploy, PR/main/release or green-proof replays |
+| NEEDS HUMAN VALIDATION | Native player/reward/JEI experience, Blueprint feedback, pressure presentation and longitudinal compatibility; no tier accepted/frozen |
+| NEEDS MY DECISION | None for this closure |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
+| COST / BILLING RISK | None new |
+| DEPLOYED STATE | Last verified T0 dd0/29bc/79ce delivery above is not re-inspected or modified by this wave; original/backup preserved. M only runs in the diagnostic server |
+
+All PC/cache leases are explicitly returned at21:56:31.4465559Z:
+cleanM, owned/all-observed Java0, work/cache locks0, no owner-world access or
+client command-line inspection. No automatic next PC grant exists.
+Read [the active handoff](.agent/handoff.md#integrated-development-source) and
+[closed source qualification](docs/testing/latest-validation.md#integrated-development-source)
+for exact evidence. Blueprint missing/blocked preflight spends
+nothing, but later throwing placement callbacks do not have a global rollback
+guarantee. Future managed46-to50 definitions, broader basic families, real
+upgrades and longitudinal feedback remain separate work under ADR-0173/0174.
+The historical snapshots below retain their original results, not current holds.
+
+**Latest:** ADR-0174 fixes basic families fromT1 and exponential meaningful
+lines/content, real capability upgrades and compatible external reuse. Public
+b38 preserves nativeFTB+firstfactory/two components/18 concise T1 bodies; it is
+not allT1. Publice265 preserves the F2 operand but still produces baselineF1/MKI,
+not a functioning upgrade. Recovered8210 source research leads to isolated
+blueprint-preflight51366 and optional-pressureb823 code, with no PC grant.
+
+The real backup-derived owner clone now boots/saves/stops0; parent verifies all22
+custody files and unchanged backup/prior diagnostic. Forge's three retired
+Heracles registry errors and seven native-profile datapack warnings remain
+explicit. Runtime980 alone has the new read-only retired-ID audit lease, not a
+second server grant. Final pristine copy is pending that disposition; real
+login/GUI/rewards/campaign remain unobserved. Original and backup are intact.
+
+The owner now explicitly opens remaining-tier development alongside T1
+(ADR-0173), without acceptance/release or later-tier deployment. Separate source
+lanes cover T1 native integration, first T2 physical manufacturing and actual
+T3-T15 dependencies; questbook delivery retains priority. Runtime980e99a3 alone
+temporarily owns the diagnostic clone PC/cache lease; all other execution waits
+for its explicit return. Exact ingredient/stronger-control semantics and managed
+native46-to50 updates remain uncovered boundaries, not implicitly waived gates.
+
+## Current protected native-questbook delivery
+
+Native implementation and exact-schema Persistence now pass. Final source dd0b4bc
+produces ZIP79ce5da2; its embedded JAR29bcce43 is the exact ff610 native-tested
+runtime. Parent verifies all25 raw/receipt/harness/disk/package artifacts. The
+backend lease is explicitly returned; only the coordinator may use PC/cache.
+
+| Category | Current outcome |
+| --- | --- |
+| COMPLETED | Genuine native FTB, concise goals, legacy receipt fence, actual two-process proof, standalone/persistence and package qualified; new owned FTB instance deployed; stopped actual F world/options backed up with36 files/10,885,681 world bytes and unchanged original |
+| BLOCKED | None external; final protected handover remains in progress |
+| NOT EXECUTED | Separate owner-save clone technical load, final pristine copy and actual client; no main merge/release |
+| NEEDS HUMAN VALIDATION | Native GUI/JEI, actual login/rewards and campaign |
+| NEEDS MY DECISION | None |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
+| COST / BILLING RISK | None new |
+| DEPLOYED STATE | dd0/JAR29bc/ZIP79ce in new isolated Grindless-T0-FTB-Dev; no player world copied yet; original F and verified backup intact |
+
+Load only an explicitly admitted diagnostic copy, never the original or backup.
+The final player copy must come from the untouched backup, not the tested clone.
+Private paths/identity/receipts remain out of Git. Read
+[the current qualification](docs/testing/t0-ftb-native-qualification.md) and
+[active handoff](.agent/handoff.md); prior pending-test/lease snapshots below are
+historical and do not authorize another worker.
+
+## Current blocker — native FTB Quests, not a custom guide
+
+The owner cannot continue with the delivered questbook. ADR-0171 supersedes the
+old custom/native-Heracles presentation: use supported native FTB Quests and short
+human goals, JEI for ordinary recipes, preserving actual progress/paid rewards.
+Backend, content and verification run in parallel; build/cache/deploy serialize.
+
+| Category | Current outcome |
+| --- | --- |
+| COMPLETED | Copy190a024 plus native-wording follow-ups authored; native ownership fence/source work and migration oracles prepared; played DevF world/ledger identified read-only |
+| BLOCKED | Actual diagnostic native graph/import/restart now passes; exact persistence-root test correction, final package and protected owner delivery remain |
+| NOT EXECUTED | Qualified FTB deployment, real world copy-upgrade, graphical FTB or acceptance pass |
+| NEEDS HUMAN VALIDATION | New native questbook and resumed play after delivery |
+| NEEDS MY DECISION | None for current assignments |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | No paid generation or new service activation |
+| DEPLOYED STATE | DevF95bf unchanged; one current world/legacy ledger observed17:12:20Z; old preparation separate; only backendac503 owns the new qualification lease, not deployment/world writes |
+
+Read [the native qualification](docs/testing/t0-ftb-native-qualification.md):
+real registered Forge1099/seed56/second-process disk reopen58 with natural stops;
+standalone2352 and pack152 are distinct. No actual GUI/JEI, real player inventory
+delivery or reference-world migration pass is inferred. The diagnostic world
+must never become the player's reference save.
+
+Parallel T1 source2f4eee1 is public on its isolated component branch and includes
+qualified base523b3ab as ancestor; the new two-route data is not execution-qualified.
+The parent verifies the base's13closed receipts/58raw hashes/five outputs without
+replay. Research/map/ADR-0172 are durable; no T1 world/deployment action occurred.
+
+## Current owner loop — longitudinal T0 play and ongoing T1 development
+
+ADR-0170 records the direct owner instruction: begin the intended T0 game,
+develop/research/brainstorm T1 routes/machines/components/lines in parallel,
+fix reported play blockers first and polish T0 from the final conclusions.
+Intent is not a completed client/save/campaign or human-acceptance pass.
+
+| Category | Current outcome |
+| --- | --- |
+| COMPLETED | Durable loop/ownership established; preserved T1 source/bounded proof resumed under a new outcome assignment; source/reference research dispatched |
+| BLOCKED | None for source/research; actual heavy execution remains guarded and yields to gameplay |
+| NOT EXECUTED | Final normal canonical output qualification at this checkpoint, new observed owner play/save results, T1 deployment/release or T0 acceptance |
+| NEEDS HUMAN VALIDATION | Owner's T0 feedback and final conclusions; real player observations are not inferred from intent |
+| NEEDS MY DECISION | None for assigned outcomes |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | No new generation or paid-service allowance |
+| DEPLOYED STATE | Last verified installed F unchanged; no live stopped-state claim once the owner may be playing; no T1 deployment or world mutation |
+
+## Preserved readiness investigation — before ADR-0170
+
+The owner asks for [an evidence-based readiness diagnosis and corrective path](docs/testing/t0-longitudinal-readiness.md).
+The intended world is not merely disposable testing. Human acceptance is produced
+by the campaign, not demanded before it begins.
+
+| Category | Current outcome |
+| --- | --- |
+| COMPLETED | Fresh read-only installed F/95bf/3e5a confirmed; independent entry/pin QA finds real free-kit route/no initial functional blocker; save review finds unused vein-version pin and delivery review finds stale instructions |
+| BLOCKED | Actual client/start/save-reopen unobserved; no personal-PC Prism GUI exposed to the current local tools |
+| NOT EXECUTED | Client/world actions, copy-upgrade, code repair, RC publication or new deployment; T1 normal canonical output gates remain open |
+| NEEDS HUMAN VALIDATION | Controlled graphical observation, then real longitudinal feedback/acceptance |
+| NEEDS MY DECISION | None for the investigation; no required gate is silently waived |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | Approved graphical route or owner's controlled result; no credential value |
+| COST / BILLING RISK | No new generation, paid service or installation |
+| DEPLOYED STATE | F unchanged and stopped at16:30:22Z,0worlds/no client log/options observed; no instance/save mutation; T1 executor returned lease and is suspended |
+
+## Preserved owner-directed T1 development
+
+This earlier checkpoint is superseded operationally by the priority/lease return
+above, not relabeled as a completed T1 qualification.
+
+On2026-10-21 the owner explicitly opens T1 development while testing T0.
+[ADR-0168/0169](docs/DECISIONS.md#adr-0168--develop-t1-in-parallel-with-owner-t0-testing-without-changing-the-dev-game)
+and the [first-factory plan](plan/feature-t1-first-factory-1.md) supersede the old
+development hold only. The T0 acceptance/client/release records below retain their
+actual observed bounds; intent to test is not a completed pass.
+
+| Category | Current T1 increment |
+| --- | --- |
+| COMPLETED | Handbook/line map plus sourcec727/repair74: live line/export/model selectors and50 tasks/18 T1 teachings/four reward-free lessons, preserving T0/all old IDs/rewards. Static QA P1 closed on74; the read-only writer limitation was recovered. |
+| BLOCKED | Private helper observer fails after reported compile/backend exit0, before selectors. Core preserves raw proof and continues remaining stages without replay; final receipts not yet accepted. T0 client/human gate unchanged. |
+| NOT EXECUTED | No new compilation/export pass accepted before exact receipts. Package/deploy/server/native/client/real saved-world migration, release and T0 acceptance are outside the T1 build-only lease. |
+| NEEDS HUMAN VALIDATION | Owner's T0 feedback and later T1 factory/pacing/clarity review; no pass inferred. |
+| NEEDS MY DECISION | None for the assigned first-factory development. Material recipe/architecture/dependency changes still escalate. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new. Corea94 exclusively holds guarded Sync/JVM/cache for sourcec727/corrective descendants; no other PC executor and no identity/configuration change. |
+| COST / BILLING RISK | No generation requests, paid images, new models or billable service activation selected. |
+| DEPLOYED STATE | Leave F298988d/JAR95bf47c4/ZIP3e5ad1fb in Grindless-T0-Dev intact while the owner tests; new T1 source remains isolated and undeployed. |
+
+## New T0 experience programme
+
+**Implemented, automatically/native qualified and installed; graphical gate
+BLOCKED.** The [executable plan](plan/feature-t0-experience-1.md) is not a claim
+that the first longitudinal run can start. Current source/runtime is exact
+F `298988d500dccf0823fb2eab52fbe57bff8fe831`, JAR95bf47c4/2305405 bytes,
+ZIP3e5ad1fb/1869976 bytes. Read the
+[Prism delivery and first smoke actions](docs/testing/t0-experience-prism-deployment.md).
+
+| Category | Current new-wave state |
+| --- | --- |
+| COMPLETED | Implemented46 quests/32 T0/14 gated T1,20 lessons/shared six-port instruction, Guide migration,17 barter offers/cost ledger, tank/four-role six-variant hatches, optional F8 inspection, physical sound and deterministic visuals. Actual full52/backend776, affected2088/package88/native26 pass. Exact F DevDeploy/Inspect/idempotency and preservation pass. These are scoped engineering results, not whole-T0/human completion. |
+| BLOCKED | Required actual graphical new/backed-up existing-world, input, HUD, audible lifecycle and save/reconnect smoke. RDP is disabled/no authorized graphical service was found; owner unavailability does not waive the gate. No code/automated/native/hosted failure remains open in this delivered candidate. |
+| NOT EXECUTED | Controlled graphical smoke, multiplayer/client interaction, human review and normal longitudinal campaign; no release/tag, new main merge, T0 acceptance/freeze or T1 chain. |
+| NEEDS HUMAN VALIDATION | Final art/audio/fatigue, quest clarity, exact pacing/prices, ergonomics and enjoyment; no automatic pass is claimed. |
+| NEEDS MY DECISION | None for assigned reversible scope. No new currency or starter nerf is selected; material dependency/license/migration changes remain gated. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | Existing secure sound access and local visual runtime are reused; actual authorized graphical client access remains to be established. No credential change/value is requested or committed. |
+| COST / BILLING RISK | Six actual sound POSTs/HTTP200/no retry or ambiguity, about720 estimated credits. Two families selected, both fire candidates rejected in favor of native furnace feedback without reroll. New visual inference0; demonstrated state-mask issue is fixed deterministically. No paid images/new models/reset of old ledgers. |
+| DEPLOYED STATE | Owned Grindless-T0-Dev is left stopped on exact F/95bf47c4/3e5ad1fb. Deploy/Inspect/repeat are Deployed/VerifiedStopped/Unchanged, zero downloads. At21:39:19Z six original files/two Dev metadata hashes are unchanged;21:44:11Z confirms no protected Dev game paths before/after and0Java/Python. Old player world remains unopened/uncopied. |
+
+The coordinator independently hash-verifies the closed52-suite receipt and both
+raw streams, all26 primary-log predicates exactly once, normal natural save/stop
+and the exact deployed ZIP. Source-bound
+[Phase A](docs/testing/t0-experience-source-qualification.md) and
+[Phase B](docs/testing/t0-experience-package-native.md) preserve every earlier
+red, including failed fixture setup/observation, intrusive standalone attempts,
+economic byte-order drift and the full batch timeout. No budgets or expectations
+are relaxed.
+Fresh exact-F push39501647923 and PR39501654467 both finish SUCCESS:
+verify, Windows tooling and all six native shards each,16 actual green jobs.
+Redundant evidence-only parent CI39501816859 is cancel-requested only after
+executable equality; its cancellation and all historical reds stay distinct.
+
+The new [PR56](https://github.com/Ezequiel24123z/grindless-earlygame/pull/56)
+is **draft**, with no auto-merge. Mainb8bd5e8 is the previous delivery; installed F
+and the draft's exact head are separate identities. The historical PR55 remains
+merged and is not edited or retargeted. No source lane or QA may self-resume a
+PC/deployment lease; all workers, models and build locks are released.
+
+Before any longitudinal start, the owner must perform the controlled smoke in
+the existing instance: recover/open the Quest Book, inspect the Firing/Settling
+six-port help in both renderers, exercise Shop/buckets/valid and invalid ports,
+enable F8 inspection, check actual audio/reload and save/reconnect. Use a separate
+diagnostic world/backed-up upgrade copy, not the original player world. Subjective
+pacing, exact prices/time, fatigue, clarity, ergonomics and fun remain human
+judgments; no final-readiness phrase is substituted for the missing gate.
+
+## Previous testing delivery
+
+Everything below retains the previous747 source/time boundary. It is historical
+evidence, not the currently installed runtime or a re-opened work queue.
+
 **T0 engineering testing candidate747 is qualified, deployed and stopped.**
 Human appearance/listening, first-quest interaction and the campaign remain the
 owner's testing. This is not T0 acceptance/freeze, a product RC or T1 activation.

@@ -64,12 +64,18 @@ public final class GenerateAssets {
 
     public static void main(String[] args) throws IOException {
         if (args.length < 1 || args.length > 2
-                || args.length == 2 && !"--t0-guides-only".equals(args[1])) {
-            System.err.println("usage: GenerateAssets <repository-root> [--t0-guides-only]");
+                || args.length == 2 && !"--t0-guides-only".equals(args[1])
+                && !"--t0-visuals-only".equals(args[1])) {
+            System.err.println("usage: GenerateAssets <repository-root> [--t0-guides-only|--t0-visuals-only]");
             System.exit(2);
         }
         File root = new File(args[0]);
         if (args.length == 2) {
+            if ("--t0-visuals-only".equals(args[1])) {
+                int written = writeT0Visuals(resourceDir(root, "textures/block"));
+                System.out.println("Generated " + written + " T0 state/port textures only under " + root);
+                return;
+            }
             File items = resourceDir(root, "textures/item");
             int written = writeGuideItems(items);
             System.out.println("Generated " + written + " T0 guide sprites only under " + items);
@@ -227,6 +233,7 @@ public final class GenerateAssets {
                 written += write(blocks, lower + "_front_" + status, MachineArt.front(mass, status));
             }
         }
+        written += writePortOverlays(blocks);
         written += writeGui(root);
         written += WorkshopPreview.write(root);
 
@@ -248,6 +255,27 @@ public final class GenerateAssets {
         writeProvenance(root, written);
         System.out.println("Generated " + written + " assets under "
                 + root.toPath().resolve("common/src/main/resources/assets/grindless"));
+    }
+
+    private static int writeT0Visuals(File blocks) throws IOException {
+        int written = writePortOverlays(blocks);
+        for (BlockCatalogue.Entry block : BlockCatalogue.blocks()) {
+            if (MachineArt.hasT0StateMark(block.geometry())) {
+                for (String status : block.statuses()) {
+                    written += write(blocks, block.lower() + "_front_" + status,
+                            MachineArt.front(block.geometry(), status));
+                }
+            }
+        }
+        return written;
+    }
+
+    private static int writePortOverlays(File blocks) throws IOException {
+        int written = 0;
+        for (String role : WorkshopPortTextures.ROLES) {
+            written += write(blocks, "port_" + role, WorkshopPortTextures.overlay(role));
+        }
+        return written;
     }
 
     private static int writeGuideItems(File items) throws IOException {
@@ -437,6 +465,11 @@ public final class GenerateAssets {
     }
 
     private static int writeText(File file, String text) throws IOException {
+        if (file.isFile() && Files.readString(file.toPath(), StandardCharsets.UTF_8)
+                .replace("\r\n", "\n").equals(text.replace("\r\n", "\n"))) {
+            // Count the output even when preserving its existing bytes and modification time.
+            return 1;
+        }
         File parent = file.getParentFile();
         if (!parent.exists() && !parent.mkdirs()) {
             throw new IllegalStateException("could not create " + parent);
@@ -553,6 +586,11 @@ public final class GenerateAssets {
                         + "    \"top\": \"grindless:block/casing_top\",\n"
                         + "    \"bottom\": \"grindless:block/casing_top\",\n"
                         + "    \"side\": \"grindless:block/casing_side\"\n  }\n}\n");
+        written += writeText(new File(assets, "models/item/" + BlockCatalogue.THERMAL_GENERATOR_CORE_ITEM + ".json"),
+                "{\n  \"parent\": \"minecraft:block/cube_bottom_top\",\n  \"textures\": {\n"
+                        + "    \"top\": \"grindless:block/generator_top\",\n"
+                        + "    \"bottom\": \"grindless:block/casing_top\",\n"
+                        + "    \"side\": \"grindless:block/generator_front_idle\"\n  }\n}\n");
         written += writeText(new File(data, "minecraft/tags/blocks/mineable/pickaxe.json"),
                 tagJson(names.toArray(new String[0])));
         written += writeText(new File(data, "minecraft/tags/blocks/mineable/axe.json"),
@@ -678,15 +716,18 @@ public final class GenerateAssets {
                 output, so regenerating never shows up as a spurious diff.
 
                 No Minecraft assets are redistributed. The imported `sounds/t0_grinding.ogg` and
-                `sounds/t0_wet_work.ogg` are noticed external game audio, not synthetic generator output.
+                `sounds/t0_wet_work.ogg`, together with `sounds/t0_water_flow.ogg` and
+                `sounds/t0_mineral_extraction.ogg`, are noticed external game audio, not synthetic
+                generator output.
                 The approved Quern A import remains byte-identical (ADR-0148); the Mixer working bed
                 uses its separately recorded technical normalization.
                 Keep `AUDIO-NOTICE.txt` with them; the repository's `THIRD_PARTY_NOTICES.md` records
                 their exact provenance and distribution limits.
 
                 Generation does not write imported Ogg files, `sounds.json`, `AUDIO-NOTICE.txt`
-                or localization. The paired legacy audio converters allow only the five synthetic
-                sound names, so an extra WAV cannot overwrite either imported working bed.
+                or localization. The five historical WAV writers produce development evidence only.
+                The paired legacy audio converters reject runtime synthesis, so an extra WAV
+                cannot overwrite an imported working bed or restore the retired generic palette.
 
                 The Multitool PNG is copied byte-for-byte from `tools/visual-assets/approved/`
                 after native JDK hash, PNG, dimensions and hard-alpha validation. Its retained

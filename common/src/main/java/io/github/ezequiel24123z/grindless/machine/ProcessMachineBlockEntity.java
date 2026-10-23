@@ -22,11 +22,15 @@ import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
 import io.github.ezequiel24123z.grindless.process.ConditionFault;
 import io.github.ezequiel24123z.grindless.process.ConditionReport;
 import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
+import io.github.ezequiel24123z.grindless.recipe.LegacyGuideAssembly;
+import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
 import io.github.ezequiel24123z.grindless.recipe.OutputSpec;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortBlockEntity;
+import io.github.ezequiel24123z.grindless.telemetry.dev.DevTelemetry;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
 import io.github.ezequiel24123z.grindless.source.SourceSite;
 import io.github.ezequiel24123z.grindless.factory.FactoryCatalogue;
@@ -106,6 +110,9 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     private WorkshopStructure.Fault structureFault = WorkshopStructure.Fault.NONE;
     private SourceSite.Fault siteFault = SourceSite.Fault.NONE;
     private boolean loadingInventory;
+    private boolean processing;
+    private boolean settling;
+    private AssemblerWork assemblerWork = new AssemblerWork();
 
     public ProcessMachineBlockEntity(ProcessMachineKind kind, BlockPos pos, BlockState state) {
         this(kind.type(), kind, pos, state);
@@ -138,6 +145,34 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     public ProcessMachineKind kind() {
         return kind;
+    }
+
+    public double inspectionProgress() {
+        return progress;
+    }
+
+    /** Inspection never resolves a recipe, changes subscriptions or resurrects a retired generation. */
+    public Optional<ProcessRecipe> inspectionRecipe() {
+        return !unavailablePaidBenchWork() && recipeGeneration == ProcessLookup.generation()
+                ? Optional.ofNullable(cached) : Optional.empty();
+    }
+
+    public ConditionFault inspectionConditionFault() {
+        return lastFault;
+    }
+
+    public WorkshopStructure.Fault inspectionStructureFault() {
+        return structureFault;
+    }
+
+    public SourceSite.Fault inspectionSiteFault() {
+        return getLevel() != null && !getLevel().isClientSide() && !isRemoved()
+                && getLevel().hasChunkAt(getBlockPos()) && getLevel().getBlockEntity(getBlockPos()) == this
+                ? checkSite() : siteFault;
+    }
+
+    public int inspectionFluidOutput() {
+        return fluidOutput;
     }
 
     @Override
@@ -187,7 +222,8 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     @Override
     protected void updateSubscriptions() {
-        if (loadingInventory || getLevel() == null) {
+        if (loadingInventory || settling || kind == ProcessMachineKind.ASSEMBLER && processing
+                || getLevel() == null) {
             return;
         }
         structureFault = checkStructure();
@@ -204,7 +240,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             working.unsubscribe();
             working = null;
         }
-        if (ProcessLookup.needsPrimaryFluid(kind.family(), inputs(), fluid.state())) {
+        if (needsPrimaryFluid()) {
             filling = subscriptions().subscribe(filling, this::fillFromNeighbours);
         } else if (filling != null) {
             filling.unsubscribe();
@@ -239,10 +275,23 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     }
 
     private void work(long tick, List<FluidInsert.Source> sources) {
-        if (lastWorkTick == tick) {
+        if (lastWorkTick == tick || processing || settling || loadingInventory) {
             return;
         }
         lastWorkTick = tick;
+        processing = true;
+        try {
+            workCycle(sources);
+        } finally {
+            processing = false;
+            if (kind == ProcessMachineKind.ASSEMBLER) {
+                updateSubscriptions();
+                syncData();
+            }
+        }
+    }
+
+    private void workCycle(List<FluidInsert.Source> sources) {
         structureFault = checkStructure();
         siteFault = checkSite();
         if (structureFault != WorkshopStructure.Fault.NONE || siteFault != SourceSite.Fault.NONE) {
@@ -320,6 +369,21 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     }
 
     private boolean complete(ProcessRecipe recipe, List<FluidInsert.Source> sources) {
+        if (settling || loadingInventory) {
+            return false;
+        }
+        settling = true;
+        try {
+            return settleCompletion(recipe, sources);
+        } finally {
+            settling = false;
+        }
+    }
+
+    private boolean settleCompletion(ProcessRecipe recipe, List<FluidInsert.Source> sources) {
+        if (kind == ProcessMachineKind.ASSEMBLER && !currentAssemblerWork(recipe)) {
+            return false;
+        }
         if (!ProcessLookup.matches(recipe, inputs()) || !canOutput(recipe)) {
             return false;
         }
@@ -344,10 +408,23 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
                     + "tentative withdrawals were restored", recipe.id(), getBlockPos());
             return false;
         }
+        if (getLevel() != null) {
+            DevTelemetry.processCompleted(getLevel(), recipe.id());
+        }
         captureOrVent(recipe);
         pushOutputs();
         setChanged();
         return true;
+    }
+
+    private boolean currentAssemblerWork(ProcessRecipe recipe) {
+        return assemblerWork.valid() && recipe.family() == kind.family()
+                && recipe.id().equals(workRecipeId) && progress >= recipe.durationTicks()
+                && kind.regulationReport(recipe).canRun()
+                && ProcessLookup.conditionsOf(recipe).evaluate(conditions()).canRun()
+                && (assemblerWork.selected().isEmpty() || assemblerWork.selected().equals(recipe.id()))
+                && (ProcessLookup.byId(kind.family(), recipe.id()).filter(current -> current == recipe).isPresent()
+                || assemblerWork.selected().isEmpty() && LegacyGuideAssembly.retired(kind.family(), recipe.id()));
     }
 
     private final class Completion implements NativeFluidStore.Settlement {
@@ -369,6 +446,9 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
         @Override
         public void apply() {
+            if (kind == ProcessMachineKind.ASSEMBLER && !currentAssemblerWork(recipe)) {
+                throw new IllegalStateException("Assembler recipe changed during completion settlement");
+            }
             for (int i = 0; i < recipe.itemInputs().size(); i++) {
                 items.removeItem(i, recipe.itemInputs().get(i).count());
             }
@@ -376,7 +456,13 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
                 items.setItem(kind.menuKind().inputs() + i, outputs[i]);
             }
             storeFluidOutputs(recipe);
-            progress = Math.max(0.0, progress - recipe.durationTicks());
+            if (LegacyGuideAssembly.retired(kind.family(), recipe.id())) {
+                progress = 0.0;
+                workRecipeId = "";
+                cachedRecipeId = "";
+            } else {
+                progress = Math.max(0.0, progress - recipe.durationTicks());
+            }
             cached = null;
         }
 
@@ -545,25 +631,84 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     private ProcessRecipe recipe(List<FluidInsert.Source> sources) {
         refreshRecipeGeneration();
+        if (unavailablePaidBenchWork()) {
+            cached = null;
+            cachedRecipeId = "";
+            return null;
+        }
+        if (kind == ProcessMachineKind.ASSEMBLER && !assemblerWork.valid()) {
+            cached = null;
+            return null;
+        }
+        if (cached != null && kind == ProcessMachineKind.ASSEMBLER && !assemblerWork.selected().isEmpty()
+                && (!cached.id().equals(assemblerWork.selected())
+                || !ProcessLookup.matches(cached, inputs())
+                || progress < cached.durationTicks() && !ProcessLookup.matchesFluid(cached, fluid.state(),
+                        FluidInsert.available(sources)))) {
+            cached = null;
+        }
         if (cached != null) {
             return cached;
+        }
+        cached = matchingRecipe(sources).orElse(null);
+        cachedRecipeId = cached == null ? "" : cached.id();
+        if (cached != null) {
+            if (kind == ProcessMachineKind.ASSEMBLER) {
+                activateAssemblerWork(cached.id());
+            } else if (!workRecipeId.isEmpty() && !workRecipeId.equals(cached.id())) {
+                progress = 0.0;
+            }
+            workRecipeId = cached.id();
+        }
+        return cached;
+    }
+
+    /** Shared read-only selection; inspection of produced volume never publishes a cached recipe. */
+    private Optional<ProcessRecipe> matchingRecipe(List<FluidInsert.Source> sources) {
+        if (unavailablePaidBenchWork()) {
+            return Optional.empty();
+        }
+        if (kind == ProcessMachineKind.ASSEMBLER) {
+            if (!assemblerWork.valid()) {
+                return Optional.empty();
+            }
+            if (!assemblerWork.selected().isEmpty()) {
+                Optional<ProcessRecipe> completed = ProcessLookup.byId(kind.family(), assemblerWork.selected())
+                        .filter(row -> row.id().equals(workRecipeId) && progress >= row.durationTicks()
+                                && ProcessLookup.matches(row, inputs()));
+                return completed.isPresent() ? completed
+                        : ProcessLookup.findSelected(kind.family(), assemblerWork.selected(), inputs(),
+                                fluid.state(), FluidInsert.available(sources));
+            }
         }
         Optional<ProcessRecipe> found = ProcessLookup.recipes().stream()
                 .filter(row -> row.id().equals(workRecipeId) && row.family() == kind.family()
                         && progress >= row.durationTicks() && ProcessLookup.matches(row, inputs()))
                 .findFirst();
         if (found.isEmpty()) {
+            found = LegacyGuideAssembly.resume(kind.family(), workRecipeId, progress)
+                    .filter(row -> ProcessLookup.matches(row, inputs()));
+        }
+        if (found.isEmpty()) {
             found = ProcessLookup.find(kind.family(), inputs(), fluid.state(), FluidInsert.available(sources));
         }
-        cached = found.orElse(null);
-        cachedRecipeId = cached == null ? "" : cached.id();
-        if (cached != null) {
-            if (!workRecipeId.isEmpty() && !workRecipeId.equals(cached.id())) {
-                progress = 0.0;
-            }
-            workRecipeId = cached.id();
+        return found;
+    }
+
+    /** A retired/unattributed paid Bench job cannot authorize another batch or lose its raw balance. */
+    private boolean unavailablePaidBenchWork() {
+        return kind == ProcessMachineKind.ASSEMBLY_BENCH && progress > 0.0
+                && ProcessLookup.byId(kind.family(), workRecipeId).isEmpty()
+                && LegacyGuideAssembly.resume(kind.family(), workRecipeId, progress).isEmpty();
+    }
+
+    private void activateAssemblerWork(String id) {
+        double restored = assemblerWork.activate(workRecipeId, progress, id);
+        if (!workRecipeId.equals(id)) {
+            progress = restored;
+            workRecipeId = id;
+            setChanged();
         }
-        return cached;
     }
 
     private boolean refreshRecipeGeneration() {
@@ -580,8 +725,24 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         if (kind.structure() == WorkshopStructure.NONE || getLevel() == null) {
             return WorkshopStructure.Fault.NONE;
         }
+        return inspectionStructure().fault();
+    }
+
+    /** Fresh geometric evidence only; port owner resolution uses this to avoid recursive formation. */
+    public WorkshopStructure.Inspection inspectionStructureGeometry() {
+        if (kind.structure() == WorkshopStructure.NONE) {
+            return new WorkshopStructure.Inspection(WorkshopStructure.Fault.NONE, null, List.of());
+        }
+        if (getLevel() == null || !getLevel().hasChunkAt(getBlockPos())) {
+            return new WorkshopStructure.Inspection(WorkshopStructure.Fault.UNLOADED,
+                    new WorkshopStructure.Offset(0, 0, 0), List.of());
+        }
+        if (isRemoved() || getLevel().getBlockEntity(getBlockPos()) != this) {
+            return new WorkshopStructure.Inspection(WorkshopStructure.Fault.STALE_OWNER,
+                    new WorkshopStructure.Offset(0, 0, 0), List.of());
+        }
         int turns = horizontalTurns(getBlockState());
-        return kind.structure().check(turns, offset -> {
+        return kind.structure().inspect(turns, offset -> {
             BlockPos cell = getBlockPos().offset(offset.x(), offset.y(), offset.z());
             if (!getLevel().hasChunkAt(cell)) {
                 return null;
@@ -591,6 +752,28 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
                     : BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString(),
                     state.hasProperty(MachineProperties.FACING) ? horizontalTurns(state) : -1);
         });
+    }
+
+    /** Final formation also requires every recognised port to have this one current owner. */
+    public WorkshopStructure.Inspection inspectionStructure() {
+        WorkshopStructure.Inspection geometric = inspectionStructureGeometry();
+        if (!geometric.formed()) {
+            return geometric;
+        }
+        for (WorkshopStructure.Port port : geometric.ports()) {
+            WorkshopStructure.Offset offset = port.offset();
+            BlockPos position = getBlockPos().offset(offset.x(), offset.y(), offset.z());
+            if (!(getLevel().getBlockEntity(position) instanceof WorkshopPortBlockEntity entity)) {
+                return new WorkshopStructure.Inspection(WorkshopStructure.Fault.ORPHANED_PORT,
+                        offset, geometric.ports());
+            }
+            WorkshopPortBlockEntity.Inspection ownership = entity.inspection();
+            if (!ownership.formed() || !getBlockPos().equals(ownership.ownerPos())) {
+                return new WorkshopStructure.Inspection(ownership.fault() == WorkshopStructure.Fault.NONE
+                        ? WorkshopStructure.Fault.STALE_OWNER : ownership.fault(), offset, geometric.ports());
+            }
+        }
+        return geometric;
     }
 
     private static int horizontalTurns(BlockState state) {
@@ -622,7 +805,13 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         if (kind.tier() != FluxTier.F0 || getLevel() == null || getLevel().isClientSide()) {
             return;
         }
-        energy().setStored(Math.min(energy().getCapacity(), energy().getStored() + SourceLogic.MANUAL_CHARGE));
+        long before = energy().getStored();
+        energy().setStored(Math.min(energy().getCapacity(), before + SourceLogic.MANUAL_CHARGE));
+        long accepted = energy().getStored() - before;
+        if (accepted > 0) {
+            DevTelemetry.manualWork(getLevel(),
+                    BuiltInRegistries.BLOCK.getKey(getBlockState().getBlock()).toString(), accepted);
+        }
     }
 
     private ItemStack[] inputs() {
@@ -667,6 +856,16 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         }
     }
 
+    private boolean needsPrimaryFluid() {
+        if (kind != ProcessMachineKind.ASSEMBLER || assemblerWork.selected().isEmpty()) {
+            return ProcessLookup.needsPrimaryFluid(kind.family(), inputs(), fluid.state());
+        }
+        return assemblerWork.valid() && ProcessLookup.byId(kind.family(), assemblerWork.selected())
+                .filter(row -> ProcessLookup.matches(row, inputs()) && !row.fluidInputs().isEmpty())
+                .map(row -> fluid.state().isEmpty() || fluid.state().is(row.fluidInputs().get(0).id())
+                        && fluid.state().millibuckets() < row.fluidInputs().get(0).count()).orElse(false);
+    }
+
     private void storeFluidOutputs(ProcessRecipe recipe) {
         for (OutputSpec output : recipe.fluidOutputs()) {
             if (output.vented()) {
@@ -707,7 +906,18 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         if (state == null || state.isEmpty() || from != null && !containerConfig().allowsInsert(from)) {
             return 0;
         }
-        int target = ProcessLookup.primaryFluidTarget(kind.family(), inputs(), state.id());
+        int target;
+        if (kind == ProcessMachineKind.ASSEMBLER && !assemblerWork.valid()) {
+            return 0;
+        }
+        if (kind == ProcessMachineKind.ASSEMBLER && !assemblerWork.selected().isEmpty()) {
+            target = ProcessLookup.byId(kind.family(), assemblerWork.selected())
+                    .filter(row -> !row.fluidInputs().isEmpty()
+                            && row.fluidInputs().get(0).id().equals(state.id()))
+                    .map(row -> row.fluidInputs().get(0).count()).orElse(0);
+        } else {
+            target = ProcessLookup.primaryFluidTarget(kind.family(), inputs(), state.id());
+        }
         return Math.min(fluid.accepted(state), Math.max(0, target - fluid.state().millibuckets()));
     }
 
@@ -761,6 +971,18 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         return fluid.capacity();
     }
 
+    /** Produced-only output view, preserving the same primary-batch reservation as legacy export. */
+    public FluidState workshopProducedFluid() {
+        if (fluidOutput <= 0 || fluid.isEmpty()) {
+            return FluidState.EMPTY;
+        }
+        ProcessRecipe active = inspectionRecipe().orElseGet(() -> matchingRecipe(List.of()).orElse(null));
+        int reserved = active == null || active.fluidInputs().isEmpty()
+                ? 0 : active.fluidInputs().get(0).count();
+        return fluid.state().withAmount(Math.min(fluidOutput,
+                Math.max(0, fluid.state().millibuckets() - reserved)));
+    }
+
     private boolean hasPartialInput() {
         if (!fluid.isEmpty()) {
             return true;
@@ -788,15 +1010,17 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             return;
         }
         lastFault = report.fault();
+        boolean retainedBenchWork = unavailablePaidBenchWork();
         MachineStatus observed = ProcessLogic.status(recipe != null, missing, stuck,
                 report.canRun() || recipe == null, powered, workingNow);
         if (recipe == null && fluidOutput > 0) {
             observed = MachineStatus.BLOCKED;
         }
-        if (structureFault != WorkshopStructure.Fault.NONE || siteFault != SourceSite.Fault.NONE) {
+        if (retainedBenchWork || structureFault != WorkshopStructure.Fault.NONE || siteFault != SourceSite.Fault.NONE) {
             observed = MachineStatus.OUT_OF_BAND;
         }
-        boolean stableIdle = recipe == null && !missing && structureFault == WorkshopStructure.Fault.NONE
+        boolean stableIdle = !retainedBenchWork && recipe == null && !missing
+                && structureFault == WorkshopStructure.Fault.NONE
                 && siteFault == SourceSite.Fault.NONE;
         if ((stableIdle ? display.settle(MachineStatus.IDLE) : display.observe(observed))
                 && getLevel() != null) {
@@ -833,6 +1057,9 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         tag.putString(KEY_WORK_RECIPE, workRecipeId);
         tag.put(KEY_FLUID, FluidNbt.save(fluid.state()));
         tag.putInt(KEY_FLUID_OUTPUT, fluidOutput);
+        if (kind == ProcessMachineKind.ASSEMBLER) {
+            assemblerWork.save(tag);
+        }
     }
 
     @Override
@@ -840,7 +1067,8 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         loadingInventory = true;
         try {
             super.load(tag);
-            progress = Math.max(0.0, tag.getDouble(KEY_PROGRESS));
+            progress = kind == ProcessMachineKind.ASSEMBLER
+                    ? tag.getDouble(KEY_PROGRESS) : Math.max(0.0, tag.getDouble(KEY_PROGRESS));
             ListTag savedItems = tag.getList(KEY_ITEMS, net.minecraft.nbt.Tag.TAG_COMPOUND).copy();
             if (kind == ProcessMachineKind.ASSEMBLER
                     && tag.getInt(KEY_ITEM_LAYOUT) < FOUR_INPUT_LAYOUT) {
@@ -849,7 +1077,15 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             items.fromTag(savedItems);
             cachedRecipeId = tag.getString(KEY_RECIPE);
             workRecipeId = tag.contains(KEY_WORK_RECIPE) ? tag.getString(KEY_WORK_RECIPE) : cachedRecipeId;
+            if (kind == ProcessMachineKind.ASSEMBLER) {
+                assemblerWork = AssemblerWork.load(tag, workRecipeId, progress);
+                if (!assemblerWork.valid()) {
+                    Grindless.LOG.error("Assembler work at {} is unavailable and retained without repair: {}",
+                            getBlockPos(), assemblerWork.problem());
+                }
+            }
             cached = null;
+            recipeGeneration = ProcessLookup.generation();
             fluid.set(FluidNbt.load(tag.getCompound(KEY_FLUID)));
             fluidOutput = 0;
             if (tag.contains(KEY_FLUID_OUTPUT)) {
@@ -907,9 +1143,96 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     @Override
     public Component menuFault() {
+        if (unavailablePaidBenchWork()) {
+            return Component.translatable("gui.grindless.bench.retained_work", workRecipeId, Double.toString(progress));
+        }
         return lastFault.isFault()
                 ? Component.literal(lastFault.message())
                 : Component.empty();
+    }
+
+    @Override
+    public Optional<RecipeSelection> recipeSelection() {
+        if (kind != ProcessMachineKind.ASSEMBLER) {
+            return Optional.empty();
+        }
+        return Optional.of(new RecipeSelection(assemblerWork.selected(), assemblerWork.valid() ? workRecipeId : "",
+                assemblerWork.valid() ? progress : 0.0, assemblerWork.suspended(), selectionIssue()));
+    }
+
+    private SelectionIssue selectionIssue() {
+        if (!assemblerWork.valid()) {
+            return SelectionIssue.INVALID_WORK;
+        }
+        if (assemblerWork.selected().isEmpty()) {
+            return SelectionIssue.AUTO;
+        }
+        ProcessRecipe selected = ProcessLookup.byId(kind.family(), assemblerWork.selected()).orElse(null);
+        if (selected == null) {
+            return SelectionIssue.UNAVAILABLE;
+        }
+        if (!ProcessLookup.matches(selected, inputs())) {
+            return SelectionIssue.MISSING_ITEMS;
+        }
+        if (!ProcessLookup.matchesFluid(selected, fluid.state(),
+                FluidInsert.available(FluidInsert.neighbours(getLevel(), getBlockPos())))) {
+            return SelectionIssue.MISSING_FLUID;
+        }
+        var held = kind.regulatesConditions() ? kind.heldConditions(selected) : kind.heldConditions();
+        if (!kind.regulationReport(selected).canRun() || !ProcessLookup.conditionsOf(selected).evaluate(held).canRun()) {
+            return SelectionIssue.CONDITIONS;
+        }
+        return workRecipeId.equals(selected.id()) && progress >= selected.durationTicks() && !canOutput(selected)
+                ? SelectionIssue.OUTPUT_BLOCKED : SelectionIssue.SELECTED;
+    }
+
+    @Override
+    public SelectionResult selectRecipe(Player player, String id) {
+        if (kind != ProcessMachineKind.ASSEMBLER || kind.family() != MachineFamily.ASSEMBLER) {
+            return SelectionResult.NOT_ASSEMBLER;
+        }
+        if (getLevel() == null || getLevel().isClientSide() || getLevel().getServer() == null
+                || !getLevel().getServer().isSameThread()) {
+            return SelectionResult.CLOSED;
+        }
+        if (!(player.containerMenu instanceof ProcessMachineMenu menu) || menu.host() != this
+                || player.level() != getLevel() || !player.isAlive() || player.isRemoved() || isRemoved()
+                || !getLevel().hasChunkAt(getBlockPos()) || getLevel().getBlockEntity(getBlockPos()) != this
+                || !stillValid(player)) {
+            return SelectionResult.CLOSED;
+        }
+        if (player.isSpectator() || !player.mayBuild() || !getLevel().mayInteract(player, getBlockPos())
+                || !player.mayInteract(getLevel(), getBlockPos())
+                || !player.mayUseItemAt(getBlockPos(), Direction.UP, ItemStack.EMPTY)) {
+            return SelectionResult.DENIED;
+        }
+        return changeRecipeSelection(id);
+    }
+
+    private SelectionResult changeRecipeSelection(String id) {
+        if (loadingInventory || processing || settling) {
+            return SelectionResult.BUSY;
+        }
+        if (!assemblerWork.valid()) {
+            return SelectionResult.INVALID_WORK;
+        }
+        if (id == null || id.length() > AssemblerWork.MAX_ID_LENGTH
+                || !id.isEmpty() && ProcessLookup.byId(MachineFamily.ASSEMBLER, id).isEmpty()) {
+            return SelectionResult.INVALID_RECIPE;
+        }
+        if (assemblerWork.selected().equals(id)) {
+            return SelectionResult.UNCHANGED;
+        }
+        if (!id.isEmpty()) {
+            activateAssemblerWork(id);
+        }
+        assemblerWork.select(id);
+        cached = null;
+        cachedRecipeId = "";
+        setChanged();
+        updateSubscriptions();
+        syncData();
+        return SelectionResult.SELECTED;
     }
 
     @Override

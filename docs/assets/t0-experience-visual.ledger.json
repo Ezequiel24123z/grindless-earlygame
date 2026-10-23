@@ -1,0 +1,20 @@
+{
+  "schema": "grindless.local-visual-wave.v1",
+  "purpose": "Global T0 source/runtime visual inventory, reusable guided presets, demonstrated state-readability repair and original shared port markings.",
+  "source_baseline": "b8bd5e885aef598bf888d7e390b297a34cbb7d52",
+  "maximum_local_diffusion_candidates": 6,
+  "maximum_demonstrated_critical_targets": 3,
+  "maximum_candidates_per_target": 2,
+  "reserved_targets": [],
+  "requests": [],
+  "spent": 0,
+  "external_paid_image_requests": 0,
+  "new_models_downloaded": 0,
+  "runtime_or_account_installation_changes": 0,
+  "model_if_generation_is_justified": "e9476a13728cd75d8279f6ec8bad753a66a1957ca375a1464dc63b37db6e3916",
+  "generation_decision": "Not needed: the demonstrated ambiguity is an exact shared status-mask defect; repair it deterministically instead of sampling pictures.",
+  "historical_multitool_run": "Immutable spent2/2; never reset, amended or used as this wave allowance.",
+  "reservation_policy": "Before any future HTTP submit, freeze a concrete critical target, source revision, canonical spec/template/model/settings/guide/seed and reserve its purpose/slot durably. Unknown delivery remains spent; never rePOST ambiguously.",
+  "budget_is_a_ceiling_not_a_target": true,
+  "human_visual_approval": false
+}

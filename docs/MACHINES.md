@@ -113,8 +113,14 @@ Grindless takes the depth and refuses the repetition.
 
 The operating rule:
 
-> **If the player has already solved a problem, never ask them to solve it again by hand.**
+> **Do not make the player repeatedly gather or process industrial feed by hand.**
 > Asking them to solve it *at a different scale* is fair — that is a new problem.
+
+ADR-0188 deliberately keeps final normal-machine construction manual. Automatic
+materials/components and machine operation remove industrial repetition; they do
+not imply automatic production of every complete machine. Real multiblock
+controllers are eligible for automated manufacture. Already-owned machinery
+may still be placed by stock-consuming construction tools.
 
 Everything below follows from that. Depth comes from the recipe graph, from condition tuning, from
 route selection and from ratio balancing. None of those are repetitive, and all of them get *more*
@@ -123,8 +129,8 @@ interesting the larger your factory gets.
 The tier ladder therefore grows approximately monotonically in meaningful content. A later tier
 has more interacting process families, deeper routes, a larger logistics problem and a larger
 signature project than an earlier one. It also supplies the leverage needed to handle that scale:
-Assembler automation, Process Cards, construction drones, Assembly Fields, abstract colonies and
-self-replicating infrastructure. Larger stack counts, longer timers and more manual placement do
+component/controller fabrication, Process Cards, construction drones, Assembly Fields and abstract
+colonies. Ordinary final machines are not a self-replicating product. Larger stack counts, longer timers and more manual placement do
 not count as content (ADR-0107).
 
 ---
@@ -251,6 +257,37 @@ always better telemetry rather than less complexity.
 
 ---
 
+### Assembler target and paid work
+
+The ADR-0185 development source extends the existing Assembler screen with
+**Assembly target**, a searchable output/ID list and an explicit
+**AUTO (from inputs)** option. Choose a named target for equal-input
+component/eligible-controller recipes; JEI remains the authority for ordinary ingredient
+quantities. AUTO preserves legacy lookup rather than guessing the player's
+intended output. This source feature is not yet the installed player build.
+
+Target configuration and paid work are separate. The server admits only a
+current Assembler recipe through the live authorized menu; missing inputs or
+an unavailable target wait visibly without a different automatic output.
+Switching stores work by its exact recipe ID, including fractional carry;
+return to a still-valid ID with its requirements met to resume it. Work whose
+recipe was retired stays retained and unavailable, without transfer/refund.
+Completed blocked work waits for output room
+without another work tick. A stale-menu refusal asks for the refreshed menu,
+not an inventory reset or manual save edit.
+
+ADR-0189 applies a narrower guard to the Assembly Bench: positive orphaned
+work holds the machine before another recipe can replace its owner or balance,
+including through inspection/cache refresh. The existing fault presentation
+names the unavailable recipe and retained base ticks. Known live work,
+unpaid lookup and the specific valid legacy Guide exception stay separate.
+Do not interpret this hold as a completed recovery of a real saved-world job.
+
+These are implemented source contracts, not a claim of graphical/transport/
+longitudinal acceptance. The [current validation record](testing/latest-validation.md)
+distinguishes actual tests from pending native and human gates. Process Cards,
+genuine in-place chassis capabilities and full tier readiness remain separate.
+
 ## Control matrices
 
 Technology tier, controller rating and Flux tier advance together from T0/F0 through T15/F15
@@ -282,6 +319,13 @@ ordinary machines never ask a world-scoped permission whether their recipe exist
 
 ## Chassis marks and upgrades
 
+ADR-0174 reiterates the owner contract: T1 introduces baseline ordinary machine
+families; later tiers broaden their real recipe/condition capabilities and add
+specialized multiblocks. The first five-machine factory is not the complete T1
+catalogue. First-introduction labels in older prototype slices do not supersede
+this rule. The design below is the intended shared mechanism, not a claim that
+all marks, kits, persistence and family variants already exist in runtime.
+
 Two independent dials. The **chassis mark** is the machine's capability ceiling; **upgrades** tune
 behaviour within that ceiling. Separating them is what stops the catalogue from exploding into nine
 copies of every machine.
@@ -291,6 +335,11 @@ copies of every machine.
 Every machine exists at marks **MK I** through **MK VIII**. A mark is not a different block — you
 apply a **Chassis Upgrade Kit** to the machine in place, keeping its position, its contents, its
 configuration and its connections. Nothing is ever rebuilt or re-piped.
+
+An implementation must also explicitly preserve or safely handle the active
+process and store ownership; applying a costlier Matrix while producing the same
+unchanged baseline item is not an upgrade. Trace/save/reload these boundaries
+before qualifying a later-tier machine variant.
 
 | Mark | Upgrade slots | Max Flux tier | Envelope width | First technology |
 | --- | --- | --- | --- | --- |
@@ -497,7 +546,7 @@ craft and re-pipe.
 
 | Machine | First tier | Role |
 | --- | --- | --- |
-| **Assembler** | T1 | Multi-ingredient fabrication. The machine that makes machines. |
+| **Assembler** | T1 | Multi-ingredient component and eligible multiblock-controller fabrication; normal machines have manual final assembly (ADR-0188). |
 | **Press** | T1 | Plates, rods, gears, casings, with a die in the catalyst slot. |
 | **Caster** | T2 | Molten metal to solid shapes, skipping the ingot stage. |
 | **Wire Mill** | T2 | Wire and coil, which everything electrical needs. |

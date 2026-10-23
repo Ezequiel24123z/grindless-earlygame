@@ -1,15 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "MIC",
-    "IRI",
-    "CIC"
+    "ICI",
+    "IMI",
+    "CRC"
   ],
   "key": {
     "C": { "tag": "minecraft:stone_crafting_materials" },
     "I": { "tag": "forge:ingots/iron" },
     "R": { "item": "minecraft:redstone" },
-    "M": { "item": "grindless:relay_matrix" }
+    "M": { "type": "grindless:minimum_control", "tier": "F1" }
   },
   "result": { "item": "grindless:terrestrial_extractor" }
 }

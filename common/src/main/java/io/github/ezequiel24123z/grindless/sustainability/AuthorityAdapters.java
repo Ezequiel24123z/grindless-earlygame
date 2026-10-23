@@ -5,8 +5,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceContext;
 import io.github.ezequiel24123z.grindless.material.MaterialForm;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
+import io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt;
+import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
+import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.recipe.BootstrapRecipes;
 import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
@@ -118,7 +122,7 @@ public final class AuthorityAdapters {
             tags.resolve(tag);
         }
         for (SupplyCatalogue.Entry entry : SupplyCatalogue.entries()) {
-            builder.resource(item("grindless:" + entry.itemName()));
+            builder.resource(new Resource(Kind.ITEM, "grindless:" + entry.itemName()));
         }
         List<ProcessRecipe> graph = ProcessGraph.generate(materialViews());
         for (ProcessRecipe recipe : graph) {
@@ -183,7 +187,7 @@ public final class AuthorityAdapters {
         return List.copyOf(result);
     }
 
-    /** Adapts one process with its actual quantities, Matrix ratings, sinks, conditions and rates. */
+    /** Minimum control retains a canonical supply option plus its explicit role, not fabricated resources. */
     public static Route process(ProcessRecipe recipe) {
         Map<Resource, Long> inputs = new TreeMap<>();
         Map<Resource, Long> catalysts = new TreeMap<>();
@@ -207,6 +211,10 @@ public final class AuthorityAdapters {
         if (recipe.namesTemperature()) {
             conditions.put("temperature_c", Double.toString(recipe.temperatureC()));
         }
+        if (recipe.namesPressure()) {
+            conditions.put("pressure_mpa", Double.toString(recipe.pressureMPa()));
+            conditions.put("pressure_optimal_half_width_mpa", Double.toString(recipe.pressureHalfWidthMPa()));
+        }
         if (recipe.namesAtmosphere()) {
             conditions.put("atmosphere", recipe.atmosphere());
         }
@@ -216,6 +224,8 @@ public final class AuthorityAdapters {
         if (recipe.milestone() != null) {
             conditions.put("informational_milestone", recipe.milestone());
         }
+        minimumControl(conditions, recipe.inputs(), "input");
+        minimumControl(conditions, recipe.catalysts(), "catalyst");
         WorkshopStructure structure = WorkshopStructure.forFamily(recipe.family());
         if (structure != WorkshopStructure.NONE) {
             conditions.put("workshop_structure", structure.name());
@@ -228,6 +238,17 @@ public final class AuthorityAdapters {
         return new Route(recipe.id(), Authority.PROCESS_GRAPH, "ProcessGraph.generate",
                 recipe.family().name(), inputs, catalysts, outputs, discharged,
                 recipe.durationTicks(), recipe.fuPerTick(), conditions, Set.of(), false, true, true);
+    }
+
+    private static void minimumControl(Map<String, String> conditions, List<IngredientSpec> inputs, String role) {
+        for (int index = 0; index < inputs.size(); index++) {
+            IngredientSpec input = inputs.get(index);
+            if (input.isMinimumControl()) {
+                conditions.put("minimum_control_" + role + "_" + index,
+                        resource(input.kind(), input.id(), input.matrixRating()).key());
+                conditions.put("control_supply_projection", "canonical_option_not_exhaustive_alternatives");
+            }
+        }
     }
 
     /**
@@ -345,7 +366,8 @@ public final class AuthorityAdapters {
         for (Class<?> entry : List.of(ProcessGraph.class, SupplyCatalogue.class, BootstrapRecipes.class,
                 T1Recipes.class, QuestCatalogue.class, FluidLogic.class, ThermalLogic.class, SolarLogic.class,
                 SourceLogic.class, MaterialForm.class, FluxTier.class, IngredientSpec.class,
-                OutputSpec.class, ProcessRecipe.class, WorkshopStructure.class)) {
+                OutputSpec.class, ProcessRecipe.class, WorkshopStructure.class,
+                ControlMatrixNbt.class, MatrixArchitecture.class, ResourceGuidanceContext.class)) {
             pending.add(entry.getName());
         }
         // Read the physical claim-access authority as source without loading game classes.
@@ -417,7 +439,9 @@ public final class AuthorityAdapters {
         Set<String> pending = new TreeSet<>();
         for (Class<?> type : List.of(AuditFinding.class, AuditReports.class, AuthorityAdapters.class,
                 ConstructionReserve.class, DebtManifest.class, SustainabilityAnnotations.class,
-                SustainabilityAudit.class, SustainabilityModel.class, TagResolver.class)) {
+                SustainabilityAudit.class, SustainabilityModel.class, TagResolver.class,
+                ControlMatrixNbt.class, ControlMatrixSpec.class, MatrixArchitecture.class, FluxTier.class,
+                ResourceGuidanceContext.class)) {
             pending.add(type.getName().replace('.', '/') + ".class");
         }
         for (String check : List.of("VerifySustainability", "VerifySustainabilityAdapters",
@@ -562,7 +586,10 @@ public final class AuthorityAdapters {
                 }
                 Route expected = catalogues.get(name);
                 if (expected != null) {
-                    if (!route.inputs().equals(expected.inputs()) || !route.outputs().equals(expected.outputs())) {
+                    Map<String, String> manualConditions = new TreeMap<>(route.conditions());
+                    manualConditions.remove("crafting_type");
+                    if (!route.inputs().equals(expected.inputs()) || !route.outputs().equals(expected.outputs())
+                            || !manualConditions.equals(expected.conditions())) {
                         builder.finding(new AuditFinding("craft_authority_mismatch", route.id(), "",
                                 AuditFinding.Severity.ERROR, "Shipped crafting JSON differs from its live Java catalogue.",
                                 List.of(source, expected.source())));
@@ -591,14 +618,19 @@ public final class AuthorityAdapters {
     private static Route shaped(String name, List<String> pattern, Map<String, String> key,
                                 String result, long count, Authority authority) {
         Map<Resource, Long> inputs = new TreeMap<>();
+        Map<String, String> conditions = new TreeMap<>();
         for (String row : pattern) {
             for (char symbol : row.toCharArray()) {
                 if (symbol != ' ') {
-                    add(inputs, qualified(key.get(String.valueOf(symbol))), 1);
+                    IngredientSpec input = IngredientSpec.crafting(key.get(String.valueOf(symbol)));
+                    add(inputs, manualIngredient(input, "key_" + symbol, conditions), 1);
                 }
             }
         }
-        return craft(name, inputs, result, count, authority, authority.name() + ".shaped");
+        Route route = craft(name, inputs, result, count, authority, authority.name() + ".shaped");
+        return new Route(route.id(), route.authority(), route.source(), route.family(), route.inputs(),
+                route.catalysts(), route.outputs(), route.discharged(), route.durationTicks(), route.fuPerTick(),
+                conditions, route.prerequisites(), route.oneShot(), route.modOwned(), route.automatable());
     }
 
     private static Route craft(String name, Map<Resource, Long> inputs, String output, long count,
@@ -610,6 +642,7 @@ public final class AuthorityAdapters {
     private static Route crafting(String id, JsonObject json, String source, Authority authority, Builder builder) {
         String type = json.has("type") ? json.get("type").getAsString() : "";
         Map<Resource, Long> inputs = new TreeMap<>();
+        Map<String, String> conditions = new TreeMap<>(Map.of("crafting_type", type));
         String family = null;
         if (type.equals("minecraft:crafting_shaped")) {
             JsonObject keys = json.getAsJsonObject("key");
@@ -622,7 +655,8 @@ public final class AuthorityAdapters {
                 }
                 for (char symbol : row.getAsString().toCharArray()) {
                     if (symbol != ' ') {
-                        add(inputs, ingredient(keys.get(String.valueOf(symbol)), id + "/" + symbol, builder), 1);
+                        add(inputs, ingredient(keys.get(String.valueOf(symbol)), id + "/" + symbol, builder,
+                                "key_" + symbol, conditions), 1);
                     }
                 }
             }
@@ -632,7 +666,8 @@ public final class AuthorityAdapters {
             }
             int index = 0;
             for (JsonElement element : json.getAsJsonArray("ingredients")) {
-                add(inputs, ingredient(element, id + "/" + index++, builder), 1);
+                add(inputs, ingredient(element, id + "/" + index, builder, "input_" + index, conditions), 1);
+                index++;
             }
         } else {
             builder.finding(unknown("recipe_type_unknown", id, "Unsupported authored recipe type: " + type));
@@ -642,15 +677,20 @@ public final class AuthorityAdapters {
         long count = result.has("count") ? result.get("count").getAsLong() : 1;
         return new Route(id, authority, source, family, inputs, Map.of(),
                 Map.of(item(result.get("item").getAsString()), count), Set.of(), 0, 0,
-                Map.of("crafting_type", type), Set.of(), false, authority != Authority.VANILLA_TRANSFORMATION, false);
+                conditions, Set.of(), false, authority != Authority.VANILLA_TRANSFORMATION, false);
     }
 
-    private static Resource ingredient(JsonElement json, String id, Builder builder) {
+    private static Resource ingredient(JsonElement json, String id, Builder builder,
+                                       String role, Map<String, String> conditions) {
         if (json.isJsonArray()) {
             Set<Resource> alternatives = new TreeSet<>();
             int index = 0;
             for (JsonElement element : json.getAsJsonArray()) {
-                alternatives.add(ingredient(element, id + "/" + index++, builder));
+                Map<String, String> alternativeConditions = new TreeMap<>();
+                alternatives.add(ingredient(element, id + "/" + index++, builder, role, alternativeConditions));
+                if (!alternativeConditions.isEmpty()) {
+                    throw new IllegalArgumentException("Minimum control inside alternatives is not authored at " + id);
+                }
             }
             Resource choice = new Resource(Kind.TAG, "choices:" + id);
             builder.tag(choice, new TagResolution(alternatives,
@@ -660,13 +700,25 @@ public final class AuthorityAdapters {
             return choice;
         }
         JsonObject object = json.getAsJsonObject();
-        if (object.has("item")) {
+        if (object.has("type")) {
+            return manualIngredient(IngredientSpec.manualControl(object), role, conditions);
+        }
+        if (object.keySet().equals(Set.of("item"))) {
             return item(object.get("item").getAsString());
         }
-        if (object.has("tag")) {
+        if (object.keySet().equals(Set.of("tag"))) {
             return new Resource(Kind.TAG, object.get("tag").getAsString());
         }
         throw new IllegalArgumentException("Unsupported ingredient at " + id);
+    }
+
+    private static Resource manualIngredient(IngredientSpec input, String role, Map<String, String> conditions) {
+        Resource supply = resource(input.kind(), input.id(), input.matrixRating());
+        if (input.isMinimumControl()) {
+            conditions.put("minimum_control_" + role, supply.key());
+            conditions.put("control_supply_projection", "canonical_option_not_exhaustive_alternatives");
+        }
+        return supply;
     }
 
     private static void readQuests(Builder builder) {
@@ -675,11 +727,14 @@ public final class AuthorityAdapters {
         for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
             Resource subject = task.evidence() == QuestCatalogue.Evidence.DIMENSION
                     || task.evidence() == QuestCatalogue.Evidence.FREE ? null
-                    : new Resource(Kind.ITEM, task.subject(),
-                    task.matrixRating() == null ? 0 : task.matrixRating().ordinal(), "items");
+                    : resource(IngredientSpec.ITEM, task.subject(), questResourceRating(task));
             String routeId = "quest/" + task.id();
-            builder.objective(new Objective(task.id(), subject, task.count(), Set.copyOf(task.requires()),
-                    routeId, "QuestCatalogue.tasks"));
+            Set<String> prerequisites = Set.copyOf(QuestCatalogue.requirements(task));
+            builder.objective(new Objective(task.id(), subject, task.count(), prerequisites,
+                    task.type() == QuestCatalogue.Type.LESSON ? null : routeId, "QuestCatalogue.tasks"));
+            if (task.type() == QuestCatalogue.Type.LESSON) {
+                continue;
+            }
             if (task.evidence() == QuestCatalogue.Evidence.DIMENSION) {
                 builder.finding(unknown("objective_unknown", task.id(), "Dimension evidence requires a world adapter."));
                 continue;
@@ -691,14 +746,23 @@ public final class AuthorityAdapters {
             requirements.merge(book, 1L, Math::max);
             Map<Resource, Long> rewards = new TreeMap<>();
             task.rewards().forEach(reward -> rewards.merge(item(reward.itemId()), (long) reward.count(), Math::addExact));
+            Map<String, String> conditions = new TreeMap<>(Map.of("evidence", task.evidence().name(),
+                    "claim_access", "held_quest_book_menu"));
+            if (task.matrixRating() != null) {
+                conditions.put("matrix_rating", task.matrixRating().name());
+            }
             builder.route(new Route(routeId, Authority.QUEST_REWARD, "QuestCatalogue.tasks/" + task.id()
                     + " + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton",
                     null, Map.of(), requirements,
                     rewards, Set.of(), 0, 0,
-                    Map.of("evidence", task.evidence().name(), "claim_access", "held_quest_book_menu"),
-                    task.requires().stream().map(id -> "quest/" + id)
+                    conditions,
+                    prerequisites.stream().map(id -> "quest/" + id)
                             .collect(java.util.stream.Collectors.toSet()), true, true, false));
         }
+    }
+
+    private static int questResourceRating(QuestCatalogue.Task task) {
+        return task.matrixRating() == null ? 0 : task.matrixRating().ordinal();
     }
 
     private static void readGenerators(List<ProcessRecipe> graph, Builder builder) {
@@ -741,11 +805,19 @@ public final class AuthorityAdapters {
     }
 
     private static Resource resource(String kind, String id, int rating) {
-        return new Resource(switch (kind) {
+        return physical(new Resource(switch (kind) {
             case IngredientSpec.TAG -> Kind.TAG;
             case IngredientSpec.FLUID -> Kind.FLUID;
             default -> Kind.ITEM;
-        }, id, rating, "items");
+        }, id, rating, "items"));
+    }
+
+    /**
+     * Shares the pure authored supply rule with display; registry declarations bypass this seam.
+     * Invalid explicit NBT is not an authored default and must be rejected by the actual stack decoder.
+     */
+    static Resource physical(Resource resource) {
+        return ResourceGuidanceContext.canonicalSupply(resource);
     }
 
     private static Resource qualified(String value) {
@@ -754,7 +826,7 @@ public final class AuthorityAdapters {
     }
 
     private static Resource item(String id) {
-        return new Resource(Kind.ITEM, id);
+        return resource(IngredientSpec.ITEM, id, 0);
     }
 
     private static void add(Map<Resource, Long> quantities, Resource resource, long amount) {

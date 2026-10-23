@@ -30,9 +30,14 @@ public final class VerifySustainabilityT0 {
         DebtManifest debt = DebtManifest.read(root.resolve(Path.of("tools", "sustainability", "debt.json")));
         var derivation = SustainabilityAudit.deriveEntryProfile(snapshot, annotations, debt, 0);
         var result = derivation.replay();
-        passed += VerifyResourceGuidance.verifyCanonical(root, result);
         var tier = result.tiers().get(0);
         T0ConditionalGate.Gate gate = T0ConditionalGate.evaluate(result);
+        // Keep semantic failures visible even when the independent generated-asset equality is
+        // also stale. The equality and the hard pass assertion below are not skipped or waived.
+        gate.unmetObligations().forEach((id, reason) -> System.out.println("GATE BLOCKED " + id + ": " + reason));
+        gate.decisions().stream().filter(T0ConditionalGate.Decision::blocking)
+                .forEach(decision -> System.out.println("GATE BLOCKED " + decision.fingerprint() + ": " + decision.basis()));
+        passed += VerifyResourceGuidance.verifyCanonical(root, result);
         Path report = root.resolve(Path.of("build", "sustainability", "t0-conditional"));
         String revision = revision(root);
         AuditReports.Hashes hashes = AuditReports.write(report, result, revision, true);
@@ -56,9 +61,6 @@ public final class VerifySustainabilityT0 {
                 System.out.println("T0 " + finding.severity() + " " + finding.fingerprint() + ": " + finding.message());
             }
         }
-        gate.unmetObligations().forEach((id, reason) -> System.out.println("GATE BLOCKED " + id + ": " + reason));
-        gate.decisions().stream().filter(T0ConditionalGate.Decision::blocking)
-                .forEach(decision -> System.out.println("GATE BLOCKED " + decision.fingerprint() + ": " + decision.basis()));
         eq("the hard gate covers relevant global evidence, not only detail T0", true, gate.pass());
         eq("a finite conditional entry is explicitly identified", template.id(), derivation.profile().id());
         eq("the entire prototype route inventory remains present", true,
@@ -108,7 +110,82 @@ public final class VerifySustainabilityT0 {
             eq("each allowlisted construction has actual resolved recipe data: " + id, true, craft != null);
             eq("vanilla construction crafts stay manual: " + id, false, craft != null && craft.automatable());
         }
+        Resource furnace = new Resource(Kind.ITEM, "minecraft:furnace");
+        ResourceMetadata furnaceCapital = annotations.resources().get(furnace);
+        eq("the coordinator's external Furnace decision uses the existing manual vanilla authority",
+                "vanilla/minecraft:furnace", furnaceCapital.canonicalRoute());
+        eq("the vanilla Furnace is finite manual capital, not recurring automatic item supply",
+                ResourceClass.MANUAL_CAPITAL, furnaceCapital.resourceClass());
+        eq("no Matrix ingredient is added to the vanilla Furnace", false,
+                snapshot.routes().get(furnaceCapital.canonicalRoute()).inputs().keySet().stream()
+                .anyMatch(input -> input.id().equals("grindless:relay_matrix")));
+        eq("the old Bench Furnace constructor is absent", false, snapshot.routes().containsKey("bench/furnace"));
+        eq("the old Assembler Furnace constructor is absent", false,
+                snapshot.routes().containsKey("assemble/bootstrap/furnace"));
+        Resource firingController = annotations.machines().get("FIRING_CHAMBER").construction();
+        ResourceMetadata firingCapital = annotations.resources().get(firingController);
+        eq("the allowed formed-controller constructor is finite capital with its manual Furnace input",
+                ResourceClass.BOOTSTRAP, firingCapital.resourceClass());
+        eq("finite formed capital does not promise R0 controller-item renewal", null,
+                firingCapital.firstRenewableTier());
+        eq("the actual automatic controller authority is retained", "bench/firing_chamber", firingCapital.canonicalRoute());
+        eq("local automatic controller assembly remains permitted", true,
+                snapshot.routes().get(firingCapital.canonicalRoute()).automatable());
+        eq("the actual controller bill still consumes one real Furnace", 1L,
+                snapshot.routes().get(firingCapital.canonicalRoute()).inputs().get(furnace));
+        eq("controller-item supply is not automatically renewable", false, tier.renewable().contains(firingController));
+        eq("the installed controller still supports actual renewable ceramics", true,
+                tier.renewable().contains(new Resource(Kind.ITEM, "grindless:ceramic_insulator")));
+        for (Machine machine : annotations.machines().values()) {
+            Resource capital = machine.construction();
+            if (!io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy.isManualFinalMachine(capital.id())) {
+                continue;
+            }
+            ResourceMetadata metadata = annotations.resources().get(capital);
+            eq("real normal-machine capital has its explicit nonrenewable class: " + capital.key(),
+            ResourceClass.MANUAL_CAPITAL, metadata.resourceClass());
+            eq("manual capital has no automatic item-renewability tier: " + capital.key(), null,
+            metadata.firstRenewableTier());
+            eq("manual capital uses an actual manual construction route: " + capital.key(), false,
+            snapshot.routes().get(metadata.canonicalRoute()).automatable());
+            eq("a normal machine item is not an R0 recurring supply: " + capital.key(), false,
+            tier.renewable().contains(capital));
+            eq("possession/installation is not a recurring raw-feed obligation: " + capital.key(), false,
+            tier.recurring().contains(capital));
+            eq("normal capital remains constructible and available: " + capital.key(), true,
+            tier.available().contains(capital));
+        }
+        for (Route route : snapshot.routes().values()) {
+            RoutePolicy policy = annotations.routes().get(route.id());
+            if (policy == null || !Integer.valueOf(0).equals(policy.unlockTier())) {
+                continue;
+            }
+            for (Resource output : route.retainedOutputs().keySet()) {
+                if (io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy.isManualFinalMachine(output.id())) {
+            eq("all actual T0 normal-machine outputs, not only process-family bindings, have capital metadata: "
+                            + route.id() + "/" + output.key(),
+                    ResourceClass.MANUAL_CAPITAL, annotations.resources().get(output).resourceClass());
+            eq("a T0 capital output is never a renewable item claim: " + output.key(), false,
+                    tier.renewable().contains(output));
+                }
+            }
+        }
         Resource exit = annotations.ledger().get(0).exitObjective();
+        Resource relayDeclaration = new Resource(Kind.ITEM, "grindless:relay_matrix");
+        eq("the T0 exit retains the exact physical F1 quest identity",
+                new Resource(Kind.ITEM, relayDeclaration.id(), 1, "items"), exit);
+        eq("the T0 exit metadata and quest use the same physical identity", exit,
+                snapshot.objectives().get("relay").subject());
+        eq("the manual exit produces the unchanged complete physical batch", Map.of(exit, 5L),
+                snapshot.routes().get("craft/relay_matrix").outputs());
+        eq("the Relay claim retains five physical F1 stacks as evidence", 5L,
+                snapshot.routes().get("quest/relay").catalysts().get(exit));
+        eq("physical T0 exit metadata stays finite bootstrap, not automatic supply", ResourceClass.BOOTSTRAP,
+                annotations.resources().get(exit).resourceClass());
+        eq("a generic declaration does not borrow the physical exit's metadata", false,
+                annotations.resources().containsKey(relayDeclaration));
+        eq("canonical inventory retains the separate generic declaration", true,
+                snapshot.resources().contains(relayDeclaration));
         eq("the manual Matrix is not a recurring product root", false, tier.recurring().contains(exit));
         eq("the manual Matrix is not renewable T0 production", false, tier.renewable().contains(exit));
         eq("the existing manual Matrix craft is unchanged", false,
@@ -161,6 +238,45 @@ public final class VerifySustainabilityT0 {
                         && tier.exitProduction().status().equals("conditional_established"));
         eq("the real quest requires at least the existing five-Matrix batch", true,
                 tier.exitProduction() != null && tier.exitProduction().requiredCount() >= 5);
+        var custody = tier.witnessState();
+        eq("the applicable passing conditional T0 replay issues complete immutable custody", true, custody != null);
+        if (custody != null) {
+            eq("the existing report still exposes locked catalysts, not the complete stock",
+                    tier.retainedInventory(), custody.retainedCatalysts());
+            eq("actual exit production is present once as free physical F1", tier.exitProduction().produced(),
+                    custody.freeStock().get(exit));
+            eq("manufactured exit stock is not duplicated as a delivery", 0L,
+                    custody.cumulativeDeliveries().getOrDefault(exit, 0L));
+            eq("the complete checkpoint preserves actual completed-batch counts",
+                    tier.establishmentBatches(), custody.establishmentBatches());
+            eq("every completed batch has a concrete physical history entry",
+                    tier.establishmentBatches().values().stream().mapToLong(Long::longValue).sum(),
+                    (long) custody.history().size());
+            eq("the required startup-work bound is preserved exactly",
+                    tier.manualWork().requiredActions(), custody.requiredManualActions());
+            eq("actual spent startup labour is distinct from the required-work high-water mark", true,
+                    custody.consumedManualActions() >= 0
+                            && custody.consumedManualActions() <= custody.requiredManualActions());
+            // Installation reserves one paid unit, not every unit with the same resource identity.
+            // Compare independent executed/delivered funding with all physical custody axes.
+            var physical = VerifySustainability.physicalCustody(custody);
+            for (Resource block : custody.installedMachines()) {
+                long free = custody.freeStock().getOrDefault(block, 0L);
+                long locked = custody.retainedCatalysts().getOrDefault(block, 0L);
+                long parts = custody.installationParts().values().stream()
+                        .mapToLong(requirements -> requirements.getOrDefault(block, 0L)).reduce(0L, Math::addExact);
+                String context = block.key() + " [installed=1, free=" + free
+                        + ", locked=" + locked + ", installation_parts=" + parts + "]";
+                eq("installed construction and separately funded stock conserve physical units: " + context,
+                        VerifySustainability.constructionSupply(custody, block), physical.get(block));
+                eq("no construction custody axis borrows an installed unit: " + context, true,
+                        free >= 0 && locked >= 0 && custody.installationParts().values().stream()
+                                .allMatch(requirements -> requirements.getOrDefault(block, 0L) >= 0));
+            }
+            eq("formed surrounding parts remain physically reserved", true, !custody.installationParts().isEmpty());
+            eq("every inherited one-shot has exactly one completed batch", true, custody.claimedRoutes().stream()
+                    .allMatch(id -> custody.establishmentBatches().getOrDefault(id, 0L) == 1));
+        }
         eq("all concrete T0 findings remain hard failures", 0L, result.findings().findings().stream()
                 .filter(finding -> finding.detail().equals("T0")).count());
         System.out.println(passed + " passed, " + failed + " failed; conditional model only, no Tier acceptance.");

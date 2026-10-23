@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /** Throwaway check that every registered block and item can be drawn, dropped and named. */
 public final class VerifyAssets {
@@ -57,6 +58,7 @@ public final class VerifyAssets {
         everyModelResolves();
         textureReferenceRegressionCases();
         itemsAreNamedAndModelled();
+        thermalGeneratorCore();
         physicalItemSprites();
         finish();
     }
@@ -284,7 +286,7 @@ public final class VerifyAssets {
         }
     }
 
-    /** Every sound event must exist in code, in sounds.json and on disk, and be mono. */
+    /** Every event is a checked mono import, an explicit native alias or intentional silence. */
     private static void sounds() throws IOException {
         List<String> inCode = registered("ModSounds.java", "sound");
         JsonObject events = read(ASSETS.resolve("sounds.json"));
@@ -292,20 +294,40 @@ public final class VerifyAssets {
         yes("sounds.json defines exactly the events ModSounds registers " + inCode,
                 events.size() == inCode.size() && inCode.stream().allMatch(events::has));
         JsonObject lang = read(ASSETS.resolve("lang/en_us.json"));
+        Map<String, String> nativeEvents = Map.of(
+                "pylon_link", "minecraft:block.tripwire.attach",
+                "relay_click", "minecraft:block.lever.click",
+                "brownout_alarm", "minecraft:block.iron_trapdoor.close",
+                "t0_fire_draft", "minecraft:block.furnace.fire_crackle");
         for (String name : inCode) {
             Path file = ASSETS.resolve("sounds/" + name + ".ogg");
-            yes(name + " has an ogg file", exists(file));
-            yes(name + " is mono, or Minecraft will not place it in 3D", exists(file) && vorbisChannels(file) == 1);
             yes(name + " has a subtitle", lang.has("subtitles.grindless." + name));
             JsonArray sounds = events.getAsJsonObject(name).getAsJsonArray("sounds");
+            if (Set.of("machine_hum", "machine_hum_heavy").contains(name)) {
+                yes(name + " retains its identity but is intentionally silent",
+                        sounds.isEmpty() && !exists(file));
+                continue;
+            }
             JsonElement sound = sounds.size() == 1 ? sounds.get(0) : null;
+            if (nativeEvents.containsKey(name)) {
+                yes(name + " references its exact installed native event without a copied recording",
+                        sound != null && sound.isJsonObject()
+                                && sound.getAsJsonObject().keySet().equals(Set.of("name", "type"))
+                                && sound.getAsJsonObject().get("type").getAsString().equals("event")
+                                && sound.getAsJsonObject().get("name").getAsString().equals(nativeEvents.get(name))
+                                && !exists(file));
+                continue;
+            }
+            yes(name + " has an ogg file", exists(file));
+            yes(name + " is mono, or Minecraft will not place it in 3D", exists(file) && vorbisChannels(file) == 1);
             yes(name + " binds exactly its checked Ogg resource",
                     sound != null && ("grindless:" + name).equals(sound.isJsonObject()
                             ? sound.getAsJsonObject().get("name").getAsString() : sound.getAsString()));
         }
         importedQuernAudio(events);
         importedMixerAudio(events);
-        preservedLegacyAudio(events);
+        physicalAudio(events);
+        retiredSyntheticAudio();
     }
 
     private static void importedQuernAudio(JsonObject events) throws IOException {
@@ -339,34 +361,27 @@ public final class VerifyAssets {
         while (writes.find()) {
             generated.add(writes.group(1));
         }
-        yes("the generator writes only the five legacy synthetic sounds", generated.equals(legacy));
+        yes("the generator preserves only the five historical development WAV writers", generated.equals(legacy));
         yes("regeneration cannot reset the imported event, file or public provenance",
                 generator.contains("Generation does not write imported Ogg files, `sounds.json`, `AUDIO-NOTICE.txt`")
                         && !generator.contains("deleteTree(sounds)")
                         && !generator.contains("resourceDir(root, \"sounds\")"));
-        yes("generated audio prose distinguishes both imports from the five synthetic sources",
+        yes("generated audio prose distinguishes all imports from historical development synthesis",
                 generator.contains("`sounds/t0_grinding.ogg` and")
                         && generator.contains("`sounds/t0_wet_work.ogg`")
                         && generator.contains("Quern A import remains byte-identical")
                         && generator.contains("separately recorded technical normalization")
-                        && generator.contains("an extra WAV cannot overwrite either imported working bed"));
+                        && generator.contains("`sounds/t0_water_flow.ogg`")
+                        && generator.contains("`sounds/t0_mineral_extraction.ogg`")
+                        && generator.contains("converters reject runtime synthesis"));
         String shell = Files.readString(Path.of("tools/convert-audio.sh"));
-        Matcher shellNames = Pattern.compile("for name in ([a-z_ ]+); do").matcher(shell);
-        yes("the shell converter cannot overwrite an imported sound from a stray WAV",
-                shellNames.find() && Set.of(shellNames.group(1).split(" +")).equals(legacy)
-                        && !shell.contains("\"$SRC\"/*.wav"));
+        yes("the retired shell converter cannot restore synthetic runtime audio",
+                shell.contains("Synthetic runtime conversion is retired.") && shell.contains("exit 1")
+                        && !shell.contains("ffmpeg -") && !shell.contains("mkdir"));
         String powershell = Files.readString(Path.of("tools/convert-audio.ps1"));
-        Matcher list = Pattern.compile("\\$names = @\\(([^)]*)\\)").matcher(powershell);
-        Set<String> powershellNames = new HashSet<>();
-        if (list.find()) {
-            Matcher name = Pattern.compile("'([a-z_]+)'").matcher(list.group(1));
-            while (name.find()) {
-                powershellNames.add(name.group(1));
-            }
-        }
-        yes("the Windows converter has the same closed synthetic-only import boundary",
-                powershellNames.equals(legacy) && powershell.contains("foreach ($name in $names)")
-                        && !powershell.contains("Get-ChildItem"));
+        yes("the retired Windows converter has the same fail-closed boundary",
+                powershell.contains("throw 'Synthetic runtime conversion is retired.")
+                        && !powershell.contains("& ffmpeg") && !powershell.contains("New-Item"));
     }
 
     private static void importedMixerAudio(JsonObject events) throws IOException {
@@ -417,25 +432,63 @@ public final class VerifyAssets {
                         && !runtime.get("ordinary_error_sounds").getAsBoolean());
     }
 
-    private static void preservedLegacyAudio(JsonObject events) throws IOException {
+    private static void physicalAudio(JsonObject events) throws IOException {
         Map<String, String> hashes = Map.of(
-                "machine_hum", "1a4444847bcd7b65fa245688b40538e713c857bc0595f7d86dab4e84d1bbe194",
-                "machine_hum_heavy", "3614968863fb10953acf429ac990ab92c3a1d196d23ec1e289f85714da7d98f3",
-                "pylon_link", "07e5624bfb2eaced8df7219419de6ad214967842db9af16f3f4a050f9ddccd24",
-                "relay_click", "c5446171b5d6194057b2cfc860ffd1d5bf25a6b99004b7cda8c04e85d83a786e",
-                "brownout_alarm", "c6222b817b90ca76c8b95e53df000c8d6cb7b4ddfa21117cd59b09767c2fffc5");
+                "t0_water_flow", "5fbfa5c1906fcc98ac310f3feaa9959fd7838ef5f4f6143dc293d37eadc6aeb1",
+                "t0_mineral_extraction", "a634f9a17c5f5c71e7fd20da8f79ec5453715d125b1084c557de54bb380ba9fb");
+        JsonObject record = read(Path.of("docs/assets/t0-experience-audio.json"));
+        yes("the physical wave records six real requests without claiming human approval",
+                record.getAsJsonObject("generation").get("performed_posts").getAsInt() == 6
+                        && record.getAsJsonObject("generation").get("successful_http_200").getAsInt() == 6
+                        && !record.get("human_listening_approved").getAsBoolean()
+                        && !record.get("release_ready").getAsBoolean());
+        String notice = Files.readString(ASSETS.resolve("AUDIO-NOTICE.txt"));
+        JsonArray selected = record.getAsJsonArray("selected_resources");
+        yes("only two new technically selected files are imported", selected.size() == 2);
         for (var entry : hashes.entrySet()) {
             String name = entry.getKey();
             Path ogg = ASSETS.resolve("sounds/" + name + ".ogg");
             JsonObject event = events.getAsJsonObject(name);
             JsonArray sounds = event.getAsJsonArray("sounds");
-            yes(name + " retains its original synthetic bytes and unmodified legacy event",
+            int radius = name.equals("t0_water_flow") ? 10 : 12;
+            long size = name.equals("t0_water_flow") ? 33490 : 29241;
+            yes(name + " has the exact technically selected normalized payload",
                     exists(ogg) && entry.getValue().equals(sha256(Files.readAllBytes(ogg)))
-                            && event.keySet().equals(Set.of("subtitle", "sounds"))
-                            && event.get("subtitle").getAsString().equals("subtitles.grindless." + name)
-                            && sounds.size() == 1 && sounds.get(0).isJsonPrimitive()
-                            && sounds.get(0).getAsString().equals("grindless:" + name));
+                            && Files.size(ogg) == size && notice.contains(entry.getValue()));
+            yes(name + " has a non-streamed mono positional binding with its physical radius",
+                    sounds.size() == 1 && sounds.get(0).isJsonObject()
+                            && sounds.get(0).getAsJsonObject().get("name").getAsString().equals("grindless:" + name)
+                            && !sounds.get(0).getAsJsonObject().get("stream").getAsBoolean()
+                            && sounds.get(0).getAsJsonObject().get("attenuation_distance").getAsInt() == radius);
+            JsonObject imported = StreamSupport.stream(selected.spliterator(), false)
+                    .map(JsonElement::getAsJsonObject)
+                    .filter(resource -> resource.get("event").getAsString().equals("grindless:" + name))
+                    .findFirst().orElseThrow();
+            yes(name + " binds actual imported/QC metadata without inventing listening",
+                    imported.get("sha256").getAsString().equals(entry.getValue())
+                            && imported.get("bytes").getAsLong() == size
+                            && imported.get("import_authorized").getAsBoolean()
+                            && imported.get("imported").getAsBoolean()
+                            && imported.get("human_approval").getAsString().equals("pending")
+                            && imported.getAsJsonObject("decoded_qc").getAsJsonArray("flags").isEmpty()
+                            && imported.getAsJsonObject("decoded_qc").get("clipped_samples").getAsLong() == 0);
         }
+        try (Stream<Path> files = Files.list(ASSETS.resolve("sounds"))) {
+            yes("runtime ships exactly the two preserved and two new selected Oggs, no candidates",
+                    files.map(path -> path.getFileName().toString()).collect(java.util.stream.Collectors.toSet())
+                            .equals(Set.of("t0_grinding.ogg", "t0_wet_work.ogg",
+                                    "t0_water_flow.ogg", "t0_mineral_extraction.ogg")));
+        }
+    }
+
+    private static void retiredSyntheticAudio() throws IOException {
+        for (String name : List.of("machine_hum", "machine_hum_heavy", "pylon_link", "relay_click", "brownout_alarm")) {
+            yes(name + " synthetic Ogg is absent from runtime distribution",
+                    Files.notExists(ASSETS.resolve("sounds/" + name + ".ogg")));
+        }
+        String effects = Files.readString(SOURCES.resolve("machine/MachineEffects.java"));
+        yes("MachineEffects cannot duplicate the managed physical beds with generic hum bursts",
+                !effects.contains("ModSounds.MACHINE_HUM") && !effects.contains("ModSounds.MACHINE_HUM_HEAVY"));
     }
 
     /** Reads the channel count from the Vorbis identification header. */
@@ -692,6 +745,33 @@ public final class VerifyAssets {
         for (String sprite : BlockCatalogue.placeholderSprites()) {
             yes(sprite + " has a sprite", exists(ASSETS.resolve("textures/item/" + sprite + ".png")));
         }
+    }
+
+    private static void thermalGeneratorCore() throws IOException {
+        String name = BlockCatalogue.THERMAL_GENERATOR_CORE_ITEM;
+        yes("the Thermal core has exactly one ordinary item registration",
+                registered("ModItems.java").stream().filter(name::equals).count() == 1
+                        && Pattern.compile("THERMAL_GENERATOR_CORE = register\\(\"thermal_generator_core\",\\s*"
+                                + "\\(\\) -> new Item\\(new Item.Properties\\(\\)\\)\\);")
+                                .matcher(Files.readString(SOURCES.resolve("registry/ModItems.java"))).find());
+        yes("the Thermal core is discoverable in the existing creative tab",
+                Files.readString(SOURCES.resolve("registry/ModCreativeTabs.java"))
+                        .contains("lazy(ModItems.THERMAL_GENERATOR_CORE)"));
+        yes("the Thermal core is not a new block, stateful item or missing standalone sprite",
+                !registered("ModBlocks.java").contains(name) && !BlockCatalogue.placeholderSprites().contains(name));
+        JsonObject model = read(ASSETS.resolve("models/item/" + name + ".json"));
+        yes("the Thermal core uses the existing native item-model mechanism without custom loaders",
+                model != null && model.keySet().equals(Set.of("parent", "textures"))
+                        && "minecraft:block/cube_bottom_top".equals(model.get("parent").getAsString()));
+        JsonObject expectedTextures = new JsonObject();
+        expectedTextures.addProperty("top", "grindless:block/generator_top");
+        expectedTextures.addProperty("bottom", "grindless:block/casing_top");
+        expectedTextures.addProperty("side", "grindless:block/generator_front_idle");
+        yes("the core composes only the existing owned generator and casing textures",
+                model != null && expectedTextures.equals(model.getAsJsonObject("textures")));
+        yes("normal asset generation retains the core model rather than needing a bespoke asset pipeline",
+                Files.readString(Path.of("tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/GenerateAssets.java"))
+                        .contains("BlockCatalogue.THERMAL_GENERATOR_CORE_ITEM + \".json\""));
     }
 
     /** Structural sprite guards, not an artistic or in-game rendering acceptance claim. */

@@ -43,6 +43,6 @@ public final class QuestBookItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("tooltip.grindless.quest_book"));
+        tooltip.add(Component.translatable("tooltip.grindless.quest_book.current"));
     }
 }

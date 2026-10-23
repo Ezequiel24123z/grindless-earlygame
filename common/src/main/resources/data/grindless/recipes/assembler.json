@@ -9,7 +9,7 @@
     "G": { "tag": "forge:gears/iron" },
     "C": { "item": "grindless:machine_casing" },
     "A": { "item": "grindless:copper_coil" },
-    "M": { "item": "grindless:relay_matrix" }
+    "M": { "type": "grindless:minimum_control", "tier": "F1" }
   },
   "result": { "item": "grindless:assembler" }
 }

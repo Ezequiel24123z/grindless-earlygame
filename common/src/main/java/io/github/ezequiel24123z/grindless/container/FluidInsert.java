@@ -11,12 +11,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -31,7 +29,11 @@ public final class FluidInsert {
         if (state == null || state.isEmpty()) {
             return FluidState.EMPTY;
         }
-        BlockEntity blockEntity = level.getBlockEntity(from.relative(side));
+        BlockPos position = from.relative(side);
+        if (!level.hasChunkAt(position)) {
+            return state;
+        }
+        BlockEntity blockEntity = level.getBlockEntity(position);
         if (blockEntity instanceof FluidEndpoint endpoint) {
             return endpoint.insert(side.getOpposite(), state);
         }
@@ -51,9 +53,12 @@ public final class FluidInsert {
             if (store == null) {
                 return null;
             }
+            long revision = endpoint.nativeAccessRevision();
             return new NativeFluidStore.Access(store, () -> lookup.get() == endpoint
-                    && endpoint.nativeStore() == store && endpoint.canExtract(face)
-                    && endpoint.contents().equals(store.contents()));
+                    && endpoint.nativeStore() == store && endpoint.nativeAccessRevision() == revision
+                    && endpoint.canExtract(face)
+                    && visibleNativeState(endpoint.contents(), store.contents()),
+                    () -> endpoint.contents().millibuckets());
         }
     }
 
@@ -65,6 +70,9 @@ public final class FluidInsert {
         for (Direction side : Direction.values()) {
             BlockPos position = from.relative(side);
             sources.add(new Source(side.getOpposite(), () -> {
+                if (!level.hasChunkAt(position)) {
+                    return null;
+                }
                 BlockEntity entity = level.getBlockEntity(position);
                 return entity instanceof FluidEndpoint endpoint ? endpoint : null;
             }));
@@ -74,15 +82,53 @@ public final class FluidInsert {
 
     /** The same native identity and face filter used by planning and commit, with aliases removed. */
     public static List<FluidState> available(List<Source> sources) {
-        Set<NativeFluidStore> seen = Collections.newSetFromMap(new IdentityHashMap<>());
+        IdentityHashMap<NativeFluidStore, Integer> seen = new IdentityHashMap<>();
         List<FluidState> states = new ArrayList<>();
         for (Source source : sources) {
             NativeFluidStore.Access access = source.access();
-            if (access != null && access.allowed().getAsBoolean() && seen.add(access.store())) {
-                states.add(access.store().contents());
+            if (access != null && access.allowed().getAsBoolean()) {
+                FluidState visible = access.store().contents().withAmount(Math.min(
+                        access.store().contents().millibuckets(), Math.max(0, access.limit().getAsInt())));
+                Integer index = seen.get(access.store());
+                if (index == null) {
+                    seen.put(access.store(), states.size());
+                    states.add(visible);
+                } else if (states.get(index).millibuckets() < visible.millibuckets()) {
+                    states.set(index, visible);
+                }
             }
         }
         return states;
+    }
+
+    private static boolean visibleNativeState(FluidState visible, FluidState full) {
+        return !visible.isEmpty() && visible.millibuckets() <= full.millibuckets()
+                && visible.withAmount(full.millibuckets()).equals(full);
+    }
+
+    /** Exact bounded transfer between the two already-owned native stores, never an external fallback. */
+    public static int moveNative(Source source, Source destination, int maximum) {
+        if (maximum <= 0) {
+            return 0;
+        }
+        NativeFluidStore.Access access = source.access();
+        FluidEndpoint target = destination.lookup().get();
+        NativeFluidStore targetStore = target == null ? null : target.nativeStore();
+        if (access == null || targetStore == null || access.store() == targetStore
+                || !access.allowed().getAsBoolean()) {
+            return 0;
+        }
+        FluidState offered = access.store().contents().withAmount(Math.min(maximum,
+                Math.max(0, access.limit().getAsInt())));
+        int accepted = target.acceptedAmount(destination.face(), offered);
+        FluidState transfer = offered.withAmount(Math.min(offered.millibuckets(), accepted));
+        if (transfer.isEmpty()) {
+            return 0;
+        }
+        return NativeFluidStore.transfer(access, targetStore, transfer,
+                () -> destination.lookup().get() == target && target.nativeStore() == targetStore
+                        && target.acceptedAmount(destination.face(), transfer) >= transfer.millibuckets())
+                ? transfer.millibuckets() : 0;
     }
 
     public static Optional<NativeFluidStore.Batch> plan(NativeFluidStore primary,

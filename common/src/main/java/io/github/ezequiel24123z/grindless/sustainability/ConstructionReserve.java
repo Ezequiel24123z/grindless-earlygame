@@ -27,6 +27,9 @@ final class ConstructionReserve {
     private final Set<Resource> renewable;
     private final EntryProfile profile;
     private final boolean deriving;
+    private final List<Route> selection;
+    private final String completedEntryRoute;
+    private final Map<String, Long> bootstrapSources = new TreeMap<>();
     private final Map<Resource, Long> guaranteed = new TreeMap<>();
     private final Map<Resource, Long> playerDelivered = new TreeMap<>();
     private final Map<Resource, Long> claimedRewards = new TreeMap<>();
@@ -40,6 +43,7 @@ final class ConstructionReserve {
     private final Set<Resource> pending = new HashSet<>();
     private final Set<String> claimed = new HashSet<>();
     private final Set<String> pendingRoutes = new HashSet<>();
+    private final Set<String> fundingRoutes = new HashSet<>();
     private final Set<String> preparing = new HashSet<>();
     private final Set<String> circulating = new HashSet<>();
     private final List<AuditFinding> findings = new ArrayList<>();
@@ -50,6 +54,34 @@ final class ConstructionReserve {
     private long requiredManualActions;
     private SustainabilityAudit.GoalWitness exitProduction;
     private final Map<String, Long> executions = new TreeMap<>();
+    private final List<SustainabilityAudit.ExecutedBatch> history = new ArrayList<>();
+
+    /** Internal immutable checkpoint; only SustainabilityAudit can issue an admissible witness. */
+    record Custody(Map<Resource, Long> guaranteed, Map<Resource, Long> playerDelivered,
+                   Map<Resource, Long> claimedRewards, Map<Resource, Long> delivered,
+                   Map<Resource, Long> stock, Map<Resource, Long> peak, Map<Resource, Long> locked,
+                   Set<Resource> installed, Map<String, Map<Resource, Long>> installationRequirements,
+                   Set<String> claimed, Map<String, Long> bootstrapSources, long manualActions,
+                   long requiredManualActions, int steps, Map<String, Long> executions,
+                   List<SustainabilityAudit.ExecutedBatch> history) {
+        Custody {
+            guaranteed = sortedMap(guaranteed);
+            playerDelivered = sortedMap(playerDelivered);
+            claimedRewards = sortedMap(claimedRewards);
+            delivered = sortedMap(delivered);
+            stock = sortedMap(stock);
+            peak = sortedMap(peak);
+            locked = sortedMap(locked);
+            installed = sortedSet(installed);
+            Map<String, Map<Resource, Long>> parts = new TreeMap<>();
+            installationRequirements.forEach((family, requirements) -> parts.put(family, sortedMap(requirements)));
+            installationRequirements = sortedMap(parts);
+            claimed = sortedSet(claimed);
+            bootstrapSources = sortedMap(bootstrapSources);
+            executions = sortedMap(executions);
+            history = List.copyOf(history);
+        }
+    }
 
     ConstructionReserve(Snapshot snapshot, SustainabilityAnnotations annotations, SustainabilityAudit audit,
                         int tier, Set<Resource> available, Set<Resource> renewable) {
@@ -61,14 +93,99 @@ final class ConstructionReserve {
         this.renewable = renewable;
         this.profile = audit.entryProfile(tier);
         this.deriving = audit.deriving(tier);
+        this.selection = List.of();
+        this.completedEntryRoute = null;
         for (Terminal terminal : snapshot.terminals().values()) {
             if (terminal.kind() == TerminalKind.EXACT_BOOTSTRAP && terminal.unlockTier() <= tier
                     && terminal.justification() != null && !terminal.justification().isBlank()) {
                 merge(guaranteed, terminal.resource(), terminal.guaranteed());
                 merge(delivered, terminal.resource(), terminal.guaranteed());
                 merge(stock, terminal.resource(), terminal.guaranteed());
+                bootstrapSources.put(terminal.id(), terminal.guaranteed());
             }
         }
+    }
+
+    /** No terminal loading or budget reset is permitted on this path. */
+    ConstructionReserve(Snapshot snapshot, SustainabilityAnnotations annotations, SustainabilityAudit audit,
+                        Set<Resource> available, Set<Resource> renewable, Custody prior, EntryProfile profile,
+                        List<String> selected, String completedEntryRoute) {
+        this.snapshot = snapshot;
+        this.annotations = annotations;
+        this.audit = audit;
+        this.tier = 1;
+        this.available = available;
+        this.renewable = renewable;
+        this.profile = profile;
+        this.deriving = false;
+        this.selection = selected.stream().map(snapshot.routes()::get).toList();
+        this.completedEntryRoute = completedEntryRoute;
+        guaranteed.putAll(prior.guaranteed());
+        playerDelivered.putAll(prior.playerDelivered());
+        claimedRewards.putAll(prior.claimedRewards());
+        delivered.putAll(prior.delivered());
+        stock.putAll(prior.stock());
+        peak.putAll(prior.peak());
+        locked.putAll(prior.locked());
+        installed.addAll(prior.installed());
+        prior.installationRequirements().forEach((family, parts) ->
+                installationRequirements.put(family, new TreeMap<>(parts)));
+        claimed.addAll(prior.claimed());
+        bootstrapSources.putAll(prior.bootstrapSources());
+        manualActions = prior.manualActions();
+        requiredManualActions = prior.requiredManualActions();
+        steps = prior.steps();
+        executions.putAll(prior.executions());
+        history.addAll(prior.history());
+    }
+
+    Custody custody() {
+        return new Custody(guaranteed, playerDelivered, claimedRewards, delivered, stock, peak, locked, installed,
+                installationRequirements, claimed, bootstrapSources, manualActions, requiredManualActions,
+                steps, executions, history);
+    }
+
+    /** Execute the selected finite batches in teaching order, not another closure/planning algorithm. */
+    boolean continueFinite(List<String> selected, String exitId) {
+        Map<String, Long> before = new TreeMap<>(executions);
+        boolean completed = true;
+        for (String id : selected) {
+            if (id.equals(exitId)) {
+                continue;
+            }
+            Route route = snapshot.routes().get(id);
+            if (executions.getOrDefault(id, 0L).equals(before.getOrDefault(id, 0L)) && !execute(route, 1)) {
+                findings.add(new AuditFinding("finite_route_unexecuted", id, "T1", AuditFinding.Severity.ERROR,
+                        "The selected real batch could not execute from conserved predecessor custody.",
+                        List.of(route.source())));
+                completed = false;
+                break;
+            }
+            for (Machine machine : annotations.machines().values()) {
+                if (route.retainedOutputs().containsKey(machine.construction()) && !install(machine.construction())) {
+                    completed = false;
+                    break;
+                }
+            }
+            if (!completed) {
+                break;
+            }
+        }
+        Route exit = snapshot.routes().get(exitId);
+        Resource goal = exit.retainedOutputs().size() == 1
+                ? exit.retainedOutputs().keySet().iterator().next() : null;
+        long count = goal == null ? 0 : audit.outputAmount(exit, goal);
+        long beforeExit = executions.getOrDefault(exitId, 0L);
+        completed = goal != null && count > 0 && completed && execute(exit, 1);
+        long batches = executions.getOrDefault(exitId, 0L) - beforeExit;
+        exitProduction = new SustainabilityAudit.GoalWitness(goal, exitId, count, count, batches,
+                Math.multiplyExact(count, batches), completed ? "conditional_established" : "unproved");
+        if (!completed) {
+            findings.add(new AuditFinding("finite_exit_unexecuted", exitId, "T1", AuditFinding.Severity.ERROR,
+                    "The actual exit batch must execute; inherited or caller-reported goal stock cannot replace it.",
+                    List.of(exit.source())));
+        }
+        return completed;
     }
 
     List<AuditFinding> findings() {
@@ -163,6 +280,10 @@ final class ConstructionReserve {
             }
         }
         establishExitGoal();
+        return reserves();
+    }
+
+    List<SustainabilityAudit.Reserve> reserves() {
         List<SustainabilityAudit.Reserve> result = new ArrayList<>();
         Set<Resource> reserved = new TreeSet<>(guaranteed.keySet());
         reserved.addAll(claimedRewards.keySet());
@@ -438,7 +559,14 @@ final class ConstructionReserve {
             return true;
         }
         Route source = replenishing(resource);
-        return source != null && !members.contains(source.id()) || snapshot.terminals().values().stream()
+        boolean independent = source != null && !members.contains(source.id());
+        if (completedEntryRoute != null && independent) {
+            // A Thermal burning this loop's biomass is not independent startup FU, especially
+            // while it is already waiting for that biomass. Keep the paid native prefix in use.
+            independent = !pendingRoutes.contains(source.id()) && source.netInputs().keySet().stream()
+                    .noneMatch(input -> audit.has(internal, input));
+        }
+        return independent || snapshot.terminals().values().stream()
                 .anyMatch(terminal -> terminal.resource().equals(resource) && terminal.renewable());
     }
 
@@ -582,15 +710,10 @@ final class ConstructionReserve {
         Map<Resource, Long> previousShortages = new TreeMap<>(shortages);
         boolean previouslyUncertain = uncertain;
         try {
-            for (Route source : snapshot.routes().values()) {
-                if (source.authority() == Authority.QUEST_REWARD && source.oneShot()
-                        && audit.outputAmount(source, resource) > 0 && audit.unlocked(source, tier)
-                        && selectedClaim(source) && !claimed.contains(source.id())) {
-                    execute(source, 1);
-                    if (free(resource) >= amount) {
-                        return true;
-                    }
-                }
+            // Preserve standalone T0's claim priority. A continuation first uses its established
+            // producers, rather than constructing extra claim evidence with the five factory seeds.
+            if (completedEntryRoute == null && obtainRewards(resource, amount)) {
+                return true;
             }
             Route route = replenishing(resource);
             Machine readyMachine = route == null || route.family() == null
@@ -608,6 +731,22 @@ final class ConstructionReserve {
                 }
                 if (free(resource) >= amount) {
                     return true;
+                }
+            }
+            if (completedEntryRoute != null && profile != null && audit.has(renewable, resource)
+                    && route != null && selection.contains(route) && route.automatable()
+                    && audit.unlocked(route, tier) && !pendingRoutes.contains(route.id())
+                    && (route.family() == null || readyMachine != null && installed.contains(readyMachine.construction()))) {
+                long yield = audit.outputAmount(route, resource) - route.inputs().getOrDefault(resource, 0L);
+                if (yield > 0) {
+                    // Refill the actual selected producer's inputs, not just its already-free fuel.
+                    // The retained native loop may fund that input production without replacing
+                    // a selected Thermal batch with many tiny native net-FU gains.
+                    long missing = amount - free(resource);
+                    execute(route, 1 + (missing - 1) / yield);
+                    if (free(resource) >= amount) {
+                        return true;
+                    }
                 }
             }
             if (profile != null && audit.has(renewable, resource)) {
@@ -666,6 +805,9 @@ final class ConstructionReserve {
                     }
                 }
             }
+            if (completedEntryRoute != null && obtainRewards(resource, amount)) {
+                return true;
+            }
             if (provideManual(resource, amount)) {
                 return true;
             }
@@ -683,8 +825,23 @@ final class ConstructionReserve {
         }
     }
 
+    private boolean obtainRewards(Resource resource, long amount) {
+        for (Route source : snapshot.routes().values()) {
+            if (source.authority() == Authority.QUEST_REWARD && source.oneShot()
+                    && audit.outputAmount(source, resource) > 0 && audit.unlocked(source, tier)
+                    && selectedClaim(source) && !claimed.contains(source.id())) {
+                execute(source, 1);
+                if (free(resource) >= amount) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private boolean manualCraft(Route route) {
-        if (route.automatable() || route.oneShot() || !audit.unlocked(route, tier)) {
+        if (route.id().equals(completedEntryRoute)
+                || route.automatable() || route.oneShot() || !audit.unlocked(route, tier)) {
             return false;
         }
         RoutePolicy policy = annotations.routes().get(route.id());
@@ -713,6 +870,28 @@ final class ConstructionReserve {
     }
 
     private Route replenishing(Resource resource) {
+        Route selectedFallback = null;
+        if (completedEntryRoute != null) {
+            List<Route> producers = selection.stream().filter(route ->
+                    !route.id().equals(completedEntryRoute) && audit.outputAmount(route, resource)
+                            > route.inputs().getOrDefault(resource, 0L)).toList();
+            // Prefer a real selected automatic producer only after its machine is installed.
+            for (Route route : producers) {
+                Machine machine = route.family() == null ? null : annotations.machines().get(route.family());
+                if (route.automatable() && (route.family() == null
+                        || machine != null && installed.contains(machine.construction()))) {
+                    return route;
+                }
+            }
+            for (Route route : producers) {
+                if (manualCraft(route)) {
+                    return route;
+                }
+            }
+            if (!producers.isEmpty()) {
+                selectedFallback = producers.get(0);
+            }
+        }
         for (ClosedLoop loop : annotations.loops().values()) {
             if (loop.carrier().equals(resource) && loop.makeUpRoute() != null) {
                 Route makeUp = snapshot.routes().get(loop.makeUpRoute());
@@ -721,7 +900,8 @@ final class ConstructionReserve {
                 }
             }
         }
-        return audit.canonical(resource, tier, false);
+        Route canonical = audit.canonical(resource, tier, false);
+        return canonical != null && !canonical.id().equals(completedEntryRoute) ? canonical : selectedFallback;
     }
 
     private boolean execute(Route route, long batches) {
@@ -822,9 +1002,42 @@ final class ConstructionReserve {
     }
 
     private boolean executeBatch(Route route) {
-        if (!audit.unlocked(route, tier) || audit.zeroInputUnjustified(route)
+        if (completedEntryRoute != null) {
+            for (Resource output : route.retainedOutputs().keySet()) {
+                TagResolution tag = snapshot.tags().get(output);
+                if (output.kind() == Kind.TAG && (tag == null || !tag.complete() || tag.members().size() != 1)) {
+                    unknown(output, "Finite continuation requires an exact retained output, not an unresolved "
+                            + "or multi-member tag from " + route.id() + ".");
+                    return false;
+                }
+            }
+        }
+        if (route.id().equals(completedEntryRoute)
+                || !audit.unlocked(route, tier) || audit.zeroInputUnjustified(route)
                 || !audit.environmentReady(route, available) || route.oneShot() && claimed.contains(route.id())
-                || !pendingRoutes.add(route.id())) {
+                || pendingRoutes.contains(route.id())) {
+            return false;
+        }
+        Long energy = route.inputs().get(ENERGY);
+        if (completedEntryRoute != null && circulating.isEmpty() && energy != null
+                && route.netInputs().containsKey(ENERGY) && free(ENERGY) < energy && audit.has(renewable, ENERGY)) {
+            // Finance net FU before this batch owns inputs or becomes an active route. A paid
+            // circulation may need this very producer to rebuild surplus FU before an external
+            // carrier withdrawal. Re-entering an already active/allocated batch is still refused.
+            if (!fundingRoutes.add(route.id())) {
+                unknown(route.retainedOutputs().keySet().iterator().next(),
+                        "Native energy funding is circular for " + route.id() + "; no batch or budget is invented.");
+                return false;
+            }
+            try {
+                if (!obtain(ENERGY, energy)) {
+                    return false;
+                }
+            } finally {
+                fundingRoutes.remove(route.id());
+            }
+        }
+        if (!pendingRoutes.add(route.id())) {
             return false;
         }
         Map<Resource, Long> allocated = new TreeMap<>();
@@ -892,6 +1105,7 @@ final class ConstructionReserve {
             }
             completed = true;
             executions.merge(route.id(), 1L, Math::addExact);
+            history.add(new SustainabilityAudit.ExecutedBatch(route.id(), allocated, outputs, batchWork));
             return true;
         } finally {
             if (!completed) {
@@ -1007,7 +1221,7 @@ final class ConstructionReserve {
     }
 
     private boolean localWork(Route route) {
-        return profile != null && audit.manualWorkReady(route, tier, available);
+        return profile != null && audit.manualWorkReady(route, tier, available, profile);
     }
 
     private long actions(long fu) {

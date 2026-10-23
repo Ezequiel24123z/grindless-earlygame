@@ -49,3 +49,45 @@ docs/assets/mixer-runtime-import.json in the source repository.
 
 Selection is technical only. Owner in-game listening, one/eight-machine mix,
 fatigue, native lifecycle and release acceptance remain pending.
+
+---
+
+Grindless physical T0 water movement and mineral extraction
+
+Runtime resource: assets/grindless/sounds/t0_water_flow.ogg
+Sound event: grindless:t0_water_flow
+SHA-256: 5fbfa5c1906fcc98ac310f3feaa9959fd7838ef5f4f6143dc293d37eadc6aeb1
+Size: 33490 bytes. Candidate: water-flow-b.
+Generated: 2026-10-20T16:46:29.3653447Z.
+Source MP3 SHA-256: f27885dc9a84cbbb4199e61977c11a69d20a2c14037d5ed88e0828dbeeb75a58
+Constant normalization gain after the fixed -3 dB mono preview: 2.5929911824553469.
+
+Runtime resource: assets/grindless/sounds/t0_mineral_extraction.ogg
+Sound event: grindless:t0_mineral_extraction
+SHA-256: a634f9a17c5f5c71e7fd20da8f79ec5453715d125b1084c557de54bb380ba9fb
+Size: 29241 bytes. Candidate: mineral-extraction-b.
+Generated: 2026-10-20T16:46:43.7253653Z.
+Source MP3 SHA-256: 002f8ce7ff23407e45ca5faa21c15635b342300b24eefd5d37d5b25c66898ac0
+Constant normalization gain after the fixed -3 dB mono preview: 5.3096296296296295.
+
+Provider/model: ElevenLabs Sound Effects, eleven_text_to_sound_v2.
+Source generation checkpoint: 1789ce9098d444a6f7dd70f37695c3b1dd1525aa.
+New finite purpose: t0-physical-soundscape-replacement, t0-physical-20261020-01.
+Three-second loop requests, influence 0.3, mp3_44100_128.
+Processing: min(0.03/RMS, 0.35/peak), mono 44.1 kHz Vorbis q4, metadata removed,
+bitexact output. Neither selected sound is trimmed, faded, crossfaded or stretched.
+
+Game incorporation is authorized by the owner's 2026-10-20 master direction and
+current coordinator delegation, using the existing generation-time owner-confirmed
+paid entitlement and already reviewed ElevenCreative Terms, Sound Effects exhibit:
+https://elevenlabs.io/creative-terms
+
+These sounds are not CC0 or relicensed under Grindless's MIT code licence.
+They are supplied only as incorporated game audio, not a standalone sample or sound library.
+Keep this notice with the game distribution. Full original prompts, request/receipt,
+source/processing/output identities and the rejected fire-loop experiment are in
+docs/assets/t0-experience-audio.json and THIRD_PARTY_NOTICES.md.
+
+Technical selection and decoded QC are not human listening or release approval.
+Furnace crackle and physical legacy interaction aliases reference installed
+Minecraft events; no vanilla sound file is copied into Grindless.

@@ -4,16 +4,21 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.client.ResourceGuidanceClient;
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.guidance.ResourceGuidance;
 import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceContext;
 import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceJson;
 import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceProjection;
 import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceRuntime;
 import io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt;
+import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
 import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.quest.QuestLogic;
+import io.github.ezequiel24123z.grindless.quest.QuestTeaching;
 import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
+import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
+import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
 import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
 import io.github.ezequiel24123z.grindless.recipe.ProcessGraph;
 import io.github.ezequiel24123z.grindless.recipe.RenewableProcesses;
@@ -72,6 +77,7 @@ public final class VerifyResourceGuidance {
         lineEndings();
         loader();
         contexts();
+        authoredMatrixContexts();
         matrixDeclarations();
         surfaces(Path.of("").toAbsolutePath().normalize());
         System.out.println("RESOURCE GUIDANCE: " + assertions
@@ -153,6 +159,17 @@ public final class VerifyResourceGuidance {
         equal("flint remains optional without a first-use tier", null, actual.resources().get(flint).metadata().firstUseTier());
         equal("flint storage does not forbid ordinary discard", new Handling(Action.STORE, true, false, null, null),
                 actual.resources().get(flint).metadata().handling());
+        Resource relay = new Resource(Kind.ITEM, "grindless:relay_matrix", 1, "items");
+        equal("canonical guidance declares the same physical F1 as the T0 exit", relay,
+                result.annotations().ledger().get(0).exitObjective());
+        equal("the physical F1 declaration retains finite bootstrap metadata", ResourceClass.BOOTSTRAP,
+                actual.resources().get(relay).metadata().resourceClass());
+        equal("generic registration inventory does not acquire the physical F1 declaration", false,
+                actual.resources().containsKey(new Resource(Kind.ITEM, relay.id())));
+        equal("guidance derives the actual manual and automatic physical F1 producers",
+                Set.of("craft/relay_matrix", "assemble/relay_matrix"),
+                actual.resources().get(relay).producers().stream().map(RouteReference::route)
+                        .collect(java.util.stream.Collectors.toSet()));
         return assertions - start;
     }
 
@@ -257,6 +274,28 @@ public final class VerifyResourceGuidance {
         equal("hazard handling remains visible even with unknown action", true, hasTranslation(hazardLines, PREFIX + "hazardous"));
         equal("unknown containment is not an invented API", true, hasTranslation(hazardLines, PREFIX + "containment"));
         equal("unknown treatment is explicit", true, hasTranslation(hazardLines, PREFIX + "treatment"));
+        // This vocabulary/DTO fixture references its actual fixture producer. It is not a
+        // Survival construction proof and must not invent a runtime craft/capital authority.
+        var capital = new ResourceMetadata(ResourceClass.MANUAL_CAPITAL, null, 0, null, "fixture/source",
+                List.of(), new Handling(Action.STORE, true, false, null, null), null, null, null);
+        Document capitalDocument = ResourceGuidanceProjection.project(fixture(capital));
+        equal("the existing metadata format losslessly carries manual durable capital", capitalDocument,
+                ResourceGuidanceJson.read(ResourceGuidanceJson.write(capitalDocument)));
+        List<Component> capitalLines = ResourceGuidanceClient.lines(new ResourceGuidanceRuntime.Loaded(capitalDocument, null),
+                item("fixture:resource"), true, false);
+        equal("manual capital has an explicit localized classification", true,
+                hasTranslation(capitalLines, PREFIX + "class.manual_capital"));
+        equal("manual capital never borrows the renewable tooltip label", false,
+                hasTranslation(capitalLines, PREFIX + "class.renewable"));
+        var absentCapital = new ResourceMetadata(ResourceClass.MANUAL_CAPITAL, null, 0, null, "craft/capital",
+                List.of(), new Handling(Action.STORE, true, false, null, null), null, null, null);
+        try {
+            ResourceGuidanceProjection.project(fixture(absentCapital));
+            throw new AssertionError("a declared absent capital route must remain a failure");
+        } catch (IllegalArgumentException expected) {
+            equal("missing capital authority keeps its exact absent-route diagnosis",
+                    "A declared guidance route is absent: craft/capital", expected.getMessage());
+        }
     }
 
     private static void identities() {
@@ -459,7 +498,28 @@ public final class VerifyResourceGuidance {
                 ResourceGuidanceContext.resource("Two buckets of water").isEmpty());
         equal("non-item Matrix rating is not fabricated", true,
                 ResourceGuidanceContext.resource("fluid:minecraft:water [F2]").isEmpty());
+        equal("a minimum-control label selects its canonical declaration without inventing an ID",
+                new Resource(Kind.ITEM, "grindless:relay_matrix", 1, "items"),
+                ResourceGuidanceContext.resource("item:grindless:relay_matrix [F1+]").orElseThrow());
+        for (String invalid : List.of("item:grindless:relay_matrix [F0+]",
+                "item:grindless:relay_matrix [F16+]", "fluid:minecraft:water [F2+]",
+                "tag:forge:ingots/iron [F1+]", "item:grindless:relay_matrix [F1++]",
+                "item:grindless:relay_matrix [F1+] trailing")) {
+            equal("strict minimum-control labels reject " + invalid, true,
+                    ResourceGuidanceContext.resource(invalid).isEmpty());
+        }
         List<AtlasLogic.Entry> entries = AtlasLogic.allEntries(ProcessGraph.generate(List.of()));
+        var mill = entries.stream().filter(entry -> entry.id().equals("craft/wire_mill")).findFirst().orElseThrow();
+        var control = ResourceGuidanceContext.operands(mill).stream()
+                .filter(operand -> operand.resource().id().equals("grindless:relay_matrix")).findFirst().orElseThrow();
+        equal("teaching does not silently drop the minimum input", 1, control.amount());
+        equal("teaching preserves the input's typed minimum role",
+                io.github.ezequiel24123z.grindless.recipe.IngredientSpec.MatrixRole.MINIMUM_CONTROL,
+                control.matrixRole());
+        equal("teaching preserves exact output identities", false, ResourceGuidanceContext.operands(mill).stream()
+                .filter(operand -> operand.role() == ResourceGuidanceContext.Role.OUTPUT)
+                .anyMatch(operand -> operand.matrixRole()
+                        != io.github.ezequiel24123z.grindless.recipe.IngredientSpec.MatrixRole.EXACT));
         for (String page : List.of("bootstrap", "workshop", "settling", "relay", "renewables")) {
             equal("native guide data is present for " + page, false, ResourceGuidanceContext.guideRecipes(page, entries).isEmpty());
         }
@@ -490,15 +550,109 @@ public final class VerifyResourceGuidance {
         equal("FREE evidence has no item or resource subject", true,
                 ResourceGuidanceContext.questSubject(starter).isEmpty());
         var relay = QuestCatalogue.byId("relay");
-        equal("the relay quest is ordinary ITEM evidence, not a specified physical rating", QuestCatalogue.Evidence.ITEM,
+        equal("the final relay quest is strict physical Matrix evidence", QuestCatalogue.Evidence.MATRIX,
                 relay.evidence());
-        equal("ordinary relay evidence has no specified Matrix rating", null, relay.matrixRating());
-        equal("ordinary ITEM evidence keeps rating0, which does not mean F0", 0,
+        equal("the final relay requires exact F1", io.github.ezequiel24123z.grindless.energy.FluxTier.F1,
+                relay.matrixRating());
+        equal("physical F1 quest context keeps that exact rating", 1,
                 ResourceGuidanceContext.questSubject(relay).orElseThrow().rating());
+        var stock = QuestCatalogue.byId("matrix_line");
+        equal("ordinary factory-stock display uses the physical default supply option", 1,
+                ResourceGuidanceContext.questSubject(stock).orElseThrow().rating());
+        equal("the display option does not replace generic stock evidence with exact Matrix evidence",
+                QuestCatalogue.Evidence.ITEM, stock.evidence());
+        equal("generic stock evidence still specifies no required Matrix rating", null, stock.matrixRating());
         var industrial = QuestCatalogue.byId("industrial_matrix");
         equal("industrial evidence really requires a physical Matrix", QuestCatalogue.Evidence.MATRIX, industrial.evidence());
         equal("industrial Matrix evidence keeps exact F2", 2,
                 ResourceGuidanceContext.questSubject(industrial).orElseThrow().rating());
+    }
+
+    private static void authoredMatrixContexts() {
+        Resource f1 = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX, FluxTier.F1.ordinal(), "items");
+        var entry = new ResourceGuidance.Entry(new ResourceMetadata(ResourceClass.BOOTSTRAP, null, 0, null,
+                "craft/relay_matrix", List.of(), null, null, null, null), List.of(), List.of(), Map.of());
+        var loaded = new ResourceGuidanceRuntime.Loaded(ResourceGuidanceJson.prepare(Map.of(f1, entry)), null);
+        String original = ResourceGuidanceJson.write(loaded.document());
+        Function<String, Optional<MatrixArchitecture>> architectures = id -> id.equals(FabricationLogic.RELAY_MATRIX)
+                ? Optional.of(MatrixArchitecture.RELAY) : Optional.empty();
+        List<AtlasLogic.Entry> entries = AtlasLogic.allEntries(ProcessGraph.generate(List.of()));
+        for (var selection : Map.of(
+                "craft/relay_matrix", ResourceGuidanceContext.Role.OUTPUT,
+                "assemble/relay_matrix", ResourceGuidanceContext.Role.OUTPUT,
+                "craft/thermal_generator", ResourceGuidanceContext.Role.INPUT,
+                "craft/thermal_generator_from_core", ResourceGuidanceContext.Role.INPUT,
+                "craft/wire_mill", ResourceGuidanceContext.Role.INPUT).entrySet()) {
+            var authored = entries.stream().filter(row -> row.id().equals(selection.getKey())).findFirst().orElseThrow();
+            var matrices = ResourceGuidanceContext.operands(authored).stream()
+                    .filter(operand -> operand.resource().id().equals(FabricationLogic.RELAY_MATRIX)).toList();
+            equal("real Atlas row retains one logical Matrix operand: " + authored.id(), 1, matrices.size());
+            var operand = matrices.get(0);
+            equal("authored Atlas identity agrees with physical F1-only metadata: " + authored.id(), f1, operand.resource());
+            equal("authored Atlas retains the actual input/output role: " + authored.id(), selection.getValue(), operand.role());
+            equal("authored Atlas retains the complete native quantity: " + authored.id(),
+                    operand.role() == ResourceGuidanceContext.Role.OUTPUT ? FabricationLogic.RELAY_MATRIX_BATCH : 1,
+                    operand.amount());
+            equal("the physical declaration is found without a generic raw DTO key: " + authored.id(), f1,
+                    ResourceGuidanceClient.declaration(loaded, operand.resource(), architectures).orElseThrow().declaration());
+            equal("actual Atlas context cannot become unknown after physical metadata projection: " + authored.id(), false,
+                    hasTranslation(ResourceGuidanceClient.lines(loaded, operand.resource(), true, true), PREFIX + "unknown"));
+            equal("actual Atlas context retains declared supply rather than an empty success: " + authored.id(), true,
+                    hasTranslation(ResourceGuidanceClient.lines(loaded, operand.resource(), true, true), PREFIX + "supply"));
+        }
+        for (String task : List.of("relay", "matrix_line")) {
+            Resource subject = ResourceGuidanceContext.questSubject(QuestCatalogue.byId(task)).orElseThrow();
+            equal("actual quest context uses the physical F1 declaration: " + task, f1, subject);
+            equal("actual quest reading does not regress to unknown with an F1-only DTO: " + task, false,
+                    hasTranslation(ResourceGuidanceClient.playerContext(loaded, subject), PREFIX + "player_unknown"));
+            equal("actual quest reading retains declared supply: " + task, true,
+                    hasTranslation(ResourceGuidanceClient.playerContext(loaded, subject), PREFIX + "supply"));
+        }
+        var f2Route = entries.stream().filter(row -> row.id().equals("assemble/relay_matrix_f2")).findFirst().orElseThrow();
+        var predecessor = ResourceGuidanceContext.operands(f2Route).stream()
+                .filter(operand -> operand.role() == ResourceGuidanceContext.Role.INPUT
+                        && operand.resource().id().equals(FabricationLogic.RELAY_MATRIX)).findFirst().orElseThrow();
+        equal("the exact F2 predecessor stays physical F1", f1, predecessor.resource());
+        equal("the exact F2 predecessor never becomes minimum control", IngredientSpec.MatrixRole.EXACT, predecessor.matrixRole());
+        for (FluxTier tier : List.of(FluxTier.F2, FluxTier.F3)) {
+            Resource rated = new Resource(Kind.ITEM, f1.id(), tier.ordinal(), "items");
+            equal("explicit higher descriptors keep their exact identity: " + tier, rated,
+                    ResourceGuidanceContext.resource("item:" + f1.id() + " [" + tier.name() + "]").orElseThrow());
+            equal("F1-only metadata cannot leak into a higher physical declaration: " + tier, true,
+                    ResourceGuidanceClient.declaration(loaded, rated, architectures).isEmpty());
+        }
+        Resource f2 = new Resource(Kind.ITEM, f1.id(), FluxTier.F2.ordinal(), "items");
+        equal("industrial quest display stays physically F2", f2,
+                ResourceGuidanceContext.questSubject(QuestCatalogue.byId("industrial_matrix")).orElseThrow());
+        equal("the actual F2 Atlas output stays physically F2", f2, ResourceGuidanceContext.operands(f2Route).stream()
+                .filter(operand -> operand.role() == ResourceGuidanceContext.Role.OUTPUT).findFirst().orElseThrow().resource());
+        for (Resource unrelated : List.of(new Resource(Kind.ITEM, "minecraft:paper"),
+                new Resource(Kind.ITEM, "grindless:unknown_matrix"), new Resource(Kind.ITEM, "grindless:integrated_matrix"),
+                new Resource(Kind.ITEM, "other_mod:relay_matrix"), new Resource(Kind.TAG, f1.id()),
+                new Resource(Kind.FLUID, f1.id()), new Resource(Kind.ITEM, f1.id(), 0, "blocks"),
+                new Resource(Kind.ITEM, f1.id(), 0, "fluids"))) {
+            equal("other IDs/axes/registries cannot inherit the canonical Relay default: " + unrelated.key(), true,
+                    unrelated == ResourceGuidanceContext.canonicalSupply(unrelated));
+            equal("other IDs/axes/registries cannot borrow F1-only metadata: " + unrelated.key(), true,
+                    ResourceGuidanceClient.declaration(loaded, unrelated, architectures).isEmpty());
+        }
+        for (String descriptor : List.of("item:minecraft:paper", "item:grindless:unknown_matrix",
+                "item:grindless:integrated_matrix", "tag:" + f1.id(), "fluid:" + f1.id())) {
+            equal("non-Matrix and wrong-axis descriptors remain unrated: " + descriptor, 0,
+                    ResourceGuidanceContext.resource(descriptor).orElseThrow().rating());
+        }
+        equal("ordinary non-Matrix quest display remains unrated", 0,
+                ResourceGuidanceContext.questSubject(QuestCatalogue.byId("data_core")).orElseThrow().rating());
+        equal("generic authored ingredients retain unspecified admission rating0", 0,
+                IngredientSpec.item(f1.id(), 1).matrixRating());
+        var f3 = new ControlMatrixSpec(MatrixArchitecture.RELAY, FluxTier.F3);
+        equal("explicit minimum-control admission still accepts a stronger valid Matrix", true,
+                IngredientSpec.minimumControl(f1.id(), FluxTier.F1, 1).acceptsMatrix(f1.id(), f3));
+        equal("exact F1 admission still refuses a stronger physical Matrix", false,
+                IngredientSpec.matrix(f1.id(), FluxTier.F1, 1).acceptsMatrix(f1.id(), f3));
+        equal("authored display never manufactures a generic DTO declaration", Set.of(f1), loaded.document().resources().keySet());
+        equal("authored display lookup does not mutate the DTO or its digest", original,
+                ResourceGuidanceJson.write(loaded.document()));
     }
 
     private static void matrixDeclarations() {
@@ -627,6 +781,10 @@ public final class VerifyResourceGuidance {
         String dtoBefore = ResourceGuidanceJson.write(loaded.document());
         var spec = ControlMatrixNbt.load(architecture, carrier.getTag());
         Optional<Resource> physical = ResourceGuidanceClient.matrixItem(id, spec);
+        Optional<Resource> authority = spec.map(value -> AuthorityAdapters.physical(
+                new Resource(Kind.ITEM, id, value.rating().ordinal(), "items")));
+        equal(label + " authority projection preserves valid ratings and never defaults invalid explicit NBT",
+                physical, authority);
         equal(label + " preserves validated physical rating", expectedPhysical, physical.map(Resource::rating).orElse(null));
         var declaration = physical.flatMap(resource -> ResourceGuidanceClient.declaration(loaded, resource, architectures));
         equal(label + " selects only the correct declaration", expectedDeclaration,
@@ -652,9 +810,11 @@ public final class VerifyResourceGuidance {
         }
         String runtime = Files.readString(root.resolve(COMMON.resolve(Path.of("guidance", "ResourceGuidanceRuntime.java"))));
         String presenter = Files.readString(root.resolve(COMMON.resolve(Path.of("client", "ResourceGuidanceClient.java"))));
+        String context = Files.readString(root.resolve(COMMON.resolve(Path.of("guidance", "ResourceGuidanceContext.java"))));
         for (String forbidden : List.of("AuthorityAdapters", "ToolProvider", "java.nio.file", "T0Sustainability",
                 "SustainabilityAudit", "ConstructionReserve", "EntryProfile")) {
-            equal("runtime does not invoke source/model audit " + forbidden, false, runtime.contains(forbidden) || presenter.contains(forbidden));
+            equal("runtime does not invoke source/model audit " + forbidden, false,
+                    runtime.contains(forbidden) || presenter.contains(forbidden) || context.contains(forbidden));
         }
         equal("runtime only reads prepared classpath bytes", true, runtime.contains("getResourceAsStream(ResourceGuidance.ASSET)"));
         String init = Files.readString(root.resolve(COMMON.resolve(Path.of("client", "GrindlessClient.java"))));
@@ -678,14 +838,41 @@ public final class VerifyResourceGuidance {
         String atlas = Files.readString(root.resolve(COMMON.resolve(Path.of("client", "ProcessAtlasScreen.java"))));
         equal("Atlas context uses current recipe operands and shared guidance", true,
                 atlas.contains("ResourceGuidanceContext.operands(rows.get(selected))") && atlas.contains("ResourceGuidanceClient.append("));
+        equal("Atlas context retains the minimum role instead of naming only exact F1", true,
+                atlas.contains("operand.matrixRole() == MatrixRole.MINIMUM_CONTROL")
+                        && atlas.contains("\"recipe.grindless.minimum_control\""));
         String guide = Files.readString(root.resolve(COMMON.resolve(Path.of("client", "FieldGuideScreen.java"))));
-        equal("guide uses live Atlas quantities and lossless native pagination", true, guide.contains("AtlasLogic.line(entry)")
-                && guide.contains("GuideCatalogue.paginate(lines, linesPerPage)") && guide.contains("ResourceGuidanceClient.playerContext("));
-        equal("guide never opts mandatory reading into technical detail", false, guide.contains("ResourceGuidanceClient.lines("));
-        equal("guide selection uses the same declaration lookup as hover", true,
-                guide.contains("ResourceGuidanceClient.declaration(loaded, operand.resource())"));
+        String teaching = Files.readString(root.resolve(COMMON.resolve(Path.of("client", "QuestTeachingClient.java"))));
         String legacy = Files.readString(root.resolve(COMMON.resolve(Path.of("client", "QuestBookScreen.java"))));
         String heracles = Files.readString(root.resolve(FORGE.resolve(Path.of("quest", "HeraclesQuestClient.java"))));
+        String ftb = Files.readString(root.resolve(FORGE.resolve(Path.of("quest", "FtbQuestDefinitions.java"))));
+        equal("quest help uses live Atlas quantities and lossless native pagination", true,
+                teaching.contains("AtlasLogic.line(entry)") && legacy.contains("QuestTeaching.paginate(")
+                        && teaching.contains("ResourceGuidanceClient.playerContext("));
+        equal("optional legacy renderers consume the same lesson projection", true,
+                legacy.contains("QuestTeachingClient.content(") && heracles.contains("QuestTeachingClient.content("));
+        equal("the official FTB data uses concise translated notes and native item tasks", true,
+                ftb.contains("QuestTeaching.bodyKey(task)") && ftb.contains("\"ftbquests:item\"")
+                        && ftb.contains("\"ftbquests:checkmark\""));
+        equal("FTB does not embed the retired custom guide, recipe panels or widgets", false,
+                ftb.contains("QuestTeachingClient") || ftb.contains("AtlasLogic.line(")
+                        || ftb.contains("ResourceGuidanceClient") || ftb.contains("DisplayWidget"));
+        equal("quest teaching keeps real output roles and the shared declaration formatter", true,
+                teaching.contains("ResourceGuidanceContext.operands(entry)")
+                        && teaching.contains("ResourceGuidanceContext.Role.OUTPUT")
+                        && teaching.contains("ResourceGuidanceClient.playerContext(output)"));
+        equal("port teaching projects the actual shared role/position/count authority", true,
+                teaching.contains("WorkshopPortContract.slots(structure)")
+                        && teaching.contains("WorkshopPortContract.maximumPorts(structure)")
+                        && teaching.contains("WorkshopPortContract.minimumBricks(structure)")
+                        && teaching.contains("WorkshopPortContract.maximum(structure, role)"));
+        equal("tank teaching reads capacity from the existing fluid authority", true,
+                teaching.contains("FluidLogic.TANK_CAPACITY"));
+        equal("teaching never opts mandatory reading into technical detail", false,
+                teaching.contains("ResourceGuidanceClient.lines("));
+        equal("the compatibility Guide contains no parallel route manual", true,
+                guide.contains("gui.grindless.quest.guide_migration")
+                        && !guide.contains("GuideCatalogue.bodyKey") && !guide.contains("ProcessLookup"));
         equal("both book displays share canonical resource context", true,
                 legacy.contains("ResourceGuidanceContext.questSubject(task)") && legacy.contains("ResourceGuidanceClient.append(")
                         && heracles.contains("ResourceGuidanceContext.questSubject(task)") && heracles.contains("ResourceGuidanceClient.playerContext("));
@@ -699,10 +886,12 @@ public final class VerifyResourceGuidance {
         equal("JEI does not add contradictory unknown text to a default Matrix declaration", true,
                 jei.contains("ResourceGuidanceClient.declaration(loaded, resource.orElse(null)).isEmpty()"));
         equal("JEI does not invent registered fluids", false, jei.contains("DeferredRegister") || jei.contains("new ForgeFlowingFluid"));
-        String bootstrap = lang.get("gui.grindless.guide.bootstrap.body").getAsString();
-        String renewables = lang.get("gui.grindless.guide.renewables.body").getAsString();
+        String bootstrap = lang.get("gui.grindless.quest.lesson.starter_supplies").getAsString();
+        String renewables = List.of("geological_collector", "biocultivator", "biomass_dynamo", "water", "biomass").stream()
+                .map(id -> lang.get("gui.grindless.quest.lesson." + id).getAsString())
+                .collect(java.util.stream.Collectors.joining("\n"));
         QuestCatalogue.Task starter = QuestCatalogue.byId(QuestCatalogue.STARTER_SUPPLIES);
-        equal("the guide's starter is the first canonical quest", starter.id(), QuestCatalogue.tasks().get(0).id());
+        equal("the teaching starter is the first canonical quest", starter.id(), QuestCatalogue.tasks().get(0).id());
         equal("the starter has an explicit free goal", QuestCatalogue.Evidence.FREE, starter.evidence());
         equal("the starter has no hidden quest prerequisite", List.of(), starter.requires());
         equal("the first quest is ready without physical evidence", QuestLogic.Status.CLAIMABLE,
@@ -715,25 +904,40 @@ public final class VerifyResourceGuidance {
         equal("the advertised starter kit has actual rewards", false, starter.rewards().isEmpty());
         equal("starter rewards remain basic supplies, not machines, cores, insulators or Matrices", true,
                 starter.rewards().stream().allMatch(reward -> basicSupplies.contains(reward.itemId())));
-        equal("the guide names the actual free task and explicit claim action", true,
-                bootstrap.contains(lang.get("gui.grindless.quest.task." + starter.id()).getAsString())
-                        && bootstrap.contains(lang.get("gui.grindless.quest.claim_free").getAsString()));
-        equal("the guide describes one finite, explicitly claimed kit per player", true,
-                bootstrap.contains("each player can explicitly claim one finite kit")
+        equal("the starter note offers free native framework rewards", true,
+                bootstrap.contains("free rewards in FTB Quests"));
+        equal("the starter note describes eleven native rewards without promising legacy atomic delivery", true,
+                bootstrap.contains("all eleven stacks")
+                        && starter.rewards().size() == 11
+                        && bootstrap.contains("rewards are claimed separately")
+                        && bootstrap.contains("may drop on the ground")
+                        && !bootstrap.contains("nothing is claimed or dropped")
                         && lang.get("gui.grindless.quest.starter_policy").getAsString()
-                        .contains("One finite starter kit per player, claimed explicitly"));
-        equal("the finite kit does not replace construction or the renewable machine loop", true,
-                bootstrap.contains("Construct the Crank Handle, Hand Pump and ceramic workshop")
-                        && bootstrap.contains("establish geological collection, bioculture and biomass power"));
-        equal("guide does not prescribe an initial glass/copper/redstone kit", false, bootstrap.startsWith("Bring"));
-        equal("guide leads with mod-owned recurring sources", true, renewables.contains("Geological Collector")
+                        .contains("FTB Quests"));
+        equal("the finite kit leads to a lasting workshop supply", true,
+                lang.get("gui.grindless.quest.lesson.superflat").getAsString().contains("lasting supply")
+                        && lang.has("gui.grindless.quest.lesson.manual_work")
+                        && lang.has("gui.grindless.quest.lesson.firing"));
+        equal("teaching does not prescribe an initial glass/copper/redstone kit", false, bootstrap.startsWith("Bring"));
+        equal("quests lead with mod-owned recurring sources", true, renewables.contains("Geological Collector")
                 && renewables.contains("Biocultivator") && renewables.contains("Biomass Dynamo")
                 && renewables.contains("Hand Pump")
-                && renewables.contains("Use this machine loop for continuing supply instead of depending on vanilla cobblestone generators or tree farms"));
-        equal("natural instructions retain night and restart limits", true,
-                renewables.contains("Do not assume the line will keep running at night or resume on its own after restarting"));
-        for (String page : List.of("bootstrap", "workshop", "settling", "relay", "renewables")) {
-            String body = lang.get("gui.grindless.guide." + page + ".body").getAsString();
+                && lang.get("gui.grindless.quest.lesson.superflat").getAsString()
+                .contains("lasting supply through your workshop"));
+        equal("natural instructions retain daylight and restart cautions", true,
+                renewables.contains("It needs daylight")
+                        && renewables.contains("check it after a restart")
+                        && renewables.contains("reserve for the night"));
+        for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
+            String title = lang.get("gui.grindless.quest.task." + task.id()).getAsString();
+            String body = lang.get(QuestTeaching.bodyKey(task)).getAsString();
+            equal("native quest titles remain short: " + task.id(), true,
+                    !title.isBlank() && title.length() <= 40);
+            equal("native quest notes remain short single paragraphs: " + task.id(), true,
+                    !body.isBlank() && !body.contains("\n") && body.split("\\s+").length <= 45);
+        }
+        for (String page : List.of("starter_supplies", "clay_mixer", "settling", "relay", "biomass")) {
+            String body = lang.get(QuestTeaching.bodyKey(QuestCatalogue.byId(page))).getAsString();
             equal("T0 prose does not duplicate recipe numbers or witness bill: " + page, false,
                     body.matches("(?s).*\\b(?:250|750|1000|33|41|21|20)\\b.*"));
             for (String jargon : List.of("a model's sufficient stock", "Tier-accepted", "Declarations do not certify")) {
@@ -741,8 +945,13 @@ public final class VerifyResourceGuidance {
             }
         }
         equal("manual five-Matrix/calibrated exit is explicit without a Bench shortcut", true,
-                lang.get("gui.grindless.guide.relay.body").getAsString().contains("manual five-Relay-Matrix")
-                        && lang.get("gui.grindless.guide.relay.body").getAsString().contains("Assembly Bench does not fabricate a Matrix"));
+                lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("Craft five Relay Matrices by hand")
+                        && lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("Calibrated Data Core")
+                        && lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("five valid F1 Matrices")
+                        && lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("complete this milestone")
+                        && lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("does not consume them")
+                        && lang.get("gui.grindless.quest.lesson.relay").getAsString()
+                        .contains("Assembly Bench cannot make this batch"));
         String exporter = Files.readString(root.resolve(Path.of("tools", "dashboard", "DashboardExport.java")));
         for (String source : List.of("VerifySustainability", "VerifySustainabilityAdapters",
                 "VerifySustainabilityRegistry", "VerifySustainabilityT0", "VerifyResourceGuidance")) {

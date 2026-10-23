@@ -12,10 +12,17 @@ No action launches Java for a probe,
 Prism or Minecraft. JavaSha256 must identify the operator-selected Java 17 executable.
 Only component uid/version metadata and exact hash-matched dependency jars are read
 from TemplateInstance. Public overrides must currently be explicitly empty.
+UpdateQuestDefinitions applies only an explicitly hash-selected native publisher plan
+to the stopped owned target. RecoverQuestDefinitions restores its verified definition
+backups, never world/team data. Neither action builds, downloads or launches Java.
+Deploy the qualified current package while stopped, then produce a fresh native plan
+and apply it before starting the game. Old incomplete chapters keep startup fail-closed.
+Recovery restores definitions only, not the runtime: retry the update or explicitly
+restore a compatible verified package before starting.
 #>
 [CmdletBinding()]
 param(
-    [ValidateSet('Prepare', 'Deploy', 'Inspect', 'Build', 'BuildAndDeploy')][string]$Action = 'Inspect',
+    [ValidateSet('Prepare', 'Deploy', 'Inspect', 'Build', 'BuildAndDeploy', 'UpdateQuestDefinitions', 'RecoverQuestDefinitions')][string]$Action = 'Inspect',
     [string]$Root,
     [string]$InstancesRoot,
     [string]$InstanceId = 'Grindless-T0-Dev',
@@ -25,6 +32,8 @@ param(
     [string]$PackZip,
     [string]$ExpectedRevision,
     [string]$RuntimeRevision,
+    [string]$QuestUpdatePlan,
+    [string]$QuestUpdateSha256,
     [string[]]$DependencyDirectory = @()
 )
 
@@ -32,10 +41,21 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version 2.0
 $script:PrismDevTool = 'grindless-prism-dev'
 $script:PrismDevStatus = 'restricted-playable-profile-not-rc'
-$script:PrismDevProjects = @(419699, 238222, 845831, 570073, 790626, 429235, 908741)
+$script:PrismDevPreparationProjects = @(419699, 238222, 289412, 404465, 404468, 889915)
+$script:PrismDevProjects = $script:PrismDevPreparationProjects + @(790626, 429235, 908741)
+$script:PrismDevExpandedProjects = $script:PrismDevProjects + @(324717, 422301, 618298, 410811, 314906)
+$script:PrismDevQuestCoordinates = @{
+    289412 = @('ftb-quests', 'ftbquests')
+    404465 = @('ftb-library', 'ftblibrary')
+    404468 = @('ftb-teams', 'ftbteams')
+    889915 = @('ftb-xmod-compat', 'ftbxmodcompat')
+}
 $script:PrismDevOwnerFile = '.grindless-dev-owner.json'
 $script:PrismDevReceiptFile = '.grindless-dev-deployment.json'
 $script:PrismDevPendingFile = '.grindless-dev-pending.json'
+$script:PrismQuestReceiptFile = 'minecraft\config\ftbquests\.grindless-definitions.json'
+$script:PrismQuestPendingFile = 'minecraft\config\ftbquests\.grindless-definition-update.json'
+$script:PrismQuestFilenames = @('grindless_t0.snbt', 'grindless_t1.snbt')
 $script:PrismDevRepositoryRoot = Split-Path -Parent $PSScriptRoot
 
 function Get-PrismCanonicalJson($Value) {
@@ -101,11 +121,11 @@ function Get-PrismPath([string]$Path, [string]$Kind = 'Any', [switch]$AllowMissi
             throw 'Unsafe path segment.'
         }
         $current = Join-Path $current $segment
-        if (Test-Path -LiteralPath $current) {
-            $item = Get-Item -LiteralPath $current -Force -ErrorAction Stop
-            if (($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
-                throw 'Reparse points and symlinks are not allowed.'
-            }
+        $item = $null
+        try { $item = Get-Item -LiteralPath $current -Force -ErrorAction Stop }
+        catch [Management.Automation.ItemNotFoundException] { }
+        if ($null -ne $item -and ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+            throw 'Reparse points and symlinks are not allowed.'
         }
     }
     if (-not (Test-Path -LiteralPath $full)) {
@@ -225,9 +245,14 @@ function Get-PrismProperties([string]$Root) {
         $values[$matches[1]] = $matches[2].Trim()
     }
     foreach ($key in @('minecraft_version', 'forge_version', 'java_version', 'pack_version',
-            'archives_base_name', 'mod_version', 'architectury_api_version', 'jei_version',
-            'heracles_version', 'heracles_curse_file', 'resourcefullib_version', 'resourcefullib_curse_file')) {
+            'archives_base_name', 'mod_version', 'architectury_api_version', 'jei_version')) {
         if (-not $values.ContainsKey($key) -or -not $values[$key]) { throw 'Missing required Gradle version property.' }
+    }
+    foreach ($id in $script:PrismDevQuestCoordinates.Keys) {
+        foreach ($suffix in @('_version', '_curse_file')) {
+            $key = $script:PrismDevQuestCoordinates[$id][1] + $suffix
+            if (-not $values.ContainsKey($key) -or -not $values[$key]) { throw 'Missing required Gradle version property.' }
+        }
     }
     if ($values.java_version -cne '17') { throw 'This engineering tool requires the Java 17 contract.' }
     return $values
@@ -241,6 +266,15 @@ function Assert-PrismPin($Pin) {
         $Pin.requiredProjectIDs -isnot [System.Collections.IList]) { throw 'Invalid dependency verification metadata.' }
     Assert-PrismLeaf $Pin.fileName
     if (-not $Pin.fileName.EndsWith('.jar', [StringComparison]::Ordinal)) { throw 'A pinned dependency must be a jar.' }
+    $declaredSha256 = $Pin.PSObject.Properties['sha256']
+    if ($null -ne $declaredSha256 -and ($declaredSha256.Value -isnot [string] -or
+        $declaredSha256.Value -cnotmatch '^[0-9a-f]{64}$')) { throw 'Invalid dependency SHA256 metadata.' }
+    foreach ($required in @($Pin.requiredProjectIDs)) {
+        if ($required -isnot [int] -or $required -le 0) { throw 'Invalid required dependency project.' }
+    }
+    if (@($Pin.requiredProjectIDs | Sort-Object -Unique).Count -ne @($Pin.requiredProjectIDs).Count) {
+        throw 'Duplicate required dependency project.'
+    }
 }
 
 function Get-PrismContract([string]$Root) {
@@ -257,12 +291,26 @@ function Get-PrismContract([string]$Root) {
         throw 'Nonempty public overrides are unsupported by this bounded deployment tool; nothing was installed.'
     }
     Assert-PrismKeys $profiles @('expanded', 'preparation', 'playable') 'profile catalogue'
-    Assert-PrismKeys $profiles.playable @('name', 'status', 'projectIDs') 'playable profile'
+    Assert-PrismKeys $profiles.expanded @('status') 'expanded profile'
+    if ($profiles.expanded.status -isnot [string] -or [string]::IsNullOrWhiteSpace($profiles.expanded.status)) {
+        throw 'Invalid expanded profile data.'
+    }
+    foreach ($profileName in @('preparation', 'playable')) {
+        $profile = $profiles.$profileName
+        Assert-PrismKeys $profile @('name', 'status', 'projectIDs') "$profileName profile"
+        if ($profile.name -isnot [string] -or [string]::IsNullOrWhiteSpace($profile.name) -or
+            $profile.status -isnot [string] -or [string]::IsNullOrWhiteSpace($profile.status) -or
+            $profile.projectIDs -isnot [System.Collections.IList]) {
+            throw "Invalid $profileName profile data."
+        }
+    }
     if ($profiles.playable.status -cne $script:PrismDevStatus -or -not $profiles.playable.name) {
         throw 'The selected profile must retain its restricted, not-RC status.'
     }
+    Assert-PrismEqual @($profiles.preparation.projectIDs | Sort-Object) `
+        @($script:PrismDevPreparationProjects | Sort-Object) 'Six-project preparation selection'
     Assert-PrismEqual @($profiles.playable.projectIDs | Sort-Object) `
-        @($script:PrismDevProjects | Sort-Object) 'Seven-project playable selection'
+        @($script:PrismDevProjects | Sort-Object) 'Nine-project playable selection'
     if ($manifest.manifestType -cne 'minecraftModpack' -or $manifest.manifestVersion -ne 1 -or
         $manifest.overrides -cne 'overrides' -or $manifest.version -cne $props.pack_version -or
         $manifest.minecraft.version -cne $props.minecraft_version -or
@@ -271,7 +319,8 @@ function Get-PrismContract([string]$Root) {
         $manifest.minecraft.modLoaders[0].id -isnot [string] -or
         -not $manifest.minecraft.modLoaders[0].id.StartsWith('forge-') -or
         ($props.minecraft_version + '-' + $manifest.minecraft.modLoaders[0].id.Substring(6)) -cne $props.forge_version -or
-        $metadata.minecraft -cne $props.minecraft_version -or $metadata.loader -cne 'Forge') {
+        $metadata.minecraft -cne $props.minecraft_version -or $metadata.loader -cne 'Forge' -or
+        $manifest.files -isnot [System.Collections.IList] -or $metadata.files -isnot [System.Collections.IList]) {
         throw 'Manifest/platform version mismatch against gradle.properties.'
     }
     $ids = @{}
@@ -282,37 +331,53 @@ function Get-PrismContract([string]$Root) {
         }
         $ids[$pin.projectID] = $true
     }
-    $selected = @($manifest.files | Where-Object { $_.projectID -in $profiles.playable.projectIDs })
-    if ($selected.Count -ne 7) { throw 'Missing playable dependency pin.' }
-    $dependencies = @()
-    foreach ($pin in $selected) {
+    Assert-PrismEqual @($manifest.files.projectID | Sort-Object) `
+        @($script:PrismDevExpandedProjects | Sort-Object) 'Expanded dependency selection'
+    if (@($metadata.files).Count -ne @($manifest.files).Count) {
+        throw 'Manifest/dependency metadata pin parity mismatch.'
+    }
+    $expandedDependencies = @()
+    foreach ($pin in @($manifest.files)) {
         $records = @($metadata.files | Where-Object { $_.projectID -eq $pin.projectID -and $_.fileID -eq $pin.fileID })
-        if ($records.Count -ne 1) { throw 'Missing or duplicate dependency verification metadata.' }
+        if ($records.Count -ne 1) { throw 'Manifest/dependency metadata pin parity mismatch.' }
         Assert-PrismPin $records[0]
         foreach ($required in @($records[0].requiredProjectIDs)) {
-            if ($required -notin $profiles.playable.projectIDs) { throw 'Missing required dependency project.' }
+            if (-not $ids.ContainsKey($required)) { throw 'Missing required dependency project.' }
         }
-        $dependencies += $records[0]
+        $expandedDependencies += $records[0]
     }
     $names = @{}
-    foreach ($dep in $dependencies) {
+    foreach ($dep in $expandedDependencies) {
         if ($names.ContainsKey($dep.fileName)) { throw 'Conflicting dependency jar names.' }
         $names[$dep.fileName] = $true
+    }
+    $selected = @($manifest.files | Where-Object { $_.projectID -in $profiles.playable.projectIDs })
+    if ($selected.Count -ne 9) { throw 'Missing playable dependency pin.' }
+    $dependencies = @($expandedDependencies | Where-Object { $_.projectID -in $profiles.playable.projectIDs })
+    foreach ($dep in $dependencies) {
+        foreach ($required in @($dep.requiredProjectIDs)) {
+            if ($required -notin $profiles.playable.projectIDs) { throw 'Missing required dependency project.' }
+        }
     }
     $expectedNames = @{
         419699 = "architectury-$($props.architectury_api_version)-forge.jar"
         238222 = "jei-$($props.minecraft_version)-forge-$($props.jei_version).jar"
-        845831 = "Heracles-forge-$($props.minecraft_version)-$($props.heracles_version).jar"
-        570073 = "resourcefullib-forge-$($props.minecraft_version)-$($props.resourcefullib_version).jar"
+    }
+    $questFileProperties = @{}
+    foreach ($id in $script:PrismDevQuestCoordinates.Keys) {
+        $coordinate = $script:PrismDevQuestCoordinates[$id]
+        $expectedNames[$id] = $coordinate[0] + '-forge-' + $props[$coordinate[1] + '_version'] + '.jar'
+        $questFileProperties[$id] = $coordinate[1] + '_curse_file'
     }
     foreach ($id in $expectedNames.Keys) {
         if (@($dependencies | Where-Object { $_.projectID -eq $id })[0].fileName -cne $expectedNames[$id]) {
             throw 'Dependency version mismatch against gradle.properties.'
         }
     }
-    if (@($dependencies | Where-Object { $_.projectID -eq 845831 })[0].fileID.ToString() -cne $props.heracles_curse_file -or
-        @($dependencies | Where-Object { $_.projectID -eq 570073 })[0].fileID.ToString() -cne $props.resourcefullib_curse_file) {
-        throw 'Quest file pin mismatch against gradle.properties.'
+    foreach ($id in $questFileProperties.Keys) {
+        if (@($dependencies | Where-Object { $_.projectID -eq $id })[0].fileID.ToString() -cne $props[$questFileProperties[$id]]) {
+            throw 'Native FTB quest file pin mismatch against gradle.properties.'
+        }
     }
     $manifest.name = $profiles.playable.name
     $manifest.version += '-playable'
@@ -592,7 +657,7 @@ function Assert-PrismModIndex([string]$Mods) {
     }
 }
 
-        function Get-PrismOwnedState([string]$Target, [string]$InstanceId) {
+        function Get-PrismOwnedState([string]$Target, [string]$InstanceId, [switch]$AllowQuestRecovery) {
             $null = Get-PrismPath $Target 'Directory'
             Assert-PrismStopped $Target
             Assert-PrismTree $Target
@@ -607,6 +672,10 @@ function Assert-PrismModIndex([string]$Mods) {
             }
             if (Test-Path -LiteralPath (Join-Path $Target $script:PrismDevPendingFile)) {
                 throw 'An incomplete deployment journal exists; inspect its preserved backups manually.'
+            }
+            if (-not $AllowQuestRecovery -and
+                (Test-Path -LiteralPath (Join-Path $Target $script:PrismQuestPendingFile))) {
+                throw 'An incomplete native definition update exists; use RecoverQuestDefinitions with its original verified plan.'
             }
             $owner = Read-PrismJson $ownerPath
             Assert-PrismKeys $owner @('schemaVersion', 'tool', 'purpose', 'instanceId', 'ownershipId') 'ownership marker'
@@ -643,13 +712,13 @@ function Assert-PrismModIndex([string]$Mods) {
                 throw 'Owned instance Java/memory/type or unmanaged engineering settings were changed.'
             }
             Assert-PrismEqual @($receipt.dependencies.projectID | Sort-Object) `
-                @($script:PrismDevProjects | Sort-Object) 'Installed seven-project selection'
+                @($script:PrismDevProjects | Sort-Object) 'Installed nine-project selection'
             $mods = Join-Path $Target 'minecraft/mods'
             $null = Get-PrismPath $mods 'Directory'
             Assert-PrismModIndex $mods
             $records = @($receipt.dependencies) + @($receipt.grindless)
             $actual = @(Get-ChildItem -LiteralPath $mods -Force | Where-Object { $_.Name -ine '.index' })
-            if ($records.Count -ne 8 -or $actual.Count -ne 8) { throw 'Unknown, missing or tampered managed mods.' }
+            if ($records.Count -ne 10 -or $actual.Count -ne 10) { throw 'Unknown, missing or tampered managed mods.' }
             $names = @{}
             foreach ($record in $records) {
                 Assert-PrismLeaf $record.fileName
@@ -681,6 +750,9 @@ function Assert-PrismModIndex([string]$Mods) {
             $null = Get-PrismPath $Path 'File'
             if ((Get-Item -LiteralPath $Path).Length -ne $Pin.bytes -or (Get-PrismHash $Path 'SHA1') -cne $Pin.sha1) {
                 throw 'Local/downloaded pinned dependency size or published SHA1 mismatch.'
+            }
+            if ($null -ne $Pin.PSObject.Properties['sha256'] -and (Get-PrismHash $Path) -cne $Pin.sha256) {
+                throw 'Local/downloaded pinned dependency SHA256 mismatch.'
             }
         }
 
@@ -778,6 +850,317 @@ function Assert-PrismModIndex([string]$Mods) {
             $null = Get-PrismPath $temporaryBackup 'File' -AllowMissing
             [IO.File]::Replace($Source, $Destination, $temporaryBackup)
         }
+
+function Read-PrismQuestPlan([string]$Path, [string]$ExpectedHash, [string]$Target, $State) {
+    if ($ExpectedHash -cnotmatch '^[0-9a-f]{64}$' -or (Get-PrismHash $Path) -cne $ExpectedHash) {
+        throw 'Native definition plan SHA256 does not match the explicitly selected publisher output.'
+    }
+    $plan = Read-PrismJson $Path
+    Assert-PrismKeys $plan @('schemaVersion', 'tool', 'sourceRevision', 'runtimeSourceRevision',
+        'grindlessSha256', 'instanceId', 'ownershipId', 'target', 'ownerSha256', 'deploymentSha256',
+        'previousReceiptSha256', 'previousDefinitionsSha256', 'chapters', 'files', 'receipt') 'native definition plan'
+    if (-not (Test-PrismQuestInteger $plan.schemaVersion 1 1) -or $plan.tool -cne 'grindless-ftb-definition-update' -or
+        $plan.instanceId -cne $State.Owner.instanceId -or $plan.ownershipId -cne $State.Owner.ownershipId -or
+        -not (Get-PrismPath $plan.target 'Directory').Equals($Target, [StringComparison]::OrdinalIgnoreCase)) {
+        throw 'Unknown native definition plan version or target ownership.'
+    }
+    Assert-PrismRevision $plan.sourceRevision
+    Assert-PrismRevision $plan.runtimeSourceRevision
+    foreach ($hash in @($plan.grindlessSha256, $plan.ownerSha256, $plan.deploymentSha256,
+            $plan.previousDefinitionsSha256)) {
+        if ($hash -isnot [string] -or $hash -cnotmatch '^[0-9a-f]{64}$') { throw 'Invalid native definition plan hash.' }
+    }
+    if ($null -ne $plan.previousReceiptSha256 -and
+        ($plan.previousReceiptSha256 -isnot [string] -or $plan.previousReceiptSha256 -cnotmatch '^[0-9a-f]{64}$')) {
+        throw 'Invalid previous native definition ownership hash.'
+    }
+    if ($plan.files -isnot [System.Collections.IList] -or $plan.chapters -isnot [System.Collections.IList] -or
+        $plan.chapters.Count -lt 2 -or $plan.chapters.Count -gt 1000) { throw 'Invalid native chapter snapshot.' }
+    Assert-PrismEqual @($plan.files.fileName | Sort-Object -CaseSensitive) $script:PrismQuestFilenames 'Native definition filenames'
+    $seen = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+    foreach ($file in $plan.chapters) {
+        Assert-PrismKeys $file @('fileName', 'bytes', 'sha256') 'native chapter snapshot entry'
+        Assert-PrismLeaf $file.fileName
+        if (-not $file.fileName.EndsWith('.snbt', [StringComparison]::OrdinalIgnoreCase) -or
+            -not $seen.Add($file.fileName) -or -not (Test-PrismQuestInteger $file.bytes 1 1MB) -or
+            $file.sha256 -cnotmatch '^[0-9a-f]{64}$') { throw 'Invalid or colliding native chapter snapshot entry.' }
+    }
+    foreach ($file in $plan.files) {
+        Assert-PrismKeys $file @('fileName', 'beforeSha256', 'beforeBytes', 'afterSha256', 'afterBytes',
+            'contentsBase64') 'native definition replacement'
+        if ($file.beforeSha256 -cnotmatch '^[0-9a-f]{64}$' -or $file.afterSha256 -cnotmatch '^[0-9a-f]{64}$' -or
+            -not (Test-PrismQuestInteger $file.beforeBytes 1 1MB) -or
+            -not (Test-PrismQuestInteger $file.afterBytes 1 1MB) -or $file.contentsBase64 -isnot [string]) {
+            throw 'Invalid native definition replacement hash or size.'
+        }
+        $bytes = [Convert]::FromBase64String($file.contentsBase64)
+        if ($bytes.Length -ne $file.afterBytes -or (Get-PrismBytesHash $bytes) -cne $file.afterSha256) {
+            throw 'Native definition replacement payload hash mismatch.'
+        }
+        $entry = @($plan.chapters | Where-Object { $_.fileName -ceq $file.fileName })
+        if ($entry.Count -ne 1 -or $entry[0].sha256 -cne $file.beforeSha256 -or $entry[0].bytes -ne $file.beforeBytes) {
+            throw 'Native definition replacement does not match its preflight snapshot.'
+        }
+    }
+    $receipt = $plan.receipt
+    Assert-PrismKeys $receipt @('schemaVersion', 'tool', 'instanceId', 'ownershipId', 'sourceRevision',
+        'runtimeSourceRevision', 'grindlessSha256', 'questCount', 'files') 'native definition ownership receipt'
+    if (-not (Test-PrismQuestInteger $receipt.schemaVersion 1 1) -or $receipt.tool -cne 'grindless-ftb-definitions' -or
+        $receipt.instanceId -cne $plan.instanceId -or $receipt.ownershipId -cne $plan.ownershipId -or
+        $receipt.sourceRevision -cne $plan.sourceRevision -or $receipt.runtimeSourceRevision -cne $plan.runtimeSourceRevision -or
+        $receipt.grindlessSha256 -cne $plan.grindlessSha256 -or -not (Test-PrismQuestInteger $receipt.questCount 46 52) -or
+        $receipt.questCount -notin @(46, 50, 51, 52) -or
+        $receipt.files -isnot [System.Collections.IList]) { throw 'Invalid native definition ownership receipt.' }
+    $expectedFiles = @($plan.files | ForEach-Object {
+        [ordered]@{ fileName = $_.fileName; bytes = $_.afterBytes; sha256 = $_.afterSha256 }
+    })
+    Assert-PrismEqual $receipt.files $expectedFiles 'Native definition ownership payload'
+    return $plan
+}
+
+function Test-PrismQuestInteger($Value, [long]$Minimum, [long]$Maximum) {
+    return ($Value -is [int] -or $Value -is [long]) -and $Value -ge $Minimum -and $Value -le $Maximum
+}
+
+function Get-PrismQuestReceiptBytes($Plan) {
+    return ,([Text.Encoding]::UTF8.GetBytes((ConvertTo-Json $Plan.receipt -Depth 40) + "`n"))
+}
+
+function Get-PrismQuestSnapshot([string]$Target) {
+    $directory = Get-PrismPath (Join-Path $Target 'minecraft\config\ftbquests\quests\chapters') 'Directory'
+    $result = @()
+    foreach ($file in @(Get-ChildItem -LiteralPath $directory -Force -ErrorAction Stop)) {
+        if (-not $file.Name.EndsWith('.snbt', [StringComparison]::OrdinalIgnoreCase)) { continue }
+        Assert-PrismLeaf $file.Name
+        $path = Get-PrismPath $file.FullName 'File'
+        if ($file.Length -le 0 -or $file.Length -gt 1MB) { throw 'Native chapter exceeds its size limit.' }
+        Assert-PrismUnlocked $path
+        $result += [pscustomobject]@{ fileName = $file.Name; bytes = $file.Length; sha256 = (Get-PrismHash $path) }
+    }
+    return $result
+}
+
+function Assert-PrismQuestBinding($Plan) {
+    Assert-PrismStopped $Plan.target
+    if ((Get-PrismHash (Join-Path $Plan.target $script:PrismDevOwnerFile)) -cne $Plan.ownerSha256 -or
+        (Get-PrismHash (Join-Path $Plan.target $script:PrismDevReceiptFile)) -cne $Plan.deploymentSha256) {
+        throw 'Native definition target ownership/deployment drifted since preflight.'
+    }
+}
+
+function Assert-PrismQuestSnapshot($Plan, [ValidateSet('Before', 'After', 'Recover')][string]$Phase) {
+    Assert-PrismQuestBinding $Plan
+    $actual = @(Get-PrismQuestSnapshot $Plan.target)
+    if ($actual.Count -ne $Plan.chapters.Count) { throw 'Native chapter inventory drifted since preflight.' }
+    foreach ($file in $actual) {
+        $expected = @($Plan.chapters | Where-Object { $_.fileName -ceq $file.fileName })
+        if ($expected.Count -ne 1) { throw 'Unknown native chapter appeared since preflight.' }
+        $owned = @($Plan.files | Where-Object { $_.fileName -ceq $file.fileName })
+        $valid = $file.sha256 -ceq $expected[0].sha256 -and $file.bytes -eq $expected[0].bytes
+        if ($owned.Count -eq 1 -and $Phase -ne 'Before') {
+            $after = $file.sha256 -ceq $owned[0].afterSha256 -and $file.bytes -eq $owned[0].afterBytes
+            if ($Phase -eq 'After') { $valid = $after } else { $valid = $valid -or $after }
+        }
+        if (-not $valid) { throw 'Native chapter bytes drifted or were edited; existing files are preserved.' }
+    }
+}
+
+function Assert-PrismQuestPreviousReceipt($Plan) {
+    $path = Get-PrismPath (Join-Path $Plan.target $script:PrismQuestReceiptFile) 'File' -AllowMissing
+    if ($null -eq $Plan.previousReceiptSha256) {
+        if (Test-Path -LiteralPath $path) { throw 'Native definition ownership appeared since preflight.' }
+    } elseif (-not [IO.File]::Exists($path) -or (Get-PrismHash $path) -cne $Plan.previousReceiptSha256) {
+        throw 'Native definition ownership drifted since preflight.'
+    }
+}
+
+function Read-PrismQuestJournal($Plan, [string]$PlanHash) {
+    $journal = Read-PrismJson (Join-Path $Plan.target $script:PrismQuestPendingFile)
+    Assert-PrismKeys $journal @('schemaVersion', 'tool', 'state', 'operationId', 'planSha256', 'backup') 'native definition journal'
+    if (-not (Test-PrismQuestInteger $journal.schemaVersion 1 1) -or $journal.tool -cne 'grindless-ftb-definition-update' -or
+        $journal.state -cne 'in-progress' -or $journal.operationId -cnotmatch '^[0-9a-f]{32}$' -or
+        $journal.planSha256 -cne $PlanHash -or
+        $journal.backup -cne ('.grindless-dev-backups/ftb-' + $journal.operationId)) {
+        throw 'Unknown native definition journal; manual inspection is required.'
+    }
+    return $journal
+}
+
+function Restore-PrismQuestDefinitions($Plan, [string]$PlanHash) {
+    $journal = Read-PrismQuestJournal $Plan $PlanHash
+    $pending = Join-Path $Plan.target $script:PrismQuestPendingFile
+    $journalHash = Get-PrismHash $pending
+    $backup = Get-PrismPath (Join-Path $Plan.target $journal.backup) 'Directory'
+    $receiptPath = Get-PrismPath (Join-Path $Plan.target $script:PrismQuestReceiptFile) 'File' -AllowMissing
+    $afterReceiptHash = Get-PrismBytesHash (Get-PrismQuestReceiptBytes $Plan)
+    # All current files AND all backup bytes must be admissible before any recovery write.
+    Assert-PrismQuestSnapshot $Plan 'Recover'
+    if ((Get-PrismHash (Join-Path $backup 'plan.json')) -cne $PlanHash) {
+        throw 'Native definition recovery plan backup verification failed.'
+    }
+    foreach ($file in $Plan.files) {
+        $path = Get-PrismPath (Join-Path $backup ('before-' + $file.fileName)) 'File'
+        if ((Get-Item -LiteralPath $path).Length -ne $file.beforeBytes -or (Get-PrismHash $path) -cne $file.beforeSha256) {
+            throw 'Native definition backup verification failed; recovery is refused.'
+        }
+    }
+    if ($null -ne $Plan.previousReceiptSha256 -and
+        (Get-PrismHash (Join-Path $backup 'previous-receipt.json')) -cne $Plan.previousReceiptSha256) {
+        throw 'Native definition ownership backup verification failed.'
+    }
+    $receiptHash = $null
+    if ([IO.File]::Exists($receiptPath)) { $receiptHash = Get-PrismHash $receiptPath }
+    if ($receiptHash -cne $Plan.previousReceiptSha256 -and $receiptHash -cne $afterReceiptHash) {
+        throw 'Native definition ownership was edited; recovery preserves it.'
+    }
+    foreach ($file in $Plan.files) {
+        $path = Join-Path $Plan.target ('minecraft\config\ftbquests\quests\chapters\' + $file.fileName)
+        if ((Get-PrismHash $path) -ceq $file.beforeSha256) { continue }
+        Assert-PrismQuestSnapshot $Plan 'Recover'
+        if ((Get-PrismHash $pending) -cne $journalHash) { throw 'Native definition journal changed during recovery.' }
+        $restore = Join-Path $backup ('restore-' + [Guid]::NewGuid().ToString('N') + '.tmp')
+        Write-PrismNewBytes $restore ([IO.File]::ReadAllBytes((Join-Path $backup ('before-' + $file.fileName))))
+        if ((Get-PrismHash $restore) -cne $file.beforeSha256) { throw 'Native definition restore staging verification failed.' }
+        if ((Get-PrismHash $path) -cne $file.afterSha256) { throw 'Native definition changed during recovery.' }
+        Set-PrismReplacement $restore $path
+    }
+    Assert-PrismQuestSnapshot $Plan 'Before'
+    if ($receiptHash -cne $Plan.previousReceiptSha256) {
+        if ((Get-PrismHash $receiptPath) -cne $afterReceiptHash) { throw 'Native definition ownership changed during recovery.' }
+        if ($null -eq $Plan.previousReceiptSha256) {
+            [IO.File]::Delete($receiptPath)
+        } else {
+            $restore = Join-Path $backup ('restore-receipt-' + [Guid]::NewGuid().ToString('N') + '.tmp')
+            Write-PrismNewBytes $restore ([IO.File]::ReadAllBytes((Join-Path $backup 'previous-receipt.json')))
+            if ((Get-PrismHash $restore) -cne $Plan.previousReceiptSha256) { throw 'Native definition receipt restore verification failed.' }
+            Set-PrismReplacement $restore $receiptPath
+        }
+    }
+    Assert-PrismQuestPreviousReceipt $Plan
+    if ((Get-PrismHash $pending) -cne $journalHash) { throw 'Native definition journal changed during recovery.' }
+    [IO.File]::Delete($pending)
+    return $journal.backup
+}
+
+function Invoke-PrismQuestDefinitions($Plan, [string]$PlanHash, [string]$InstancesRoot, [string]$PlanPath, [switch]$Recover) {
+    $pending = Join-Path $Plan.target $script:PrismQuestPendingFile
+    $receiptPath = Join-Path $Plan.target $script:PrismQuestReceiptFile
+    $receiptBytes = Get-PrismQuestReceiptBytes $Plan
+    if (-not $Recover) {
+        if (Test-Path -LiteralPath $pending) { throw 'An incomplete native definition update requires explicit recovery.' }
+        Assert-PrismQuestBinding $Plan
+        if ([IO.File]::Exists($receiptPath) -and (Get-PrismHash $receiptPath) -ceq (Get-PrismBytesHash $receiptBytes)) {
+            Assert-PrismQuestSnapshot $Plan 'After'
+            return [pscustomobject]@{ Outcome = 'Unchanged'; Backup = $null }
+        }
+        Assert-PrismQuestSnapshot $Plan 'Before'
+        Assert-PrismQuestPreviousReceipt $Plan
+    } else {
+        $null = Read-PrismQuestJournal $Plan $PlanHash
+        Assert-PrismQuestSnapshot $Plan 'Recover'
+    }
+    $lockPath = Get-PrismPath (Join-Path $InstancesRoot ('.' + $Plan.instanceId + '.grindless-deploy.lock')) 'File' -AllowMissing
+    $lock = $null
+    $ownsLock = $false
+    try {
+        # A crashed attempt may leave our own lock. Recovery must acquire it exclusively,
+        # with the exact plan identity; a running or foreign deployment is never bypassed.
+        if ($Recover -and [IO.File]::Exists($lockPath)) {
+            try { $lock = [IO.File]::Open($lockPath, [IO.FileMode]::Open, [IO.FileAccess]::ReadWrite, [IO.FileShare]::None) }
+            catch { throw 'Native definition recovery lock is active or uninspectable; it is preserved.' }
+            $reader = New-Object IO.StreamReader($lock, [Text.Encoding]::UTF8, $true, 1024, $true)
+            try { $text = $reader.ReadToEnd() } finally { $reader.Dispose() }
+            if ($text -cne ('grindless-ftb-definition-update:' + $PlanHash)) {
+                throw 'Foreign deployment lock is preserved; native definition recovery is refused.'
+            }
+            $ownsLock = $true
+        } else {
+            try { $lock = [IO.File]::Open($lockPath, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::None) }
+            catch { throw 'Another deployment or a stale deployment lock exists; inspect it manually.' }
+            $ownsLock = $true
+            $bytes = [Text.Encoding]::UTF8.GetBytes('grindless-ftb-definition-update:' + $PlanHash)
+            $lock.Write($bytes, 0, $bytes.Length); $lock.Flush($true)
+        }
+        if ($Recover) {
+            $backup = Restore-PrismQuestDefinitions $Plan $PlanHash
+            return [pscustomobject]@{ Outcome = 'DefinitionsRestored'; Backup = $backup }
+        }
+        Assert-PrismQuestSnapshot $Plan 'Before'
+        Assert-PrismQuestPreviousReceipt $Plan
+        $operation = [Guid]::NewGuid().ToString('N')
+        $relativeBackup = '.grindless-dev-backups/ftb-' + $operation
+        $backup = Get-PrismPath (Join-Path $Plan.target $relativeBackup) 'Directory' -AllowMissing
+        if (Test-Path -LiteralPath $backup) { throw 'Native definition backup target already exists.' }
+        [IO.Directory]::CreateDirectory($backup) | Out-Null
+        $null = Get-PrismPath $PlanPath 'File'
+        Write-PrismNewBytes (Join-Path $backup 'plan.json') ([IO.File]::ReadAllBytes($PlanPath))
+        if ((Get-PrismHash (Join-Path $backup 'plan.json')) -cne $PlanHash) {
+            throw 'Native definition plan changed during backup; no installed file was replaced.'
+        }
+        foreach ($file in $Plan.files) {
+            $path = Join-Path $Plan.target ('minecraft\config\ftbquests\quests\chapters\' + $file.fileName)
+            Write-PrismNewBytes (Join-Path $backup ('before-' + $file.fileName)) ([IO.File]::ReadAllBytes($path))
+            Write-PrismNewBytes (Join-Path $backup ('after-' + $file.fileName)) ([Convert]::FromBase64String($file.contentsBase64))
+            if ((Get-PrismHash (Join-Path $backup ('before-' + $file.fileName))) -cne $file.beforeSha256 -or
+                (Get-PrismHash (Join-Path $backup ('after-' + $file.fileName))) -cne $file.afterSha256) {
+                throw 'Native definition backup/staging verification failed; no installed file was replaced.'
+            }
+        }
+        if ($null -ne $Plan.previousReceiptSha256) {
+            Write-PrismNewBytes (Join-Path $backup 'previous-receipt.json') ([IO.File]::ReadAllBytes($receiptPath))
+            if ((Get-PrismHash (Join-Path $backup 'previous-receipt.json')) -cne $Plan.previousReceiptSha256) {
+                throw 'Native definition ownership backup verification failed.'
+            }
+        }
+        Write-PrismNewBytes (Join-Path $backup 'new-receipt.json') $receiptBytes
+        if ((Get-PrismHash (Join-Path $backup 'new-receipt.json')) -cne (Get-PrismBytesHash $receiptBytes)) {
+            throw 'Native definition ownership staging verification failed.'
+        }
+        Assert-PrismQuestSnapshot $Plan 'Before'
+        Assert-PrismQuestPreviousReceipt $Plan
+        $journal = [ordered]@{ schemaVersion = 1; tool = 'grindless-ftb-definition-update'; state = 'in-progress'
+            operationId = $operation; planSha256 = $PlanHash; backup = $relativeBackup }
+        Write-PrismNewJson $pending $journal
+        $journalHash = Get-PrismHash $pending
+        try {
+            foreach ($file in $Plan.files) {
+                Assert-PrismQuestSnapshot $Plan 'Recover'
+                Assert-PrismQuestPreviousReceipt $Plan
+                if ((Get-PrismHash $pending) -cne $journalHash) { throw 'Native definition journal changed during update.' }
+                $path = Join-Path $Plan.target ('minecraft\config\ftbquests\quests\chapters\' + $file.fileName)
+                if ((Get-PrismHash $path) -cne $file.beforeSha256) { throw 'Native definition changed immediately before replacement.' }
+                if ($file.beforeSha256 -cne $file.afterSha256) {
+                    Set-PrismReplacement (Join-Path $backup ('after-' + $file.fileName)) $path
+                }
+            }
+            Assert-PrismQuestSnapshot $Plan 'After'
+            Assert-PrismQuestPreviousReceipt $Plan
+            if ($null -eq $Plan.previousReceiptSha256) {
+                [IO.File]::Move((Join-Path $backup 'new-receipt.json'), $receiptPath)
+            } else { Set-PrismReplacement (Join-Path $backup 'new-receipt.json') $receiptPath }
+            if ((Get-PrismHash $receiptPath) -cne (Get-PrismBytesHash $receiptBytes)) {
+                throw 'Installed native definition ownership verification failed.'
+            }
+            Assert-PrismQuestSnapshot $Plan 'After'
+            if ((Get-PrismHash $pending) -cne $journalHash) { throw 'Native definition journal changed during update.' }
+            [IO.File]::Delete($pending)
+        } catch {
+            $failure = $_.Exception.Message
+            try { $null = Restore-PrismQuestDefinitions $Plan $PlanHash }
+            catch {
+                $recoveryFailure = $_.Exception.Message
+                throw "Native definition update failed and recovery is incomplete. Its journal and verified backups are preserved; no success is accepted. Use RecoverQuestDefinitions with the original plan. Update: $failure Recovery: $recoveryFailure"
+            }
+            throw "Native definition update failed; original chapters and ownership receipt were restored. $failure"
+        }
+        return [pscustomobject]@{ Outcome = 'DefinitionsUpdated'; Backup = $relativeBackup }
+    } finally {
+        if ($null -ne $lock) {
+            $lock.Dispose()
+            if ($ownsLock) { [IO.File]::Delete($lockPath) }
+        }
+    }
+}
 
         function Invoke-PrismUpdate($Plan, [string]$Stage, $NewReceipt) {
             $target = $Plan.Target
@@ -877,7 +1260,12 @@ function Assert-PrismModIndex([string]$Mods) {
                     } else { Save-PrismOfficialPin $pin $destination }
                     Assert-PrismDependency $destination $pin
                     $record = (ConvertTo-Json $pin -Depth 30) | ConvertFrom-Json
-                    $record | Add-Member -NotePropertyName sha256 -NotePropertyValue (Get-PrismHash $destination)
+                    $actualSha256 = Get-PrismHash $destination
+                    if ($null -ne $record.PSObject.Properties['sha256']) {
+                        if ($record.sha256 -cne $actualSha256) { throw 'Staged dependency SHA256 mismatch.' }
+                    } else {
+                        $record | Add-Member -NotePropertyName sha256 -NotePropertyValue $actualSha256
+                    }
                     $dependencyReceipts += $record
                 }
                 if ((Get-PrismHash (Join-Path $mods $Plan.Package.JarName)) -cne $Plan.Package.JarSha256) {
@@ -1061,15 +1449,26 @@ function Invoke-PrismBuild([string]$Root, [string]$Expected, [string]$Runtime) {
         function Invoke-PrismDev {
             [CmdletBinding()]
             param(
-                [ValidateSet('Prepare', 'Deploy', 'Inspect', 'Build', 'BuildAndDeploy')][string]$Action = 'Inspect',
+                [ValidateSet('Prepare', 'Deploy', 'Inspect', 'Build', 'BuildAndDeploy', 'UpdateQuestDefinitions', 'RecoverQuestDefinitions')][string]$Action = 'Inspect',
                 [string]$Root,
                 [string]$InstancesRoot, [string]$InstanceId = 'Grindless-T0-Dev', [string]$TemplateInstance,
                 [string]$JavaPath, [string]$JavaSha256, [string]$PackZip, [string]$ExpectedRevision,
-                [string]$RuntimeRevision, [string[]]$DependencyDirectory = @()
+                [string]$RuntimeRevision, [string]$QuestUpdatePlan, [string]$QuestUpdateSha256,
+                [string[]]$DependencyDirectory = @()
             )
             if ($env:OS -ne 'Windows_NT') { throw 'The host-side Prism deployment tool targets Windows with CIM process inspection.' }
             if (-not $Root) { $Root = $script:PrismDevRepositoryRoot }
             $Root = Get-PrismPath ([IO.Path]::GetFullPath($Root)) 'Directory'
+            $questAction = $Action -in @('UpdateQuestDefinitions', 'RecoverQuestDefinitions')
+            if (($QuestUpdatePlan -or $QuestUpdateSha256) -and -not $questAction) {
+                throw 'Native definition plans require an explicit definition update/recovery action.'
+            }
+            if ($questAction -and -not $PSBoundParameters.ContainsKey('InstanceId')) {
+                throw 'Native definition update/recovery requires an explicitly selected InstanceId; no default player target is inferred.'
+            }
+            if ($questAction -and $RuntimeRevision) {
+                throw 'RuntimeRevision is only a Build/BuildAndDeploy input; definition updates use the verified publisher/pack runtime.'
+            }
             if ($Action -eq 'Build') {
                 if ($PackZip) { throw 'Build selects its exact source-bound output; PackZip is a Deploy input.' }
                 Assert-PrismRevision $ExpectedRevision
@@ -1089,7 +1488,9 @@ function Invoke-PrismBuild([string]$Root, [string]$Expected, [string]$Runtime) {
             }
             Assert-PrismStopped $target
             $state = $null
-            if (Test-Path -LiteralPath $target) { $state = Get-PrismOwnedState $target $InstanceId }
+            if (Test-Path -LiteralPath $target) {
+                $state = Get-PrismOwnedState $target $InstanceId -AllowQuestRecovery:($Action -eq 'RecoverQuestDefinitions')
+            }
             if ($Action -eq 'Inspect') {
                 if ($null -eq $state) { throw 'The dedicated engineering instance has not been deployed.' }
                 return [pscustomobject]@{ Action = 'Inspect'; InstanceId = $InstanceId; Outcome = 'VerifiedStopped'
@@ -1099,6 +1500,31 @@ function Invoke-PrismBuild([string]$Root, [string]$Expected, [string]$Runtime) {
             }
             if ($ExpectedRevision) { Assert-PrismRevision $ExpectedRevision }
             $source = Assert-PrismSource $Root $ExpectedRevision
+            if ($questAction) {
+                if ($null -eq $state) { throw 'Native definition updates require an already owned engineering instance.' }
+                Assert-PrismRevision $ExpectedRevision
+                $plan = Read-PrismQuestPlan $QuestUpdatePlan $QuestUpdateSha256 $target $state
+                if ($Action -eq 'UpdateQuestDefinitions') {
+                    $contract = Get-PrismContract $Root
+                    $package = Read-PrismPackage $Root $PackZip $contract $source
+                    if ($plan.sourceRevision -cne $source -or
+                        $plan.runtimeSourceRevision -cne $package.Provenance.runtimeSourceRevision -or
+                        $plan.grindlessSha256 -cne $package.JarSha256) {
+                        throw 'Native definition publisher plan does not match the verified source/runtime package.'
+                    }
+                    if ($state.Receipt.sourceRevision -cne $plan.sourceRevision -or
+                        $state.Receipt.runtimeSourceRevision -cne $plan.runtimeSourceRevision -or
+                        $state.Receipt.grindless.sha256 -cne $plan.grindlessSha256 -or
+                        $state.Receipt.packSha256 -cne $package.Sha256) {
+                        throw 'Deploy the verified current package while stopped, then produce a fresh definition plan before starting the game.'
+                    }
+                }
+                $result = Invoke-PrismQuestDefinitions $plan $QuestUpdateSha256 $instances $QuestUpdatePlan -Recover:($Action -eq 'RecoverQuestDefinitions')
+                return [pscustomobject]@{ Action = $Action; InstanceId = $InstanceId; Outcome = $result.Outcome
+                    SourceRevision = $plan.sourceRevision; RuntimeSourceRevision = $plan.runtimeSourceRevision
+                    GrindlessSha256 = $plan.grindlessSha256; PlanSha256 = $QuestUpdateSha256
+                    Backup = $result.Backup; PackStatus = $script:PrismDevStatus }
+            }
             $contract = Get-PrismContract $Root
             $forge = $contract.Properties.forge_version.Substring($contract.Properties.minecraft_version.Length + 1)
             $components = $null
@@ -1120,7 +1546,11 @@ function Invoke-PrismBuild([string]$Root, [string]$Expected, [string]$Runtime) {
                 $components = $state.Components
                 $previousPins = @($state.Receipt.dependencies | ForEach-Object {
                     $copy = (ConvertTo-Json $_ -Depth 30) | ConvertFrom-Json
-                    $copy.PSObject.Properties.Remove('sha256')
+                    $declaredPin = @($contract.Dependencies | Where-Object { $_.projectID -eq $copy.projectID })
+                    # Strip only receipt-only measurements, never a committed digest.
+                    if ($declaredPin.Count -ne 1 -or $null -eq $declaredPin[0].PSObject.Properties['sha256']) {
+                        $copy.PSObject.Properties.Remove('sha256')
+                    }
                     $copy
                 })
                 Assert-PrismEqual $previousPins @($contract.Dependencies) 'Installed dependency pins (pin migrations require a new instance)'

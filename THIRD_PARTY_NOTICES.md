@@ -220,12 +220,58 @@ Technical codec/level/boundary screens pass for the selected encoded file.
 Actual client lifecycle, one/eight-machine and mixed-factory listening remain
 unobserved. The owner, not the waveform screen, judges artistic quality.
 
+## Physical T0 water and extraction game-audio imports
+
+The owner's 2026-10-20 master directive and current Sol6.1 delegation authorize
+technical game incorporation of the two selected resources below, after source
+rights and actual codec QC. These notices precede binary import. Earlier Quern,
+Mixer and visual-model notices/evidence above remain unchanged.
+
+- Provider/model: ElevenLabs Sound Effects, `eleven_text_to_sound_v2`.
+- Purpose/run: `t0-physical-soundscape-replacement` /
+  `t0-physical-20261020-01`, generated from reviewed checkpoint
+  `1789ce9098d444a6f7dd70f37695c3b1dd1525aa`.
+- Request: original non-imitative prompts in
+  [the physical manifest](tools/sound-design/t0-physical-purpose.json),
+  specified3-second loop, influence0.3, `mp3_44100_128`.
+  Six actual HTTP200 sources; no retries or ambiguous requests. Three families
+  were compared, but the two unsuitable generated combustion candidates are
+  not imported. Native furnace crackle is referenced instead.
+- Processing: existing fixed-3dB mono44.1kHz PCM16 preview, then constant
+  `min(0.03/RMS, 0.35/peak)` normalization and bitexact Vorbis q4 with metadata
+  removed. Neither selected file is trimmed, faded, crossfaded or time-stretched.
+  All source/preview/provenance/processing/QC hashes and preserved rejections are in
+  [the public sound record](docs/assets/t0-experience-audio.json).
+- Rights basis: existing owner-confirmed paid entitlement at generation and
+  already reviewed [ElevenCreative Terms](https://elevenlabs.io/creative-terms),
+  Sound Effects exhibit. No new account/subscription inquiry is performed.
+  The grant permits internal generation; the separate owner/coordinator direction
+  permits technical game incorporation, not public release acceptance.
+- Distribution: incorporated game audio only, **not** standalone/isolated samples
+  or a sound library; no CC0/MIT relicensing of the audio. Keep
+  `assets/grindless/AUDIO-NOTICE.txt` in the game. Raw/unselected media, grants,
+  private receipts and credentials/access locations are not distributed.
+- Technical selection is not artistic listening, factory-mix, fatigue, native
+  playback or human/T0/release approval. Those checks remain explicit.
+
+| Selected resource | Source / generation time | SHA-256 of distributed Ogg |
+| --- | --- | --- |
+| `sounds/t0_water_flow.ogg`,33,490B | `water-flow-b`,2026-10-20T16:46:29.3653447Z | `5fbfa5c1906fcc98ac310f3feaa9959fd7838ef5f4f6143dc293d37eadc6aeb1` |
+| `sounds/t0_mineral_extraction.ogg`,29,241B | `mineral-extraction-b`,2026-10-20T16:46:43.7253653Z | `a634f9a17c5f5c71e7fd20da8f79ec5453715d125b1084c557de54bb380ba9fb` |
+
+No Minecraft audio is copied: the retained legacy interaction IDs reference native
+tripwire-attachment, lever-latch and iron-trapdoor safety-trip events; combustion
+references native furnace crackle. The two old hum IDs remain registered but
+intentionally silent. All five synthesized runtime Oggs are retired, not relabelled
+as these physical sources. Historical development WAV writers are not runtime media.
+
 ## Pack dependencies (not imports)
 
 The first local client-pack manifest names launcher-managed dependency files but does **not** copy
 their jars, code or assets into this repository. The user receives each file directly through the
 CurseForge or Prism launcher. The current reference preparation profile selects Architectury,
-JEI, Heracles and ResourcefulLib; the expanded profile retains the other integrations. The
+JEI and native FTB Quests/Library/Teams/XMod Compat under ADR-0171; the expanded
+profile retains the other integrations. The
 previously delivered26c8/740 archives are unchanged. Verified file hashes and required
 project edges are recorded in `pack/dependency-metadata.json`, not a second version selector.
 Their licences govern redistribution and modification of those files:
@@ -265,7 +311,9 @@ MIT licence does not relicense Jade.
 
 ## Quest-backend dependency selection
 
-The following optional integration is implemented under ADR-0142. It is not present
+The following historical optional integration was implemented under ADR-0142.
+ADR-0171 replaces it in all official pack profiles; retained historical adapter
+code is not activated as a fallback and does not select or redistribute those jars. It is not present
 in the previously delivered740ec84 preparation package. No upstream source, asset or jar
 is copied into Grindless's distribution by this selection; current pack references remain
 launcher-managed.
@@ -279,6 +327,41 @@ launcher-managed.
 
 ResourcefulLib's nested Yabn1.0.3/ByteCodecs1.0.2 remain upstream-managed; their exact notices
 must be recorded before any decision to copy those components. None is vendored here.
+
+## Native FTB quest-backend dependency selection
+
+ADR-0171 selects the publisher's unmodified Forge 1.20.1 artifacts below. They are
+launcher-managed references, not imports of FTB source, artwork, quest prose or jars
+into Grindless or its ZIP. Their All Rights Reserved notices remain applicable;
+visible source and dependency use do not grant permission to copy or relicense it.
+The package includes this provenance ledger and downloads remain through the
+official publisher distribution, not a republished dependency bundle.
+
+| Component | Exact publisher file | Verified SHA-256 |
+| --- | --- | --- |
+| FTB Quests 2001.4.22 | [project289412/file8078538](https://www.curseforge.com/projects/289412/files/8078538), 1,255,469 bytes | `9ea9d159a78a2724cfe0457b024680fdb52a2126eff9cfa5280a30578f647a68` |
+| FTB Library 2001.2.13 | [project404465/file8226927](https://www.curseforge.com/projects/404465/files/8226927), 780,558 bytes | `41810281b65336265cae2c88412022d02f2f0a3f28c66a06173d86f98acf14a7` |
+| FTB Teams 2001.3.2 | [project404468/file7499810](https://www.curseforge.com/projects/404468/files/7499810), 252,579 bytes | `b1cb4d82ea9f137a87e12a7aaf3329619294b56f7d70337dfd557a76e10b6e07` |
+| FTB XMod Compat 2.1.3 | [project889915/file6402486](https://www.curseforge.com/projects/889915/files/6402486), 129,725 bytes | `16a8eb9de88d5c33d29cb076cc39dfb337b2c54348e1ef1efe9dd60cf85e5f72` |
+
+The coordinator's 2026-10-21 publisher investigation downloaded and hashed each
+artifact from FTB's release Maven and the corresponding CurseForge CDN file;
+both copies matched. SHA-1, byte sizes and required-project closure are recorded in
+`pack/dependency-metadata.json`; `pack/curseforge/manifest.json` is the pin authority.
+The Library artifact is a published release, not the later source HEAD's alpha label.
+Teams requires Architectury at least 9.1.12 and Library requires Forge at least 47.3;
+the retained Architectury 9.2.14 and Forge 47.4.23 pins satisfy these constraints.
+ItemFilters is optional and is not added as a false required dependency.
+
+API behavior was inspected at FTB Quests source commit
+[`a74ee04bf80e7fba2c8475112a07ace4a4abd0a6`](https://github.com/FTBTeam/FTB-Quests/tree/a74ee04bf80e7fba2c8475112a07ace4a4abd0a6)
+and XMod Compat tag commit
+[`3f9d9fe165f8ba110d0dd88aa1316cee2687cf49`](https://github.com/FTBTeam/FTB-XMod-Compat/tree/3f9d9fe165f8ba110d0dd88aa1316cee2687cf49).
+Grindless implements its own catalogue projection and supported API adapters;
+no FTB implementation is copied. XMod Compat is a functional JEI dependency:
+it installs the recipe helper that the quest core alone does not provide.
+Compilation and native binding against the selected jars remain separate evidence
+from source/API inspection, and client recipe clicks still require client validation.
 
 ## Required entry for every future import
 

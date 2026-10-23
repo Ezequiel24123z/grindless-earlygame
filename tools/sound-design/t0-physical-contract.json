@@ -1,0 +1,35 @@
+{
+  "schema": "grindless.sound-purpose-contract/v2",
+  "id": "t0-physical-20261020-elevenlabs-purpose-3s-mp3",
+  "review_status": "reviewed",
+  "authorization_authority": "Sol",
+  "reference": "https://elevenlabs.io/docs/api-reference/text-to-sound-effects/convert",
+  "method": "POST",
+  "endpoint": "https://api.elevenlabs.io/v1/sound-generation?output_format=mp3_44100_128",
+  "authentication_header": "xi-api-key",
+  "content_type": "application/json",
+  "text_max_characters": 450,
+  "body_parameters": {
+    "model_id": "eleven_text_to_sound_v2",
+    "duration_seconds": 3.0,
+    "loop": true,
+    "prompt_influence": 0.3
+  },
+  "response": "binary_audio_not_JSON",
+  "wave_limits": {
+    "max_families": 4,
+    "max_candidates_per_family": 2,
+    "max_calls": 8
+  },
+  "automatic_retries": 0,
+  "alternate_formats": false,
+  "licence_scope": "internal_audition_only",
+  "publication_approved": false,
+  "notes": [
+    "NEW finite 2026-10-20 physical T0 soundscape purpose, explicitly delegated by the current coordinator. Not a reset or expansion of any previous ledger.",
+    "The actual selection is three families and six calls, not a target to consume the eight-call ceiling. No fourth family, automatic reroll or request beyond the selected list.",
+    "Use the existing reservation-before-HTTP receipt and exact checkpoint/input/output grant bindings. Failed or ambiguous delivery consumes the slot and stops continuation.",
+    "Reuse existing generation-time paid entitlement and reviewed ElevenCreative Sound Effects terms; do not query billing or relocate a credential.",
+    "Generation permission is internal audition only. The separately delegated technical game-incorporation review does not imply listening, public release or standalone-library permission."
+  ]
+}

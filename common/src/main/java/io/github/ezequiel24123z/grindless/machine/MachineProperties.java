@@ -1,6 +1,8 @@
 package io.github.ezequiel24123z.grindless.machine;
 
+import io.github.ezequiel24123z.grindless.telemetry.dev.DevTelemetry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -38,6 +40,10 @@ public final class MachineProperties {
         if (next == current) {
             return false;
         }
-        return level.setBlock(pos, next, Block.UPDATE_CLIENTS);
+        boolean published = level.setBlock(pos, next, Block.UPDATE_CLIENTS);
+        if (published && level.getServer() != null && DevTelemetry.active(level.getServer())) {
+            DevTelemetry.blocked(level, BuiltInRegistries.BLOCK.getKey(current.getBlock()).toString(), status);
+        }
+        return published;
     }
 }

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Runs the same isolated no-JVM/no-network fixtures, not a second implementation.
+# Pass -Suite QuestDefinitions for the bounded managed-chapter filesystem transaction checks.
 set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPT="$SCRIPT_DIR/Test-PrismDev.ps1"

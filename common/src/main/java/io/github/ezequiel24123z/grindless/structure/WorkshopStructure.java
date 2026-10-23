@@ -4,6 +4,10 @@ import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -26,7 +30,8 @@ public enum WorkshopStructure {
 
     /** Stable menu values; append future faults instead of reordering them. */
     public enum Fault {
-        NONE, MISSING_BRICKS, UNLOADED, MISSING_CHANNEL, MISSING_SCREEN, WRONG_FACING, COVERED;
+        NONE, MISSING_BRICKS, UNLOADED, MISSING_CHANNEL, MISSING_SCREEN, WRONG_FACING, COVERED,
+        INCOMPATIBLE_PORT, EXCESS_PORTS, AMBIGUOUS_OWNER, ORPHANED_PORT, STALE_OWNER;
 
         /** The localized recovery instruction, never an untranslated server-side sentence. */
         public String translationKey() {
@@ -54,6 +59,21 @@ public enum WorkshopStructure {
 
     /** A loaded world's block identity and horizontal rotation, or -1 when it has no facing. */
     public record Present(String block, int turns) {
+    }
+
+    /** An observed port position relative to the controller, already rotated into world axes. */
+    public record Port(Offset offset, WorkshopPortContract.Kind kind) {
+    }
+
+    /** Fresh derived evidence, never a persisted or trusted formed flag. */
+    public record Inspection(Fault fault, Offset offset, List<Port> ports) {
+        public Inspection {
+            ports = List.copyOf(ports);
+        }
+
+        public boolean formed() {
+            return fault == Fault.NONE;
+        }
     }
 
     private final List<Cell> cells;
@@ -84,19 +104,52 @@ public enum WorkshopStructure {
      * @return the first actionable fault, or {@link Fault#NONE}
      */
     public Fault check(int turns, Function<Offset, Present> blockAt) {
+        return inspect(turns, blockAt).fault();
+    }
+
+    /** The first fault includes its exact world-relative cell instead of only a broad status. */
+    public Inspection inspect(int turns, Function<Offset, Present> blockAt) {
+        List<Port> ports = new ArrayList<>();
+        Map<WorkshopPortRole, Integer> counts = new EnumMap<>(WorkshopPortRole.class);
+        int bricks = 0;
         for (Cell cell : cells) {
-            Present found = blockAt.apply(cell.offset().rotate(turns));
+            Offset offset = cell.offset().rotate(turns);
+            Present found = blockAt.apply(offset);
             if (found == null) {
-                return Fault.UNLOADED;
+                return new Inspection(Fault.UNLOADED, offset, ports);
             }
             if (!cell.block().equals(found.block())) {
-                return cell.fault();
+                Optional<WorkshopPortContract.Kind> kind = WorkshopPortContract.kind(found.block());
+                if (kind.isEmpty()) {
+                    return new Inspection(cell.fault(), offset, ports);
+                }
+                Optional<WorkshopPortContract.Slot> slot = WorkshopPortContract.slot(this, cell.offset());
+                if (slot.isEmpty() || !slot.get().accepts(kind.get())) {
+                    return new Inspection(Fault.INCOMPATIBLE_PORT, offset, ports);
+                }
+                if (found.turns() != turns) {
+                    return new Inspection(Fault.WRONG_FACING, offset, ports);
+                }
+                WorkshopPortRole role = kind.get().role();
+                int count = counts.merge(role, 1, Integer::sum);
+                if (count > WorkshopPortContract.maximum(this, role)
+                        || ports.size() >= WorkshopPortContract.maximumPorts(this)) {
+                    return new Inspection(Fault.EXCESS_PORTS, offset, ports);
+                }
+                ports.add(new Port(offset, kind.get()));
+                continue;
             }
             if (cell.oriented() && found.turns() != turns) {
-                return Fault.WRONG_FACING;
+                return new Inspection(Fault.WRONG_FACING, offset, ports);
+            }
+            if (cell.block().equals("minecraft:bricks")) {
+                bricks++;
             }
         }
-        return Fault.NONE;
+        if (bricks < WorkshopPortContract.minimumBricks(this)) {
+            return new Inspection(Fault.MISSING_BRICKS, null, ports);
+        }
+        return new Inspection(Fault.NONE, null, ports);
     }
 
     private static Cell brick(int x, int y, int z) {

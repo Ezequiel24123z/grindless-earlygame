@@ -227,6 +227,12 @@ public final class BlockCatalogue {
             new Entry("settling_trough", Geometry.SETTLER, 1, true, CONSUMER, MiningTool.PICKAXE),
             new Entry("settling_channel", Geometry.CHANNEL, 1, true, List.of("idle"), MiningTool.PICKAXE),
             new Entry("settling_screen", Geometry.SCREEN, 1, true, List.of("idle"), MiningTool.PICKAXE),
+            new Entry("workshop_item_input", Geometry.FIREBOX, 1, true, List.of("idle"), MiningTool.PICKAXE),
+            new Entry("workshop_item_output", Geometry.FIREBOX, 1, true, List.of("idle"), MiningTool.PICKAXE),
+            new Entry("settling_item_input", Geometry.CHANNEL, 1, true, List.of("idle"), MiningTool.PICKAXE),
+            new Entry("settling_fluid_input", Geometry.CHANNEL, 1, true, List.of("idle"), MiningTool.PICKAXE),
+            new Entry("settling_item_output", Geometry.SCREEN, 1, true, List.of("idle"), MiningTool.PICKAXE),
+            new Entry("settling_fluid_output", Geometry.SCREEN, 1, true, List.of("idle"), MiningTool.PICKAXE),
             new Entry("geological_collector", Geometry.COLLECTOR, 1, true, CONSUMER, MiningTool.PICKAXE),
             new Entry("biocultivator", Geometry.CULTURE, 1, true, CONSUMER, MiningTool.PICKAXE),
             new Entry("biomass_dynamo", Geometry.BIOGEN, 1, true, GENERATOR, MiningTool.PICKAXE),
@@ -304,6 +310,7 @@ public final class BlockCatalogue {
 
     /** The item that renders as the bare casing cube. */
     public static final String CASING_ITEM = "machine_casing";
+    public static final String THERMAL_GENERATOR_CORE_ITEM = "thermal_generator_core";
 
     private BlockCatalogue() {
     }

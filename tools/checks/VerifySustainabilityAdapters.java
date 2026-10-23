@@ -3,6 +3,17 @@ package io.github.ezequiel24123z.grindless.sustainability;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceContext;
+import io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt;
+import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
+import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
+import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
+import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
+import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
+import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
+import io.github.ezequiel24123z.grindless.recipe.OutputSpec;
+import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -45,6 +56,10 @@ public final class VerifySustainabilityAdapters {
             canonicalInventory();
             canonicalVanillaCrafts();
             reportRelationships();
+            processPressure();
+            minimumControlProjection();
+            manualControlProjection();
+            physicalMatrixProjection();
             contentAndImplementationIdentity();
         } catch (Exception failure) {
             failed++;
@@ -58,6 +73,54 @@ public final class VerifySustainabilityAdapters {
 
     private static void questAccessPrerequisites() throws IOException {
         Snapshot snapshot = AuthorityAdapters.live(Path.of(""));
+        eq("all old51 objectives and the reward-free gas objective remain inventoried",
+                52, snapshot.objectives().size());
+        Set<String> old50 = Set.of(
+                "starter_supplies", "quest_book_help", "superflat", "construction", "multitool", "manual_work",
+                "crank", "extractor", "quern", "water", "clay_mixer", "grog", "firing", "ceramics",
+                "geological_collector", "aggregate", "settling", "water_recovery", "mineral_feed",
+                "biocultivator", "biomass", "fibreboard", "biomass_dynamo", "fluid_logistics", "conveyors",
+                "workshop_flow", "assembly_bench", "research_terminal", "data_core", "calibrate", "calibrated_core",
+                "relay", "thermal", "pylon", "first_grid", "scanner", "terrestrial", "pulverizer", "furnace",
+                "press", "forming_dies", "copper_coil", "assembler", "matrix_line", "glass", "logistics",
+                "kiln", "factory_world", "flux_cell", "industrial_matrix");
+        Set<String> expected = new TreeSet<>(old50);
+        expected.add("wet_beneficiation");
+        expected.add("gas_utilities");
+        eq("the exact old50 objective identities are retained", 50, old50.size());
+        eq("no old objective is replaced or unknown objective invented", expected, snapshot.objectives().keySet());
+        Objective wet = snapshot.objectives().get("wet_beneficiation");
+        eq("wet acquisition uses the existing Washer as evidence", "item:grindless:chemical_washer", wet.subject().key());
+        eq("wet acquisition requires one existing Washer", 1L, wet.count());
+        eq("optional wet acquisition retains assembly and Relay prerequisites", Set.of("assembler", "relay"), wet.requires());
+        eq("wet acquisition invents no material reward route", null, wet.rewardRoute());
+        eq("wet acquisition has no corresponding reward supply", false, snapshot.routes().containsKey("quest/wet_beneficiation"));
+        Objective gas = snapshot.objectives().get("gas_utilities");
+        eq("gas acquisition uses the existing Cell as evidence", "item:grindless:electrolysis_cell", gas.subject().key());
+        eq("gas acquisition requires one existing Cell", 1L, gas.count());
+        eq("optional gas acquisition retains assembly and Relay prerequisites", Set.of("assembler", "relay"), gas.requires());
+        eq("gas acquisition invents no material reward route", null, gas.rewardRoute());
+        eq("gas acquisition has no corresponding reward supply", false, snapshot.routes().containsKey("quest/gas_utilities"));
+        QuestCatalogue.Task gasTask = QuestCatalogue.byId("gas_utilities");
+        eq("gas acquisition remains an explicit lesson", QuestCatalogue.Type.LESSON, gasTask.type());
+        eq("gas acquisition observes possession, not processing", QuestCatalogue.Evidence.ITEM, gasTask.evidence());
+        eq("gas acquisition contains no material reward", List.of(), gasTask.rewards());
+        eq("the first F2 prerequisite set is unchanged by gas acquisition",
+                Set.of("matrix_line", "glass", "relay"), snapshot.objectives().get("industrial_matrix").requires());
+        eq("only the original material-reward quests create reward routes", 26L,
+                snapshot.routes().values().stream().filter(route -> route.authority() == Authority.QUEST_REWARD).count());
+        for (var task : QuestCatalogue.tasks()) {
+            if (task.type() == QuestCatalogue.Type.LESSON) {
+                eq("a reading/checklist objective does not invent supply " + task.id(), null,
+                        snapshot.objectives().get(task.id()).rewardRoute());
+                eq("a reading/checklist has no material reward route " + task.id(), false,
+                        snapshot.routes().containsKey("quest/" + task.id()));
+            }
+        }
+        eq("the retired Guide has no canonical craft", false, snapshot.routes().containsKey("craft/field_guide"));
+        eq("the retired Guide has no primitive Bench projection", false, snapshot.routes().containsKey("bench/field_guide"));
+        eq("the retired Guide has no Assembler projection", false,
+                snapshot.routes().containsKey("assemble/bootstrap/field_guide"));
         Resource book = new Resource(Kind.ITEM, io.github.ezequiel24123z.grindless.recipe.BootstrapRecipes.shaped()
                 .stream().filter(craft -> craft.name().equals("quest_book")).findFirst().orElseThrow().result());
         for (Route route : snapshot.routes().values()) {
@@ -76,12 +139,194 @@ public final class VerifySustainabilityAdapters {
         eq("the actual first-book craft keeps its authored stick cost", 2L,
                 craft.inputs().get(new Resource(Kind.ITEM, "minecraft:stick")));
         eq("the actual bootstrap book remains manually crafted", false, craft.automatable());
+        Resource f1 = AuthorityAdapters.physical(new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX));
+        for (String id : List.of("craft/relay_matrix", "assemble/relay_matrix")) {
+            eq("the real manual and automatic batches produce the same five physical F1 Matrices: " + id,
+                    Map.of(f1, 5L), snapshot.routes().get(id).outputs());
+        }
+        for (String id : List.of("relay", "matrix_line")) {
+            eq("the quest subject projects the authored physical default: " + id, f1,
+                    snapshot.objectives().get(id).subject());
+            eq("the quest still requires the complete physical batch: " + id, 5L,
+                    snapshot.objectives().get(id).count());
+            eq("claim evidence retains the same physical batch without consuming it: " + id, 5L,
+                    snapshot.routes().get("quest/" + id).catalysts().get(f1));
+        }
+        eq("an ordinary stock task is not silently tightened into exact Matrix evidence", false,
+                snapshot.routes().get("quest/matrix_line").conditions().containsKey("matrix_rating"));
         Map<String, String> sources = AuthorityAdapters.authoritySourceHashes(Path.of(""));
         String prefix = "common/src/main/java/io/github/ezequiel24123z/grindless/";
         eq("source provenance includes the actual book opener without loading it", true,
                 sources.containsKey(prefix + "item/QuestBookItem.java"));
         eq("source provenance includes the actual held-book validity and claim handler", true,
                 sources.containsKey(prefix + "menu/QuestBookMenu.java"));
+    }
+
+    private static void processPressure() {
+        List<IngredientSpec> inputs = List.of(IngredientSpec.item("fixture:feed", 2));
+        List<OutputSpec> outputs = List.of(OutputSpec.item("fixture:product", 3));
+        ProcessRecipe legacy = new ProcessRecipe("fixture/pressure", MachineFamily.PULVERIZER, inputs, outputs,
+                Double.NaN, null, 80, 4);
+        Route absent = AuthorityAdapters.process(legacy);
+        eq("the auditor invents no pressure or ambient band for an old recipe", Map.of(), absent.conditions());
+        for (double optimum : new double[] {0.0, 1.25, 0.000001}) {
+            ProcessRecipe named = new ProcessRecipe(legacy.id(), legacy.family(), inputs, outputs,
+                    Double.NaN, optimum, 0.0000001, null, null, 80, 4, List.of(), null);
+            Route adapted = AuthorityAdapters.process(named);
+            eq("the auditor retains exact absolute pressure MPa " + optimum, Double.toString(optimum),
+                    adapted.conditions().get("pressure_mpa"));
+            eq("the auditor retains the exact optimal half-width MPa " + optimum, "1.0E-7",
+                    adapted.conditions().get("pressure_optimal_half_width_mpa"));
+            eq("pressure adds only its two physical facts " + optimum,
+                    Set.of("pressure_mpa", "pressure_optimal_half_width_mpa"), adapted.conditions().keySet());
+            eq("pressure does not rewrite consumed quantities " + optimum, absent.inputs(), adapted.inputs());
+            eq("pressure does not rewrite output quantities " + optimum, absent.outputs(), adapted.outputs());
+            eq("pressure does not introduce a tier permission " + optimum, absent.prerequisites(),
+                    adapted.prerequisites());
+        }
+    }
+
+    private static void minimumControlProjection() {
+        String matrix = "grindless:relay_matrix";
+        IngredientSpec exact = IngredientSpec.matrix(matrix,
+                io.github.ezequiel24123z.grindless.energy.FluxTier.F1, 2);
+        IngredientSpec minimum = IngredientSpec.minimumControl(matrix,
+                io.github.ezequiel24123z.grindless.energy.FluxTier.F1, 2);
+        ProcessRecipe old = new ProcessRecipe("fixture/control", MachineFamily.ASSEMBLER, List.of(exact),
+                List.of(OutputSpec.item("fixture:product", 1)), Double.NaN, null, 400, 32);
+        ProcessRecipe selected = new ProcessRecipe(old.id(), old.family(), List.of(minimum), old.outputs(),
+                Double.NaN, null, 400, 32);
+        Route before = AuthorityAdapters.process(old);
+        Route after = AuthorityAdapters.process(selected);
+        eq("minimum control retains the same valid canonical supply and count", before.inputs(), after.inputs());
+        eq("minimum control cannot change output or energy accounting", before.outputs(), after.outputs());
+        eq("minimum control role is not lost in audit/export conditions",
+                "item:grindless:relay_matrix [F1]", after.conditions().get("minimum_control_input_0"));
+        eq("the canonical supply does not claim exhaustive alternate manufacture",
+                "canonical_option_not_exhaustive_alternatives", after.conditions().get("control_supply_projection"));
+        eq("the old exact recipe invents no capacity role", Map.of(), before.conditions());
+        eq("audit resource IDs never acquire a minimum marker", false,
+                after.inputs().keySet().stream().anyMatch(resource -> resource.id().contains("+")));
+        JsonObject route = document(new Builder().route(after).build()).getAsJsonArray("routes")
+                .get(0).getAsJsonObject();
+        eq("normal audit serialization preserves minimum control",
+                "item:grindless:relay_matrix [F1]",
+                route.getAsJsonObject("conditions").get("minimum_control_input_0").getAsString());
+    }
+
+    private static void physicalMatrixProjection() {
+        Resource declaration = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX);
+        var actualDefault = ControlMatrixNbt.load(MatrixArchitecture.RELAY, null).orElseThrow();
+        Resource f1 = new Resource(Kind.ITEM, declaration.id(), actualDefault.rating().ordinal(), "items");
+        eq("authored default identity comes from the actual decoder", f1, AuthorityAdapters.physical(declaration));
+        eq("the actual registered legacy Relay default is F1", FluxTier.F1, actualDefault.rating());
+        eq("generic constructors retain the raw registration key", "item:grindless:relay_matrix", declaration.key());
+        eq("physical and generic registration resources remain distinct", false, declaration.equals(f1));
+        eq("physical projection is idempotent", f1, AuthorityAdapters.physical(AuthorityAdapters.physical(declaration)));
+        for (FluxTier tier : List.of(FluxTier.F1, FluxTier.F2, FluxTier.F3)) {
+            var explicit = ControlMatrixNbt.load(MatrixArchitecture.RELAY,
+                    ControlMatrixNbt.save(new ControlMatrixSpec(MatrixArchitecture.RELAY, tier))).orElseThrow();
+            Resource rated = new Resource(Kind.ITEM, declaration.id(), tier.ordinal(), "items");
+            eq("validated explicit ratings are never replaced by a default: " + tier, explicit.rating().ordinal(),
+                    AuthorityAdapters.physical(rated).rating());
+            eq("explicit resource identity is retained exactly: " + tier, true,
+                    rated == AuthorityAdapters.physical(rated));
+        }
+        for (Resource unrelated : List.of(
+                new Resource(Kind.ITEM, "grindless:integrated_matrix"),
+                new Resource(Kind.ITEM, "grindless:superconducting_matrix"),
+                new Resource(Kind.ITEM, "grindless:unknown_matrix"),
+                new Resource(Kind.ITEM, "other_mod:relay_matrix"),
+                new Resource(Kind.ITEM, "minecraft:paper"),
+                new Resource(Kind.TAG, declaration.id()),
+                new Resource(Kind.FLUID, declaration.id()),
+                new Resource(Kind.ITEM, declaration.id(), 0, "blocks"),
+                new Resource(Kind.ITEM, declaration.id(), 0, "fluids"))) {
+            eq("unsupported names, axes and registries cannot obtain a default: " + unrelated.key(),
+                    true, unrelated == AuthorityAdapters.physical(unrelated));
+        }
+        Resource f2 = new Resource(Kind.ITEM, declaration.id(), FluxTier.F2.ordinal(), "items");
+        Resource f3 = new Resource(Kind.ITEM, declaration.id(), FluxTier.F3.ordinal(), "items");
+        ProcessRecipe authored = new ProcessRecipe("fixture/physical_matrix", MachineFamily.ASSEMBLER,
+                List.of(IngredientSpec.item(declaration.id(), 2), IngredientSpec.matrix(declaration.id(), FluxTier.F1, 3),
+                        IngredientSpec.tag(declaration.id(), 7), IngredientSpec.fluid(declaration.id(), 11)),
+                List.of(OutputSpec.item(declaration.id(), 5), OutputSpec.matrix(declaration.id(), FluxTier.F2, 1),
+                        OutputSpec.matrix(declaration.id(), FluxTier.F3, 1)),
+                Double.NaN, null, 400, 32,
+                List.of(IngredientSpec.item(declaration.id(), 1), IngredientSpec.matrix(declaration.id(), FluxTier.F1, 1)));
+        Route projected = AuthorityAdapters.process(authored);
+        eq("physical process inputs merge only identical default/explicit F1 quantities",
+                Map.of(f1, 5L, new Resource(Kind.TAG, declaration.id()), 7L,
+                        new Resource(Kind.FLUID, declaration.id()), 11L, ENERGY, 12_800L), projected.inputs());
+        eq("retained catalysts use the same physical identity and unchanged sum", Map.of(f1, 2L),
+                projected.catalysts());
+        eq("physical default output never erases explicit F2/F3 or changes the batch",
+                Map.of(f1, 5L, f2, 1L, f3, 1L), projected.outputs());
+        eq("normalization invents no route, permission or minimum-control substitution", Map.of(), projected.conditions());
+        eq("normalization preserves the complete physical duration", 400L, projected.durationTicks());
+        eq("normalization preserves the actual rated draw", 32L, projected.fuPerTick());
+    }
+
+    private static void manualControlProjection() throws Exception {
+        Snapshot snapshot = AuthorityAdapters.live(Path.of(""));
+        Resource f1 = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX, FluxTier.F1.ordinal(), "items");
+        for (var craft : io.github.ezequiel24123z.grindless.recipe.T1Recipes.shaped()) {
+            Route route = snapshot.routes().get("craft/" + craft.name());
+            Map<Resource, Long> expected = new TreeMap<>();
+            for (IngredientSpec input : craft.ingredients()) {
+                Resource resource = new Resource(IngredientSpec.TAG.equals(input.kind()) ? Kind.TAG : Kind.ITEM,
+                        input.id(), input.matrixRating(), "items");
+                expected.merge(AuthorityAdapters.physical(resource), 1L, Long::sum);
+            }
+            eq(craft.name() + " projects the actual complete manual material/control multiset", expected, route.inputs());
+            eq(craft.name() + " remains a manual action, never automatic recurring supply", false, route.automatable());
+            eq(craft.name() + " invents no process draw", 0L, route.fuPerTick());
+            eq(craft.name() + " invents no process duration", 0L, (long) route.durationTicks());
+            boolean control = craft.ingredients().stream().anyMatch(IngredientSpec::isMinimumControl);
+            eq(craft.name() + " retains its exact actual minimum-control key semantics", control,
+                    route.conditions().containsKey("minimum_control_key_M"));
+            if (control) {
+                eq(craft.name() + " uses one actual canonical sufficient F1 supply", 1L, route.inputs().get(f1));
+                eq(craft.name() + " exports capacity rather than a fabricated resource identity",
+                        f1.key(), route.conditions().get("minimum_control_key_M"));
+                eq(craft.name() + " does not claim an exhaustive alternate manufacture set",
+                        "canonical_option_not_exhaustive_alternatives", route.conditions().get("control_supply_projection"));
+                eq(craft.name() + " has exactly its known type/control/projection conditions",
+                        Set.of("crafting_type", "minimum_control_key_M", "control_supply_projection"),
+                        route.conditions().keySet());
+            }
+        }
+        eq("all shipped manual recipes agree with catalogue quantities and control role", false,
+                snapshot.findings().stream().anyMatch(finding -> finding.rule().equals("craft_authority_mismatch")
+                        || finding.rule().equals("craft_authority_missing")));
+        for (Route route : snapshot.routes().values()) {
+            if (route.automatable()) {
+                eq("every automatic adapter output excludes final normal machinery: " + route.id(), false,
+                        route.outputs().keySet().stream().anyMatch(resource ->
+                                io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy.isManualFinalMachine(resource.id())));
+            }
+        }
+        var parser = AuthorityAdapters.class.getDeclaredMethod("crafting", String.class, JsonObject.class,
+                String.class, Authority.class, Builder.class);
+        parser.setAccessible(true);
+        for (String ingredient : List.of(
+                "{\"type\":\"grindless:minimum_control\",\"tier\":\"F0\"}",
+                "{\"type\":\"grindless:minimum_control\",\"tier\":\"F4\"}",
+                "{\"type\":\"grindless:minimum_control\",\"tier\":1}",
+                "{\"type\":\"grindless:minimum_control\",\"tier\":\"F1\",\"nbt\":{\"Rating\":0}}",
+                "{\"type\":\"other:control\",\"tier\":\"F1\"}",
+                "{\"item\":\"grindless:relay_matrix\",\"nbt\":{\"Rating\":0}}")) {
+            JsonObject json = JsonParser.parseString("{\"type\":\"minecraft:crafting_shaped\","
+                    + "\"pattern\":[\"M\"],\"key\":{\"M\":" + ingredient
+                    + "},\"result\":{\"item\":\"fixture:product\"}}").getAsJsonObject();
+            try {
+                parser.invoke(null, "craft/fixture", json, "fixture:manual", Authority.CRAFTING_JSON, new Builder());
+                throw new AssertionError("A malformed/unsupported control ingredient was projected as supply: " + ingredient);
+            } catch (java.lang.reflect.InvocationTargetException rejected) {
+                eq("manual adapter does not ignore malformed/unsupported physical constraints: " + ingredient,
+                        true, rejected.getCause() instanceof IllegalArgumentException);
+            }
+        }
     }
 
     private static void debtCannotWaiveGeneratedDebt() {
@@ -443,8 +688,10 @@ public final class VerifySustainabilityAdapters {
     private static void checkedDeclarationInventory() {
         Resource declaredItem = item("checked_item");
         Resource declaredBlock = new Resource(Kind.ITEM, "fixture:checked_block", 0, "blocks");
+        Resource relay = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX);
         Map<Resource, String> declarations = Map.of(declaredItem, "fixture:checked_field",
-                declaredBlock, "fixture:provenance_is_not_code/register(\"ghost\")/\"base\"+suffix");
+                declaredBlock, "fixture:provenance_is_not_code/register(\"ghost\")/\"base\"+suffix",
+                relay, "ModItems.RELAY_MATRIX");
         TagResolver.ElementLookup checked = new TagResolver.ElementLookup() {
             @Override
             public TagResolver.ElementStatus element(Resource resource) {
@@ -460,11 +707,17 @@ public final class VerifySustainabilityAdapters {
         AuthorityAdapters.contributeCheckedDeclarations(builder, checked);
         Snapshot inventory = builder.build();
         eq("checked inventory is exactly catalogue references plus verified declarations, without extras",
-                Set.of(item("catalogue_reference"), declaredItem, declaredBlock), inventory.resources());
+                Set.of(item("catalogue_reference"), declaredItem, declaredBlock, relay), inventory.resources());
         eq("the inventory and tag lookup consume the same declaration set", declarations.keySet(),
                 checked.declarations().keySet());
-        eq("public declaration provenance is retained for every checked declaration", 2L,
+        eq("public declaration provenance is retained for every checked declaration", (long) declarations.size(),
                 inventory.inputHashes().keySet().stream().filter(key -> key.startsWith("registry_declaration:")).count());
+        Resource physical = AuthorityAdapters.physical(relay);
+        eq("raw registry declarations are never normalized into authored stacks", false,
+                inventory.resources().contains(physical));
+        eq("raw registration and physical F1 resources can coexist without equality aliases",
+                Set.of(item("catalogue_reference"), declaredItem, declaredBlock, relay, physical),
+                new Builder(inventory).resource(physical).build().resources());
         eq("an inventory reference is not a registry membership proof", TagResolver.ElementStatus.UNKNOWN,
                 checked.element(declaredItem));
         eq("extending a snapshot starts with all of its authorities and evidence intact", inventory,
@@ -483,6 +736,23 @@ public final class VerifySustainabilityAdapters {
     private static void canonicalInventory() throws IOException, InterruptedException {
         Path root = Path.of("").toAbsolutePath().normalize();
         CanonicalPack pack = CanonicalPack.resolved(root);
+        Builder furnaceAuthority = new Builder();
+        Route furnace = AuthorityAdapters.canonicalVanillaTransformation(
+                "minecraft:furnace", root, pack, furnaceAuthority);
+        if (furnace == null) {
+            throw new AssertionError("The actual canonical vanilla Furnace manual recipe is missing or ambiguous");
+        }
+        eq("the real Furnace retains vanilla/minecraft:furnace, not an invented Grindless craft",
+                "vanilla/minecraft:furnace", furnace.id());
+        eq("the existing vanilla Furnace authority remains manual", false, furnace.automatable());
+        eq("the real Furnace manual recipe retains exactly eight existing stone materials and no Matrix tax",
+                Map.of(new Resource(Kind.TAG, "minecraft:stone_crafting_materials"), 8L), furnace.inputs());
+        eq("the real vanilla manual craft still produces exactly one unchanged Furnace",
+                Map.of(new Resource(Kind.ITEM, "minecraft:furnace"), 1L), furnace.outputs());
+        eq("vanilla Furnace manual capital uses the same classification policy", true,
+                io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy.isManualFinalMachine("minecraft:furnace"));
+        eq("the scoped decision does not replace actual vanilla crafting provenance",
+                Authority.VANILLA_TRANSFORMATION, furnace.authority());
         Resource iron = new Resource(Kind.TAG, "forge:ingots/iron");
         Resource copper = new Resource(Kind.TAG, "forge:ingots/copper");
         Resource planks = new Resource(Kind.TAG, "minecraft:planks");
@@ -582,7 +852,9 @@ public final class VerifySustainabilityAdapters {
         Map<String, String> sources = AuthorityAdapters.authoritySourceHashes(Path.of(""));
         String javaRoot = "common/src/main/java/io/github/ezequiel24123z/grindless/";
         for (String dependency : List.of("energy/FluxTier.java", "recipe/FabricationLogic.java",
-                "recipe/ProcessLogic.java", "recipe/ProcessRecipe.java", "recipe/MachineFamily.java")) {
+                "recipe/ProcessLogic.java", "recipe/ProcessRecipe.java", "recipe/MachineFamily.java",
+                "matrix/ControlMatrixNbt.java", "matrix/MatrixArchitecture.java",
+                "guidance/ResourceGuidanceContext.java")) {
             eq("transitive authority source is fingerprinted: " + dependency, true, sources.containsKey(javaRoot + dependency));
         }
         eq("authority source identities never contain an absolute path", false,
@@ -593,6 +865,14 @@ public final class VerifySustainabilityAdapters {
         eq("the actual report implementation has a separate binary identity", true,
                 executed.classHashes().containsKey(reportClass));
         eq("all S1 implementation bytes were available", Set.of(), executed.unresolved());
+        for (Class<?> type : List.of(ControlMatrixNbt.class, ControlMatrixSpec.class, MatrixArchitecture.class,
+                FluxTier.class, ResourceGuidanceContext.class)) {
+            String path = type.getName().replace('.', '/') + ".class";
+            try (InputStream bytes = type.getResourceAsStream("/" + path)) {
+                eq("physical rating provenance hashes the actual resolved class image: " + type.getName(),
+                        AuthorityAdapters.sha256(bytes.readAllBytes()), executed.classHashes().get(path));
+            }
+        }
         try (InputStream bytes = AuditReports.class.getResourceAsStream("AuditReports.class")) {
             eq("implementation identity hashes the resolved report class bytes",
                     AuthorityAdapters.sha256(bytes.readAllBytes()), executed.classHashes().get(reportClass));

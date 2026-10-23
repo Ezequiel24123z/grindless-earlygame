@@ -98,7 +98,7 @@ public final class MachineArt {
 
     public static BufferedImage front(io.github.ezequiel24123z.grindless.registry.BlockCatalogue.Geometry geometry,
                                      String status) {
-        return switch (geometry) {
+        BufferedImage image = switch (geometry) {
             case DYNAMO -> dynamoFront(status);
             case EXTRACTOR -> extractorFront(status);
             case TERMINAL -> terminalFront(status);
@@ -165,6 +165,18 @@ public final class MachineArt {
             case SCREEN -> channelFront(true);
             case COLLECTOR, CULTURE, BIOGEN, BENCH -> bootstrapFront(geometry, status);
             case FIBREBOARD -> BootstrapArt.fibreboard(false);
+        };
+        if (hasT0StateMark(geometry)) {
+            t0StateMark(image, status);
+        }
+        return image;
+    }
+
+    static boolean hasT0StateMark(io.github.ezequiel24123z.grindless.registry.BlockCatalogue.Geometry geometry) {
+        return switch (geometry) {
+            case DYNAMO, EXTRACTOR, TERMINAL, QUERN, MIXER, FIREBOX, SETTLER,
+                    COLLECTOR, CULTURE, BIOGEN, BENCH, PUMP, CONDUIT, TANK, BELT, MANIPULATOR -> true;
+            default -> false;
         };
     }
 
@@ -401,6 +413,32 @@ public final class MachineArt {
             };
             set(img, x, 13, colour);
         }
+    }
+
+    private static void t0StateMark(BufferedImage image, String status) {
+        String[] mark = switch (status) {
+            case "idle" -> new String[]{"........", "..####..", "........"};
+            case "running" -> new String[]{"....#...", ".######.", "....#..."};
+            case "blocked" -> new String[]{".##..##.", ".##..##.", ".##..##."};
+            case "starved" -> new String[]{".######.", ".#....#.", ".######."};
+            case "out_of_band" -> new String[]{".##..##.", "...##...", ".##..##."};
+            default -> throw new IllegalArgumentException("Unknown T0 visual status: " + status);
+        };
+        int accent = switch (status) {
+            case "running" -> RUNNING;
+            case "blocked" -> BLOCKED;
+            case "starved" -> STARVED;
+            case "out_of_band" -> OUT_OF_BAND;
+            default -> 0x8D938C;
+        };
+        for (int y = 0; y < mark.length; y++) {
+            for (int x = 3; x <= 12; x++) {
+                boolean ink = x >= 4 && x <= 11 && mark[y].charAt(x - 4) == '#';
+                set(image, x, y + 12, ink ? 0xF1DEB8 : 0x171B1F);
+            }
+        }
+        set(image, 3, 13, accent);
+        set(image, 12, 13, accent);
     }
 
     // ---- Hand Crank Dynamo ---------------------------------------------------------------

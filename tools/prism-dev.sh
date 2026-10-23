@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Thin twin: the deployment contract and implementation live in prism-dev.ps1.
+# UpdateQuestDefinitions/RecoverQuestDefinitions use the same hash-bound stopped-target path.
 set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPT="$SCRIPT_DIR/prism-dev.ps1"

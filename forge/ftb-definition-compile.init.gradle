@@ -1,0 +1,192 @@
+import groovy.json.JsonOutput
+import org.gradle.api.tasks.compile.JavaCompile
+import java.nio.channels.FileChannel
+import java.nio.file.Files
+import java.nio.file.LinkOption
+import java.nio.file.StandardOpenOption
+import java.security.MessageDigest
+
+// Reuse the pinned project's own compilation/remap tasks, but never its old output directories.
+def request = gradle.startParameter.projectProperties
+def expectedSource = request["ftbCompilationSource"]
+def output = new File(request["ftbCompilationOutput"] ?: "").absoluteFile
+def toolHash = request["ftbCompilationToolSha256"]
+if (!(expectedSource ==~ /[0-9a-f]{40}/) || !(toolHash ==~ /[0-9a-f]{64}/) ||
+        !output.name.matches("ftb-compilation-[0-9a-f]{32}")) {
+    throw new GradleException("Missing bounded FTB compilation request.")
+}
+gradle.projectsLoaded {
+    gradle.rootProject.allprojects { project ->
+        if (project.path in [":common", ":forge"]) {
+            project.layout.buildDirectory.set(new File(output, project.name))
+        }
+    }
+}
+gradle.projectsEvaluated {
+    def root = gradle.rootProject
+    def common = root.project(":common")
+    def forge = root.project(":forge")
+    if (output.parentFile.canonicalFile != new File(root.rootDir, "build").canonicalFile) {
+        throw new GradleException("FTB compilation output must be a fresh child of the pinned checkout's build directory.")
+    }
+    def safe = { File file ->
+        for (def path = file.toPath().toAbsolutePath(); path != null; path = path.parent) {
+            if (Files.isSymbolicLink(path) || (Files.exists(path, LinkOption.NOFOLLOW_LINKS) &&
+                    Files.readAttributes(path, java.nio.file.attribute.BasicFileAttributes,
+                            LinkOption.NOFOLLOW_LINKS).isOther())) {
+                throw new GradleException("FTB compilation paths cannot traverse links or special files.")
+            }
+        }
+    }
+    def hash = { File file ->
+        safe(file)
+        if (!file.isFile()) { throw new GradleException("Missing regular FTB compilation input.") }
+        def digest = MessageDigest.getInstance("SHA-256")
+        file.withInputStream { stream ->
+            byte[] buffer = new byte[81920]
+            int count
+            while ((count = stream.read(buffer)) != -1) { digest.update(buffer, 0, count) }
+        }
+        digest.digest().encodeHex().toString()
+    }
+    def tree = { File directory ->
+        safe(directory)
+        if (!directory.isDirectory()) { throw new GradleException("Missing FTB compilation directory.") }
+        def entries = []
+        Files.walk(directory.toPath()).withCloseable { paths ->
+            paths.sorted().forEach { path ->
+                safe(path.toFile())
+                if (Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS)) {
+                    entries.add([path: directory.toPath().relativize(path).toString().replace("\\", "/"),
+                                 sha256: hash(path.toFile())])
+                }
+            }
+        }
+        entries.sort { it.path }
+    }
+    def entries = { Collection<File> files ->
+        files.collect { file ->
+            safe(file)
+            if (file.isDirectory()) {
+                [path: file.absolutePath, kind: "directory", files: tree(file)]
+            } else if (file.isFile()) {
+                [path: file.absolutePath, kind: "file", sha256: hash(file)]
+            } else {
+                [path: file.absolutePath, kind: "missing"]
+            }
+        }
+    }
+    def git = { List<String> arguments ->
+        def stdout = new ByteArrayOutputStream()
+        def stderr = new ByteArrayOutputStream()
+        def result = root.exec {
+            commandLine(["git", "--no-pager", "-C", root.rootDir.absolutePath] + arguments)
+            standardOutput = stdout
+            errorOutput = stderr
+            ignoreExitValue = true
+        }
+        if (result.exitValue != 0) { throw new GradleException("Read-only FTB compilation source verification failed.") }
+        stdout.toString("UTF-8")
+    }
+    def sourceSnapshot = {
+        if (git(["rev-parse", "HEAD"]).trim() != expectedSource ||
+                !git(["status", "--porcelain", "--untracked-files=normal"]).trim().isEmpty()) {
+            throw new GradleException("FTB compilation requires the exact clean pinned source.")
+        }
+        git(["ls-files", "-z", "--", "build.gradle", "settings.gradle", "gradle.properties",
+             "gradle", "gradlew", "gradlew.bat", "common", "forge"]).split("\u0000")
+                .findAll { !it.isEmpty() }.sort().collect { relative ->
+            def file = new File(root.rootDir, relative)
+            [path: relative.replace("\\", "/"), sha256: hash(file)]
+        }
+    }
+    def beforeSources = sourceSnapshot()
+    def captured = [:]
+    def compilers = [common.tasks.named("compileJava", JavaCompile).get(),
+                     forge.tasks.named("compileJava", JavaCompile).get()]
+    compilers.each { compiler ->
+        def destination = compiler.destinationDirectory.get().asFile
+        safe(destination)
+        if (!destination.toPath().toAbsolutePath().startsWith(output.toPath()) ||
+                (destination.exists() && tree(destination).any { it.path.endsWith(".class") })) {
+            throw new GradleException("FTB compiler destination must be fresh; existing classes are never adopted.")
+        }
+        compiler.options.incremental = false
+        compiler.outputs.upToDateWhen { false }
+        compiler.outputs.cacheIf { false }
+        compiler.doFirst {
+            if (destination.exists() && tree(destination).any { it.path.endsWith(".class") }) {
+                throw new GradleException("FTB compiler destination contains pre-existing outputs.")
+            }
+            captured[compiler.path] = [
+                    sources: entries(compiler.source.files.sort { it.absolutePath }),
+                    classpath: entries(compiler.classpath.files),
+                    release: compiler.options.release.get(),
+                    compilerArgs: compiler.options.compilerArgs.collect { it.toString() }
+            ]
+        }
+    }
+    def remap = forge.tasks.named("remapJar").get()
+    remap.outputs.upToDateWhen { false }
+    remap.outputs.cacheIf { false }
+    forge.tasks.register("writeFtbDefinitionCompilerReceipt") {
+        dependsOn remap, common.tasks.named("writeCheckClasspath"),
+                forge.tasks.named("extractQuestCheckLibraries"), forge.tasks.named("verifyFtbPublisherArtifacts")
+        doLast {
+            def afterSources = sourceSnapshot()
+            if (beforeSources != afterSources) { throw new GradleException("FTB source changed during compilation.") }
+            def classes = compilers.collect { compiler ->
+                if (!compiler.state.executed || compiler.state.failure != null || !compiler.didWork ||
+                        !captured.containsKey(compiler.path)) {
+                    throw new GradleException("FTB receipt requires successful actual JavaCompile execution.")
+                }
+                def actual = [sources: entries(compiler.source.files.sort { it.absolutePath }),
+                              classpath: entries(compiler.classpath.files),
+                              release: compiler.options.release.get(),
+                              compilerArgs: compiler.options.compilerArgs.collect { it.toString() }]
+                if (captured[compiler.path] != actual) {
+                    throw new GradleException("FTB compiler inputs changed while compiling.")
+                }
+                def directory = compiler.destinationDirectory.get().asFile
+                def files = tree(directory)
+                if (!files.any { it.path.endsWith(".class") }) {
+                    throw new GradleException("FTB compiler output must contain actual class files.")
+                }
+                [project: compiler.project.name, path: directory.absolutePath,
+                 files: files, inputs: actual]
+            }
+            if (!remap.state.executed || remap.state.failure != null || !remap.didWork) {
+                throw new GradleException("FTB receipt requires the pinned normal remapJar execution.")
+            }
+            def jar = remap.archiveFile.get().asFile
+            def runtime = new LinkedHashSet<File>()
+            runtime.addAll(compilers.collect { it.destinationDirectory.get().asFile })
+            // Own verified classes first; vanilla common libraries still precede patched Forge libraries.
+            runtime.addAll(common.sourceSets.main.runtimeClasspath.files)
+            runtime.addAll(forge.sourceSets.main.output.files)
+            runtime.addAll(forge.sourceSets.main.compileClasspath.files)
+            runtime.addAll(forge.fileTree(forge.layout.buildDirectory.dir("quest-checks/libraries")) { include "*.jar" }.files)
+            def manifest = [
+                    schemaVersion: 1, tool: "grindless-ftb-compilation",
+                    sourceRevision: expectedSource, sourceRoot: root.rootDir.absolutePath,
+                    outputRoot: output.absolutePath, toolSha256: toolHash,
+                    javaVersion: System.getProperty("java.version"), gradleVersion: gradle.gradleVersion,
+                    sources: afterSources, classes: classes, runtimeClasspath: entries(runtime),
+                    remappedJar: [path: jar.absolutePath, sha256: hash(jar)]
+            ]
+            def receipt = new File(output, "compilation.json")
+            safe(receipt)
+            if (receipt.exists()) { throw new GradleException("FTB compilation receipt already exists.") }
+            byte[] bytes = (JsonOutput.prettyPrint(JsonOutput.toJson(manifest)) + "\n").getBytes("UTF-8")
+            def temporary = Files.createTempFile(output.toPath(), ".compilation-", ".tmp")
+            try {
+                Files.write(temporary, bytes, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING)
+                FileChannel.open(temporary, StandardOpenOption.WRITE).withCloseable { it.force(true) }
+                Files.move(temporary, receipt.toPath())
+            } finally {
+                Files.deleteIfExists(temporary)
+            }
+            logger.lifecycle("FTB_COMPILATION_RECEIPT source=${expectedSource} sha256=${hash(receipt)} receipt=${receipt.absolutePath}")
+        }
+    }
+}

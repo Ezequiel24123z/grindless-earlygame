@@ -1,19 +1,39 @@
 package io.github.ezequiel24123z.grindless.recipe;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
+import io.github.ezequiel24123z.grindless.material.MaterialSnapshot;
+import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
+import io.github.ezequiel24123z.grindless.fluid.FluidState;
+import io.github.ezequiel24123z.grindless.menu.MachineMenuKind;
 import io.github.ezequiel24123z.grindless.process.ConditionBand;
 import io.github.ezequiel24123z.grindless.process.MachineEnvelopes;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
+import net.minecraft.SharedConstants;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.Bootstrap;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Behaviour checks for generated ore-line, press and assembler recipes and the Voltaic-gated T1 crafts.
@@ -43,10 +63,15 @@ public final class VerifyRecipes {
 
     private static int failures = 0;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
+        indexedLookupBeforeBootstrap();
         graph();
+        pressure();
         logic();
         crafts();
+        manufacturingBoundary();
+        manualPatternOverlap();
+        explicitAssemblerLookup();
 
         System.out.println(failures == 0
                 ? "ALL RECIPE CHECKS PASSED"
@@ -54,7 +79,206 @@ public final class VerifyRecipes {
         System.exit(failures == 0 ? 0 : 1);
     }
 
-    private static void graph() {
+    private static void indexedLookupBeforeBootstrap() throws ReflectiveOperationException {
+        ProcessLookup.Generation original = ProcessLookup.generation();
+        ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
+        List<ProcessRecipe> first = ProcessLookup.recipes();
+        yes("a pure pre-bootstrap rebuild contains no automatic final normal-machine output",
+                first.stream().flatMap(row -> row.outputs().stream())
+                        .noneMatch(output -> ManufacturingPolicy.isManualFinalMachine(output.id())));
+        no("retiring constructors does not leave an automatic minimum-primary normal recipe",
+                first.stream().anyMatch(row -> !row.itemInputs().isEmpty()
+                        && row.itemInputs().get(0).isMinimumControl()));
+        yes("a pure pre-bootstrap rebuild publishes a complete new generation",
+                original != ProcessLookup.generation());
+        ProcessLookup.Generation published = ProcessLookup.generation();
+        ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
+        yes("a repeated pre-bootstrap rebuild preserves the generated descriptors", first.equals(ProcessLookup.recipes()));
+        yes("a repeated pure rebuild still replaces the generation identity", published != ProcessLookup.generation());
+
+        List<IngredientSpec> wetItem = List.of(IngredientSpec.item("fixture:stock", 1),
+                IngredientSpec.fluid("minecraft:water", 250));
+        List<IngredientSpec> wetControl = List.of(
+                IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1),
+                IngredientSpec.fluid("minecraft:water", 250));
+        List<OutputSpec> output = List.of(OutputSpec.item("fixture:product", 1));
+        ProcessRecipe early = new ProcessRecipe("fixture/index/early", MachineFamily.ASSEMBLER,
+                wetItem, output, Double.NaN, null, 20, 1);
+        ProcessRecipe control = new ProcessRecipe("fixture/index/minimum", MachineFamily.ASSEMBLER,
+                wetControl, output, Double.NaN, null, 20, 1);
+        ProcessRecipe late = new ProcessRecipe("fixture/index/late", MachineFamily.ASSEMBLER,
+                List.of(IngredientSpec.item("fixture:stock", 1)), output, Double.NaN, null, 20, 1);
+        ProcessRecipe otherFamily = new ProcessRecipe("fixture/index/other_family", MachineFamily.PRESS,
+                wetControl, output, Double.NaN, null, 20, 1);
+        // Inspect only pure candidate descriptors; no fake item registration or global graph replacement.
+        Class<?> graphType = Class.forName(ProcessLookup.class.getName() + "$Graph");
+        var index = graphType.getDeclaredMethod("index", List.class);
+        var candidates = graphType.getDeclaredMethod("candidates", MachineFamily.class, List.class);
+        index.setAccessible(true);
+        candidates.setAccessible(true);
+        Object graph = index.invoke(null, List.of(early, control, late, otherFamily));
+        List<ProcessRecipe> expected = List.of(early, control, late);
+        yes("a nonempty ordinary item index cannot exclude minimum-control candidates for another ID",
+                expected.equals(candidates.invoke(graph, MachineFamily.ASSEMBLER, List.of("item:fixture:stock"))));
+        yes("item, fluid and role hits deduplicate in authoritative graph order",
+                expected.equals(candidates.invoke(graph, MachineFamily.ASSEMBLER,
+                        List.of("item:fixture:stock", "fluid:minecraft:water", "item:fixture:stock"))));
+        yes("candidate priority cannot depend on runtime tag/key enumeration order",
+                expected.equals(candidates.invoke(graph, MachineFamily.ASSEMBLER,
+                        List.of("fluid:minecraft:water", "item:fixture:stock"))));
+        yes("an empty index hit retains the existing complete family fallback",
+                expected.equals(candidates.invoke(graph, MachineFamily.ASSEMBLER, List.of("item:fixture:missing"))));
+        yes("minimum-primary candidates never cross machine families",
+                List.of(otherFamily).equals(candidates.invoke(graph, MachineFamily.PRESS,
+                        List.of("fluid:minecraft:water"))));
+    }
+
+    private static void explicitAssemblerLookup() throws Exception {
+        ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
+        List<ProcessRecipe> real = ProcessLookup.recipes();
+        for (ProcessRecipe row : real) {
+            yes(row.id() + " has one current stable identity in its exact family",
+                    ProcessLookup.byId(row.family(), row.id()).orElseThrow() == row);
+            yes(row.id() + " fits the bounded ID wire contract",
+                    row.id().length() <= io.github.ezequiel24123z.grindless.machine.AssemblerWork.MAX_ID_LENGTH);
+        }
+        yes("the family view exhaustively retains graph order",
+                ProcessLookup.recipes(MachineFamily.ASSEMBLER).equals(real.stream()
+                        .filter(row -> row.family() == MachineFamily.ASSEMBLER).toList()));
+        ProcessRecipe washer = ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/blueprint_tool").orElseThrow();
+        ProcessRecipe reactor = ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/deconstruction_planner").orElseThrow();
+        ProcessRecipe cell = ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/flux_drill").orElseThrow();
+        yes("real Blueprint tool, Planner and Drill are distinct IDs with the same unchanged allowed bill",
+                washer.inputs().equals(reactor.inputs()) && washer.inputs().equals(cell.inputs())
+                        && !washer.outputs().equals(reactor.outputs()) && !washer.outputs().equals(cell.outputs()));
+        for (String retired : List.of("chemical_washer", "chemical_reactor", "electrolysis_cell",
+                "thermal_generator", "pulverizer", "arc_furnace", "press", "assembler", "wire_mill")) {
+            no("retired normal selection is explicitly unavailable: " + retired,
+                    ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/" + retired).isPresent());
+        }
+        yes("the same bill retains its casing1, motor2 and plates4 prefix without fixing its total group count",
+                washer.itemInputs().size() >= 3
+                        && washer.itemInputs().subList(0, 3).equals(List.of(
+                                IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                                IngredientSpec.item(FabricationLogic.MOTOR, 2), IngredientSpec.tag("forge:plates/iron", 4))));
+        no("exact ID lookup never borrows another family",
+                ProcessLookup.byId(MachineFamily.CHEMICAL_WASHER, washer.id()).isPresent());
+        no("unknown saved IDs do not acquire another current identity",
+                ProcessLookup.byId(MachineFamily.ASSEMBLER, "removed/unknown").isPresent());
+
+        SharedConstants.tryDetectVersion();
+        Bootstrap.bootStrap();
+        List<String> carrierIds = List.of("minecraft:quartz", "minecraft:copper_ingot",
+                "minecraft:iron_ingot", "minecraft:redstone");
+        List<Item> carrierItems = List.of(Items.QUARTZ, Items.COPPER_INGOT, Items.IRON_INGOT, Items.REDSTONE);
+        List<IngredientSpec> carriers = new ArrayList<>();
+        ItemStack[] inputs = new ItemStack[MachineMenuKind.ASSEMBLER.inputs()];
+        java.util.Arrays.fill(inputs, ItemStack.EMPTY);
+        for (int slot = 0; slot < washer.itemInputs().size(); slot++) {
+            int count = washer.itemInputs().get(slot).count();
+            carriers.add(IngredientSpec.item(carrierIds.get(slot), count));
+            inputs[slot] = new ItemStack(carrierItems.get(slot), count);
+        }
+        ProcessRecipe boundWasher = new ProcessRecipe(washer.id(), washer.family(), carriers, washer.outputs(),
+                washer.temperatureC(), washer.atmosphere(), washer.durationTicks(), washer.fuPerTick());
+        ProcessRecipe boundReactor = new ProcessRecipe(reactor.id(), reactor.family(), carriers, reactor.outputs(),
+                reactor.temperatureC(), reactor.atmosphere(), reactor.durationTicks(), reactor.fuPerTick());
+        ProcessRecipe foreign = new ProcessRecipe("press/plate/iron", MachineFamily.PRESS, carriers,
+                washer.outputs(), Double.NaN, null, 20, 32);
+        List<IngredientSpec> wetInputs = new ArrayList<>(carriers);
+        wetInputs.add(IngredientSpec.fluid("minecraft:water", 250));
+        wetInputs.add(IngredientSpec.fluid("grindless:oxygen", 100));
+        ProcessRecipe wet = new ProcessRecipe("check/selected_wet", MachineFamily.ASSEMBLER, wetInputs,
+                washer.outputs(), Double.NaN, null, 20, 32);
+        Field graph = ProcessLookup.class.getDeclaredField("GRAPH");
+        graph.setAccessible(true);
+        Object original = graph.get(null);
+        Method index = original.getClass().getDeclaredMethod("index", List.class);
+        index.setAccessible(true);
+        try {
+            graph.set(null, index.invoke(null, List.of(boundWasher, boundReactor, foreign, wet)));
+            eq("AUTO keeps the last dry match (vanilla carriers, not native acquisition)", boundReactor.id(),
+                    ProcessLookup.find(MachineFamily.ASSEMBLER, inputs).orElseThrow().id());
+            for (ProcessRecipe selected : List.of(boundWasher, boundReactor)) {
+                yes(selected.id() + " independently resolves instead of last-dry shadowing (carriers)",
+                        ProcessLookup.findSelected(MachineFamily.ASSEMBLER, selected.id(), inputs,
+                                FluidState.EMPTY, List.of()).orElseThrow() == selected);
+            }
+            no("an explicit unknown target never falls back to a matching dry row",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, "removed/unknown", inputs,
+                            FluidState.EMPTY, List.of()).isPresent());
+            no("an explicit foreign target never falls back to a matching dry row",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, foreign.id(), inputs,
+                            FluidState.EMPTY, List.of()).isPresent());
+            inputs[2].setCount(carriers.get(2).count() - 1);
+            no("the explicit target still needs the entire real bill's plate count (carriers)",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, boundWasher.id(), inputs,
+                            FluidState.EMPTY, List.of()).isPresent());
+            inputs[2] = new ItemStack(Items.IRON_INGOT, carriers.get(2).count());
+            inputs[1] = new ItemStack(Items.PAPER, carriers.get(1).count());
+            no("equal counts of the wrong physical item cannot start the selected target",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, boundWasher.id(), inputs,
+                            FluidState.EMPTY, List.of()).isPresent());
+            inputs[1] = new ItemStack(Items.COPPER_INGOT, carriers.get(1).count());
+            if (carriers.size() < inputs.length) {
+                inputs[carriers.size()] = new ItemStack(Items.REDSTONE, 64);
+                yes("explicit targeting preserves actual surplus-slot matching when the declared bill leaves a slot",
+                        ProcessLookup.findSelected(MachineFamily.ASSEMBLER, boundWasher.id(), inputs,
+                                FluidState.EMPTY, List.of()).isPresent());
+            } else {
+                ItemStack required = inputs[inputs.length - 1];
+                inputs[inputs.length - 1] = ItemStack.EMPTY;
+                no("a full-width selected bill cannot omit its last real declared group",
+                        ProcessLookup.findSelected(MachineFamily.ASSEMBLER, boundWasher.id(), inputs,
+                                FluidState.EMPTY, List.of()).isPresent());
+                inputs[inputs.length - 1] = required;
+            }
+            no("a selected wet mechanism requires primary fluid",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, wet.id(), inputs,
+                            FluidState.EMPTY, List.of(FluidState.of("grindless:oxygen", 100))).isPresent());
+            no("a selected wet mechanism rejects short primary fluid",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, wet.id(), inputs,
+                            FluidState.of("minecraft:water", 249),
+                            List.of(FluidState.of("grindless:oxygen", 100))).isPresent());
+            no("a selected wet mechanism rejects a wrong primary fluid",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, wet.id(), inputs,
+                            FluidState.of("minecraft:lava", 250),
+                            List.of(FluidState.of("grindless:oxygen", 100))).isPresent());
+            no("a selected wet mechanism rejects short adjacent fluid",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, wet.id(), inputs,
+                            FluidState.of("minecraft:water", 250),
+                            List.of(FluidState.of("grindless:oxygen", 99))).isPresent());
+            yes("the same selected mechanism admits exact primary and adjacent supplies",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, wet.id(), inputs,
+                            FluidState.of("minecraft:water", 250),
+                            List.of(FluidState.of("grindless:oxygen", 100))).orElseThrow() == wet);
+            ProcessLookup.Generation old = ProcessLookup.generation();
+            graph.set(null, index.invoke(null, List.of(boundReactor, boundWasher, foreign, wet)));
+            yes("reindexing atomically changes the generation and ID table", old != ProcessLookup.generation());
+            eq("reordering changes only the incumbent AUTO dry priority", boundWasher.id(),
+                    ProcessLookup.find(MachineFamily.ASSEMBLER, inputs).orElseThrow().id());
+            eq("reordering cannot change the explicit Planner target", boundReactor.id(),
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, boundReactor.id(), inputs,
+                            FluidState.EMPTY, List.of()).orElseThrow().id());
+            ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
+            yes("a real rebuild resolves the selected stable ID to the new real row, not the carrier object",
+                    ProcessLookup.byId(MachineFamily.ASSEMBLER, washer.id()).orElseThrow() != boundWasher);
+            no("old carrier inputs cannot execute a current real recipe after reload",
+                    ProcessLookup.findSelected(MachineFamily.ASSEMBLER, washer.id(), inputs,
+                            FluidState.EMPTY, List.of()).isPresent());
+            try {
+                index.invoke(null, List.of(boundWasher, boundWasher));
+                fail("duplicate recipe IDs must not publish an arbitrary identity");
+            } catch (java.lang.reflect.InvocationTargetException expected) {
+                yes("duplicate recipe IDs fail graph construction explicitly",
+                        expected.getCause() instanceof IllegalArgumentException);
+            }
+        } finally {
+            graph.set(null, original);
+        }
+    }
+
+    private static void graph() throws Exception {
         List<ProcessGraph.MaterialView> materials = List.of(
                 new ProcessGraph.MaterialView("iron", true, true, true, true, true, true, true, true, true),
                 new ProcessGraph.MaterialView("gold", true, false, false, true, true, true, true, true, false),
@@ -62,10 +286,15 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        // ADR-0133 adds 12 RenewableProcesses rows and 28 BootstrapAssembly rows per station.
+        yes("no existing production recipe acquires a pressure requirement",
+                recipes.stream().noneMatch(ProcessRecipe::namesPressure));
         eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable sources, primitive assembly, glass, redstone, steel, silicon and Relay Matrix graph",
-                189, recipes.size());
+                168, recipes.size());
         c3Routes(recipes);
+        legacyGuideWork(recipes);
+        assemblerCrafts(recipes);
+        thermalGeneratorAssembly(recipes);
+        thermalInputSelection(recipes);
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -89,15 +318,20 @@ public final class VerifyRecipes {
         eq("the Relay Matrix batch consumes the calibrated core", "item:grindless:calibrated_data_core",
                 relayMatrix.itemInputs().get(3).qualified());
         eq("the Relay Matrix batch has four inputs", 4, relayMatrix.itemInputs().size());
-        eq("the Relay Matrix batch makes physical matrices", "item:grindless:relay_matrix",
-                relayMatrix.itemOutputs().get(0).qualified());
-        eq("the Relay Matrix batch makes five", FabricationLogic.RELAY_MATRIX_BATCH,
-                relayMatrix.itemOutputs().get(0).count());
+        yes("the Relay Matrix batch keeps five ordinary outputs for the legacy F1 rating",
+                relayMatrix.outputs().equals(List.of(OutputSpec.item(FabricationLogic.RELAY_MATRIX, 5))));
         eq("the Relay Matrix batch is twenty seconds", FabricationLogic.ASSEMBLE_TICKS,
                 relayMatrix.durationTicks());
+        yes("the Relay Matrix batch keeps its complete physical bill", relayMatrix.inputs().equals(List.of(
+                IngredientSpec.item("minecraft:glass", 2),
+                IngredientSpec.tag("forge:ingots/copper", 2),
+                IngredientSpec.item("minecraft:redstone", 2),
+                IngredientSpec.item(FabricationLogic.CALIBRATED_DATA_CORE, 1))));
         eq("the Industrial Matrix is assembled", MachineFamily.ASSEMBLER, industrialRelayMatrix.family());
         eq("the Industrial Matrix consumes an F1 physical Matrix", 1,
                 industrialRelayMatrix.itemInputs().get(0).matrixRating());
+        yes("the Industrial Matrix still needs an exact predecessor",
+                industrialRelayMatrix.itemInputs().get(0).matrixRole() == IngredientSpec.MatrixRole.EXACT);
         eq("the Industrial Matrix consumes a casing", "item:grindless:machine_casing",
                 industrialRelayMatrix.itemInputs().get(1).qualified());
         eq("the Industrial Matrix consumes renewable dielectric glass", "item:minecraft:glass",
@@ -107,6 +341,16 @@ public final class VerifyRecipes {
         eq("the Industrial Matrix produces F2", 2, industrialRelayMatrix.itemOutputs().get(0).matrixRating());
         eq("the Industrial Matrix takes forty seconds", FabricationLogic.ASSEMBLE_TICKS * 2,
                 industrialRelayMatrix.durationTicks());
+        yes("the Industrial Matrix keeps its complete physical bill", industrialRelayMatrix.inputs().equals(List.of(
+                IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1),
+                IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                IngredientSpec.item("minecraft:glass", 4),
+                IngredientSpec.item(FabricationLogic.FLUX_CELL, 1))));
+        yes("the Industrial Matrix keeps its exact rated output batch", industrialRelayMatrix.outputs().equals(
+                List.of(OutputSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F2, 1))));
+        eq("the Industrial Matrix keeps its F1 draw", FabricationLogic.FU_PER_TICK,
+                industrialRelayMatrix.fuPerTick());
+        yes("the Industrial Matrix has no new catalyst", industrialRelayMatrix.catalysts().isEmpty());
 
         eq("renewable sand uses the pulverizer", MachineFamily.PULVERIZER, renewableSand.family());
         eq("renewable sand consumes cobblestone", "item:minecraft:cobblestone",
@@ -243,9 +487,15 @@ public final class VerifyRecipes {
         eq("gear uses the gear die", "item:grindless:gear_die", ironGear.catalysts().get(0).qualified());
 
         eq("coil is the press", MachineFamily.PRESS, coil.family());
-        eq("coil takes copper", "tag:forge:ingots/copper", coil.itemInputs().get(0).qualified());
-        eq("coil uses the coil die", "item:grindless:coil_die", coil.catalysts().get(0).qualified());
-        eq("coil is a reagent", "item:grindless:copper_coil", coil.itemOutputs().get(0).qualified());
+        yes("the T1 coil keeps one copper ingot without a Matrix or fluid",
+                coil.inputs().equals(List.of(IngredientSpec.tag("forge:ingots/copper", 1))));
+        yes("the T1 coil keeps its one unconsumed coil die",
+                coil.catalysts().equals(List.of(IngredientSpec.item(FabricationLogic.COIL_DIE, 1))));
+        yes("the T1 coil keeps its one-coil output",
+                coil.outputs().equals(List.of(OutputSpec.item(FabricationLogic.COPPER_COIL, 1))));
+        eq("the T1 coil keeps its four-second cycle", 80, coil.durationTicks());
+        eq("the T1 coil keeps its F1 draw", 32L, coil.fuPerTick());
+        yes("the T1 coil keeps its unlabelled route", coil.milestone() == null);
 
         eq("MK2 is the assembler", MachineFamily.ASSEMBLER, mk2.family());
         eq("MK2 takes a casing", "item:grindless:machine_casing", mk2.itemInputs().get(0).qualified());
@@ -260,7 +510,6 @@ public final class VerifyRecipes {
 
         ProcessRecipe ironWire = recipe(recipes, "mill/wire/iron");
         ProcessRecipe millCoil = recipe(recipes, "mill/coil/copper");
-        ProcessRecipe mill = recipe(recipes, "assemble/wire_mill");
         ProcessRecipe motor = recipe(recipes, "assemble/motor");
 
         eq("wire is the mill", MachineFamily.WIRE_MILL, ironWire.family());
@@ -282,27 +531,33 @@ public final class VerifyRecipes {
         eq("mill coil is a reagent", "item:grindless:copper_coil", millCoil.itemOutputs().get(0).qualified());
         yes("mill coil has no die", millCoil.catalysts().isEmpty());
 
-        eq("the mill is the assembler", MachineFamily.ASSEMBLER, mill.family());
-        eq("the mill takes a casing", "item:grindless:machine_casing", mill.itemInputs().get(0).qualified());
-        eq("the mill takes two coils", 2, mill.itemInputs().get(1).count());
-        eq("the mill coils are the reagent", "item:grindless:copper_coil", mill.itemInputs().get(1).qualified());
-        eq("the mill takes four plates", 4, mill.itemInputs().get(2).count());
-        eq("the mill is twenty seconds", 20 * 20, mill.durationTicks());
-        eq("the mill carries the Industrial milestone", "industrial", mill.milestone());
-        eq("the mill makes the block", "item:grindless:wire_mill", mill.itemOutputs().get(0).qualified());
-
+        manualMachineBills(recipes);
+        IngredientSpec minimum = IngredientSpec.manualControl("F1");
+        eq("the manual minimum role preserves the canonical baseline Matrix ID", "item:grindless:relay_matrix",
+                minimum.qualified());
+        JsonObject serialized = new com.google.gson.Gson().toJsonTree(minimum).getAsJsonObject();
+        eq("ingredient serialization carries the role, not a fabricated resource ID", "MINIMUM_CONTROL",
+                serialized.get("matrixRole").getAsString());
+        eq("ingredient serialization keeps the actual registry ID", FabricationLogic.RELAY_MATRIX,
+                serialized.get("id").getAsString());
         eq("motor is the assembler", MachineFamily.ASSEMBLER, motor.family());
-        eq("motor takes a casing", "item:grindless:machine_casing", motor.itemInputs().get(0).qualified());
-        eq("motor takes two coils", 2, motor.itemInputs().get(1).count());
-        eq("motor takes a rod", "tag:forge:rods/iron", motor.itemInputs().get(2).qualified());
+        yes("motor remains a component with its complete three-group bill and no Matrix",
+                motor.inputs().equals(List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.item(FabricationLogic.COPPER_COIL, 2),
+                        IngredientSpec.tag("forge:rods/iron", 1))));
         eq("motor is ten seconds", 20 * 10, motor.durationTicks());
+        eq("motor still draws F1", 32L, motor.fuPerTick());
         eq("motor carries the Industrial milestone", "industrial", motor.milestone());
-        eq("motor makes the reagent", "item:grindless:motor", motor.itemOutputs().get(0).qualified());
+        yes("motor keeps its single ordinary component output",
+                motor.outputs().equals(List.of(OutputSpec.item(FabricationLogic.MOTOR, 1))));
+        yes("motor still has no catalyst", motor.catalysts().isEmpty());
+        no("motor adds no operating condition",
+                motor.namesTemperature() || motor.namesAtmosphere() || motor.namesAgitation());
 
         ProcessRecipe so3 = recipe(recipes, "contact/so3");
         ProcessRecipe acid = recipe(recipes, "contact/acid");
         ProcessRecipe pickle = recipe(recipes, "pickle/plate/iron");
-        ProcessRecipe reactor = recipe(recipes, "assemble/chemical_reactor");
 
         eq("oxidation is the reactor", MachineFamily.CHEMICAL_REACTOR, so3.family());
         eq("oxidation takes one bucket of SO2", "fluid:grindless:sulfur_dioxide",
@@ -336,23 +591,10 @@ public final class VerifyRecipes {
         eq("pickle is four seconds", 20 * 4, pickle.durationTicks());
         yes("pickle has no die", pickle.catalysts().isEmpty());
 
-        eq("the reactor is the assembler", MachineFamily.ASSEMBLER, reactor.family());
-        eq("the reactor takes a casing", "item:grindless:machine_casing",
-                reactor.itemInputs().get(0).qualified());
-        eq("the reactor takes two motors", 2, reactor.itemInputs().get(1).count());
-        eq("the reactor motors are the reagent", "item:grindless:motor",
-                reactor.itemInputs().get(1).qualified());
-        eq("the reactor takes four plates", 4, reactor.itemInputs().get(2).count());
-        eq("the reactor is twenty seconds", 20 * 20, reactor.durationTicks());
-        eq("the reactor carries the Industrial milestone", "industrial", reactor.milestone());
-        eq("the reactor makes the block", "item:grindless:chemical_reactor",
-                reactor.itemOutputs().get(0).qualified());
-
         ProcessRecipe ironWash = recipe(recipes, "b2/iron");
         ProcessRecipe mythrilWash = recipe(recipes, "b2/mythril");
         ProcessRecipe ironWashedReduce = recipe(recipes, "b2_r1/iron");
         ProcessRecipe ironWashedRoast = recipe(recipes, "roast_washed/iron");
-        ProcessRecipe washer = recipe(recipes, "assemble/chemical_washer");
 
         eq("wash is the washer", MachineFamily.CHEMICAL_WASHER, ironWash.family());
         eq("wash takes eight crushed", 8, ironWash.itemInputs().get(0).count());
@@ -389,23 +631,9 @@ public final class VerifyRecipes {
         eq("washed roast vents SO2", "fluid:grindless:sulfur_dioxide",
                 ironWashedRoast.ventedOutputs().get(0).qualified());
 
-        eq("the washer is the assembler", MachineFamily.ASSEMBLER, washer.family());
-        eq("the washer takes a casing", "item:grindless:machine_casing",
-                washer.itemInputs().get(0).qualified());
-        eq("the washer takes two motors", 2, washer.itemInputs().get(1).count());
-        eq("the washer motors are the reagent", "item:grindless:motor",
-                washer.itemInputs().get(1).qualified());
-        eq("the washer takes four plates", 4, washer.itemInputs().get(2).count());
-        eq("the washer is twenty seconds", 20 * 20, washer.durationTicks());
-        eq("the washer carries the Industrial milestone", "industrial", washer.milestone());
-        eq("the washer makes the block", "item:grindless:chemical_washer",
-                washer.itemOutputs().get(0).qualified());
-
         ProcessRecipe split = recipe(recipes, "electrolysis/water");
         ProcessRecipe recombine = recipe(recipes, "recombine/water");
         ProcessRecipe air = recipe(recipes, "air/oxygen");
-        ProcessRecipe cell = recipe(recipes, "assemble/electrolysis_cell");
-        ProcessRecipe intake = recipe(recipes, "assemble/atmospheric_intake");
 
         eq("electrolysis is the cell", MachineFamily.ELECTROLYSIS_CELL, split.family());
         yes("electrolysis has no items", split.itemInputs().isEmpty() && split.itemOutputs().isEmpty());
@@ -419,6 +647,29 @@ public final class VerifyRecipes {
                 split.ventedOutputs().get(0).qualified());
         eq("vented oxygen is one bucket", 1000, split.ventedOutputs().get(0).count());
         eq("electrolysis is ten seconds", 20 * 10, split.durationTicks());
+        eq("unmodified electrolysis draws 32 FU per tick", 32L, split.fuPerTick());
+        long splitCost = Math.multiplyExact(split.fuPerTick(), split.durationTicks());
+        eq("the live unmodified electrolysis batch costs 6400 FU", 6400L, splitCost);
+        eq("the baseline Thermal Generator produces 32 FU per tick", 32L, ThermalLogic.generate(true));
+        eq("one newly ignited hydrogen bucket returns 1600 FU", 1600L,
+                ThermalLogic.generate(true) * FluidLogic.burnTicks(FluidLogic.HYDROGEN));
+        long recoveredFu = 0L;
+        for (OutputSpec output : split.fluidOutputs()) {
+            int burnTicks = FluidLogic.burnTicks(output.id());
+            if (burnTicks > 0) {
+                eq("the live electrolysis fuel output consists of whole ignition buckets", 0,
+                        output.count() % FluidLogic.BUCKET);
+                recoveredFu += (long) (output.count() / FluidLogic.BUCKET)
+                        * burnTicks * ThermalLogic.generate(true);
+            }
+        }
+        eq("all live electrolysis outputs together return only 3200 FU as fuel", 3200L, recoveredFu);
+        yes("unmodified electrolysis and fuel generation are strictly lossy", recoveredFu < splitCost);
+        eq("unmodified hydrogen fuel recovers exactly half the split cost", splitCost / 2, recoveredFu);
+        long legacyRecovery = (long) (split.fluidOutputs().get(0).count() / FluidLogic.BUCKET)
+                * 400 * ThermalLogic.generate(true);
+        eq("the old shared 400-tick rate is a 25600 FU counterexample", 25600L, legacyRecovery);
+        no("the old shared CO rate satisfies the baseline loss invariant", legacyRecovery < splitCost);
         yes("electrolysis names no temperature", !split.namesTemperature());
         yes("electrolysis names no atmosphere", !split.namesAtmosphere());
 
@@ -455,30 +706,6 @@ public final class VerifyRecipes {
                 recipes.stream().filter(candidate -> candidate.id().equals("roast/iron"))
                         .allMatch(candidate -> candidate.fluidInputs().isEmpty()));
 
-        eq("the cell is the assembler", MachineFamily.ASSEMBLER, cell.family());
-        eq("the cell takes a casing", "item:grindless:machine_casing",
-                cell.itemInputs().get(0).qualified());
-        eq("the cell takes two motors", 2, cell.itemInputs().get(1).count());
-        eq("the cell takes four plates", 4, cell.itemInputs().get(2).count());
-        eq("the cell is twenty seconds", 20 * 20, cell.durationTicks());
-        eq("the cell carries the Industrial milestone", "industrial", cell.milestone());
-        eq("the cell makes the block", "item:grindless:electrolysis_cell",
-                cell.itemOutputs().get(0).qualified());
-        eq("the intake is the assembler", MachineFamily.ASSEMBLER, intake.family());
-        eq("the intake makes the block", "item:grindless:atmospheric_intake",
-                intake.itemOutputs().get(0).qualified());
-        eq("the intake carries the Industrial milestone", "industrial", intake.milestone());
-
-        ProcessRecipe well = recipe(recipes, "assemble/fluid_well");
-        eq("the well is the assembler", MachineFamily.ASSEMBLER, well.family());
-        eq("the well takes a casing", "item:grindless:machine_casing",
-                well.itemInputs().get(0).qualified());
-        eq("the well takes two motors", 2, well.itemInputs().get(1).count());
-        eq("the well takes four plates", 4, well.itemInputs().get(2).count());
-        eq("the well is twenty seconds", 20 * 20, well.durationTicks());
-        eq("the well carries the Industrial milestone", "industrial", well.milestone());
-        eq("the well makes the block", "item:grindless:fluid_well",
-                well.itemOutputs().get(0).qualified());
         no("brine is not emitted",
                 recipes.stream().anyMatch(candidate -> candidate.outputs().stream()
                         .anyMatch(spec -> spec.id().contains("brine"))));
@@ -489,8 +716,6 @@ public final class VerifyRecipes {
         ProcessRecipe melt = recipe(recipes, "melt/iron");
         ProcessRecipe castIngot = recipe(recipes, "cast/ingot/iron");
         ProcessRecipe castPlate = recipe(recipes, "cast/plate/iron");
-        ProcessRecipe induction = recipe(recipes, "assemble/induction_furnace");
-        ProcessRecipe caster = recipe(recipes, "assemble/caster");
         ProcessRecipe ingotMould = recipe(recipes, "assemble/ingot_mould");
         ProcessRecipe plateMould = recipe(recipes, "assemble/plate_mould");
 
@@ -526,18 +751,6 @@ public final class VerifyRecipes {
         no("mythril has no plate cast",
                 recipes.stream().anyMatch(candidate -> candidate.id().equals("cast/plate/mythril")));
 
-        eq("the induction furnace is the assembler", MachineFamily.ASSEMBLER, induction.family());
-        eq("the induction furnace takes a casing", "item:grindless:machine_casing",
-                induction.itemInputs().get(0).qualified());
-        eq("the induction furnace takes two motors", 2, induction.itemInputs().get(1).count());
-        eq("the induction furnace takes four plates", 4, induction.itemInputs().get(2).count());
-        eq("the induction furnace is twenty seconds", 20 * 20, induction.durationTicks());
-        eq("the induction furnace carries the Industrial milestone", "industrial", induction.milestone());
-        eq("the induction furnace makes the block", "item:grindless:induction_furnace",
-                induction.itemOutputs().get(0).qualified());
-        eq("the caster is the assembler", MachineFamily.ASSEMBLER, caster.family());
-        eq("the caster makes the block", "item:grindless:caster",
-                caster.itemOutputs().get(0).qualified());
         eq("the ingot mould is the assembler", MachineFamily.ASSEMBLER, ingotMould.family());
         eq("the ingot mould takes four plates", 4, ingotMould.itemInputs().get(0).count());
         eq("the ingot mould is four seconds", 20 * 4, ingotMould.durationTicks());
@@ -551,7 +764,6 @@ public final class VerifyRecipes {
         ProcessRecipe b3Reduce = recipe(recipes, "b3_r1/iron");
         ProcessRecipe tailings = recipe(recipes, "tailings/r1/iron");
         ProcessRecipe soap = recipe(recipes, "reagent/surfactant");
-        ProcessRecipe flotationCraft = recipe(recipes, "assemble/flotation_cell");
         ProcessRecipe magnet = recipe(recipes, "assemble/magnetic_separator");
 
         eq("flotation is the cell", MachineFamily.FLOTATION, b3.family());
@@ -595,12 +807,6 @@ public final class VerifyRecipes {
         eq("surfactant is eight seconds", 20 * 8, soap.durationTicks());
         yes("surfactant names no temperature", !soap.namesTemperature());
 
-        eq("the flotation cell is the assembler", MachineFamily.ASSEMBLER, flotationCraft.family());
-        eq("the flotation cell takes a casing", "item:grindless:machine_casing",
-                flotationCraft.itemInputs().get(0).qualified());
-        eq("the flotation cell carries the Industrial milestone", "industrial", flotationCraft.milestone());
-        eq("the flotation cell makes the block", "item:grindless:flotation_cell",
-                flotationCraft.itemOutputs().get(0).qualified());
         eq("the magnet is the assembler", MachineFamily.ASSEMBLER, magnet.family());
         eq("the magnet makes the block", "item:grindless:magnetic_separator",
                 magnet.itemOutputs().get(0).qualified());
@@ -610,7 +816,6 @@ public final class VerifyRecipes {
 
         ProcessRecipe boil = recipe(recipes, "boiler/steam");
         ProcessRecipe condense = recipe(recipes, "condense/water");
-        ProcessRecipe solar = recipe(recipes, "assemble/solar_array");
         eq("the boiler turns water to steam", MachineFamily.BOILER, boil.family());
         eq("the boiler takes one bucket of water", 1000, boil.fluidInputs().get(0).count());
         eq("the boiler makes steam", "fluid:grindless:steam", boil.fluidOutputs().get(0).qualified());
@@ -623,12 +828,8 @@ public final class VerifyRecipes {
         no("superheated steam is not emitted",
                 recipes.stream().anyMatch(candidate -> candidate.outputs().stream()
                         .anyMatch(spec -> spec.id().contains("superheat"))));
-        eq("the solar array is the assembler", MachineFamily.ASSEMBLER, solar.family());
-        eq("the solar array makes the block", "item:grindless:solar_array",
-                solar.itemOutputs().get(0).qualified());
         eq("daylight is F1", 32L, SolarLogic.generate(true));
         ProcessRecipe pipe = recipe(recipes, "assemble/pressure_pipe");
-        ProcessRecipe pump = recipe(recipes, "assemble/electric_pump");
         ProcessRecipe tank = recipe(recipes, "assemble/industrial_tank");
         ProcessRecipe fluidArm = recipe(recipes, "assemble/fluid_manipulator");
         ProcessRecipe flux = recipe(recipes, "assemble/flux_belt");
@@ -637,21 +838,16 @@ public final class VerifyRecipes {
         eq("the pressure pipe is the assembler", MachineFamily.ASSEMBLER, pipe.family());
         eq("the pressure pipe makes the block", "item:grindless:pressure_pipe",
                 pipe.itemOutputs().get(0).qualified());
-        eq("the electric pump is the assembler", MachineFamily.ASSEMBLER, pump.family());
         eq("the industrial tank is the assembler", MachineFamily.ASSEMBLER, tank.family());
         eq("the fluid arm is the assembler", MachineFamily.ASSEMBLER, fluidArm.family());
         eq("the flux belt is the assembler", MachineFamily.ASSEMBLER, flux.family());
         eq("the stack arm is the assembler", MachineFamily.ASSEMBLER, stackArm.family());
         eq("the filter arm is the assembler", MachineFamily.ASSEMBLER, filterArm.family());
         ProcessRecipe cable = recipe(recipes, "assemble/signal_cable");
-        ProcessRecipe controller = recipe(recipes, "assemble/logic_controller");
         ProcessRecipe face = recipe(recipes, "assemble/redstone_interface");
         eq("the signal cable is the assembler", MachineFamily.ASSEMBLER, cable.family());
         eq("the signal cable makes the block", "item:grindless:signal_cable",
                 cable.itemOutputs().get(0).qualified());
-        eq("the logic controller is the assembler", MachineFamily.ASSEMBLER, controller.family());
-        eq("the logic controller makes the block", "item:grindless:logic_controller",
-                controller.itemOutputs().get(0).qualified());
         eq("the redstone interface is the assembler", MachineFamily.ASSEMBLER, face.family());
         eq("the redstone interface makes the block", "item:grindless:redstone_interface",
                 face.itemOutputs().get(0).qualified());
@@ -677,14 +873,6 @@ public final class VerifyRecipes {
         eq("the planner is the assembler", MachineFamily.ASSEMBLER, planner.family());
         eq("the planner makes the item", "item:grindless:deconstruction_planner",
                 planner.itemOutputs().get(0).qualified());
-        ProcessRecipe scanner = recipe(recipes, "assemble/pattern_scanner");
-        ProcessRecipe deconstructor = recipe(recipes, "assemble/deconstructor");
-        eq("the scanner is the assembler", MachineFamily.ASSEMBLER, scanner.family());
-        eq("the scanner makes the block", "item:grindless:pattern_scanner",
-                scanner.itemOutputs().get(0).qualified());
-        eq("the deconstructor is the assembler", MachineFamily.ASSEMBLER, deconstructor.family());
-        eq("the deconstructor makes the block", "item:grindless:deconstructor",
-                deconstructor.itemOutputs().get(0).qualified());
         eq("the exosuit helmet is the assembler", MachineFamily.ASSEMBLER,
                 recipe(recipes, "assemble/flux_exosuit_helmet").family());
         eq("the network tap is an assembler item", "item:grindless:network_tap",
@@ -859,6 +1047,632 @@ public final class VerifyRecipes {
                         || recipe.id().contains("stellar_forge")));
     }
 
+    private static void assemblerCrafts(List<ProcessRecipe> recipes) throws IOException {
+        List<String> dieNames = List.of("plate_die", "rod_die", "gear_die", "coil_die");
+        List<String> machineNames = List.of("pulverizer", "arc_furnace", "press", "assembler");
+        yes("the four existing manual Press dies are the only authored die crafts",
+                dieNames.equals(T1Recipes.shaped().stream().filter(craft -> craft.name().endsWith("_die"))
+                        .map(T1Recipes.Shaped::name).toList()));
+        List<String> automaticDies = recipes.stream()
+                .filter(row -> row.id().startsWith("assemble/")
+                        && row.itemOutputs().stream().anyMatch(output -> output.id().endsWith("_die")))
+                .map(row -> row.id().substring("assemble/".length())).toList();
+        yes("only the explicitly selected Press dies have automatic routes", dieNames.equals(automaticDies));
+        no("none of the four first-factory normal machines has an automatic constructor",
+                recipes.stream().anyMatch(row -> machineNames.stream()
+                        .anyMatch(name -> row.id().equals("assemble/" + name))));
+
+        for (String name : List.of("machine_casing", "flux_cell", "plate_die", "rod_die", "gear_die", "coil_die")) {
+            T1Recipes.Shaped craft = T1Recipes.shaped().stream().filter(row -> row.name().equals(name))
+                    .findFirst().orElseThrow();
+            String id = "assemble/" + name;
+            Map<String, Integer> inputs = shapedInputs(craft.pattern(), craft.key());
+            projection(recipes, MachineFamily.ASSEMBLER, id, inputs, craft.result(), craft.resultCount(),
+                    FabricationLogic.ASSEMBLE_TICKS, FabricationLogic.FU_PER_TICK);
+            ProcessRecipe automatic = recipe(recipes, id);
+            eq(id + " keeps exactly the source craft's grouped item inputs", inputs.size(),
+                    automatic.itemInputs().size());
+            yes(id + " fits the existing four Assembler input slots", automatic.itemInputs().size() <= 4);
+            yes(id + " has no fluid input, output or hidden material", automatic.fluidInputs().isEmpty()
+                    && automatic.fluidOutputs().isEmpty());
+            no(id + " adds no physical condition or permission", automatic.namesTemperature() || automatic.namesPressure()
+                    || automatic.namesAtmosphere() || automatic.namesAgitation() || automatic.milestone() != null);
+            List<IngredientSpec> minimumControlInputs = automatic.itemInputs().stream()
+                    .filter(IngredientSpec::isMinimumControl).toList();
+            yes(id + " selects only its explicit minimum-control Relay operand",
+                    List.<IngredientSpec>of().equals(minimumControlInputs));
+            yes(id + " keeps all other material operands exact",
+                    automatic.itemInputs().stream().filter(input -> !input.isMinimumControl())
+                            .allMatch(input -> input.matrixRole() == IngredientSpec.MatrixRole.EXACT));
+            yes(id + " adds no unconsumed catalyst", automatic.catalysts().isEmpty());
+            no(id + " is not an earlier Bench route", recipes.stream()
+                    .filter(row -> row.family() == MachineFamily.ASSEMBLY_BENCH)
+                    .flatMap(row -> row.itemOutputs().stream()).anyMatch(output -> output.id().equals(craft.result())));
+
+            JsonObject json = read(name);
+            List<String> pattern = new ArrayList<>();
+            json.getAsJsonArray("pattern").forEach(row -> pattern.add(row.getAsString()));
+            Map<String, String> key = new LinkedHashMap<>();
+            for (Map.Entry<String, JsonElement> entry : json.getAsJsonObject("key").entrySet()) {
+                JsonObject ingredient = entry.getValue().getAsJsonObject();
+                yes(name + " JSON keeps an ordinary item or tag ingredient " + entry.getKey(),
+                        ingredient.size() == 1 && (ingredient.has("tag") || ingredient.has("item")));
+                String kind = ingredient.has("tag") ? "tag" : "item";
+                key.put(entry.getKey(), kind + ":" + ingredient.get(kind).getAsString());
+            }
+            yes(name + " keeps the full shipped crafting pattern", pattern.equals(craft.pattern()));
+            yes(name + " keeps the full shipped crafting key", key.equals(craft.key()));
+            yes(id + " also matches the exact shipped JSON input multiset",
+                    shapedInputs(pattern, key).equals(inputs));
+            JsonObject result = json.getAsJsonObject("result");
+            int count = result.has("count") ? result.get("count").getAsInt() : 1;
+            yes(id + " also matches the exact shipped JSON output multiset", automatic.outputs().equals(
+                    List.of(OutputSpec.item(result.get("item").getAsString(), count))));
+        }
+    }
+
+    private static void thermalGeneratorAssembly(List<ProcessRecipe> recipes) throws IOException {
+        T1Recipes.Shaped craft = T1Recipes.shaped().stream()
+                .filter(row -> row.name().equals("thermal_generator")).findFirst().orElseThrow();
+        Map<String, Integer> manual = shapedInputs(craft.pattern(), craft.key());
+        eq("the unchanged manual Thermal craft has five distinct groups", 5, manual.size());
+        yes("the manual Thermal bill retains all nine physical units and valid control", manual.equals(Map.of(
+                T1Recipes.COBBLE, 5, T1Recipes.FURNACE, 1, T1Recipes.CARBON, 1,
+                T1Recipes.IRON, 1, T1Recipes.MINIMUM_F1, 1)));
+        ProcessRecipe core = recipe(recipes, "assemble/thermal_generator_core");
+        T1Recipes.Shaped finished = manual("thermal_generator_from_core");
+        Map<String, Integer> coreInputs = new LinkedHashMap<>();
+        for (String input : List.of(T1Recipes.FURNACE, T1Recipes.CARBON, T1Recipes.IRON)) {
+            coreInputs.put(input, manual.get(input));
+        }
+        Map<String, Integer> finalInputs = new LinkedHashMap<>();
+        finalInputs.put("item:" + FabricationLogic.THERMAL_GENERATOR_CORE, 1);
+        finalInputs.put(T1Recipes.COBBLE, manual.get(T1Recipes.COBBLE));
+        finalInputs.put(T1Recipes.MINIMUM_F1, manual.get(T1Recipes.MINIMUM_F1));
+        projection(recipes, MachineFamily.ASSEMBLER, core.id(), coreInputs,
+                FabricationLogic.THERMAL_GENERATOR_CORE, 1,
+                FabricationLogic.ASSEMBLE_TICKS, FabricationLogic.FU_PER_TICK);
+        yes("manual core consumer retains exactly core1, cobble5 and minimum F1",
+                finalInputs.equals(shapedInputs(finished.pattern(), finished.key())));
+        yes("the core takes only furnace, carbon and iron in stable indexed order", core.inputs().equals(List.of(
+                IngredientSpec.item("minecraft:furnace", manual.get(T1Recipes.FURNACE)),
+                IngredientSpec.tag("grindless:carbon", manual.get(T1Recipes.CARBON)),
+                IngredientSpec.tag("forge:ingots/iron", manual.get(T1Recipes.IRON)))));
+        yes("the manual final operation consumes exactly one valid minimum-F1 controller",
+                finished.ingredients().stream().filter(IngredientSpec::isMinimumControl).toList()
+                        .equals(List.of(IngredientSpec.manualControl("F1"))));
+        for (ProcessRecipe stage : List.of(core)) {
+            eq(stage.id() + " uses exactly three actual grouped input slots", 3, stage.itemInputs().size());
+            no(stage.id() + " introduces no fluid or hidden condition", !stage.fluidInputs().isEmpty()
+                    || !stage.fluidOutputs().isEmpty() || stage.namesTemperature() || stage.namesPressure()
+                    || stage.namesAtmosphere() || stage.namesAgitation() || stage.milestone() != null);
+            no(stage.id() + " has no Bench bootstrap bypass", recipes.stream()
+                    .filter(row -> row.family() == MachineFamily.ASSEMBLY_BENCH)
+                    .flatMap(row -> row.outputs().stream()).anyMatch(stage.outputs()::contains));
+        }
+        yes("the core has no Matrix, controller role or hidden duplicate", core.inputs().stream()
+                .allMatch(input -> input.matrixRating() == 0 && !input.id().equals(FabricationLogic.RELAY_MATRIX)));
+        eq("higher control stock never changes the ordinary Thermal output",
+                "grindless:thermal_generator", finished.result());
+        eq("the manual final output is still one ordinary block", 1, finished.resultCount());
+        Map<String, Integer> composed = new LinkedHashMap<>();
+        core.inputs().forEach(input -> composed.merge(input.qualified(), input.count(), Integer::sum));
+        finalInputs.forEach((input, count) -> composed.merge(input, count, Integer::sum));
+        yes("exactly one manufactured core cancels from the composed bill",
+                Integer.valueOf(1).equals(composed.remove("item:" + FabricationLogic.THERMAL_GENERATOR_CORE))
+                        && core.outputs().equals(List.of(OutputSpec.item(FabricationLogic.THERMAL_GENERATOR_CORE, 1))));
+        yes("cancelling only the one core preserves the exact complete manual multiset", manual.equals(composed));
+        JsonObject json = read("thermal_generator");
+        List<String> pattern = new ArrayList<>();
+        json.getAsJsonArray("pattern").forEach(row -> pattern.add(row.getAsString()));
+        Map<String, String> key = new LinkedHashMap<>();
+        json.getAsJsonObject("key").entrySet().forEach(entry -> {
+            JsonObject ingredient = entry.getValue().getAsJsonObject();
+            key.put(entry.getKey(), manualDeclaration(ingredient));
+        });
+        yes("the Thermal catalogue and shipped JSON retain the same complete pattern", craft.pattern().equals(pattern));
+        yes("the Thermal catalogue and shipped JSON retain the same complete key", craft.key().equals(key));
+        yes("component plus manual final compose to the exact shipped raw material bill",
+                composed.equals(shapedInputs(pattern, key)));
+        JsonObject result = json.getAsJsonObject("result");
+        yes("the output remains the ordinary unchanged manual JSON item without state",
+                result.size() == 1 && finished.result().equals(result.get("item").getAsString()));
+        eq("only the real core operation retains the normal Assembler cycle", 400, core.durationTicks());
+        eq("only the core operation has process energy demand", 12_800L,
+                Math.multiplyExact((long) core.durationTicks(), core.fuPerTick()));
+        no("the former automatic final Thermal ID is unavailable",
+                recipes.stream().anyMatch(row -> row.id().equals("assemble/thermal_generator")));
+        eq("every generated identity remains unique", (long) recipes.size(),
+                recipes.stream().map(ProcessRecipe::id).distinct().count());
+    }
+
+    /** Vanilla carriers test index/quantity selection, not mod registration or native Matrix admission. */
+    private static void thermalInputSelection(List<ProcessRecipe> recipes) throws Exception {
+        SharedConstants.tryDetectVersion();
+        Bootstrap.bootStrap();
+        Map<TagKey<Item>, List<Holder<Item>>> originalTags = new HashMap<>();
+        BuiltInRegistries.ITEM.getTags().forEach(tag ->
+                originalTags.put(tag.getFirst(), tag.getSecond().stream().toList()));
+        Map<TagKey<Item>, List<Holder<Item>>> tags = new HashMap<>(originalTags);
+        tags.put(TagKey.create(Registries.ITEM, new ResourceLocation("minecraft:stone_crafting_materials")),
+                List.of(BuiltInRegistries.ITEM.wrapAsHolder(Items.COBBLESTONE)));
+        tags.put(TagKey.create(Registries.ITEM, new ResourceLocation("grindless:carbon")),
+                List.of(BuiltInRegistries.ITEM.wrapAsHolder(Items.CHARCOAL)));
+        tags.put(TagKey.create(Registries.ITEM, new ResourceLocation("forge:ingots/iron")),
+                List.of(BuiltInRegistries.ITEM.wrapAsHolder(Items.IRON_INGOT)));
+        Field graph = ProcessLookup.class.getDeclaredField("GRAPH");
+        graph.setAccessible(true);
+        Object original = graph.get(null);
+        Method index = original.getClass().getDeclaredMethod("index", List.class);
+        index.setAccessible(true);
+        try {
+            BuiltInRegistries.ITEM.bindTags(tags);
+            graph.set(null, index.invoke(null, recipes));
+            for (int stock : List.of(1, 64)) {
+                ItemStack[] core = {new ItemStack(Items.FURNACE, stock), new ItemStack(Items.CHARCOAL, stock),
+                        new ItemStack(Items.IRON_INGOT, stock), ItemStack.EMPTY};
+                eq("complete/bulk core stock selects the real furnace-first Thermal route: " + stock,
+                        "assemble/thermal_generator_core",
+                        ProcessLookup.find(MachineFamily.ASSEMBLER, core).orElseThrow().id());
+                core[2] = ItemStack.EMPTY;
+                no("a missing core material cannot select a generic alternative: " + stock,
+                        ProcessLookup.find(MachineFamily.ASSEMBLER, core).isPresent());
+                ItemStack[] finalStock = {new ItemStack(Items.HEART_OF_THE_SEA, stock),
+                        new ItemStack(Items.COBBLESTONE, Math.max(5, stock)), new ItemStack(Items.COMPARATOR, stock),
+                        ItemStack.EMPTY};
+                no("even complete legacy final stock cannot select a retired automatic Thermal: " + stock,
+                        ProcessLookup.findSelected(MachineFamily.ASSEMBLER, "assemble/thermal_generator",
+                                finalStock, FluidState.EMPTY, List.of()).isPresent());
+                finalStock[1].setCount(4);
+                no("insufficient cobblestone cannot revive retired final Thermal: " + stock,
+                        ProcessLookup.findSelected(MachineFamily.ASSEMBLER, "assemble/thermal_generator",
+                                finalStock, FluidState.EMPTY, List.of()).isPresent());
+                finalStock[1].setCount(Math.max(5, stock));
+                finalStock[2] = ItemStack.EMPTY;
+                no("bulk cobblestone cannot revive a retired constructor without control: " + stock,
+                        ProcessLookup.findSelected(MachineFamily.ASSEMBLER, "assemble/thermal_generator",
+                                finalStock, FluidState.EMPTY, List.of()).isPresent());
+            }
+            for (int cobble : List.of(8, 64)) {
+                ItemStack[] stock = {new ItemStack(Items.COBBLESTONE, cobble),
+                        ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY};
+                no("exact/bulk vanilla Furnace materials cannot select its retired Assembler final: " + cobble,
+                        ProcessLookup.findSelected(MachineFamily.ASSEMBLER, "assemble/bootstrap/furnace",
+                                stock, FluidState.EMPTY, List.of()).isPresent());
+                no("exact/bulk vanilla Furnace materials cannot select its retired Bench final: " + cobble,
+                        ProcessLookup.findSelected(MachineFamily.ASSEMBLY_BENCH, "bench/furnace",
+                                stock, FluidState.EMPTY, List.of()).isPresent());
+                no("AUTO cannot produce a normal vanilla Furnace from exact/bulk construction stock: " + cobble,
+                        ProcessLookup.find(MachineFamily.ASSEMBLER, stock).stream()
+                                .flatMap(row -> row.outputs().stream())
+                                .anyMatch(output -> output.id().equals("minecraft:furnace")));
+            }
+        } finally {
+            graph.set(null, original);
+            BuiltInRegistries.ITEM.bindTags(originalTags);
+        }
+    }
+
+    private static Map<String, Integer> shapedInputs(List<String> pattern, Map<String, String> key) {
+        Map<String, Integer> inputs = new LinkedHashMap<>();
+        for (String row : pattern) {
+            for (char symbol : row.toCharArray()) {
+                if (symbol != ' ') {
+                    inputs.merge(key.get(String.valueOf(symbol)), 1, Integer::sum);
+                }
+            }
+        }
+        return inputs;
+    }
+
+    private static T1Recipes.Shaped manual(String name) {
+        return T1Recipes.shaped().stream().filter(craft -> craft.name().equals(name)).findFirst().orElseThrow();
+    }
+
+    private static void manualMachineBills(List<ProcessRecipe> recipes) {
+        Map<String, List<String>> originalPatterns = Map.of(
+                "thermal_generator", List.of("CFC", "CGC", "MIC"),
+                "pulverizer", List.of("MFC", "CIC", "CCC"),
+                "arc_furnace", List.of("MIC", "IRI", "CIC"),
+                "press", List.of("MIC", "CIC", "CCC"),
+                "assembler", List.of("MG ", "CAC", " G "));
+        Map<String, Map<String, Integer>> originalBills = Map.of(
+                "thermal_generator", Map.of(T1Recipes.COBBLE, 5, T1Recipes.FURNACE, 1,
+                        T1Recipes.CARBON, 1, T1Recipes.IRON, 1, T1Recipes.MINIMUM_F1, 1),
+                "pulverizer", Map.of(T1Recipes.COBBLE, 6, T1Recipes.FLINT, 1,
+                        T1Recipes.IRON, 1, T1Recipes.MINIMUM_F1, 1),
+                "arc_furnace", Map.of(T1Recipes.COBBLE, 3, T1Recipes.IRON, 4,
+                        T1Recipes.REDSTONE, 1, T1Recipes.MINIMUM_F1, 1),
+                "press", Map.of(T1Recipes.COBBLE, 6, T1Recipes.IRON, 2, T1Recipes.MINIMUM_F1, 1),
+                "assembler", Map.of(T1Recipes.GEAR, 2, T1Recipes.CASING, 2,
+                        T1Recipes.COIL, 1, T1Recipes.MINIMUM_F1, 1));
+        originalBills.forEach((name, bill) -> {
+            T1Recipes.Shaped craft = manual(name);
+            yes(name + " preserves its first-five manual identity and complete raw pattern",
+                    craft.name().equals(name) && craft.pattern().equals(originalPatterns.get(name)));
+            yes(name + " preserves the original exact material multiset and physical control",
+                    bill.equals(shapedInputs(craft.pattern(), craft.key())));
+        });
+        java.util.Set<String> controlled = new java.util.TreeSet<>(List.of(
+                "thermal_generator", "thermal_generator_from_core", "pulverizer", "arc_furnace",
+                "press", "assembler", "kiln", "terrestrial_extractor", "factory_portal", "wire_mill",
+                "chemical_reactor", "chemical_washer", "electrolysis_cell", "atmospheric_intake",
+                "induction_furnace", "caster", "flotation_cell", "boiler", "condenser"));
+        yes("the precise nineteen manual crafts, not arbitrary components, have minimum physical control",
+                controlled.equals(T1Recipes.shaped().stream()
+                        .filter(craft -> craft.ingredients().stream().anyMatch(IngredientSpec::isMinimumControl))
+                        .map(T1Recipes.Shaped::name).collect(java.util.stream.Collectors.toSet())));
+        for (String name : controlled) {
+            T1Recipes.Shaped craft = manual(name);
+            yes(name + " consumes exactly one valid minimum-F1 Matrix, never an unvalidated bare item",
+                    craft.ingredients().stream().filter(IngredientSpec::isMinimumControl).toList()
+                            .equals(List.of(IngredientSpec.manualControl("F1")))
+                            && !craft.key().containsValue(T1Recipes.RELAY_MATRIX));
+            eq(name + " produces the unchanged ordinary baseline block", "grindless:"
+                    + (name.equals("thermal_generator_from_core") ? "thermal_generator" : name), craft.result());
+            eq(name + " never upgrades or multiplies the baseline output", 1, craft.resultCount());
+        }
+        Map<String, Integer> oldControlled = Map.of(T1Recipes.CASING, 1, T1Recipes.MOTOR, 2,
+                T1Recipes.PLATE, 4, T1Recipes.MINIMUM_F1, 1);
+        for (String name : List.of("chemical_reactor", "chemical_washer", "electrolysis_cell",
+                "atmospheric_intake", "induction_furnace", "caster", "flotation_cell", "boiler", "condenser")) {
+            T1Recipes.Shaped craft = manual(name);
+            yes(name + " retains all nine-family quantities/control from ADR-0186",
+                    oldControlled.equals(shapedInputs(craft.pattern(), craft.key())));
+            eq(name + " uses eight actual crafting cells", 8, craft.ingredients().size());
+        }
+        T1Recipes.Shaped wire = manual("wire_mill");
+        yes("Wire Mill retains casing1, coils2, plates4 and minimum F1 without an acid or F2 tax",
+                shapedInputs(wire.pattern(), wire.key()).equals(Map.of(T1Recipes.CASING, 1,
+                        T1Recipes.COIL, 2, T1Recipes.PLATE, 4, T1Recipes.MINIMUM_F1, 1)));
+        for (String name : List.of("fluid_well", "solar_array", "electric_pump",
+                "logic_controller", "pattern_scanner", "deconstructor")) {
+            T1Recipes.Shaped craft = manual(name);
+            yes(name + " retains its actual old bill without inventing a controller or later tier",
+                    shapedInputs(craft.pattern(), craft.key()).equals(Map.of(
+                            T1Recipes.CASING, 1, T1Recipes.MOTOR, 2, T1Recipes.PLATE, 4)));
+            eq(name + " retains one ordinary output", "grindless:" + name, craft.result());
+        }
+        no("no live process input retains a retired normal-constructor minimum role",
+                recipes.stream().flatMap(recipe -> recipe.inputs().stream()).anyMatch(IngredientSpec::isMinimumControl));
+    }
+
+    private static void manufacturingBoundary() throws IOException {
+        List<ProcessRecipe> graph = ProcessGraph.generate(List.of());
+        for (var kind : io.github.ezequiel24123z.grindless.machine.ProcessMachineKind.values()) {
+            String id = kind.translationKey().replace("block.grindless.", "grindless:");
+            boolean formed = kind.structure() != io.github.ezequiel24123z.grindless.structure.WorkshopStructure.NONE;
+            yes(id + " uses actual WorkshopStructure rather than a controller name/site predicate",
+                    ManufacturingPolicy.isManualFinalMachine(id) == !formed
+                            && ManufacturingPolicy.kind(id) == (formed
+                            ? ManufacturingPolicy.Kind.FORMED_CONTROLLER : ManufacturingPolicy.Kind.NORMAL_MACHINE));
+        }
+        Set<String> formed = Set.of("grindless:firing_chamber", "grindless:settling_trough", "grindless:ground_array");
+        yes("the only declared formed controllers are the two workshops and Ground Array",
+                formed.equals(io.github.ezequiel24123z.grindless.registry.BlockCatalogue.blocks().stream()
+                        .map(block -> "grindless:" + block.name())
+                        .filter(id -> ManufacturingPolicy.kind(id) == ManufacturingPolicy.Kind.FORMED_CONTROLLER)
+                        .collect(java.util.stream.Collectors.toSet())));
+        for (String id : List.of("geological_collector", "biocultivator", "logic_controller",
+                "fluid_well", "hand_pump", "electric_pump", "solar_array", "pattern_scanner", "deconstructor")) {
+            yes(id + " is an actual normal machine, not a formation exception",
+                    ManufacturingPolicy.isManualFinalMachine("grindless:" + id));
+        }
+        for (String id : List.of("magnetic_separator", "basic_tank", "industrial_tank", "flux_pylon_mk2",
+                "fluid_manipulator", "stack_manipulator", "redstone_interface", "launch_pad", "station_berth")) {
+            yes(id + " retains its real transfer/storage/passive role",
+                    ManufacturingPolicy.kind("grindless:" + id) == ManufacturingPolicy.Kind.INFRASTRUCTURE);
+        }
+        String registry = Files.readString(Path.of(
+                "common/src/main/java/io/github/ezequiel24123z/grindless/registry/ModBlocks.java"));
+        var declarations = java.util.regex.Pattern.compile(
+                "register\\(\"([^\"]+)\",\\s*\\(\\)\\s*->\\s*new\\s+(\\w+)\\(").matcher(registry);
+        Set<String> inspected = new java.util.TreeSet<>();
+        Set<String> normalClasses = Set.of("HandCrankDynamoBlock", "CrudeExtractorBlock", "ResearchTerminalBlock",
+                "ThermalGeneratorBlock", "SolarArrayBlock", "TerrestrialExtractorBlock", "HandPumpBlock",
+                "ElectricPumpBlock", "FluidWellBlock", "LogicControllerBlock", "PatternScannerBlock",
+                "DeconstructorBlock", "FactoryPortalBlock", "LunarLinkBlock", "StarwardLinkBlock");
+        Set<String> passiveClasses = Set.of("WorkshopPartBlock", "WorkshopPortBlock", "BeltBlock", "SplitterBlock",
+                "MergerBlock", "TunnelBeltBlock", "OverflowGateBlock", "SorterBlock", "MagneticSeparatorBlock",
+                "ManipulatorBlock", "ClayConduitBlock", "BasicTankBlock", "PressurePipeBlock", "IndustrialTankBlock",
+                "FluidManipulatorBlock", "FluxBeltBlock", "StackManipulatorBlock", "FilterManipulatorBlock",
+                "SignalCableBlock", "RedstoneInterfaceBlock", "CapacitorBankBlock", "FluxTransformerBlock",
+                "PylonBlock", "ArrayCasingBlock", "LaunchPadBlock", "StationBerthBlock");
+        while (declarations.find()) {
+            String id = "grindless:" + declarations.group(1);
+            String type = declarations.group(2);
+            if (normalClasses.contains(type)) {
+                yes("actual normal registry type " + type + " binds " + id, ManufacturingPolicy.isManualFinalMachine(id));
+            } else if (passiveClasses.contains(type)) {
+                yes("actual passive registry type " + type + " binds " + id,
+                        ManufacturingPolicy.kind(id) == ManufacturingPolicy.Kind.INFRASTRUCTURE);
+            } else if (!Set.of("ProcessMachineBlock", "GroundArrayBlock", "Block", "LunarRegolithBlock",
+                    "DriftDeckBlock", "HorizonShellBlock", "ArrivalMarkBlock", "PylonShaftBlock").contains(type)) {
+                fail("unclassified actual block implementation " + id + ": " + type);
+            }
+            inspected.add(id);
+        }
+        yes("every player-facing block is bound to an inspected actual runtime constructor",
+                inspected.containsAll(io.github.ezequiel24123z.grindless.registry.BlockCatalogue.blocks().stream()
+                        .map(block -> "grindless:" + block.name()).toList()));
+        Set<String> manualOutputs = new java.util.TreeSet<>();
+        T1Recipes.shaped().forEach(craft -> manualOutputs.add(craft.result()));
+        BootstrapRecipes.shaped().forEach(craft -> manualOutputs.add(craft.result()));
+        var vanilla = new io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Builder();
+        io.github.ezequiel24123z.grindless.sustainability.AuthorityAdapters.vanillaTransformation(
+                "minecraft:furnace", VerifyRecipes.class.getClassLoader(), vanilla);
+        var furnace = vanilla.build().routes().get("vanilla/minecraft:furnace");
+        yes("vanilla Furnace manual availability comes from its real existing vanilla authority",
+                furnace != null && !furnace.automatable()
+                        && furnace.authority() == io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Authority.VANILLA_TRANSFORMATION);
+        if (furnace == null) {
+            throw new IOException("The actual vanilla/minecraft:furnace manual authority is missing");
+        }
+        furnace.outputs().keySet().forEach(output -> manualOutputs.add(output.id()));
+        yes("the same pure policy classifies the real vanilla Furnace as a manual final",
+                ManufacturingPolicy.isManualFinalMachine("minecraft:furnace"));
+        no("the coordinator decision invents no Grindless furnace manual recipe",
+                T1Recipes.shaped().stream().anyMatch(craft -> craft.name().equals("furnace"))
+                        || Files.exists(RECIPES.resolve("furnace.json")));
+        for (String id : ManufacturingPolicy.manualFinalMachines()) {
+            boolean withheld = Set.of("grindless:lunar_link", "grindless:starward_link").contains(id);
+            yes(id + " has an accepted manual counterpart or remains an explicitly withheld prototype",
+                    manualOutputs.contains(id) != withheld);
+            yes(id + " is refused before pattern storage/replication quoting",
+                    io.github.ezequiel24123z.grindless.pattern.PatternLogic.refused(id));
+            String name = id.substring(id.indexOf(':') + 1);
+            no(id + " has no selectable former direct normal constructor",
+                    ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/" + name).isPresent());
+            no(id + " has no selectable primitive Bench constructor",
+                    ProcessLookup.byId(MachineFamily.ASSEMBLY_BENCH, "bench/" + name).isPresent());
+            no(id + " has no selectable indirect primitive Assembler constructor",
+                    ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/bootstrap/" + name).isPresent());
+        }
+        for (ProcessRecipe recipe : graph) {
+            for (OutputSpec output : recipe.outputs()) {
+                no(recipe.id() + " has no primary, secondary, vented or indirect normal-machine output " + output,
+                        ManufacturingPolicy.isManualFinalMachine(output.id()));
+            }
+        }
+        for (MachineFamily family : List.of(MachineFamily.ASSEMBLY_BENCH, MachineFamily.ASSEMBLER)) {
+            for (ProcessRecipe recipe : BootstrapAssembly.recipes(family, 80, 8)) {
+                no(recipe.id() + " is not a primitive automatic normal-machine bypass",
+                        recipe.outputs().stream().anyMatch(output -> ManufacturingPolicy.isManualFinalMachine(output.id())));
+            }
+        }
+        yes("all replication-cost projected primary/secondary item lines exclude normal outputs",
+                ReplicationCost.linesOf(graph).stream()
+                        .noneMatch(line -> ManufacturingPolicy.isManualFinalMachine(line.outputId())));
+        for (String id : List.of("grindless:machine_casing", "grindless:motor", "grindless:blueprint_tool",
+                "grindless:firing_chamber", "grindless:magnetic_separator")) {
+            no(id + " is not globally banned just because normals are manual",
+                    io.github.ezequiel24123z.grindless.pattern.PatternLogic.refused(id));
+        }
+        for (String product : List.of("machine_casing", "flux_cell", "plate_die", "rod_die", "gear_die", "coil_die",
+                "firing_chamber", "settling_trough", "basic_tank", "conveyor_belt")) {
+            yes(product + " retains BOTH authored methods, without universal duplicate recipes",
+                    manualOutputs.contains("grindless:" + product) && graph.stream().flatMap(row -> row.outputs().stream())
+                            .anyMatch(output -> output.id().equals("grindless:" + product)));
+        }
+        for (String product : List.of("motor", "flux_pylon_mk2", "pressure_pipe", "blueprint_tool",
+                "deconstruction_planner", "ingot_mould", "plate_mould")) {
+            yes(product + " retains its actual MACHINE_ONLY method",
+                    !manualOutputs.contains("grindless:" + product) && graph.stream().flatMap(row -> row.outputs().stream())
+                            .anyMatch(output -> output.id().equals("grindless:" + product)));
+        }
+        for (String product : List.of("advanced_data_core", "flux_pylon_mk1", "factory_portal")) {
+            yes(product + " retains its actual MANUAL_ONLY method",
+                    manualOutputs.contains("grindless:" + product) && graph.stream().flatMap(row -> row.outputs().stream())
+                            .noneMatch(output -> output.id().equals("grindless:" + product)));
+        }
+        for (String id : PROTOTYPE_ITEMS) {
+            no("withdrawn prototype stays absent from every manual output: " + id,
+                    manualOutputs.contains("grindless:" + id));
+        }
+        manualControlMetadata();
+    }
+
+    private static void manualControlMetadata() {
+        for (FluxTier tier : List.of(FluxTier.F1, FluxTier.F2, FluxTier.F3)) {
+            JsonObject json = new JsonObject();
+            json.addProperty("type", IngredientSpec.MINIMUM_CONTROL_TYPE);
+            json.addProperty("tier", tier.name());
+            IngredientSpec parsed = IngredientSpec.manualControl(json);
+            yes("pure JSON and catalogue control metadata agree for " + tier,
+                    parsed.equals(IngredientSpec.crafting(IngredientSpec.MINIMUM_CONTROL_PREFIX + tier.name())));
+            yes("canonical supply uses the real Relay architecture and enum for " + tier,
+                    parsed.acceptsMatrix(FabricationLogic.RELAY_MATRIX,
+                            new io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec(
+                                    io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture.RELAY, tier)));
+        }
+        for (String invalid : List.of("{}", "{\"type\":\"grindless:minimum_control\"}",
+                "{\"type\":\"grindless:minimum_control\",\"tier\":1}",
+                "{\"type\":\"grindless:minimum_control\",\"tier\":null}",
+                "{\"type\":\"grindless:minimum_control\",\"tier\":\"f1\"}",
+                "{\"type\":\"grindless:minimum_control\",\"tier\":\"F0\"}",
+                "{\"type\":\"grindless:minimum_control\",\"tier\":\"F4\"}",
+                "{\"type\":\"grindless:minimum_control\",\"tier\":\"F15\"}",
+                "{\"type\":\"grindless:minimum_control\",\"tier\":\"F16\"}",
+                "{\"type\":\"foreign:minimum_control\",\"tier\":\"F1\"}",
+                "{\"type\":\"grindless:minimum_control\",\"tier\":\"F1\",\"item\":\"grindless:relay_matrix\"}",
+                "{\"type\":\"grindless:minimum_control\",\"tier\":\"F1\",\"nbt\":{\"Rating\":0}}")) {
+            try {
+                IngredientSpec.manualControl(JsonParser.parseString(invalid).getAsJsonObject());
+                fail("unsupported/malformed manual control must not ignore fields: " + invalid);
+            } catch (IllegalArgumentException expected) {
+                yes("unsupported/malformed manual control is explicitly refused: " + invalid, true);
+            }
+        }
+        var relay = io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture.RELAY;
+        IngredientSpec minimum = IngredientSpec.manualControl("F1");
+        var legacy = io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt.load(relay, null).orElseThrow();
+        yes("an untagged real Relay default remains sufficient F1 metadata",
+                legacy.rating() == FluxTier.F1 && minimum.acceptsMatrix(FabricationLogic.RELAY_MATRIX, legacy));
+        for (FluxTier tier : List.of(FluxTier.F1, FluxTier.F2, FluxTier.F3)) {
+            var saved = io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt.save(
+                    new io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec(relay, tier));
+            var decoded = io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt.load(relay, saved).orElseThrow();
+            yes("valid registered Relay ratings remain sufficient, not upgrades: " + tier,
+                    minimum.acceptsMatrix(FabricationLogic.RELAY_MATRIX, decoded));
+            yes("the protected F2 process predecessor remains EXACT, not minimum: " + tier,
+                    IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1)
+                            .acceptsMatrix(FabricationLogic.RELAY_MATRIX, decoded) == (tier == FluxTier.F1));
+        }
+        for (net.minecraft.nbt.Tag number : List.of(
+                net.minecraft.nbt.ByteTag.valueOf((byte) FluxTier.F2.ordinal()),
+                net.minecraft.nbt.ShortTag.valueOf((short) FluxTier.F2.ordinal()),
+                net.minecraft.nbt.IntTag.valueOf(FluxTier.F2.ordinal()),
+                net.minecraft.nbt.LongTag.valueOf(FluxTier.F2.ordinal()),
+                net.minecraft.nbt.FloatTag.valueOf(FluxTier.F2.ordinal()),
+                net.minecraft.nbt.DoubleTag.valueOf(FluxTier.F2.ordinal()))) {
+            var tag = new net.minecraft.nbt.CompoundTag();
+            tag.put(io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt.RATING, number);
+            yes("whole numeric subtype tolerance remains the decoder's rule: " + number.getClass().getSimpleName(),
+                    io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt.load(relay, tag)
+                            .filter(value -> minimum.acceptsMatrix(FabricationLogic.RELAY_MATRIX, value)).isPresent());
+        }
+        for (net.minecraft.nbt.Tag invalid : List.of(
+                net.minecraft.nbt.StringTag.valueOf("F1"),
+                net.minecraft.nbt.IntTag.valueOf(FluxTier.F0.ordinal()),
+                net.minecraft.nbt.IntTag.valueOf(FluxTier.F4.ordinal()),
+                net.minecraft.nbt.IntTag.valueOf(-1),
+                net.minecraft.nbt.IntTag.valueOf(FluxTier.values().length),
+                net.minecraft.nbt.DoubleTag.valueOf(FluxTier.F2.ordinal() + 0.5),
+                net.minecraft.nbt.DoubleTag.valueOf(Double.NaN),
+                net.minecraft.nbt.DoubleTag.valueOf(Double.POSITIVE_INFINITY))) {
+            var tag = new net.minecraft.nbt.CompoundTag();
+            tag.put(io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt.RATING, invalid);
+            no("malformed or unsupported explicit rating never defaults to usable F1: " + invalid,
+                    io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt.load(relay, tag).isPresent());
+        }
+    }
+
+    /** Compare actual item/tag domains at every offset and mirror, never character labels. */
+    private static void manualPatternOverlap() throws IOException {
+        Path root = Path.of("");
+        var tags = new io.github.ezequiel24123z.grindless.sustainability.TagResolver(root,
+                io.github.ezequiel24123z.grindless.sustainability.CanonicalPack.resolved(root));
+        List<T1Recipes.Shaped> shapes = new ArrayList<>();
+        try (var files = Files.walk(RECIPES)) {
+            for (Path file : files.filter(path -> path.toString().endsWith(".json")).sorted().toList()) {
+                JsonObject json = JsonParser.parseString(Files.readString(file)).getAsJsonObject();
+                if (!json.get("type").getAsString().equals("minecraft:crafting_shaped")) {
+                    continue;
+                }
+                Map<String, String> keys = new LinkedHashMap<>();
+                json.getAsJsonObject("key").entrySet().forEach(entry ->
+                        keys.put(entry.getKey(), manualDeclaration(entry.getValue().getAsJsonObject())));
+                shapes.add(new T1Recipes.Shaped(file.getFileName().toString(),
+                        jsonPattern(json),
+                        keys, json.getAsJsonObject("result").get("item").getAsString()));
+            }
+        }
+        Map<String, Set<String>> domains = new HashMap<>();
+        for (T1Recipes.Shaped shape : shapes) {
+            for (String declaration : shape.key().values()) {
+                IngredientSpec spec = IngredientSpec.crafting(declaration);
+                if (!domains.containsKey(declaration)) {
+                    if (IngredientSpec.TAG.equals(spec.kind())) {
+                        var resolution = tags.resolve(new io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Resource(
+                                io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Kind.TAG, spec.id()));
+                        yes("actual tag definitions for shape overlap are complete: " + declaration, resolution.complete());
+                        if (!resolution.complete()) {
+                            throw new IOException("Cannot prove crafting disambiguation with unresolved tag " + declaration);
+                        }
+                        domains.put(declaration, resolution.members().stream().map(resource -> resource.id())
+                                .collect(java.util.stream.Collectors.toSet()));
+                    } else {
+                        domains.put(declaration, Set.of(spec.id()));
+                    }
+                }
+            }
+        }
+        for (int left = 0; left < shapes.size(); left++) {
+            for (int right = left + 1; right < shapes.size(); right++) {
+                T1Recipes.Shaped a = shapes.get(left);
+                T1Recipes.Shaped b = shapes.get(right);
+                no("no actual trim/offset/mirror ingredient overlap: " + a.name() + " / " + b.name(),
+                        shapesOverlap(a, b, domains));
+            }
+        }
+        var aliasA = new T1Recipes.Shaped("fixture_a", List.of("X"), Map.of("X", T1Recipes.IRON), "fixture:a");
+        var aliasB = new T1Recipes.Shaped("fixture_b", List.of(" Y"), Map.of("Y", T1Recipes.IRON), "fixture:b");
+        yes("shape guard catches different symbols and leading whitespace for identical actual ingredients",
+                shapesOverlap(aliasA, aliasB, domains));
+        var mirror = new T1Recipes.Shaped("fixture_mirror", List.of("IP"),
+                Map.of("I", T1Recipes.IRON, "P", T1Recipes.PLATE), "fixture:mirror");
+        var reversed = new T1Recipes.Shaped("fixture_reversed", List.of("ZX"),
+                Map.of("X", T1Recipes.IRON, "Z", T1Recipes.PLATE), "fixture:reversed");
+        yes("shape guard catches horizontal mirrors under different labels",
+                shapesOverlap(mirror, reversed, domains));
+        String ironMember = domains.get(T1Recipes.IRON).iterator().next();
+        domains.put("item:" + ironMember, Set.of(ironMember));
+        var exact = new T1Recipes.Shaped("fixture_item", List.of("I"),
+                Map.of("I", "item:" + ironMember), "fixture:item");
+        yes("shape guard catches tag-versus-item acceptance overlap",
+                shapesOverlap(aliasA, exact, domains));
+        for (ProcessRecipe recipe : ProcessGraph.generate(List.of())) {
+            for (OutputSpec output : recipe.outputs()) {
+                if (IngredientSpec.TAG.equals(output.kind())) {
+                    var resolution = tags.resolve(new io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Resource(
+                            io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Kind.TAG, output.id()));
+                    no("tag output cannot indirectly manufacture a normal machine: " + recipe.id(),
+                            resolution.members().stream().anyMatch(resource -> ManufacturingPolicy.isManualFinalMachine(resource.id())));
+                }
+            }
+        }
+    }
+
+    private static boolean shapesOverlap(T1Recipes.Shaped a, T1Recipes.Shaped b, Map<String, Set<String>> domains) {
+        for (List<String> x : shapePlacements(a)) {
+            for (List<String> y : shapePlacements(b)) {
+                boolean matches = true;
+                for (int cell = 0; cell < 9 && matches; cell++) {
+                    if (x.get(cell).isEmpty() || y.get(cell).isEmpty()) {
+                        matches = x.get(cell).equals(y.get(cell));
+                    } else {
+                        matches = domains.get(x.get(cell)).stream().anyMatch(domains.get(y.get(cell))::contains);
+                    }
+                }
+                if (matches) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static List<List<String>> shapePlacements(T1Recipes.Shaped craft) {
+        int top = 3, bottom = -1, left = 3, right = -1;
+        for (int y = 0; y < craft.pattern().size(); y++) {
+            for (int x = 0; x < craft.pattern().get(y).length(); x++) {
+                if (craft.pattern().get(y).charAt(x) != ' ') {
+                    top = Math.min(top, y); bottom = Math.max(bottom, y);
+                    left = Math.min(left, x); right = Math.max(right, x);
+                }
+            }
+        }
+        List<List<String>> result = new ArrayList<>();
+        int width = right - left + 1, height = bottom - top + 1;
+        for (boolean mirror : List.of(false, true)) {
+            for (int oy = 0; oy <= 3 - height; oy++) {
+                for (int ox = 0; ox <= 3 - width; ox++) {
+                    List<String> cells = new ArrayList<>(java.util.Collections.nCopies(9, ""));
+                    for (int y = 0; y < height; y++) {
+                        for (int x = 0; x < width; x++) {
+                            char symbol = craft.pattern().get(top + y).charAt(left + (mirror ? width - 1 - x : x));
+                            if (symbol != ' ') {
+                                cells.set((oy + y) * 3 + ox + x, craft.key().get(String.valueOf(symbol)));
+                            }
+                        }
+                    }
+                    result.add(List.copyOf(cells));
+                }
+            }
+        }
+        return result;
+    }
+
     private static void c3Routes(List<ProcessRecipe> recipes) {
         no("the Assembly Bench never fabricates a Relay Matrix (ADR-0137)",
                 recipes.stream().filter(recipe -> recipe.family() == MachineFamily.ASSEMBLY_BENCH)
@@ -876,31 +1690,32 @@ public final class VerifyRecipes {
             yes(row.id() + " reaches the graph unchanged from RenewableProcesses", recipes.contains(row));
         }
 
-        // BootstrapAssembly projects 23 shaped crafts, the shapeless core and four vanilla basics.
+        // Only allowed components, formed controllers, infrastructure and basics project automatically.
         List<String> primitiveCrafts = List.of(
-                "multitool", "hand_crank_dynamo", "crude_extractor", "research_terminal",
-                "quern", "clay_mixer", "firing_chamber", "settling_trough", "settling_channel",
-                "settling_screen", "hand_pump", "basic_tank", "clay_conduit", "conveyor_belt",
-                "crude_manipulator", "process_atlas", "quest_book", "field_guide", "crank_handle",
-                "geological_collector", "biocultivator", "assembly_bench", "biomass_dynamo",
-                "data_core", "chest", "crafting_table", "furnace", "brick_block");
+                "multitool", "firing_chamber", "settling_trough", "settling_channel",
+                "settling_screen", "basic_tank", "clay_conduit", "conveyor_belt",
+                "crude_manipulator", "process_atlas", "quest_book", "crank_handle",
+                "workshop_item_input", "workshop_item_output", "settling_item_input", "settling_fluid_input",
+                "settling_item_output", "settling_fluid_output",
+                "data_core", "chest", "crafting_table", "brick_block");
         for (MachineFamily family : List.of(MachineFamily.ASSEMBLY_BENCH, MachineFamily.ASSEMBLER)) {
             boolean bench = family == MachineFamily.ASSEMBLY_BENCH;
             String prefix = bench ? "bench/" : "assemble/bootstrap/";
             List<String> projectedIds = recipes.stream().map(ProcessRecipe::id)
                     .filter(id -> id.startsWith(prefix)).map(id -> id.substring(prefix.length())).toList();
-            yes(family + " has exactly the twenty-eight primitive construction projections",
+            yes(family + " has exactly the twenty-two allowed primitive construction projections",
                     projectedIds.equals(primitiveCrafts));
+            no(family + " cannot manufacture a retired Guide", recipes.stream()
+                    .filter(recipe -> recipe.family() == family).flatMap(recipe -> recipe.itemOutputs().stream())
+                    .anyMatch(output -> output.id().equals("grindless:field_guide")));
             for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {
-                Map<String, Integer> inputs = new LinkedHashMap<>();
-                for (String line : craft.pattern()) {
-                    for (char symbol : line.toCharArray()) {
-                        if (symbol != ' ') {
-                            inputs.merge(craft.key().get(String.valueOf(symbol)), 1, Integer::sum);
-                        }
-                    }
+                if (ManufacturingPolicy.isManualFinalMachine(craft.result())) {
+                    no(family + " cannot indirectly reproduce normal " + craft.name(),
+                            recipes.stream().anyMatch(row -> row.id().equals(prefix + craft.name())));
+                } else {
+                    projection(recipes, family, prefix + craft.name(), shapedInputs(craft.pattern(), craft.key()),
+                            craft.result(), craft.resultCount());
                 }
-                projection(recipes, family, prefix + craft.name(), inputs, craft.result(), craft.resultCount());
             }
             for (BootstrapRecipes.Shapeless craft : BootstrapRecipes.shapeless()) {
                 Map<String, Integer> inputs = new LinkedHashMap<>();
@@ -911,8 +1726,8 @@ public final class VerifyRecipes {
                     "minecraft:chest", 1);
             projection(recipes, family, prefix + "crafting_table", Map.of(BootstrapRecipes.PLANKS, 4),
                     "minecraft:crafting_table", 1);
-            projection(recipes, family, prefix + "furnace", Map.of(BootstrapRecipes.COBBLE, 8),
-                    "minecraft:furnace", 1);
+            no(family + " cannot automatically manufacture the real vanilla Furnace",
+                    recipes.stream().anyMatch(row -> row.id().equals(prefix + "furnace")));
             projection(recipes, family, prefix + "brick_block", Map.of("item:minecraft:brick", 4),
                     "minecraft:bricks", 1);
         }
@@ -920,6 +1735,14 @@ public final class VerifyRecipes {
 
     private static void projection(List<ProcessRecipe> recipes, MachineFamily family, String id,
                                    Map<String, Integer> inputs, String output, int count) {
+        boolean bench = family == MachineFamily.ASSEMBLY_BENCH;
+        projection(recipes, family, id, inputs, output, count,
+                bench ? SourceLogic.BENCH_TICKS : SourceLogic.INDUSTRIAL_ASSEMBLY_TICKS,
+                bench ? FluxTier.F0.nominal() : FluxTier.F1.nominal());
+    }
+
+    private static void projection(List<ProcessRecipe> recipes, MachineFamily family, String id,
+                                   Map<String, Integer> inputs, String output, int count, int ticks, long power) {
         ProcessRecipe row = recipe(recipes, id);
         Map<String, Integer> actualInputs = new LinkedHashMap<>();
         row.inputs().forEach(input -> actualInputs.merge(input.qualified(), input.count(), Integer::sum));
@@ -929,11 +1752,39 @@ public final class VerifyRecipes {
         yes(id + " fits four input slots without a catalyst",
                 row.itemInputs().size() <= 4 && row.catalysts().isEmpty());
         eq(id + " runs on its declared station", family, row.family());
-        boolean bench = family == MachineFamily.ASSEMBLY_BENCH;
-        eq(id + " keeps its station's cycle", bench ? SourceLogic.BENCH_TICKS : SourceLogic.INDUSTRIAL_ASSEMBLY_TICKS,
-                row.durationTicks());
-        eq(id + " keeps its station's power", bench ? FluxTier.F0.nominal() : FluxTier.F1.nominal(),
-                row.fuPerTick());
+        eq(id + " keeps its station's cycle", ticks, row.durationTicks());
+        eq(id + " keeps its station's power", power, row.fuPerTick());
+    }
+
+    private static void legacyGuideWork(List<ProcessRecipe> recipes) {
+        for (MachineFamily family : List.of(MachineFamily.ASSEMBLY_BENCH, MachineFamily.ASSEMBLER)) {
+            String id = family == MachineFamily.ASSEMBLY_BENCH ? "bench/field_guide" : "assemble/bootstrap/field_guide";
+            no("the retired recipe is not a fresh selectable graph row " + id,
+                    recipes.stream().anyMatch(recipe -> recipe.id().equals(id)));
+            for (double unpaid : List.of(0.0, -1.0, Double.NaN, Double.POSITIVE_INFINITY)) {
+                yes("unpaid or invalid old work cannot start a Guide " + id + "/" + unpaid,
+                        LegacyGuideAssembly.resume(family, id, unpaid).isEmpty());
+            }
+            ProcessRecipe legacy = LegacyGuideAssembly.resume(family, id, 0.5).orElseThrow();
+            eq("pending old work keeps its exact recipe identity", id, legacy.id());
+            eq("pending old work keeps its exact station", family, legacy.family());
+            yes("legacy paper/stick inputs are preserved exactly", legacy.itemInputs().equals(List.of(
+                    IngredientSpec.item("minecraft:paper", 2), IngredientSpec.item("minecraft:stick", 1))));
+            yes("legacy work can produce only one harmless registered Guide", legacy.itemOutputs()
+                    .equals(List.of(OutputSpec.item("grindless:field_guide", 1))));
+            eq("legacy work keeps the station's original cycle",
+                    family == MachineFamily.ASSEMBLY_BENCH ? SourceLogic.BENCH_TICKS : SourceLogic.INDUSTRIAL_ASSEMBLY_TICKS,
+                    legacy.durationTicks());
+            eq("legacy work keeps the station's original FU draw",
+                    family == MachineFamily.ASSEMBLY_BENCH ? FluxTier.F0.nominal() : FluxTier.F1.nominal(),
+                    legacy.fuPerTick());
+            yes("a cleared owner cannot restart the legacy recipe", LegacyGuideAssembly.resume(family, "", 0.5).isEmpty());
+            yes("a settled legacy job cannot restart itself", LegacyGuideAssembly.resume(family, id, 0.0).isEmpty());
+            yes("a similarly named new recipe is not legacy work",
+                    LegacyGuideAssembly.resume(family, id + "_copy", 1.0).isEmpty());
+        }
+        yes("an unrelated family cannot resume legacy Guide work",
+                LegacyGuideAssembly.resume(MachineFamily.QUERN, "bench/field_guide", 1.0).isEmpty());
     }
 
     private static void logic() {
@@ -978,31 +1829,37 @@ public final class VerifyRecipes {
                     ? json.getAsJsonObject("result").get("count").getAsInt() : 1;
             eq(recipe.name() + " result count", recipe.resultCount(), count);
             yes(recipe.name() + " pattern matches the catalogue",
-                    json.getAsJsonArray("pattern").toString().contains(recipe.pattern().get(0)));
+                    jsonPattern(json).equals(recipe.pattern()));
             JsonObject key = json.getAsJsonObject("key");
+            yes(recipe.name() + " has exactly the catalogue's ingredient keys", key.keySet().equals(recipe.key().keySet()));
             for (Map.Entry<String, String> entry : recipe.key().entrySet()) {
                 yes(recipe.name() + " key " + entry.getKey(),
                         ingredientEquals(key.getAsJsonObject(entry.getKey()), entry.getValue()));
             }
             no(recipe.name() + " names no iron item id", namesMaterialItem(json));
         }
-        eq("T1 retains twenty-six physical crafts after primitive transport moves to T0", 26,
+        eq("T1 exposes forty-four real shaped crafts, not a duplicate of every automatic product", 44,
                 T1Recipes.shaped().size());
-        yes("the first Relay Matrix is a five-unit hand batch",
-                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("relay_matrix")
-                        && recipe.resultCount() == 5));
+        T1Recipes.Shaped firstRelay = T1Recipes.shaped().stream()
+                .filter(recipe -> recipe.name().equals("relay_matrix")).findFirst().orElseThrow();
+        eq("the first Relay Matrix is still hand-crafted", FabricationLogic.RELAY_MATRIX, firstRelay.result());
+        eq("the first Relay Matrix is a five-unit hand batch", 5, firstRelay.resultCount());
+        yes("the first Relay Matrix keeps its complete manual bill",
+                shapedInputs(firstRelay.pattern(), firstRelay.key()).equals(Map.of(
+                        T1Recipes.GLASS, 2, T1Recipes.COPPER, 2, T1Recipes.REDSTONE, 2,
+                        T1Recipes.CALIBRATED_DATA_CORE, 1)));
         for (String machine : List.of("thermal_generator", "pulverizer", "arc_furnace", "assembler",
                 "press", "kiln", "terrestrial_extractor")) {
             yes(machine + " consumes one physical Relay Matrix",
                     T1Recipes.shaped().stream()
                             .filter(recipe -> recipe.name().equals(machine))
-                            .anyMatch(recipe -> recipe.key().containsValue(T1Recipes.RELAY_MATRIX)
+                            .anyMatch(recipe -> recipe.key().containsValue(T1Recipes.MINIMUM_F1)
                                     && recipe.pattern().stream().flatMapToInt(String::chars)
                                     .filter(symbol -> symbol == 'M').count() == 1));
         }
         yes("the pylon is among them",
                 T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("flux_pylon_mk1")));
-        yes("the assembler is the last crafting-table machine",
+        yes("the assembler remains a manual final machine",
                 T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("assembler")));
         yes("the press is hand-crafted",
                 T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("press")));
@@ -1014,7 +1871,7 @@ public final class VerifyRecipes {
                 T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("flux_transformer")));
         yes("the Factory Portal is hand-crafted after the first Matrix",
                 T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("factory_portal")
-                        && recipe.key().containsValue(T1Recipes.RELAY_MATRIX)));
+                        && recipe.key().containsValue(T1Recipes.MINIMUM_F1)));
         yes("the kiln is hand-crafted",
                 T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("kiln")));
         yes("the merger is hand-crafted",
@@ -1031,7 +1888,7 @@ public final class VerifyRecipes {
                 BootstrapRecipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("process_atlas")));
         no("MK2 has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("flux_pylon_mk2.json")));
-        no("the mill has no crafting-table recipe",
+        yes("the mill has its actual manual final recipe",
                 Files.isRegularFile(RECIPES.resolve("wire_mill.json")));
         no("the motor has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("motor.json")));
@@ -1052,37 +1909,37 @@ public final class VerifyRecipes {
         no("silica tag does not name red sand", silica.contains("red_sand"));
         no("silica tag does not name a grindless item", silica.contains("grindless:"));
         no("silica tag does not name glass", silica.contains("glass"));
-        no("the reactor has no crafting-table recipe",
+        yes("the reactor has its actual manual final recipe",
                 Files.isRegularFile(RECIPES.resolve("chemical_reactor.json")));
-        no("the washer has no crafting-table recipe",
+        yes("the washer has its actual manual final recipe",
                 Files.isRegularFile(RECIPES.resolve("chemical_washer.json")));
-        no("the cell has no crafting-table recipe",
+        yes("the cell has its actual manual final recipe",
                 Files.isRegularFile(RECIPES.resolve("electrolysis_cell.json")));
-        no("the intake has no crafting-table recipe",
+        yes("the intake has its actual manual final recipe",
                 Files.isRegularFile(RECIPES.resolve("atmospheric_intake.json")));
-        no("the well has no crafting-table recipe",
+        yes("the well has its actual manual final recipe",
                 Files.isRegularFile(RECIPES.resolve("fluid_well.json")));
-        no("the induction furnace has no crafting-table recipe",
+        yes("the induction furnace has its actual manual final recipe",
                 Files.isRegularFile(RECIPES.resolve("induction_furnace.json")));
-        no("the caster has no crafting-table recipe",
+        yes("the caster has its actual manual final recipe",
                 Files.isRegularFile(RECIPES.resolve("caster.json")));
         no("the ingot mould has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("ingot_mould.json")));
         no("the plate mould has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("plate_mould.json")));
-        no("the flotation cell has no crafting-table recipe",
+        yes("the flotation cell has its actual manual final recipe",
                 Files.isRegularFile(RECIPES.resolve("flotation_cell.json")));
         no("the magnet has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("magnetic_separator.json")));
-        no("the solar array has no crafting-table recipe",
+        yes("the solar array has its actual manual final recipe",
                 Files.isRegularFile(RECIPES.resolve("solar_array.json")));
-        no("the boiler has no crafting-table recipe",
+        yes("the boiler has its actual manual final recipe",
                 Files.isRegularFile(RECIPES.resolve("boiler.json")));
-        no("the condenser has no crafting-table recipe",
+        yes("the condenser has its actual manual final recipe",
                 Files.isRegularFile(RECIPES.resolve("condenser.json")));
         no("the pressure pipe has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("pressure_pipe.json")));
-        no("the electric pump has no crafting-table recipe",
+        yes("the electric pump has its actual manual final recipe",
                 Files.isRegularFile(RECIPES.resolve("electric_pump.json")));
         no("the industrial tank has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("industrial_tank.json")));
@@ -1096,7 +1953,7 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("filter_manipulator.json")));
         no("the signal cable has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("signal_cable.json")));
-        no("the logic controller has no crafting-table recipe",
+        yes("the logic controller has its actual manual final recipe",
                 Files.isRegularFile(RECIPES.resolve("logic_controller.json")));
         no("the redstone interface has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("redstone_interface.json")));
@@ -1108,9 +1965,9 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("blueprint_tool.json")));
         no("the planner has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("deconstruction_planner.json")));
-        no("the scanner has no crafting-table recipe",
+        yes("the scanner has its actual manual final recipe",
                 Files.isRegularFile(RECIPES.resolve("pattern_scanner.json")));
-        no("the deconstructor has no crafting-table recipe",
+        yes("the deconstructor has its actual manual final recipe",
                 Files.isRegularFile(RECIPES.resolve("deconstructor.json")));
         no("matter has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("matter.json")));
@@ -1124,6 +1981,57 @@ public final class VerifyRecipes {
 
     private static ProcessRecipe recipe(List<ProcessRecipe> recipes, String id) {
         return recipes.stream().filter(recipe -> recipe.id().equals(id)).findFirst().orElseThrow();
+    }
+
+    private static void pressure() {
+        List<IngredientSpec> inputs = List.of(IngredientSpec.item("fixture:feed", 2));
+        List<OutputSpec> outputs = List.of(OutputSpec.item("fixture:product", 3));
+        List<IngredientSpec> catalysts = List.of(IngredientSpec.item("fixture:die", 1));
+        for (ProcessRecipe legacy : List.of(
+                new ProcessRecipe("fixture/legacy", MachineFamily.PRESS, inputs, outputs, 20, "AIR", 80, 4),
+                new ProcessRecipe("fixture/legacy", MachineFamily.PRESS, inputs, outputs, 20, "AIR", 80, 4, catalysts),
+                new ProcessRecipe("fixture/legacy", MachineFamily.PRESS, inputs, outputs, 20, "AIR", 80, 4,
+                        catalysts, "fixture_only"),
+                new ProcessRecipe("fixture/legacy", MachineFamily.PRESS, inputs, outputs, 20, "AIR", "STATIC",
+                        80, 4, catalysts, "fixture_only"))) {
+            no("every old constructor leaves pressure unnamed", legacy.namesPressure());
+            yes("unnamed pressure has no implicit ambient optimum or band",
+                    Double.isNaN(legacy.pressureMPa()) && Double.isNaN(legacy.pressureHalfWidthMPa()));
+        }
+        ProcessRecipe explicit = new ProcessRecipe("fixture/pressure", MachineFamily.PRESS, inputs, outputs,
+                20, 1.0, 0.125, "AIR", "STATIC", 80, 4, catalysts, "fixture_only");
+        yes("a physical pressure is named", explicit.namesPressure());
+        eq("the optimum uses absolute MPa", 1.0, explicit.pressureMPa());
+        eq("the explicit optimal half-width also uses MPa", 0.125, explicit.pressureHalfWidthMPa());
+        yes("adding pressure changes no material quantity", explicit.inputs().equals(inputs)
+                && explicit.outputs().equals(outputs) && explicit.catalysts().equals(catalysts));
+        ProcessRecipe vacuum = pressure(0.0, 0.001);
+        yes("zero absolute pressure is a requirement, never absence", vacuum.namesPressure());
+        eq("zero has a real explicit band", 0.001, vacuum.pressureHalfWidthMPa());
+        for (double optimum : new double[] {-0.001, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY}) {
+            rejects("invalid absolute pressure " + optimum, () -> pressure(optimum, 0.001));
+        }
+        for (double width : new double[] {0, -0.001, Double.NaN, Double.POSITIVE_INFINITY,
+                Double.NEGATIVE_INFINITY}) {
+            rejects("invalid pressure half-width " + width, () -> pressure(1, width));
+        }
+        rejects("a pressure band cannot be orphaned", () -> pressure(Double.NaN, 0.001));
+        rejects("overflowed pressure bounds are rejected", () -> pressure(Double.MAX_VALUE, Double.MAX_VALUE));
+        no("an explicitly absent pressure pair is still unnamed", pressure(Double.NaN, Double.NaN).namesPressure());
+    }
+
+    private static ProcessRecipe pressure(double optimum, double halfWidth) {
+        return new ProcessRecipe("fixture/pressure", MachineFamily.PULVERIZER, List.of(), List.of(),
+                Double.NaN, optimum, halfWidth, null, null, 80, 4, List.of(), null);
+    }
+
+    private static void rejects(String what, Runnable operation) {
+        try {
+            operation.run();
+            fail(what + ": expected IllegalArgumentException");
+        } catch (IllegalArgumentException expected) {
+            yes(what, true);
+        }
     }
 
     private static boolean namesMaterialItem(ProcessRecipe recipe) {
@@ -1146,10 +2054,27 @@ public final class VerifyRecipes {
     }
 
     private static boolean ingredientEquals(JsonObject json, String spec) {
-        int split = spec.indexOf(':');
-        String kind = spec.substring(0, split);
-        String id = spec.substring(split + 1);
-        return json.has(kind) && id.equals(json.get(kind).getAsString());
+        return manualDeclaration(json).equals(spec);
+    }
+
+    private static String manualDeclaration(JsonObject json) {
+        if (json.has("type")) {
+            IngredientSpec spec = IngredientSpec.manualControl(json);
+            return IngredientSpec.MINIMUM_CONTROL_PREFIX + FluxTier.values()[spec.matrixRating()].name();
+        }
+        if (json.keySet().equals(Set.of("item"))) {
+            return "item:" + json.get("item").getAsString();
+        }
+        if (json.keySet().equals(Set.of("tag"))) {
+            return "tag:" + json.get("tag").getAsString();
+        }
+        throw new IllegalArgumentException("Unsupported manual ingredient " + json);
+    }
+
+    private static List<String> jsonPattern(JsonObject json) {
+        List<String> rows = new ArrayList<>();
+        json.getAsJsonArray("pattern").forEach(row -> rows.add(row.getAsString()));
+        return List.copyOf(rows);
     }
 
     private static void eq(String what, String expected, String actual) {

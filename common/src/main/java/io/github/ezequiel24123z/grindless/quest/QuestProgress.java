@@ -6,7 +6,14 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.LevelResource;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -27,17 +34,63 @@ public final class QuestProgress extends SavedData {
     private static final String TAG_PLAYERS = "Players";
     private static final String TAG_PLAYER = "Player";
     private static final String TAG_TASKS = "Tasks";
+    private static final String TAG_NATIVE_CLAIMS = "NativeClaims";
 
     private final Map<UUID, Set<String>> claimed = new HashMap<>();
+    private final Set<UUID> nativeClaims = new HashSet<>();
+    private final Map<UUID, Set<String>> nativeCompleted = new HashMap<>();
 
     public static QuestProgress get(ServerPlayer player) {
+        Path file = player.server.getWorldPath(LevelResource.ROOT).resolve("data").resolve(KEY + ".dat");
         return player.server.overworld().getDataStorage()
-                .computeIfAbsent(QuestProgress::load, QuestProgress::new, KEY);
+                .computeIfAbsent(QuestProgress::load, () -> createIfMissing(file), KEY);
+    }
+
+    /** SavedData can swallow load failures; only a genuinely absent file permits a fresh reward ledger. */
+    static QuestProgress createIfMissing(Path file) {
+        try {
+            Files.readAttributes(file, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
+        } catch (NoSuchFileException missing) {
+            return new QuestProgress();
+        } catch (IOException | SecurityException exception) {
+            throw new IllegalStateException("Cannot inspect quest progress; refusing to recreate its reward ledger",
+                    exception);
+        }
+        throw new IllegalStateException("Existing quest progress could not be loaded; refusing to recreate its reward ledger");
     }
 
     /** A copy. Callers cannot mark a task claimed by editing the returned set. */
     public Set<String> claimed(UUID player) {
+        Set<String> result = new HashSet<>(legacyClaims(player));
+        result.addAll(nativeCompleted.getOrDefault(player, Set.of()));
+        return Set.copyOf(result);
+    }
+
+    /** Historical paid receipts only; native completion must never become an import receipt. */
+    public Set<String> legacyClaims(UUID player) {
         return Set.copyOf(claimed.getOrDefault(player, Set.of()));
+    }
+
+    /** A replaceable observation for compatibility gates, never a persisted reward receipt. */
+    public void updateNativeCompleted(UUID player, Set<String> completed) {
+        if (!usesNativeClaims(player) || completed.stream().anyMatch(id -> QuestCatalogue.byId(id) == null)) {
+            throw new IllegalArgumentException("Native completion requires migrated authority and known quest ids");
+        }
+        nativeCompleted.put(player, Set.copyOf(completed));
+    }
+
+    public boolean usesNativeClaims(UUID player) {
+        return nativeClaims.contains(player);
+    }
+
+    /** Retains legacy receipts for retryable import, but permanently retires their reward mint. */
+    public void useNativeClaims(UUID player) {
+        if (player == null) {
+            throw new IllegalArgumentException("Native claim authority requires a player");
+        }
+        if (nativeClaims.add(player)) {
+            setDirty();
+        }
     }
 
     /**
@@ -45,7 +98,7 @@ public final class QuestProgress extends SavedData {
      * Unknown ids are refused so a stale button cannot invent a task.
      */
     public boolean claim(UUID player, String task) {
-        if (player == null || QuestCatalogue.byId(task) == null) {
+        if (player == null || usesNativeClaims(player) || QuestCatalogue.byId(task) == null) {
             return false;
         }
         Set<String> tasks = claimed.computeIfAbsent(player, id -> new HashSet<>());
@@ -70,6 +123,11 @@ public final class QuestProgress extends SavedData {
             players.add(one);
         }
         tag.put(TAG_PLAYERS, players);
+        ListTag nativePlayers = new ListTag();
+        for (UUID player : nativeClaims) {
+            nativePlayers.add(StringTag.valueOf(player.toString()));
+        }
+        tag.put(TAG_NATIVE_CLAIMS, nativePlayers);
         return tag;
     }
 
@@ -94,6 +152,19 @@ public final class QuestProgress extends SavedData {
             }
             if (!tasks.isEmpty()) {
                 progress.claimed.put(player, tasks);
+            }
+        }
+        if (tag.contains(TAG_NATIVE_CLAIMS)) {
+            if (!(tag.get(TAG_NATIVE_CLAIMS) instanceof ListTag nativePlayers)
+                    || !nativePlayers.isEmpty() && nativePlayers.getElementType() != Tag.TAG_STRING) {
+                throw new IllegalArgumentException("Invalid native quest claim authority list in saved progress");
+            }
+            for (int i = 0; i < nativePlayers.size(); i++) {
+                try {
+                    progress.nativeClaims.add(UUID.fromString(nativePlayers.getString(i)));
+                } catch (IllegalArgumentException exception) {
+                    throw new IllegalArgumentException("Invalid native quest claim authority in saved progress", exception);
+                }
             }
         }
         return progress;

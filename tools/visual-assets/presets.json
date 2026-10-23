@@ -1,0 +1,54 @@
+{
+  "schema": "grindless.visual-presets.v1",
+  "revision": 1,
+  "workflow": "item-conditioned-workflow.json",
+  "generation": {
+    "model_lock": "sd15-model.json",
+    "size": 512,
+    "steps": 20,
+    "cfg": 7,
+    "sampler": "euler",
+    "scheduler": "normal",
+    "batch_size": 1,
+    "candidates_per_target": 2,
+    "seeds": [2026102001, 2026102002],
+    "note": "Settings are reproducible; GPU/runtime changes do not promise bitwise inference."
+  },
+  "palettes": {
+    "brass": ["#322A24", "#59432A", "#82691A", "#96724C", "#C9A227", "#DBC278", "#E7D9B2"],
+    "workshop": ["#171B1F", "#29251F", "#3A3F44", "#52604D", "#365564", "#486878", "#7297A1", "#594A40", "#795C48", "#985F48", "#B87A58", "#96724C", "#B5AD96", "#C7B79A", "#D3B98E", "#F1DEB8"],
+    "marking": ["#171B1F", "#29251F", "#96724C", "#C7B79A", "#F1DEB8"]
+  },
+  "presets": {
+    "item-concept": {
+      "kind": "item",
+      "palette": "brass",
+      "denoise": 0.35,
+      "prompt": "single original primitive workshop inventory object, preserve the supplied silhouette and orientation, substantial material volume, restrained upper-left lighting, clean pixel-art concept, isolated on white, no scene, no ground, no lettering",
+      "processing": "edge-connected white key, bounded largest component, centered 14px fit, hard alpha, nearest sampling, locked palette"
+    },
+    "block-face": {
+      "kind": "block_face",
+      "palette": "workshop",
+      "denoise": 0.25,
+      "prompt": "original primitive workshop block face, orthographic flat texture, preserve every supplied seam, border and mechanism position, stone timber clay ceramic, restrained upper-left material lighting, no perspective, no lettering, no extra mechanisms",
+      "processing": "full-frame 512-to-16 nearest, no crop/rotation/mirror/background key, opaque, locked palette"
+    },
+    "machine-family": {
+      "kind": "machine_family",
+      "palette": "workshop",
+      "denoise": 0.25,
+      "prompt": "controlled original workshop-family surface variation, preserve guide geometry silhouette UV seams and role marks, consistent stone timber clay and ceramic material palette, subtle wear only, orthographic flat block face, no perspective, no new machine parts, no lettering",
+      "processing": "same palette and processing as block-face; share one body, do not generate state/casing permutations"
+    },
+    "masked-overlay": {
+      "kind": "overlay",
+      "palette": "marking",
+      "denoise": 0.2,
+      "prompt": "original high-contrast primitive workshop marking, preserve the exact supplied role and direction silhouette, cream material ink and dark outline, no glow, no letters, no decoration, no background",
+      "processing": "full-frame nearest and locked palette; exact native binary mask; preserve all pixels outside mask and the original alpha footprint; NOT diffusion inpainting"
+    }
+  },
+  "negative_prompt": "photograph, realistic photo, scene, scenery, cast shadow, perspective, soft blurry edges, gradients, tiny details, text, numbers, watermark, logo, copied artwork, recognizable character, powered glow, neon, electronics, cropped object",
+  "human_visual_approval": false
+}

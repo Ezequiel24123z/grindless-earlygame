@@ -130,6 +130,134 @@ do not rewrite old evidence or spent sound grants to rename their author.
 
 ## Session checklist
 
+**Current owner manufacturing correction (2026-10-22, ADR-0188):** normal
+machines have manual final assembly. Do not manufacture complete normal
+machines automatically in an Assembler, another processor or a replication
+shortcut. Their operating processes remain automatable. Materials, components,
+passive infrastructure and real multiblock controllers use authored per-product
+routes: manual-only, machine-only or both. Automation capability is not a player
+obligation, and not every product needs both methods.
+Complexity belongs in interdependent materials, components, conditions and
+advanced multiblocks, not mass-producing ordinary Assembler blocks.
+
+This supersedes the old factory-builds-everything rule and automatic ordinary-
+machine reproduction, not the reusable executor, physical-control semantics,
+component automation or save protection. Renewable mandatory materials and
+consumables still need mod-owned automatic supply; that does not require
+automatic final manufacture of capital machines. Distinguish actual formed
+multiblock controllers from ordinary machines merely called controllers.
+Belts, pipes, tanks and storage may have manual and/or machine routes; do not
+impose universal Assembler-only manufacture or mass-add duplicate manual recipes.
+Withdraw the obsolete qualification scope before another exact-source GO;
+placed machines, inventories, paid work and the longitudinal save stay intact.
+
+**Owner-unavailable decision rule (2026-10-22):** when a question arises and
+the owner is unavailable, use how GregTech or comparable mature technical
+modpacks solve that concrete problem as the default design precedent, then
+make and record the bounded project decision rather than waiting on routine
+approval. Inspect actual source/recipes where the answer matters; do not
+invent a precedent or copy a system merely because it is familiar. Existing
+Grindless authorities and explicit owner choices, including manual normal
+final machines and per-product methods, take precedence over an external
+example. This rule does not grant new spending, credentials, unsafe save
+changes, gameplay interruption, unqualified deployment or human acceptance.
+
+**Current owner operating mandate (2026-10-22, ADR-0178):** work independently
+and keep the development/integration/qualification loop moving. Do not stop at
+a routine checkpoint or turn ordinary technical choices into owner approvals.
+Escalate only a serious blocker or an urgently required owner decision.
+Whenever a whole next tier is genuinely ready as a playable, qualified,
+save-compatible candidate, incorporate it into the existing longitudinal game
+so the owner can continue. This supersedes blanket development-only/no-later-tier-
+deployment holds, not readiness, save preservation or human acceptance rules.
+
+Partial factory increments, prototypes and a green source build are not a ready
+tier. Preserve the actual world's identity, paid progress and contents. Deliver
+through the owned stopped-instance path with fresh guards, verified backup,
+applicable copy-based compatibility proof and recoverable managed-file update.
+Never stop/restart the player's game to make an update convenient; a running
+game defers deployment, not unrelated development. No new public release/main
+merge, paid-generation allowance, credential change, automatic human acceptance
+or unsupported risky migration follows from this mandate.
+
+**Current owner design clarification (2026-10-21, ADR-0174):** tiers must grow
+exponentially in meaningful complexity, processing lines and content, not merely
+stack sizes or timers. T1 introduces the basic machine families, in the spirit
+of GregTech; later tiers upgrade their actual capabilities/recipes and add
+specialized multiblocks and increasingly interdependent production networks.
+The first five-machine factory is a T1 increment, not the whole T1 contract.
+Older later-tier labels must not withhold every basic variant until T2+.
+
+Reuse the established chassis/MK, modules and condition-envelope design before
+inventing another machine engine or one block per tier. Preserve world position,
+inventories, fluids, configuration, connections and save identity through real
+upgrades. A higher-rating ingredient that produces the same unmodified baseline
+machine is not an implemented tier upgrade. Preserve earlier source checkpoints,
+but qualify them against this latest direction before integration/deployment.
+
+Research and actually reuse/adapt external implementations when they fit and
+their licences permit it; source/version/licence/scope/notices precede copying.
+Public APIs and official dependencies are valid reuse; visible source alone is
+not permission to copy. Do not force an import when the existing project
+mechanism already solves the problem. No paid/generation budget is implied.
+
+**Current owner direction — parallel development across the remaining tiers
+(2026-10-21, ADR-0173):** while the native questbook is finished and prepared in
+Prism, continue the agreed T1 work and start the other tiers. This explicitly
+opens isolated development/research beyond T1; older one-tier-at-a-time or
+T1-only development holds do not veto it. Acceptance, release and deployments
+remain separately gated. The actual T0 play blocker and protected save delivery
+retain priority; do not put new-tier code into the player's instance.
+
+Keep T1 on the native FTB baseline, start bounded source-backed T2 manufacturing,
+and use actual T3-T15 dependencies to select further implementation, not an
+agent's invented recipe calendar. Existing accepted design/catalogues remain
+authorities; registered prototypes and proposed documents are not accepted
+survival routes. The coordinator retains architecture/product/integration and
+assigns noncompeting workers. Heavy PC/cache work remains single-owner with a
+new explicit lease; parallel source work is not permission to run concurrent
+builds or touch the game. No new generation/provider spending is authorized.
+
+**Current player blocker — native FTB Quests and concise content (ADR-0171):**
+the owner cannot continue with the custom/native-Heracles questbook experience
+and explicitly requests the established BetterQuesting/FTB framework. Replace the
+player-facing book with supported Forge1.20.1 FTB Quests native graph, screens,
+tasks and reward interaction, not the old guide/widget inside another window.
+Use short, human quest goals and JEI for ordinary recipes; retain extra detail
+only for genuinely unusual mechanics. Preserve logical IDs, already-paid rewards,
+the finite starter and the actual longitudinal world through explicit migration.
+Old native-book/Heracles-only choices do not veto this direct request.
+Work backend, copy and verification in parallel; serialize shared PC/cache and
+deployment. No unqualified update or raw save overwrite is authorized.
+
+**Current operating loop — longitudinal T0 play and active T1 development
+(2026-10-21, ADR-0170):** the owner explicitly chooses to start the installed T0
+game as the intended longitudinal run. Develop/research/brainstorm T1 routes,
+machines, components and processing lines in parallel on isolated source/build
+surfaces. This supersedes the investigation pause and the old disposable-only
+start restriction for the owner's play; it does not invent a client/save pass,
+completed playthrough, T0 acceptance/freeze or a release.
+
+Reported bugs that interrupt play take priority: reproduce, implement the bounded
+fix, validate affected behavior and preserve the actual world. Deploy only into
+the owned instance after the owner has stopped it and applicable backup/update
+guards pass; never stop/restart the player's game to make an agent task convenient.
+After the owner reaches the T0 end and reports conclusions, integrate that
+feedback and finish T0 polish without discarding the reference save.
+Keep research/proposals distinct from accepted gameplay and preserve forward-save
+compatibility before updates. No new generation/provider budget is implied.
+
+**Current owner direction — parallel T1 development (2026-10-21, ADR-0168):**
+the owner explicitly opens T1 development and reusable-system/production-line
+documentation while personally testing the installed T0 candidate. This overrides
+older "T1 held" development instructions only. It does not accept/freeze T0,
+certify the graphical/longitudinal gate or authorize a release. Read
+[`plan/feature-t1-first-factory-1.md`](plan/feature-t1-first-factory-1.md).
+Keep the T0 experience branch, PR56, deployed F artifact and owner worlds intact.
+Develop on isolated dependent T1 branches; do not deploy, restart Prism or stop
+the player's game. Heavy build-only execution must yield to gameplay and satisfy
+fresh resource/ownership guards; reuse unchanged mechanism proofs.
+
 **Preferred local visual backend (ADR-0157):** the owner identifies an existing
 ComfyUI installation on the personal PC and authorizes necessary reversible
 configuration/extensions/licensed models for a supervised Grindless pipeline.
@@ -185,9 +313,11 @@ bounded QoL and explicit forward-save compatibility.
 `1389ebb` is engineering evidence, not the first longitudinal-play release. Keep
 implementation, technical verification, integration, packaging, visual review,
 human acceptance and release readiness distinct. Human acceptance starts with the
-playable release. T1 may start only after the T0 RC is ready and published and the
-owner has begun its longitudinal save; finishing the player's entire T0 route is
-not an additional universal prerequisite. T1 and functional ports are not open now.
+playable release. ADR-0144's normal T1 start rule is qualified by the owner's later explicit
+ADR-0168 authorization for parallel T1 development. Release/publication and
+longitudinal acceptance remain separate; no completed T0 route or client pass is
+inferred from that development instruction. The older functional-port hold was
+superseded for the bounded T0 structures by ADR-0164.
 Preserve all previous source-bound evidence and never invent a manual pass.
 
 Follow [the playable-release plan](plan/process-t0-playable-release-1.md) and the
@@ -288,6 +418,11 @@ forge/               Forge entrypoint and bridges only (this jar also loads on N
 
 **Resource sustainability.** Every basic material or consumable required by mandatory
 progression must ultimately have an unlimited, automatable, mod-owned renewable route.
+ADR-0188 deliberately excludes final normal-machine assembly from that automation
+obligation: capital machinery is constructed manually from those industrial inputs.
+Do not turn ordinary machines into recurrent feed merely to bypass this distinction.
+Do not confuse an available automatic route with mandatory player automation, or
+override deliberately authored manual-only/machine-only/dual manufacturing methods.
 Trace every consumable dependency to its terminal source. Vanilla inputs are allowed as
 optional compatibility routes, finite bootstrap supplies or emergency alternatives, never as
 the permanent canonical farm, exploit, loot or manual-mining solution.
