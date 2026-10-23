@@ -1,5 +1,5 @@
 {
-  "authority_snapshot_sha256": "4c7c34a23fdc8c3405c3c21ea7aced7ce2df4a7cad0509f6422fb7130823bc14",
+  "authority_snapshot_sha256": "723d21905f86d900eed76bb38d45496035f3e1bc00e9a806846635e3573c715a",
   "entry_route": "craft/relay_matrix",
   "exit_route": "assemble/relay_matrix_f2",
   "external_furnace_automatic_routes": [],
@@ -8318,6 +8318,218 @@
             "tag:forge:ingots/copper": 1
           },
           "source": "ProcessGraph.generate"
+        }
+      ]
+    },
+    {
+      "id": "gas_utilities",
+      "requirement": "OPTIONAL",
+      "requires_lines": [
+        "assembly"
+      ],
+      "route_selection_scope": "Authored methods/options, not an obligation to execute every alternative",
+      "routes": [
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "informational_milestone": "industrial"
+          },
+          "discharged": [],
+          "duration_ticks": 200,
+          "fu_per_tick": 32,
+          "id": "assemble/motor",
+          "inputs": {
+            "energy:FU": 6400,
+            "item:grindless:copper_coil": 2,
+            "item:grindless:machine_casing": 1,
+            "tag:forge:rods/iron": 1
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 6400,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:motor": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "control_supply_projection": "canonical_option_not_exhaustive_alternatives",
+            "crafting_type": "minecraft:crafting_shaped",
+            "minimum_control_key_M": "item:grindless:relay_matrix [F1]"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/electrolysis_cell",
+          "inputs": {
+            "item:grindless:machine_casing": 1,
+            "item:grindless:motor": 2,
+            "item:grindless:relay_matrix [F1]": 1,
+            "tag:forge:plates/iron": 4
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:electrolysis_cell": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/electrolysis_cell.json"
+        },
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "control_supply_projection": "canonical_option_not_exhaustive_alternatives",
+            "crafting_type": "minecraft:crafting_shaped",
+            "minimum_control_key_M": "item:grindless:relay_matrix [F1]"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/atmospheric_intake",
+          "inputs": {
+            "item:grindless:machine_casing": 1,
+            "item:grindless:motor": 2,
+            "item:grindless:relay_matrix [F1]": 1,
+            "tag:forge:plates/iron": 4
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:atmospheric_intake": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/atmospheric_intake.json"
+        },
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "control_supply_projection": "canonical_option_not_exhaustive_alternatives",
+            "crafting_type": "minecraft:crafting_shaped",
+            "minimum_control_key_M": "item:grindless:relay_matrix [F1]"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/chemical_reactor",
+          "inputs": {
+            "item:grindless:machine_casing": 1,
+            "item:grindless:motor": 2,
+            "item:grindless:relay_matrix [F1]": 1,
+            "tag:forge:plates/iron": 4
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:chemical_reactor": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/chemical_reactor.json"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [
+            "fluid:grindless:oxygen"
+          ],
+          "duration_ticks": 200,
+          "fu_per_tick": 32,
+          "id": "electrolysis/water",
+          "inputs": {
+            "energy:FU": 6400,
+            "fluid:minecraft:water": 2000
+          },
+          "machine_family": "ELECTROLYSIS_CELL",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 6400,
+          "one_shot": false,
+          "outputs": {
+            "fluid:grindless:hydrogen": 2000,
+            "fluid:grindless:oxygen": 1000
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 200,
+          "fu_per_tick": 32,
+          "id": "air/oxygen",
+          "inputs": {
+            "energy:FU": 6400
+          },
+          "machine_family": "ATMOSPHERIC_INTAKE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 6400,
+          "one_shot": false,
+          "outputs": {
+            "fluid:grindless:oxygen": 2000
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 160,
+          "fu_per_tick": 32,
+          "id": "recombine/water",
+          "inputs": {
+            "energy:FU": 5120,
+            "fluid:grindless:hydrogen": 2000,
+            "fluid:grindless:oxygen": 1000
+          },
+          "machine_family": "CHEMICAL_REACTOR",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 5120,
+          "one_shot": false,
+          "outputs": {
+            "fluid:minecraft:water": 2000
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "GENERATOR_FUEL",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "generation_fu_per_tick": "32"
+          },
+          "discharged": [],
+          "duration_ticks": 50,
+          "fu_per_tick": 0,
+          "id": "fuel/thermal_generator/grindless:hydrogen",
+          "inputs": {
+            "fluid:grindless:hydrogen": 1000
+          },
+          "machine_family": "THERMAL_GENERATOR",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "energy:FU": 1600
+          },
+          "source": "FluidLogic.burnTicks + ThermalLogic.FU_PER_TICK"
         }
       ]
     },
