@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Carry the installed-source FTB startup hotfix into development.**
+  Preserve the HIGH-to-LOWEST event boundary and verified singleton/server
+  admission while retaining development's current catalogue count/publisher.
+  Resolve only the dynamic log/ready assignment and its matching strict AST
+  expectation; the deployment candidate remains separate exact e50/dd0.
+  Neither branch has an executed hotfix pass or player update yet.
 - **Prioritize the installed T0 world-entry crash over further tier work.**
   Preserve two real native FTB chapter-verification failures and confirm
   the installed dd0 jar rather than blame undeployed T1. Chapter files
@@ -1279,6 +1285,18 @@ entries below reference those records by id.
   verifies the stopped original world's36-file backup plus options. Keep the
   original intact; separate diagnostic clone load and final pristine copy remain
   open. No client/JEI/login/reward delivery or human acceptance is inferred.
+- **Fix installed T0 native-quest startup ordering on the exact dd0b4bc baseline.**
+  Verify only at Forge `ServerStartedEvent` LOWEST, after Architectury9.2.14's
+  HIGH-priority bridge has delivered FTB2001.4.22's loader. Bind admission to the
+  verified singleton/server and clear it before start, on stop and before any
+  verification attempt. Preserve full definition failures, all46 IDs, rewards,
+  migration and saves; never initialize/reload FTB or fabricate configuration.
+  Extend the existing console-only Forge probe with the old verifier-before-load
+  failure, both registration orders, one-load/readiness and malformed/missing/
+  wrong-server regressions; retain strict AST contracts/mutations.
+  Source-only hotfix: no JVM/build, PC/cache, package, deployment or owner-world
+  action; executable qualification and protected client new/load/reopen remain
+  the coordinator's separate gate, not a claimed fix of the installed artifact.
 - **Record the actual registered FTB and disk-lifecycle proof.** Real Forge
   loads46 logical quests/36 native item rewards and passes1099 graph/filter/
   import assertions, then seed56 and a new process reopens persisted native

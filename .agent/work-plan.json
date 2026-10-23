@@ -1,9 +1,9 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 145,
+  "plan_revision": 146,
   "updated": "2026-10-23",
-  "phase": "optional_t1_gas_utilities_qualified_broader_tier_and_human_gates_separate",
+  "phase": "urgent_installed_T0_FTB_startup_hotfix",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
   "tier_accepted": false,
   "merge_ready": false,
@@ -44,6 +44,19 @@
     "completion_limits": "baseline_H2_recovery_only_NO_future_upgrade_contract_actualMC52_client_world_or_wholeTier_acceptance_POSIXSKIP_preserved"
   },
   "current_PC_execution": {
+    "assignment": "t0-ftb-startup-hotfix-20261023",
+    "active": true,
+    "owner_agent": "db3f9dcd-e939-482e-b546-8b4571f474c8",
+    "source": "e50ab4632f2c322b1c7122fe904e9ddb2fa08fbc",
+    "source_parent": "dd0b4bc93187fe172fd336bfa330987220bd7be4",
+    "inventory_sha256": "34d8c9ed82708686da9887dc4bda1bc90095dfd668712e0d6be96ac3c7648bdb",
+    "scope": "NEWroot_freshguards_targeted_compile_AST_backend_native_order_boot_package_stopped_currentworld_backup_copycompatibility_conditional_managed_deploy_Inspect",
+    "delivery_conditions": "exact_hotfix_noT1_targetstopped_owned_olddriftchecked_backupverified_copycompatible_existingdefinitions46_and_deps_unchanged_NO_playerstop_or_originalsaveoverwrite",
+    "other_PC_owners": false,
+    "result": "GRANTED_NOT_OBSERVED",
+    "returned": false
+  },
+  "closed_G16_execution": {
     "assignment": "gas-content-closure-g16-20261023",
     "active": false,
     "owner_session": null,

@@ -16,6 +16,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -25,7 +27,7 @@ import java.io.IOException;
 /** Native framework entry and retryable old-receipt import; there is no Grindless quest screen or claim packet. */
 public final class FtbQuestIntegration {
 
-    private static boolean ready;
+    private static ServerQuestFile ready;
 
     private FtbQuestIntegration() {
     }
@@ -42,8 +44,9 @@ public final class FtbQuestIntegration {
                         exception);
             }
         }));
-        LifecycleEvent.SERVER_STARTED.register(FtbQuestIntegration::started);
-        LifecycleEvent.SERVER_STOPPING.register(server -> ready = false);
+        registerStarted(MinecraftForge.EVENT_BUS);
+        LifecycleEvent.SERVER_BEFORE_START.register(FtbQuestIntegration::reset);
+        LifecycleEvent.SERVER_STOPPING.register(FtbQuestIntegration::reset);
         TeamEvent.PLAYER_LOGGED_IN.register(event -> importPlayer(event.getPlayer()));
         TeamEvent.PLAYER_CHANGED.register(event -> importPlayer(event.getPlayer()));
         ObjectCompletedEvent.QUEST.register(event -> {
@@ -59,15 +62,33 @@ public final class FtbQuestIntegration {
         MinecraftForge.EVENT_BUS.addListener(FtbQuestChecks::registerCommands);
     }
 
-    private static void started(MinecraftServer server) {
+    static void registerStarted(IEventBus bus) {
+        // Architectury 9.2.14 delivers the whole SERVER_STARTED loop, including FTB's load, at HIGH.
+        bus.addListener(EventPriority.LOWEST, FtbQuestIntegration::started);
+    }
+
+    static void reset(MinecraftServer server) {
+        ready = null;
+    }
+
+    private static void started(ServerStartedEvent event) {
+        ready = null;
         ServerQuestFile file = ServerQuestFile.INSTANCE;
-        if (file == null || file.server != server) {
+        if (file == null || file.server != event.getServer()) {
             throw new IllegalStateException("FTB Quests did not initialize its native server quest file");
         }
         FtbQuestNative.verify(file);
-        ready = true;
+        ready = file;
         Grindless.LOG.info("Native FTB Quests ready: {} stable Grindless quests; legacy reward claims are import-only",
                 QuestCatalogue.tasks().size());
+    }
+
+    static ServerQuestFile verifiedFile(MinecraftServer server) {
+        ServerQuestFile file = ServerQuestFile.INSTANCE;
+        if (file == null || file != ready || file.server != server) {
+            throw new IllegalStateException("Native Grindless FTB definitions have not been verified for this server");
+        }
+        return file;
     }
 
     public static void open(ServerPlayer player) {
@@ -83,10 +104,7 @@ public final class FtbQuestIntegration {
             throw new IllegalStateException("Native quest import must execute on the server thread");
         }
         try {
-            if (!ready) {
-                throw new IllegalStateException("Native Grindless FTB definitions have not been verified");
-            }
-            TeamData data = ServerQuestFile.INSTANCE.getOrCreateTeamData(player);
+            TeamData data = verifiedFile(player.server).getOrCreateTeamData(player);
             FtbQuestNative.migrate(QuestProgress.get(player), player.getUUID(), data);
             data.saveIfChanged();
             return true;
@@ -101,8 +119,8 @@ public final class FtbQuestIntegration {
         if (event.phase == TickEvent.Phase.END && event.player.tickCount % 20 == 0
                 && event.player instanceof ServerPlayer player) {
             QuestProgress legacy = QuestProgress.get(player);
-            if (ready && legacy.usesNativeClaims(player.getUUID())) {
-                TeamData data = ServerQuestFile.INSTANCE.getOrCreateTeamData(player);
+            if (ready != null && legacy.usesNativeClaims(player.getUUID())) {
+                TeamData data = verifiedFile(player.server).getOrCreateTeamData(player);
                 if (data == null) {
                     throw new IllegalStateException("Native quest player has no framework team progress");
                 }

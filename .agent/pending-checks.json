@@ -154,6 +154,16 @@
     "not_proved": "finiteT1_establishment_renewability_autonomy_gameplay_client_or_acceptance"
   },
   "current_PC_execution": {
+    "assignment": "t0-ftb-startup-hotfix-20261023",
+    "active": true,
+    "owner_agent": "db3f9dcd-e939-482e-b546-8b4571f474c8",
+    "source": "e50ab4632f2c322b1c7122fe904e9ddb2fa08fbc",
+    "source_parent": "dd0b4bc93187fe172fd336bfa330987220bd7be4",
+    "scope": "targeted_order_fix_qualification_and_conditional_stopped_owned_backup_copycompatible_delivery_NO_T1_or_saveoverwrite",
+    "result": "GRANTED_NOT_OBSERVED",
+    "returned": false
+  },
+  "closed_G16_execution": {
     "assignment": "gas-content-closure-g16-20261023",
     "active": false,
     "owner_session": null,

@@ -4,6 +4,16 @@
 
 ### Installed T0 world-entry crash
 
+Sourcee50ab463/exactdd0 is directly reviewed and published as the isolated
+hotfix. Architectury source9.2.14 confirms bridge priority HIGH (not NORMAL),
+and Forge posts ServerStartedEvent before allowing login. The new hook is
+LOWEST, identity-bound and reset across worlds; the native fixture retains
+the original failure and both-order/fail-closed cases. Common/catalogues/
+dependencies/save formats are unchanged. Current development auto-merges
+the carrier and resolves only readiness assignment plus dynamic logging/
+matching AST; deployment still targets exact hotfixe50, not development.
+Actual compilation/native/copy-compatibility and delivery remain pending.
+
 Owner reports both new and existing worlds crash on2026-10-23. Read-only
 SSH diagnosis preserves two originals (18:29:07/18:30:01 local PC time):
 `IllegalStateException: FTB Quests did not load the Grindless chapter

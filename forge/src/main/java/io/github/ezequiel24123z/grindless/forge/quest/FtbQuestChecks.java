@@ -1,6 +1,10 @@
 package io.github.ezequiel24123z.grindless.forge.quest;
 
+import dev.architectury.event.Event;
+import dev.architectury.event.EventFactory;
+import dev.architectury.event.events.common.LifecycleEvent;
 import dev.ftb.mods.ftblibrary.snbt.SNBTCompoundTag;
+import dev.ftb.mods.ftbquests.quest.Chapter;
 import dev.ftb.mods.ftbquests.quest.Quest;
 import dev.ftb.mods.ftbquests.quest.ServerQuestFile;
 import dev.ftb.mods.ftbquests.quest.TeamData;
@@ -31,7 +35,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.eventbus.api.BusBuilder;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
@@ -42,6 +51,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -49,6 +59,8 @@ import java.util.stream.Collectors;
  * The default command uses unattached in-memory progress. Explicit seed/reopen commands
  * additionally exercise native disk persistence for one reserved diagnostic UUID and one
  * separate SavedData key. No real player, inventory, block or FTB Teams registration is used.
+ * The lifecycle probe uses separate generated config files and isolated event buses, temporarily
+ * replaces the native singleton, and restores the original file/readiness in finally.
  */
 public final class FtbQuestChecks {
 
@@ -97,6 +109,7 @@ public final class FtbQuestChecks {
             checks.matrices();
             checks.migration();
             checks.relayGate();
+            checks.lifecycle();
             checks.equal("saved team count is unchanged", savedTeams, file.getAllTeamData().size());
             for (UUID id : checks.transientTeams) {
                 checks.check("diagnostic TeamData never enters the saved-team map", file.getNullableTeamData(id) == null);
@@ -228,6 +241,116 @@ public final class FtbQuestChecks {
 
     private Path nativeDiskFile() {
         return file.server.getWorldPath(ServerQuestFile.FTBQUESTS_DATA).resolve(DISK_TEAM + ".snbt");
+    }
+
+    private void lifecycle() {
+        check("the real startup verified the actual native singleton",
+                FtbQuestIntegration.verifiedFile(file.server) == file);
+        IEventBus restore = BusBuilder.builder().build();
+        FtbQuestIntegration.registerStarted(restore);
+        try {
+            Path config = Files.createTempDirectory("grindless-ftb-lifecycle-");
+            FtbQuestFiles.ensure(config);
+            Path folder = config.resolve("ftbquests").resolve("quests");
+            Grindless.LOG.info("Native FTB lifecycle fixture retained: {}", config);
+
+            ServerQuestFile unloaded = new ServerQuestFile(file.server);
+            ServerQuestFile.INSTANCE = unloaded;
+            int[] oldLoads = {0};
+            Event<LifecycleEvent.ServerState> oldOrder = EventFactory.createLoop();
+            oldOrder.register(server -> FtbQuestNative.verify(ServerQuestFile.INSTANCE));
+            oldOrder.register(server -> {
+                unloaded.readDataFull(folder);
+                oldLoads[0]++;
+            });
+            fails("the old verifier-before-loader order reproduces the reported missing chapter",
+                    "FTB Quests did not load the Grindless chapter 7A7EC224FEFEF423",
+                    () -> oldOrder.invoker().stateChanged(file.server));
+            equal("the early verifier aborts the framework loop before its loader", 0, oldLoads[0]);
+            fails("an unverified replacement singleton cannot inherit readiness",
+                    "have not been verified for this server", () -> FtbQuestIntegration.verifiedFile(file.server));
+
+            for (boolean verifierFirst : List.of(true, false)) {
+                ServerQuestFile candidate = new ServerQuestFile(file.server);
+                ServerQuestFile.INSTANCE = candidate;
+                FtbQuestIntegration.reset(file.server);
+                fails("before-start reset closes native admission", "have not been verified for this server",
+                        () -> FtbQuestIntegration.verifiedFile(file.server));
+                IEventBus bus = BusBuilder.builder().build();
+                try {
+                    int[] loads = {0};
+                    Event<LifecycleEvent.ServerState> bridge = EventFactory.createLoop();
+                    bridge.register(server -> {
+                        fails("admission remains closed inside the loader", "have not been verified for this server",
+                                () -> FtbQuestIntegration.verifiedFile(server));
+                        candidate.readDataFull(folder);
+                        loads[0]++;
+                    });
+                    bridge.register(server -> fails("all framework listeners finish before readiness",
+                            "have not been verified for this server", () -> FtbQuestIntegration.verifiedFile(server)));
+                    Consumer<ServerStartedEvent> forward = event -> bridge.invoker().stateChanged(event.getServer());
+                    if (verifierFirst) {
+                        FtbQuestIntegration.registerStarted(bus);
+                    }
+                    // Match the pinned Architectury bridge, not constructor/listener registration order.
+                    bus.addListener(EventPriority.HIGH, forward);
+                    if (!verifierFirst) {
+                        FtbQuestIntegration.registerStarted(bus);
+                    }
+                    bus.post(new ServerStartedEvent(file.server));
+                    bus.unregister(forward);
+                    check("the production post-bridge hook verifies the fully loaded candidate",
+                            FtbQuestIntegration.verifiedFile(file.server) == candidate);
+                    equal("one framework definition read, with no integration-triggered second load", 1, loads[0]);
+                    check("the lifecycle fixture never reads or creates native world progress",
+                            candidate.getAllTeamData().isEmpty() && candidate.getFolder() == null);
+
+                    FtbQuestIntegration.reset(file.server);
+                    fails("stopping reset closes native admission", "have not been verified for this server",
+                            () -> FtbQuestIntegration.verifiedFile(file.server));
+                    bus.post(new ServerStartedEvent(file.server));
+                    check("verification alone can re-admit the same valid definitions",
+                            FtbQuestIntegration.verifiedFile(file.server) == candidate);
+                    equal("verification does not rerun the loader", 1, loads[0]);
+
+                    Chapter chapter = candidate.getChapter(FtbQuestDefinitions.id("chapter", "T0"));
+                    CompoundTag changed = new CompoundTag();
+                    chapter.writeData(changed);
+                    changed.putString("title", "{\"text\":\"Invalid lifecycle probe chapter\"}");
+                    chapter.readData(changed);
+                    fails("modified chapters still fail the production startup verification",
+                            "Modified or colliding native Grindless definition",
+                            () -> bus.post(new ServerStartedEvent(file.server)));
+                    fails("failed full verification cannot retain previous readiness",
+                            "have not been verified for this server", () -> FtbQuestIntegration.verifiedFile(file.server));
+
+                    ServerQuestFile.INSTANCE = null;
+                    fails("a missing native singleton still fails explicitly",
+                            "did not initialize its native server quest file",
+                            () -> bus.post(new ServerStartedEvent(file.server)));
+                    ServerQuestFile.INSTANCE = candidate;
+                    fails("startup refuses a different server identity",
+                            "did not initialize its native server quest file",
+                            () -> bus.post(new ServerStartedEvent(null)));
+                    fails("a wrong-server failure leaves admission closed",
+                            "have not been verified for this server", () -> FtbQuestIntegration.verifiedFile(file.server));
+                    equal("negative verification never retries or reloads definitions", 1, loads[0]);
+                } finally {
+                    bus.shutdown();
+                }
+            }
+        } catch (IOException exception) {
+            throw new IllegalStateException("Cannot prepare the isolated native lifecycle fixture", exception);
+        } finally {
+            ServerQuestFile.INSTANCE = file;
+            try {
+                restore.post(new ServerStartedEvent(file.server));
+            } finally {
+                restore.shutdown();
+            }
+        }
+        check("the probe restores the original singleton and its verified admission",
+                ServerQuestFile.INSTANCE == file && FtbQuestIntegration.verifiedFile(file.server) == file);
     }
 
     private void graph() {
@@ -509,6 +632,18 @@ public final class FtbQuestChecks {
 
     private void equal(String label, Object expected, Object actual) {
         check(label + ": expected " + expected + ", got " + actual, Objects.equals(expected, actual));
+    }
+
+    private void fails(String label, String message, Runnable action) {
+        assertions++;
+        try {
+            action.run();
+        } catch (IllegalStateException exception) {
+            require(exception.getMessage() != null && exception.getMessage().contains(message),
+                    label + ": unexpected failure " + exception);
+            return;
+        }
+        throw new IllegalStateException("Native FTB check failed: " + label + " did not fail");
     }
 
     private void check(String label, boolean condition) {

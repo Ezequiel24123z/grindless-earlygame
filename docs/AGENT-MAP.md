@@ -854,6 +854,15 @@ The first four checks also pin that the prototype transport has no generated sur
 
 ## Quests and the guide
 
+ADR-0191 places `FtbQuestIntegration` verification on Forge
+`ServerStartedEvent` LOWEST, after Architectury9.2.14's HIGH bridge finishes
+FTB loading. Preserve verified singleton/server identity and reset before
+start/stop/reverification; never put verification back into the unordered
+Architectury loop or call FTB load again. `FtbQuestChecks` exercises both
+registration orders and fail-closed negatives; `VerifySustainabilityRegistry`
+keeps the corresponding closed AST contract. Installed T0 hotfixes remain
+separate from the newer development catalogue and require guarded delivery.
+
 - `quest/QuestCatalogue.java` and `quest/GuideCatalogue.java` — the lines and the pages.
 - `QuestCatalogue.STARTER_SUPPLIES` — the first, explicitly `FREE` task, not an item
   objective with a zero count. `Task.rewards()` owns the complete finite allocation;

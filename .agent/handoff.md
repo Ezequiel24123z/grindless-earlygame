@@ -5,6 +5,17 @@ Updated: 2026-10-23. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 ## Active continuation — managed definitions and physical control
 
 **PLAYER BLOCKER: installed T0 crashes when creating/loading worlds.**
+Reviewed hotfixe50ab4632f2c322b1c7122fe904e9ddb2fa08fbc is published on its
+own branch, direct parentdd0, with no T1 code. Executor db3f9dcd now owns the
+single new `t0-ftb-startup-hotfix-20261023` window: fresh guarded new root,
+targeted compilation/backend/AST/native-order proof and exact package.
+Protected delivery is conditional on those passes, stopped owned target,
+fresh verified backups and compatibility on a copy of the current save.
+Never kill/restart the player or return the booted copy to the original.
+No executed result or delivery exists yet. Historical604 remains inactive.
+Development separately integrates the same fix with its dynamic count;
+it is NOT the artifact to deploy. ADR-0191 records the mechanism and limits.
+
 Two actual2026-10-23 server crash reports stop in FtbQuestNative.verify:
 chapter7A7EC224FEFEF423 is missing from the native in-memory graph at
 FtbQuestIntegration.started. The installed jar is still originaldd0/
@@ -20,8 +31,8 @@ files are not a required precondition in the inspected native loader.
 Do not fabricate those files or delete progress as a workaround.
 
 Hotfix author895ce5ed works in isolation from EXACT installeddd0; preserve
-46 IDs/rewards and all player content. Executor db3f9dcd prepares one NEW
-isolated PC root, but no build/deployment grant exists yet. Historical
+46 IDs/rewards and all player content. Executor db3f9dcd uses the NEW
+isolated PC root only within the guarded grant above. Historical
 executor604 cannot reload its conversation (two failed deliveries); it has
 received no new work. No active prior G16 lease is reused.
 Qualify the event-order regression and the supported native boot before a

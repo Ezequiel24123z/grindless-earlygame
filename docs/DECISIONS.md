@@ -202,6 +202,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0188](#adr-0188--assemble-normal-machines-manually-and-author-manufacturing-modes-per-product) | Assemble normal machines manually and author manufacturing modes per product | Complete A/B/C source normally composed; actual integrated qualification pending |
 | [0189](#adr-0189--hold-orphaned-paid-bench-work-before-ordinary-recipe-fallback) | Hold orphaned paid Bench work before ordinary recipe fallback | Guard f1b9 CI/Persistence/native1273 and46-file custody verified; owner-world compatibility unproved |
 | [0190](#adr-0190--add-optional-t1-gas-utilities-with-lossy-hydrogen-recovery) | Add optional T1 gas utilities with lossy hydrogen recovery | Accepted bounded development scope; source and qualification in progress |
+| [0191](#adr-0191--verify-native-quests-after-the-framework-startup-bridge) | Verify native quests after the framework startup bridge | Installed-dd0 hotfix source reviewed; executable qualification and guarded delivery pending |
 
 ---
 
@@ -9374,3 +9375,45 @@ separator cost and hydrogen output to one shared value and blocks energy
 upgrades from discounting that separator cost. Those are useful patterns,
 not copied implementation. Grindless keeps its existing paid-burn fields;
 the study does not prove external saved-burn compatibility.
+
+---
+
+## ADR-0191 — Verify native quests after the framework startup bridge
+
+**Status.** Accepted urgent installed-T0 correctness repair, 2026-10-23.
+Owner reports both world creation and load crashing. Two original reports
+bind the failure to installeddd0/JAR29bc, not undeployed T1.
+
+**Cause.** FTB Quests2001.4.22 creates ServerQuestFile before startup but
+loads chapters inside Architectury SERVER_STARTED. Grindless verified in
+the same listener loop, whose registration order depends on mod startup.
+Verification first sees the empty singleton, throws and prevents FTB's
+loader from running. Both chapter files exist; missing metadata files are
+not mandatory in the pinned chapter loader. Earlier dedicated-server
+passes did not establish this adverse integrated-server ordering.
+
+**Decision.** Register only Grindless verification at Forge
+ServerStartedEvent LOWEST. Pinned Architectury9.2.14 dispatches its whole
+framework loop at HIGH; Forge47.4.23 finishes this event before enabling
+logins. Keep full native definition verification and explicit errors.
+Store the verified native file identity, require the same server/singleton
+on admission, and clear readiness before start, on stop and before every
+verification attempt. Never reload FTB ourselves, delay by arbitrary ticks,
+sleep, catch-and-ignore the failure, fabricate files or reset progress.
+
+Hotfixe50ab463 is a direct child of the actual installeddd0 baseline,
+retaining46 quest IDs/rewards, dependencies, definitions and save schema.
+Only Integration, its existing native carrier and strict AST guard change.
+Carry the fix separately into development without deploying T1 or52 quests.
+The small merge preserves development's existing dynamic-count logging
+and publisher checks while adopting the file-identity gate.
+
+**Proof and delivery.** The existing opt-in native carrier reproduces the
+old verifier-before-loader failure, then uses real Forge buses and the
+production hook in both registration orders, plus singleton/reset/invalid
+definition negatives. It is not actual integrated-client play. Run targeted
+compiler/AST/backend and representative native startup, preserve source/JAR
+identity, then qualify a copy of the current stopped player's save before
+a recoverable owned-instance update with verified backups. Do not stop the
+player, overwrite the original save with a tested copy, or call server
+evidence a successful client create/load. Human confirmation remains distinct.
