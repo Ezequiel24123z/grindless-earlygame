@@ -203,6 +203,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0189](#adr-0189--hold-orphaned-paid-bench-work-before-ordinary-recipe-fallback) | Hold orphaned paid Bench work before ordinary recipe fallback | Guard f1b9 CI/Persistence/native1273 and46-file custody verified; owner-world compatibility unproved |
 | [0190](#adr-0190--add-optional-t1-gas-utilities-with-lossy-hydrogen-recovery) | Add optional T1 gas utilities with lossy hydrogen recovery | Accepted bounded development scope; source and qualification in progress |
 | [0191](#adr-0191--verify-native-quests-after-the-framework-startup-bridge) | Verify native quests after the framework startup bridge | Installed-dd0 hotfix source reviewed; executable qualification and guarded delivery pending |
+| [0192](#adr-0192--charge-the-existing-upgrade-energy-trade-on-process-machines) | Charge the existing upgrade energy trade on process machines | Accepted bounded runtime correction; not a chassis installer or player update |
 
 ---
 
@@ -9417,3 +9418,30 @@ identity, then qualify a copy of the current stopped player's save before
 a recoverable owned-instance update with verified backups. Do not stop the
 player, overwrite the original save with a tested copy, or call server
 evidence a successful client create/load. Human confirmation remains distinct.
+
+## ADR-0192 — Charge the existing upgrade energy trade on process machines
+
+**Status.** Accepted bounded correction, 2026-10-23.
+
+**Context.** `UpgradeSet.energyMultiplier()` already states the accepted trade:
+one Speed upgrade triples energy for double speed, Parallel scales energy
+linearly, and Efficiency spends time to reduce energy. `ProcessMachineBlockEntity`
+already applied `timeMultiplier()` every tick, but it requested and drew the
+recipe's base `fuPerTick()`. A Speed upgrade therefore made the cycle faster
+without paying the documented energy cost.
+
+**Decision.** Apply that existing multiplier to the process-machine request,
+network draw, stored-energy fallback, and power-waiting check. Pass the same
+scaled amount to `ProcessLogic.work` as the requested amount, so a fully paid
+tick is not counted as extra progress. Round a fractional cost up, and keep a
+positive base from becoming free. Do not retune the placeholder multipliers.
+Do not revalue ticks already spent, saved progress, or ADR-0190's paid burns.
+Do not add upgrade items, a chassis-kit installer, or a new mark.
+
+**Rejected.** Leaving the draw unchanged would keep a free speed increase.
+Inventing a new energy engine, or copying Mekanism's block replacement, is
+outside this correction. Chassis installation remains unimplemented.
+
+**Proof.** `VerifyMachine` checks an empty loadout, one Speed upgrade,
+Parallel, and Efficiency against the same cost function the draw uses. This
+is not a native machine boot, a client pass, or a deployment.

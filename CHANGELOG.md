@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **Apply the existing upgrade energy trade to process-machine per-tick power.**
+  `ProcessMachineBlockEntity` now scales process tick cost through
+  `UpgradeSet.energyMultiplier()` for network request/draw, stored-energy
+  fallback, work-ratio requested power and status waiting-power checks. This
+  keeps the existing paid-tick semantics (ADR-0190): already paid progress,
+  saved burns and hydrogen ignition values are unchanged. No new balance
+  numbers, chassis installer, or player deployment. ADR-0192.
 - **Give the Windows Prism tooling job enough time to finish both twins.**
   On 56cd80e2 both CI runs cancelled `prism-tooling-windows` at the five-minute
   job limit during the Git Bash twin, after the managed definition contracts

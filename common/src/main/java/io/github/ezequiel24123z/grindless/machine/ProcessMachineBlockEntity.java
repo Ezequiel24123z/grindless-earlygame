@@ -325,15 +325,16 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             return;
         }
 
-        requestPower(recipe.fuPerTick());
-        long drawn = drawPower(recipe.fuPerTick());
-        if (drawn <= 0L && energy().getStored() >= recipe.fuPerTick()) {
-            energy().setStored(energy().getStored() - recipe.fuPerTick());
-            drawn = recipe.fuPerTick();
+        long cost = upgradedTickCost(recipe.fuPerTick(), upgrades());
+        requestPower(cost);
+        long drawn = drawPower(cost);
+        if (drawn <= 0L && energy().getStored() >= cost) {
+            energy().setStored(energy().getStored() - cost);
+            drawn = cost;
         }
 
         boolean powered = drawn > 0L || hasPowerWaiting();
-        double gained = ProcessLogic.work(drawn, recipe.fuPerTick(), report.efficiency(), timeMultiplier());
+        double gained = ProcessLogic.work(drawn, cost, report.efficiency(), timeMultiplier());
         if (gained > 0.0) {
             progress += gained;
             setChanged();
@@ -995,8 +996,21 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         return false;
     }
 
+    /** Existing UpgradeSet trade. The requested and drawn amounts stay equal so paid progress is not inflated. */
+    public static long upgradedTickCost(long base, UpgradeSet upgrades) {
+        if (base <= 0L || upgrades == null) {
+            return Math.max(0L, base);
+        }
+        double scaled = base * upgrades.energyMultiplier();
+        if (!Double.isFinite(scaled) || scaled >= Long.MAX_VALUE) {
+            return Long.MAX_VALUE;
+        }
+        long cost = (long) Math.ceil(scaled);
+        return cost <= 0L ? 1L : cost;
+    }
+
     private boolean hasPowerWaiting() {
-        long needed = cached == null ? kind.tier().nominal() : cached.fuPerTick();
+        long needed = cached == null ? kind.tier().nominal() : upgradedTickCost(cached.fuPerTick(), upgrades());
         if (energy().getStored() >= needed) {
             return true;
         }

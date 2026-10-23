@@ -17,11 +17,10 @@ with Java 0 and root/cache/deploy locks 0. The profile remains
 `restricted-playable-profile-not-rc`. No client GUI, campaign, T0 acceptance,
 main merge or T1 deployment is claimed. Development `6d19925a` is not the
 deployed artifact. Do not start another Build/Deploy for this source.
-Consolidation PR #57 fast-forwards this branch to main only after its CI is
-green. The 96cd03fe native-quests red is a stale 18/51 pin, corrected in
-56cd80e2. That head's Windows tooling job was then cancelled at the
-five-minute limit, not by a failed assertion. Do not merge either cancelled
-run.
+Consolidation PR #57 merged to main as `30226c22` after `4b6dfcd5` was green.
+The earlier 96cd03fe native-quests red and the cancelled five-minute Windows
+jobs remain historical. Do not redeploy e50 for that merge. ADR-0192 applies
+the existing process-machine energy trade in source only.
 ADR-0191 records the mechanism. Private receipts stay outside Git.
 
 The diagnosis below is preserved, not an open grant.
