@@ -2,6 +2,23 @@
 
 ## Active continuation — source before integrated qualification
 
+### ADR-0190 optional T1 gas utilities
+
+New baseline8a1 source lanes are separate from the completed manual-policy
+programme. Fuelc74273858966c4ed9f8930a18a4bd348881dc74d has exactparent8a1,
+tree71065861ef556cd2fb84bb2988fd5b7e8f33b046 and five files172+/13-.
+Parent directly reviews its complete runtime/test delta, verifies private
+handoffSHA9dc1ceea688b4e9e4ef710f0ad5d80e3b57c340bc356c156449da02d4843a0a6
+and normally preserves four code/check blobs. H50/CO400, live recipe loss,
+actual ignition and binary legacy-burn/gas fixtures are authored, not run.
+ThermalBE, ProcessLogic/Graph, GeneratorKind and AuthorityAdapters are unchanged.
+
+The saved400/137 case proves only what its future binary test observes;
+the explicit exhausted Burn0 fixture is not a native137-tick execution.
+Normal baseline6400FU input/3200FU recovery is not an upgrade-loadout or
+whole-tier certificate. New content source, combined compilation, affected
+checks and normal outputs remain pending; G15 preparation is local-only.
+
 The owner requests continued autonomous development and delivery of genuinely
 ready whole tiers (ADR-0178); the new increments are not yet a ready tier.
 Normal source63142dd/5b359a5 adds four Assembler die recipes from the actual

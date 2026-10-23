@@ -88,7 +88,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0074](#adr-0074--the-wire-mill-is-t2-and-does-not-wait-for-acid) | The Wire Mill is T2 and does not wait for acid | Accepted |
 | [0075](#adr-0075--the-contact-process-is-air-vanadia-and-a-pickle) | The contact process is air, vanadia and a pickle | Accepted |
 | [0076](#adr-0076--the-washer-batch-is-eight-crushed-and-the-next-metal) | The washer batch is eight crushed and the next metal | Accepted |
-| [0077](#adr-0077--water-splits-in-the-buffer-air-yields-oxygen-only) | Water splits in the buffer; air yields oxygen only | Accepted |
+| [0077](#adr-0077--water-splits-in-the-buffer-air-yields-oxygen-only) | Water splits in the buffer; air yields oxygen only | Gas mechanics retained; tier/manufacture superseded by0174/0188 and H2 fuel rate by0190 |
 | [0078](#adr-0078--the-fluid-well-is-powered-chunk-water) | The Fluid Well is powered chunk water | Accepted |
 | [0079](#adr-0079--melt-is-144-mb-at-1000-c-and-the-arc-still-makes-ingots) | Melt is 144 mB at 1000 °C, and the arc still makes ingots | Accepted |
 | [0080](#adr-0080--flotation-is-an-integer-batch-and-the-magnet-splits-by-name) | Flotation is an integer batch, and the magnet splits by name | Accepted |
@@ -3051,6 +3051,12 @@ that starts the Electrolysis Cell here is skipping M.
 ## ADR-0077 — Water splits in the buffer; air yields oxygen only
 
 *2026-10-04 · Accepted*
+
+**Later scope.** ADR-0174/0188 places ordinary baseline families atT1 with
+manual final construction. ADR-0190 replaces only future hydrogen400-tick
+ignition with50 ticks while retaining CO400 and already-paid saved burns.
+The following original slice remains historical; its fluid quantities and
+shared storage/capture mechanics are retained.
 
 **Context.** BUILD-OUT slice M is the Electrolysis Cell and the Atmospheric Intake: split
 water, take N₂/O₂, and give hydrogen and oxygen a named sink. `PROCESSES.md` quotes
@@ -9290,6 +9296,8 @@ native proofs remain bound to their original code and are not relabeled.
 development instruction and ADR-0174/0178/0188, 2026-10-23. Source baseline
 8a1a3365 closes the preceding manual-machine increment. This decision opens
 two isolated source lanes, not another PC lease or a player update.
+Hydrogen sourcec7427385 is subsequently normally composed after direct review;
+content and actual combined qualification remain pending.
 
 **Context and existing solution.** The first factory is not all T1. Existing
 manual Electrolysis Cell, Atmospheric Intake and Chemical Reactor constructors,
@@ -9354,3 +9362,12 @@ its actual source. Keeping the positive baseline loop, removing hydrogen
 inventory, resetting paid burns, creating a new generator or making gas
 processing mandatory for F2 are rejected. Whole-T1 sustainability, client
 quality, save-copy qualification and human acceptance remain separate.
+
+The completed pinned comparison is recorded in
+[the external reference record](design/t1-external-references.md#hydrogen-energy-and-upgrade-boundary).
+GT's inspected canonical fuel file has no hydrogen input at its pin; this
+is not an exhaustive claim about addons or other routes. Mekanism ties
+separator cost and hydrogen output to one shared value and blocks energy
+upgrades from discounting that separator cost. Those are useful patterns,
+not copied implementation. Grindless keeps its existing paid-burn fields;
+the study does not prove external saved-burn compatibility.

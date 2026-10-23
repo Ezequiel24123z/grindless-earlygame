@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 134,
+  "plan_revision": 135,
   "updated": "2026-10-23",
   "phase": "optional_t1_gas_utilities_and_lossy_hydrogen_source_development",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -11,7 +11,7 @@
   "active_development": {
     "policy": "ADR-0190",
     "source_baseline": "8a1a3365dee930d312616c9f9023ecbd513ccb8b",
-    "status": "TWO_ISOLATED_SOURCE_LANES_ACTIVE_EXTERNAL_RESEARCH_PARALLEL_NO_PC_GRANT",
+    "status": "FUEL_SOURCE_c742_REVIEWED_NORMALLY_COMPOSED_CONTENT_ACTIVE_RESEARCH_COMPLETE_NO_PC_GRANT_OR_EXECUTED_RESULT",
     "content_session": "a6d4adca-c6b0-40b5-85a9-9ba83326329b",
     "fuel_session": "7042c976-722d-4974-92f5-e614e95bd506",
     "research_agent": "68d2d543-5902-4095-8fbb-c8ddc8ac4f74",
@@ -23,7 +23,10 @@
     "G15_inventory_sha256": "dee779f420a7804f8b0c4c3dbf5e88696bda3afca1cfc3bb9f2ce80d7b737bee",
     "G15_preparation_sha256": "4b73a040a98d9bf702388223cc795cd13a54446109f014b1ac45545364a989da",
     "content_coupled_ownership": "exact52_Prism_selector_PStest_and_legacyHeracles_lesson_contract_transferred_to_content_owner_no_deploy_or_backend_rewrite",
-    "source_fuel_checkpoint": null,
+    "source_fuel_checkpoint": "c74273858966c4ed9f8930a18a4bd348881dc74d",
+    "fuel_handoff_sha256": "9dc1ceea688b4e9e4ef710f0ad5d80e3b57c340bc356c156449da02d4843a0a6",
+    "fuel_review": "DIRECT_full20line_runtime_and_authoredtests_delta_no_significant_issue_ThermalBE_and_othermechanisms_byteunchanged",
+    "research_result": "pinnedGT248e1f8_paid_electrolysis_noH2in_inspectedFuelRecipes_Mek96c7362_sharedneutralbaseline_FixedUsageEnergyContainer_noefficiencyDiscount_sourceonly_NO_externalburn_saveproof",
     "source_content_checkpoint": null,
     "qualified_source": null
   },

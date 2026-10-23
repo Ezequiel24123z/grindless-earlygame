@@ -153,6 +153,32 @@ envelope number, overclock formula or native pass.
 [gt-paid-state]: https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/src/main/java/com/gregtechceu/gtceu/api/machine/trait/recipe/RecipeLogic.java#L116-L165
 [gt-paid-cycle]: https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/src/main/java/com/gregtechceu/gtceu/api/machine/trait/recipe/RecipeLogic.java#L452-L634
 
+## Hydrogen energy and upgrade boundary
+
+This new source-only comparison reuses GT248e1f8/version8.0.0 and
+Mekanism96c7362/version10.4.16 with the licence pins already recorded above.
+No licence is inferred from visibility, and no code/assets/dependency is
+copied. The study does not supply a played closed loop or save migration.
+
+| Pinned source | Read behavior | Grindless use and limit |
+| --- | --- | --- |
+| [GT water electrolysis](https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/src/main/java/com/gregtechceu/gtceu/data/recipe/serialized/chemistry/SeparationRecipes.java#L335-L339) and [voltage constants](https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/src/main/java/com/gregtechceu/gtceu/api/GTValues.java#L76-L88) |1000mB water produces2000mB hydrogen/1000mB oxygen in1500ticks at VA[LV]=30EU/t:45000EU total | Real production is paid. Different water/energy units and batches are not Grindless recipe quantities |
+| [GT canonical fuels](https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/src/main/java/com/gregtechceu/gtceu/data/recipe/misc/FuelRecipes.java) | No hydrogen input appears in the inspected combustion/gas/steam/plasma registrations | Bounded file-level absence, not proof about every addon or alternate fuel-cell path |
+| [Mekanism shared hydrogen value](https://github.com/mekanism/Mekanism/blob/96c736241e308a9cf1c73f7dcfa9aa221ea559d3/src/main/java/mekanism/common/config/GeneralConfig.java#L207-L208), [separator config](https://github.com/mekanism/Mekanism/blob/96c736241e308a9cf1c73f7dcfa9aa221ea559d3/src/main/java/mekanism/common/registries/MekanismBlockTypes.java#L284) and [water recipe](https://github.com/mekanism/Mekanism/blob/96c736241e308a9cf1c73f7dcfa9aa221ea559d3/src/datagen/main/java/mekanism/common/recipe/impl/SeparatingRecipeProvider.java#L25-L29) | Default FROM_H2=200J; separator charges twice that for2mB hydrogen | With [hydrogen fuel](https://github.com/mekanism/Mekanism/blob/96c736241e308a9cf1c73f7dcfa9aa221ea559d3/src/main/java/mekanism/common/registries/MekanismGases.java#L22), nominal input/output are200J/mB: break-even, not a claimed loss or gain |
+| [FixedUsageEnergyContainer](https://github.com/mekanism/Mekanism/blob/96c736241e308a9cf1c73f7dcfa9aa221ea559d3/src/main/java/mekanism/common/capabilities/energy/FixedUsageEnergyContainer.java#L36-L39) and [Electrolytic Separator](https://github.com/mekanism/Mekanism/blob/96c736241e308a9cf1c73f7dcfa9aa221ea559d3/src/main/java/mekanism/common/tile/machine/TileEntityElectrolyticSeparator.java) | Energy upgrades increase storage, not the separator's per-operation discount; speed raises operation count with energy charged per operation | A future Grindless upgrade must explicitly preserve its energy contract; speed is not permission for free output |
+
+Mekanism's [gas generator](https://github.com/mekanism/Mekanism/blob/96c736241e308a9cf1c73f7dcfa9aa221ea559d3/src/generators/java/mekanism/generators/common/tile/TileEntityGasGenerator.java#L88-L106)
+keeps fractional burn arithmetic, but its complete save/config-change path
+was not traced. Do not use that as evidence of legacy-burn persistence.
+Conversion rounding, transport/idle overhead, total generator upgrade
+support and arbitrary GT parallel/addon combinations are also unproved.
+
+ADR-0190's50-percent baseline recovery is a separate Grindless choice.
+The existing FluidLogic/actual Thermal ignition and Burn/Duration/GasFuel
+save contracts fit without importing Mekanism's container hierarchy or a
+new GT machine engine. The unimplemented Grindless upgrade-installation/
+energy trade remains separate; this comparison is not an all-loadout proof.
+
 ## Explicit manufacturing choice
 
 The bounded source study uses the same Forge-era GT pin248e1f8

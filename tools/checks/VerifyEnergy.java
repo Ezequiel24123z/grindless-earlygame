@@ -4,9 +4,12 @@ import io.github.ezequiel24123z.grindless.fluid.FluidBuffer;
 import io.github.ezequiel24123z.grindless.fluid.FluidEndpoint;
 import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
 import io.github.ezequiel24123z.grindless.fluid.FluidState;
+import io.github.ezequiel24123z.grindless.machine.ChassisMark;
 import io.github.ezequiel24123z.grindless.machine.GeneratorKind;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
+import io.github.ezequiel24123z.grindless.machine.MachineUpgrade;
 import io.github.ezequiel24123z.grindless.machine.ThermalGeneratorBlockEntity;
+import io.github.ezequiel24123z.grindless.machine.UpgradeSet;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,6 +30,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.List;
 
 /** Behaviour checks for the Flux energy layer. Not part of the mod. */
 public final class VerifyEnergy {
@@ -43,6 +47,7 @@ public final class VerifyEnergy {
         itemFuel();
         gasFuel();
         gasReturns();
+        legacyHydrogenFuel();
 
         System.out.println(failures == 0
                 ? "ALL ENERGY CHECKS PASSED"
@@ -100,7 +105,7 @@ public final class VerifyEnergy {
             eq("each request is bounded by missing gas", 1000 - (attempt - 1) * 250, source.lastRequested);
         }
         eq("four 250 mB deliveries buy exactly one ignition", 1, ignitions);
-        eq("one bucket buys the existing CO burn time", FluidLogic.CO_BURN_TICKS,
+        eq("one bucket buys the unchanged 400-tick CO burn time", 400,
                 integer(generator, "burnRemaining"));
         yes("the ignited private buffer is empty", state(gas, "stored").isEmpty());
 
@@ -148,10 +153,23 @@ public final class VerifyEnergy {
         eq("the completed bucket was consumed exactly once", 0, state(held, "stored").millibuckets());
 
         ThermalGeneratorBlockEntity hydrogenGenerator = generator(GeneratorKind.THERMAL);
-        collect(field(hydrogenGenerator, "gas"), hydrogen);
+        Object hydrogenGas = field(hydrogenGenerator, "gas");
+        collect(hydrogenGas, hydrogen);
+        eq("hydrogen collection requests exactly one bucket", 1000, hydrogen.lastRequested);
+        eq("hydrogen collection retains exactly one bucket before ignition", 1000,
+                state(hydrogenGas, "stored").millibuckets());
         yes("hydrogen still ignites", (boolean) invoke(hydrogenGenerator, "tryIgniteGas", new Class<?>[0]));
-        eq("hydrogen keeps its existing burn duration", FluidLogic.HYDROGEN_BURN_TICKS,
+        eq("a new hydrogen ignition buys exactly 50 ticks", 50, integer(hydrogenGenerator, "burnDuration"));
+        eq("all 50 newly paid hydrogen ticks remain", 50, integer(hydrogenGenerator, "burnRemaining"));
+        eq("one hydrogen ignition extracts from the source once", 1, hydrogen.extractions);
+        yes("one hydrogen ignition consumes the exact private bucket", state(hydrogenGas, "stored").isEmpty());
+        yes("one hydrogen ignition exhausts its one-bucket source", hydrogen.buffer.isEmpty());
+        no("the same hydrogen bucket cannot ignite twice",
+                (boolean) invoke(hydrogenGenerator, "tryIgniteGas", new Class<?>[0]));
+        eq("a refused second hydrogen ignition keeps the paid duration", 50,
                 integer(hydrogenGenerator, "burnDuration"));
+        eq("a refused second hydrogen ignition keeps the paid remaining ticks", 50,
+                integer(hydrogenGenerator, "burnRemaining"));
     }
 
     private static void gasReturns() throws Exception {
@@ -222,6 +240,103 @@ public final class VerifyEnergy {
                 state(field(restored, "gas"), "stored").millibuckets());
         eq("NBT preserves excess beside the fuel buffer", 250,
                 state(field(restored, "gas"), "pendingReturn").millibuckets());
+    }
+
+    private static void legacyHydrogenFuel() throws Exception {
+        for (int reserved : new int[] {250, 1000}) {
+            String label = "legacy hydrogen with " + reserved + " mB reserved";
+            ThermalGeneratorBlockEntity original = generator(GeneratorKind.THERMAL);
+            original.energy().setStored(1234L);
+            original.menuContainer().setItem(0, new ItemStack(Items.CHARCOAL, 2));
+            original.containerConfig().setBufferTarget(96L);
+            original.containerConfig().setCapacityLimit(4096L);
+            original.setChassisMark(ChassisMark.MK_II);
+            original.setUpgrades(UpgradeSet.EMPTY.install(MachineUpgrade.SPEED, ChassisMark.MK_II));
+            Endpoint source = new Endpoint(FluidLogic.HYDROGEN, 2000,
+                    reserved == 250 ? 250 : Integer.MAX_VALUE);
+            source.buffer.set(FluidState.of(FluidLogic.HYDROGEN, 2000, 30.0, FluidLogic.AMBIENT_MPA));
+            if (reserved == 1000) {
+                source.excess = 250;
+                source.refundLimit = 0;
+            }
+            Object originalGas = field(original, "gas");
+            collect(originalGas, source);
+            eq(label + " starts with the exact unburnt volume", reserved,
+                    state(originalGas, "stored").millibuckets());
+
+            // An already paid legacy burn owes 137 of its original 400 ticks, independently of new fuel rates.
+            CompoundTag legacy = original.saveWithoutMetadata();
+            legacy.putInt("Burn", 137);
+            legacy.putInt("Duration", 400);
+            ThermalGeneratorBlockEntity restored = generator(GeneratorKind.THERMAL);
+            restored.load(roundTrip(legacy));
+            eq(label + " retains the paid 400-tick duration", 400, integer(restored, "burnDuration"));
+            eq(label + " retains all 137 remaining paid ticks", 137, integer(restored, "burnRemaining"));
+            CompoundTag savedAgain = roundTrip(restored.saveWithoutMetadata());
+            for (String key : List.of("Burn", "Duration", "GasFuel", "Energy", "Fuel", "Config",
+                    "ChassisMark", "Upgrades", "Conditions")) {
+                eq(label + " preserves binary " + key, legacy.get(key), savedAgain.get(key));
+            }
+            Object restoredGas = field(restored, "gas");
+            eq(label + " preserves unburnt gas identity, volume and state", state(originalGas, "stored"),
+                    state(restoredGas, "stored"));
+            eq(label + " preserves refund identity, volume and state", state(originalGas, "pendingReturn"),
+                    state(restoredGas, "pendingReturn"));
+            eq(label + " preserves the refund face", field(originalGas, "returnFace"),
+                    field(restoredGas, "returnFace"));
+            no(label + " cannot ignite partial or unsettled gas",
+                    (boolean) invoke(restored, "tryIgniteGas", new Class<?>[0]));
+            eq(label + " rejection cannot reprice an existing burn", 400, integer(restored, "burnDuration"));
+            eq(label + " rejection cannot consume existing paid work", 137, integer(restored, "burnRemaining"));
+
+            CompoundTag withoutGas = legacy.copy();
+            withoutGas.remove("GasFuel");
+            ThermalGeneratorBlockEntity oldest = generator(GeneratorKind.THERMAL);
+            oldest.load(roundTrip(withoutGas));
+            eq(label + " without GasFuel keeps its paid duration", 400, integer(oldest, "burnDuration"));
+            eq(label + " without GasFuel keeps its paid remainder", 137, integer(oldest, "burnRemaining"));
+            yes(label + " without GasFuel cannot invent stored gas", state(field(oldest, "gas"), "stored").isEmpty());
+            yes(label + " without GasFuel cannot invent a refund",
+                    state(field(oldest, "gas"), "pendingReturn").isEmpty());
+
+            if (reserved == 1000) {
+                source.refundLimit = Integer.MAX_VALUE;
+                invoke(restoredGas, "returnTo", new Class<?>[] {FluidEndpoint.class}, source);
+                eq(label + " refunds through the original face", Direction.WEST, source.lastReturnFace);
+                yes(label + " settles every escrow mB", state(restoredGas, "pendingReturn").isEmpty());
+                eq(label + " clears only the settled refund face", null, field(restoredGas, "returnFace"));
+            }
+            eq(label + " conserves all unburnt gas after any refund", 2000,
+                    source.buffer.state().millibuckets() + state(restoredGas, "stored").millibuckets());
+
+            // This next binary fixture begins after the legacy paid burn has been fully spent.
+            CompoundTag exhausted = restored.saveWithoutMetadata();
+            exhausted.putInt("Burn", 0);
+            ThermalGeneratorBlockEntity next = generator(GeneratorKind.THERMAL);
+            next.load(roundTrip(exhausted));
+            eq(label + " exhausted fixture owes no old work", 0, integer(next, "burnRemaining"));
+            eq(label + " exhausted fixture retains its historical duration", 400, integer(next, "burnDuration"));
+            Object nextGas = field(next, "gas");
+            for (int missing = 1000 - reserved; missing > 0; missing -= 250) {
+                collect(nextGas, source);
+            }
+            eq(label + " completes exactly one unburnt bucket", 1000, state(nextGas, "stored").millibuckets());
+            eq(label + " refill conserves source plus private gas", 2000,
+                    source.buffer.state().millibuckets() + state(nextGas, "stored").millibuckets());
+            yes(label + " next bucket ignites", (boolean) invoke(next, "tryIgniteGas", new Class<?>[0]));
+            eq(label + " only the next ignition receives the new duration", 50, integer(next, "burnDuration"));
+            eq(label + " only the next ignition receives the new paid ticks", 50, integer(next, "burnRemaining"));
+            yes(label + " next ignition consumes its bucket once", state(nextGas, "stored").isEmpty());
+            eq(label + " next ignition leaves all remaining source gas intact", 1000,
+                    source.buffer.state().millibuckets());
+            no(label + " cannot reuse that consumed private bucket",
+                    (boolean) invoke(next, "tryIgniteGas", new Class<?>[0]));
+            eq(label + " a refused retry cannot alter the new paid ticks", 50, integer(next, "burnRemaining"));
+            ThermalGeneratorBlockEntity resumed = generator(GeneratorKind.THERMAL);
+            resumed.load(roundTrip(next.saveWithoutMetadata()));
+            eq(label + " binary reload keeps the new paid duration", 50, integer(resumed, "burnDuration"));
+            eq(label + " binary reload keeps the new paid remainder", 50, integer(resumed, "burnRemaining"));
+        }
     }
 
     private static ThermalGeneratorBlockEntity generator(GeneratorKind kind) throws Exception {

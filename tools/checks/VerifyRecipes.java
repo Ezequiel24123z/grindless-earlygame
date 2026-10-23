@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.material.MaterialSnapshot;
+import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
 import io.github.ezequiel24123z.grindless.fluid.FluidState;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuKind;
 import io.github.ezequiel24123z.grindless.process.ConditionBand;
@@ -646,6 +647,29 @@ public final class VerifyRecipes {
                 split.ventedOutputs().get(0).qualified());
         eq("vented oxygen is one bucket", 1000, split.ventedOutputs().get(0).count());
         eq("electrolysis is ten seconds", 20 * 10, split.durationTicks());
+        eq("unmodified electrolysis draws 32 FU per tick", 32L, split.fuPerTick());
+        long splitCost = Math.multiplyExact(split.fuPerTick(), split.durationTicks());
+        eq("the live unmodified electrolysis batch costs 6400 FU", 6400L, splitCost);
+        eq("the baseline Thermal Generator produces 32 FU per tick", 32L, ThermalLogic.generate(true));
+        eq("one newly ignited hydrogen bucket returns 1600 FU", 1600L,
+                ThermalLogic.generate(true) * FluidLogic.burnTicks(FluidLogic.HYDROGEN));
+        long recoveredFu = 0L;
+        for (OutputSpec output : split.fluidOutputs()) {
+            int burnTicks = FluidLogic.burnTicks(output.id());
+            if (burnTicks > 0) {
+                eq("the live electrolysis fuel output consists of whole ignition buckets", 0,
+                        output.count() % FluidLogic.BUCKET);
+                recoveredFu += (long) (output.count() / FluidLogic.BUCKET)
+                        * burnTicks * ThermalLogic.generate(true);
+            }
+        }
+        eq("all live electrolysis outputs together return only 3200 FU as fuel", 3200L, recoveredFu);
+        yes("unmodified electrolysis and fuel generation are strictly lossy", recoveredFu < splitCost);
+        eq("unmodified hydrogen fuel recovers exactly half the split cost", splitCost / 2, recoveredFu);
+        long legacyRecovery = (long) (split.fluidOutputs().get(0).count() / FluidLogic.BUCKET)
+                * 400 * ThermalLogic.generate(true);
+        eq("the old shared 400-tick rate is a 25600 FU counterexample", 25600L, legacyRecovery);
+        no("the old shared CO rate satisfies the baseline loss invariant", legacyRecovery < splitCost);
         yes("electrolysis names no temperature", !split.namesTemperature());
         yes("electrolysis names no atmosphere", !split.namesAtmosphere());
 

@@ -11,7 +11,17 @@ hydrogen fuel correction: a6d4adca owns optional selectors/one reward-free
 native lesson/exact52 lineage;7042c976 owns50-tick future H2 ignition and
 actual-energy/saved-burn/gas contracts. Existing CO400, biomass, manual
 construction, old51 IDs/rewards and mandatory first-F2 remain unchanged.
-Research68d2 checks pinned mature-mod energy/persistence precedent read-only.
+Research68d2 supplies the bounded pinned mature-mod comparison described below.
+
+Fuel sourcec7427385/exact8a1 is now directly reviewed and normally composed,
+with all four code/check blobs preserved; no revised Java result yet.
+Only FluidLogic's future-H2 rate changes. Actual ignition/binary fixtures
+retain legacy400 duration/137 remaining ticks, physical gas/refund and
+stores/configuration; an explicit Burn0 fixture is not137 observed world ticks.
+ThermalBE/process/transport/save implementations remain byte-identical.
+Research68d2 closes source-only: GT's inspected fuel list has no H2 route,
+Mekanism's shared value is nominally neutral and its fixed-usage separator
+excludes energy-upgrade discounts. No code import or external save claim.
 
 No source outcome is qualified yet. Executor604 prepares G15 locally only;
 no PC lease, root admission, CI query, JVM, generation or deployment is

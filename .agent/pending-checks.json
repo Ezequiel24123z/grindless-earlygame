@@ -11,7 +11,8 @@
   "active_t1_gas_increment": {
     "policy": "ADR-0190",
     "baseline": "8a1a3365dee930d312616c9f9023ecbd513ccb8b",
-    "status": "SOURCE_IN_PROGRESS_NO_QUALIFICATION_OR_PC_GRANT",
+    "status": "FUEL_SOURCEc742_REVIEWED_COMPOSED_CONTENT_IN_PROGRESS_NO_QUALIFICATION_OR_PC_GRANT",
+    "fuel_source": "c74273858966c4ed9f8930a18a4bd348881dc74d",
     "content_owner": "a6d4adca-c6b0-40b5-85a9-9ba83326329b",
     "fuel_owner": "7042c976-722d-4974-92f5-e614e95bd506",
     "required": "actualbaseline_energy_recovery_saved_paidburn_gasconservation_optionalroutes52lineage_old51preservation_normalprojections",

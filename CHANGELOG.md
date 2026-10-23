@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate the reviewed hydrogen rate without changing fuel custody.**
+  Normally preserve c7427385's four code/check blobs; ThermalBE and all
+  process/transport/persistence mechanisms remain identical. The new rate
+  and binary saved-burn contracts are authored, not executed. Pinned GT and
+  Mekanism research supports an energy-cost boundary and explicitly guarded
+  upgrade semantics, not a borrowed50-percent number or persistence proof.
 - **Continue T1 with existing gas families and a bounded recovery contract.**
   ADR-0190 selects an optional Cell/Intake/Reactor branch and one reward-free
   native lesson while preserving manual final machines and first-F2.
@@ -22,6 +28,16 @@ entries below reference those records by id.
   and retain paid burn/gas custody; independent mature-mod research runs
   alongside them. The50-percent comparison is baseline-only, not a future
   module/chassis energy claim. No source result, PC grant or player update.
+- **Make baseline hydrogen fuel recovery lossy without repricing saved burns.**
+  Separate newly ignited hydrogen at50 ticks per1000mB from unchanged CO400.
+  The live unmodified electrolysis batch still costs6400FU and emits2000mB
+  hydrogen, now worth3200FU at Thermal32FU/t. Author exact-rate, legacy400
+  counterexample, actual ignition and binary-NBT regressions for paid
+  Burn/Duration, partial gas, blocked refunds/faces, inventory, energy,
+  configuration and saved capabilities. Keep ThermalBE byte-unchanged.
+  This is source-only: no Java/build/native/model or PC execution occurred.
+  The50% claim covers the unmodified T1 baseline, not the separate future
+  SPEED/time-versus-energy-multiplier boundary or whole-tier readiness.
 - **Close the bounded manual-machine engineering increment.**
   Independent QA verifies115/115 G14 artifacts, new S1 identities, actual
   R36/T0/T1 outcomes, unchanged copied payloads and recorded safe return.
