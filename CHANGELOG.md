@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Assign the composed gas increment one targeted G15 window.**
+  Sole604/exacte1ed uses a new guarded root for fuel/binary/recipe/content/
+  FTB52 and synthetic Prism contracts plus normal projections/current
+  source-image evidence. Reuse unchanged native mechanisms; no per-row
+  smoke, publication, real Prism/player action or CI replay. A11 requires
+  genuine passes and exacte1ed parent; failure keeps honest partial data.
 - **Compose the optional gas branch with its real fuel boundary.**
   Normally preserve all15 content/check/tool blobs from5c34ea38 and the
   four reviewed fuel blobs fromc742. Exact52 lineage, old51 IDs/rewards,

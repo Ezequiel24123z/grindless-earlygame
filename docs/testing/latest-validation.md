@@ -4,6 +4,22 @@
 
 ### ADR-0190 optional T1 gas utilities
 
+**G15 assignment, not an executed pass.** Exact composed source
+e1edcfe5804475bead2d92f407b1ad09a589ce4c/tree69c3720b48fe99f8493e7e2375fff907a07ee3dc
+preserves reviewed fuel/content blobs. Sole604 receives new private
+inventorydee779f4/preparation4b73a040 with fresh safety/ownership/Sync before
+required common/Forge/tool compilation, affected fuel/recipe/quest/T1/
+adapter/guidance checks, existing FTB backend and isolated Prism
+QuestDefinitions contracts. Actual player definitions are not updated.
+
+Normal writers, independent checks, canonical refresh/rechecks and actual
+expanded source/image provenance must complete before optional A11
+exactparente1ed. No native is justified by these bounded data changes:
+registry/BE/store/transport/claim mechanics are unchanged and their proofs
+remain source-bound. No old backend/ABI/compiler-enclave/asset/CI replay,
+package/Prism/player operation or new budget is granted. Real failures
+retain partial outputs, diagnostics and no-restore closure; receipts and
+fresh settled guard/Java/lock return are required. No outcome exists yet.
 Content5c34ea3887d587ca0e585f295079a5695fce1a6f has exactparent8a1/tree
 adf3ab8b13394cd01f99c2f1a5a27cab2fb23859,16 files456+/137-.
 Parent directly reviews the complete source/check/tool diff and records

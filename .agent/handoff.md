@@ -4,6 +4,29 @@ Updated: 2026-10-23. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**G15 exact-source targeted GO, no result yet.** Sole604 executes source
+e1edcfe5804475bead2d92f407b1ad09a589ce4c on a NEW gas-utilities root using
+private inventorydee779f4/preparation4b73a040 after fresh admission/Sync.
+All old roots/proofs/worlds remain intact; no parent or other worker PC/cache
+access. Grant documentation is not the executable source.
+
+Required affected proof: common/Forge/classes/tools; Energy/Fluid/Recipes/
+Atlas/Quest/Claims/T1Teaching/Adapters/Registry/Guidance; existing FTB backend
+and isolated synthetic Prism QuestDefinitions contracts. Normal three
+writers/three independent CheckOnly/all4 byte+mtime invariance, required
+guidance binding and postEcon/T0/T1 follow. Capture the actual expanded
+source/image pins and copied write/check images; do not guess old43/98.
+
+No new native: registration, transport/settlement, BE persistence/scheduling
+and claim implementation are unchanged; data/ignition/binary/backend tests
+cover the new domain. No CI query, legacy Heracles run, compiler enclave,
+FTB publication, packaging or real Prism/player/world action. The Prism
+test owns only its temporary synthetic fixture, not the installed target.
+A11 is optional only after actual passes, exactparent e1ed, normal4 subset,
+frozen other inputs/Java0/locksfalse/trailers/clean bundle, no push/runtime
+after data. Failure preserves real partial outputs DIRTY without restore
+or a waived check. Final raw/guard/Java/locks/custody/leaseback is mandatory.
+
 **Gas source composition complete; G15 execution still unissued.**
 Content5c34ea38/exact8a1 (16 files456+/137-) is directly reviewed and normally
 composed with reviewed fuelc742. All15 non-changelog content blobs and four
