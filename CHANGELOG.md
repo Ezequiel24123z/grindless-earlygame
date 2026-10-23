@@ -15,6 +15,18 @@ entries below reference those records by id.
 
 ### Added
 
+- **Fix installed T0 native-quest startup ordering on the exact dd0b4bc baseline.**
+  Verify only at Forge `ServerStartedEvent` LOWEST, after Architectury9.2.14's
+  HIGH-priority bridge has delivered FTB2001.4.22's loader. Bind admission to the
+  verified singleton/server and clear it before start, on stop and before any
+  verification attempt. Preserve full definition failures, all46 IDs, rewards,
+  migration and saves; never initialize/reload FTB or fabricate configuration.
+  Extend the existing console-only Forge probe with the old verifier-before-load
+  failure, both registration orders, one-load/readiness and malformed/missing/
+  wrong-server regressions; retain strict AST contracts/mutations.
+  Source-only hotfix: no JVM/build, PC/cache, package, deployment or owner-world
+  action; executable qualification and protected client new/load/reopen remain
+  the coordinator's separate gate, not a claimed fix of the installed artifact.
 - **Record the actual registered FTB and disk-lifecycle proof.** Real Forge
   loads46 logical quests/36 native item rewards and passes1099 graph/filter/
   import assertions, then seed56 and a new process reopens persisted native

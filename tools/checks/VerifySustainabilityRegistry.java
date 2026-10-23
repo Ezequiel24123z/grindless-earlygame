@@ -1155,8 +1155,9 @@ public final class VerifySustainabilityRegistry {
                                     exception);
                         }
                     }));
-                    LifecycleEvent.SERVER_STARTED.register(FtbQuestIntegration::started);
-                    LifecycleEvent.SERVER_STOPPING.register(server -> ready = false);
+                    registerStarted(MinecraftForge.EVENT_BUS);
+                    LifecycleEvent.SERVER_BEFORE_START.register(FtbQuestIntegration::reset);
+                    LifecycleEvent.SERVER_STOPPING.register(FtbQuestIntegration::reset);
                     TeamEvent.PLAYER_LOGGED_IN.register(event -> importPlayer(event.getPlayer()));
                     TeamEvent.PLAYER_CHANGED.register(event -> importPlayer(event.getPlayer()));
                     ObjectCompletedEvent.QUEST.register(event -> {
@@ -1173,14 +1174,34 @@ public final class VerifySustainabilityRegistry {
                 }
                 """)
                 && questMethod(sources, "FtbQuestIntegration", """
-                private static void started(MinecraftServer server) {
+                static void registerStarted(IEventBus bus) {
+                    bus.addListener(EventPriority.LOWEST, FtbQuestIntegration::started);
+                }
+                """)
+                && questMethod(sources, "FtbQuestIntegration", """
+                static void reset(MinecraftServer server) {
+                    ready = null;
+                }
+                """)
+                && questMethod(sources, "FtbQuestIntegration", """
+                private static void started(ServerStartedEvent event) {
+                    ready = null;
                     ServerQuestFile file = ServerQuestFile.INSTANCE;
-                    if (file == null || file.server != server) {
+                    if (file == null || file.server != event.getServer()) {
                         throw new IllegalStateException("FTB Quests did not initialize its native server quest file");
                     }
                     FtbQuestNative.verify(file);
-                    ready = true;
+                    ready = file;
                     Grindless.LOG.info("Native FTB Quests ready: 46 stable Grindless quests; legacy reward claims are import-only");
+                }
+                """)
+                && questMethod(sources, "FtbQuestIntegration", """
+                static ServerQuestFile verifiedFile(MinecraftServer server) {
+                    ServerQuestFile file = ServerQuestFile.INSTANCE;
+                    if (file == null || file != ready || file.server != server) {
+                        throw new IllegalStateException("Native Grindless FTB definitions have not been verified for this server");
+                    }
+                    return file;
                 }
                 """)
                 && questMethod(sources, "FtbQuestIntegration", """
@@ -1198,10 +1219,7 @@ public final class VerifySustainabilityRegistry {
                         throw new IllegalStateException("Native quest import must execute on the server thread");
                     }
                     try {
-                        if (!ready) {
-                            throw new IllegalStateException("Native Grindless FTB definitions have not been verified");
-                        }
-                        TeamData data = ServerQuestFile.INSTANCE.getOrCreateTeamData(player);
+                        TeamData data = verifiedFile(player.server).getOrCreateTeamData(player);
                         FtbQuestNative.migrate(QuestProgress.get(player), player.getUUID(), data);
                         data.saveIfChanged();
                         return true;
@@ -1217,8 +1235,8 @@ public final class VerifySustainabilityRegistry {
                     if (event.phase == TickEvent.Phase.END && event.player.tickCount % 20 == 0
                             && event.player instanceof ServerPlayer player) {
                         QuestProgress legacy = QuestProgress.get(player);
-                        if (ready && legacy.usesNativeClaims(player.getUUID())) {
-                            TeamData data = ServerQuestFile.INSTANCE.getOrCreateTeamData(player);
+                        if (ready != null && legacy.usesNativeClaims(player.getUUID())) {
+                            TeamData data = verifiedFile(player.server).getOrCreateTeamData(player);
                             if (data == null) {
                                 throw new IllegalStateException("Native quest player has no framework team progress");
                             }
@@ -1835,7 +1853,8 @@ public final class VerifySustainabilityRegistry {
             case "QuestBackendPlatform", "QuestBackendPlatformImpl" -> Set.of("<init>#0", "open#1");
             case "GrindlessForge" -> Set.of("<init>#0");
             case "GrindlessForgeClient" -> Set.of("<init>#0", "onClientSetup#1");
-            case "FtbQuestIntegration" -> Set.of("<init>#0", "init#1", "started#1", "open#1", "importPlayer#1", "tick#1");
+            case "FtbQuestIntegration" -> Set.of("<init>#0", "init#1", "registerStarted#1", "reset#1",
+                    "started#1", "verifiedFile#1", "open#1", "importPlayer#1", "tick#1");
             case "FtbQuestNative" -> Set.of("<init>#0", "verify#1", "migrate#3", "refresh#3", "sameData#2", "parseId#1");
             case "FtbQuestDefinitions" -> Set.of("<init>#0", "id#2", "questId#1", "taskId#1", "rewardIds#1",
                     "code#1", "chapters#0", "quest#4", "body#1", "json#1", "strings#1", "unique#2");
@@ -2020,7 +2039,7 @@ public final class VerifySustainabilityRegistry {
                     "private final Map<UUID, Set<String>> claimed = new HashMap<>();",
                     "private final Set<UUID> nativeClaims = new HashSet<>();",
                     "private final Map<UUID, Set<String>> nativeCompleted = new HashMap<>();");
-            case "FtbQuestIntegration" -> List.of("private static boolean ready;");
+            case "FtbQuestIntegration" -> List.of("private static ServerQuestFile ready;");
             case "FtbMatrixFilter" -> List.of("public static final String BINDING = \"grindless:quest_matrix\";");
             case "HeraclesQuestNetwork" -> List.of("private static final String PROTOCOL = \"1\";");
             case "HeraclesQuestIntegration" -> List.of("private static Map<String, Quest> definitions = Map.of();",
@@ -2482,6 +2501,31 @@ public final class VerifySustainabilityRegistry {
                 "FtbQuestIntegration", "import dev.architectury.event.EventResult;", "import fixture.EventResult;");
         rejectQuest(root, sources, "the native probe must retain its actual command registration hook",
                 "FtbQuestIntegration", "MinecraftForge.EVENT_BUS.addListener(FtbQuestChecks::registerCommands);", "");
+        rejectQuest(root, sources, "native verification must remain outside the framework's unordered startup loop",
+                "FtbQuestIntegration", "registerStarted(MinecraftForge.EVENT_BUS);",
+                "LifecycleEvent.SERVER_STARTED.register(server -> started(new ServerStartedEvent(server)));");
+        rejectQuest(root, sources, "native verification must run after the complete pinned HIGH-priority bridge",
+                "FtbQuestIntegration", "EventPriority.LOWEST", "EventPriority.HIGH");
+        rejectQuest(root, sources, "the post-bridge hook must use the actual Forge event priority",
+                "FtbQuestIntegration", "import net.minecraftforge.eventbus.api.EventPriority;",
+                "import fixture.EventPriority;");
+        rejectQuest(root, sources, "the post-bridge hook must use the actual Forge server-started event",
+                "FtbQuestIntegration", "import net.minecraftforge.event.server.ServerStartedEvent;",
+                "import fixture.ServerStartedEvent;");
+        rejectQuest(root, sources, "a new world must clear readiness before native initialization",
+                "FtbQuestIntegration",
+                "LifecycleEvent.SERVER_BEFORE_START.register(FtbQuestIntegration::reset);", "");
+        rejectQuest(root, sources, "stopping a world must clear native readiness",
+                "FtbQuestIntegration", "LifecycleEvent.SERVER_STOPPING.register(FtbQuestIntegration::reset);", "");
+        rejectQuest(root, sources, "failed native startup cannot retain a previous readiness value",
+                "FtbQuestIntegration", "ready = null;", "");
+        rejectQuest(root, sources, "native readiness cannot precede full semantic verification",
+                "FtbQuestIntegration", "FtbQuestNative.verify(file);",
+                "ready = file; FtbQuestNative.verify(file);");
+        rejectQuest(root, sources, "native startup cannot initialize or reload the framework itself",
+                "FtbQuestIntegration", "FtbQuestNative.verify(file);", "file.load(); FtbQuestNative.verify(file);");
+        rejectQuest(root, sources, "startup verification must bind the event's actual server",
+                "FtbQuestIntegration", "file.server != event.getServer()", "false");
         rejectQuest(root, sources, "native readiness cannot skip the loaded definition verification",
                 "FtbQuestIntegration", "FtbQuestNative.verify(file);", "");
         rejectQuest(root, sources, "native opening cannot bypass admission and historical receipt import",
@@ -2489,7 +2533,13 @@ public final class VerifySustainabilityRegistry {
         rejectQuest(root, sources, "native migration must execute on the server thread",
                 "FtbQuestIntegration", "if (!player.server.isSameThread())", "if (false)");
         rejectQuest(root, sources, "unverified native definitions cannot admit players",
-                "FtbQuestIntegration", "if (!ready)", "if (false)");
+                "FtbQuestIntegration", "if (file == null || file != ready || file.server != server)", "if (false)");
+        rejectQuest(root, sources, "a replacement native singleton cannot inherit a previous world's readiness",
+                "FtbQuestIntegration", "file != ready", "false");
+        rejectQuest(root, sources, "native admission must bind the admitted player's server",
+                "FtbQuestIntegration", "file.server != server", "false");
+        rejectQuest(root, sources, "native import and refresh cannot bypass verified-file admission",
+                "FtbQuestIntegration", "verifiedFile(player.server)", "ServerQuestFile.INSTANCE");
         rejectQuest(root, sources, "native receipt import must use the admitted player's UUID",
                 "FtbQuestIntegration", "player.getUUID(), data", "new java.util.UUID(0, 0), data");
         rejectQuest(root, sources, "native imported receipts must be saved before successful admission",
@@ -3167,6 +3217,7 @@ public final class VerifySustainabilityRegistry {
                 Map.entry("Mod", "net.minecraftforge.fml.common.Mod"),
                 Map.entry("MinecraftForge", "net.minecraftforge.common.MinecraftForge"),
                 Map.entry("IEventBus", "net.minecraftforge.eventbus.api.IEventBus"),
+                Map.entry("EventPriority", "net.minecraftforge.eventbus.api.EventPriority"),
                 Map.entry("FMLCommonSetupEvent", "net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent"),
                 Map.entry("FMLClientSetupEvent", "net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent"),
                 Map.entry("FMLJavaModLoadingContext", "net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext"),
@@ -3176,6 +3227,7 @@ public final class VerifySustainabilityRegistry {
                 Map.entry("TickEvent", "net.minecraftforge.event.TickEvent"),
                 Map.entry("PlayerEvent", "net.minecraftforge.event.entity.player.PlayerEvent"),
                 Map.entry("ServerStoppedEvent", "net.minecraftforge.event.server.ServerStoppedEvent"),
+                Map.entry("ServerStartedEvent", "net.minecraftforge.event.server.ServerStartedEvent"),
                 Map.entry("SimpleChannel", "net.minecraftforge.network.simple.SimpleChannel"),
                 Map.entry("NetworkRegistry", "net.minecraftforge.network.NetworkRegistry"),
                 Map.entry("NetworkDirection", "net.minecraftforge.network.NetworkDirection"),
@@ -3295,6 +3347,7 @@ public final class VerifySustainabilityRegistry {
                     "FTBQuestsAPI", "FtbMatrixFilter", "FtbQuestFiles", "FtbQuestChecks",
                     "IEventBus", "FMLCommonSetupEvent", "FMLPaths", "IOException",
                     "LifecycleEvent", "EventResult", "TeamEvent", "ObjectCompletedEvent", "MinecraftForge", "TickEvent",
+                    "EventPriority", "ServerStartedEvent",
                     "MinecraftServer", "ServerPlayer", "ServerQuestFile", "TeamData", "OpenQuestBookMessage", "Component",
                     "IllegalStateException", "IllegalArgumentException");
             case "FtbQuestNative" -> Set.of("BaseQuestFile", "Chapter", "Quest", "QuestObjectBase", "TeamData",
