@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate exact gas-quest oracle corrections and retain valid G15 proofs.**
+  Normally preserve both981b5fd9 checker blobs after direct review. The
+  exact52 set and closed chapter profile retain old IDs/reward guarantees
+  and independent wet/gas negatives. Application, producers and all seven
+  passed G15 mains are unchanged; their source-bound results remain reusable.
+  Corrected checks and previously unexecuted stages still need a new window.
 - **Close G15 without reopening a retired execution window.**
   The own guard was already removed before the conditional amendment was
   admitted, so no remaining stage or writer ran. Preserve133-file custody,
@@ -33,6 +39,15 @@ entries below reference those records by id.
   source-image evidence. Reuse unchanged native mechanisms; no per-row
   smoke, publication, real Prism/player action or CI replay. A11 requires
   genuine passes and exacte1ed parent; failure keeps honest partial data.
+- **Repair the gas-lesson sustainability oracles without changing runtime.**
+  Preserve G15's exacte1ed adapter failure (1044 passes, two stale expectations).
+  Require the exact old50-plus-wet-plus-gas objective set, explicit reward-free
+  Cell-acquisition lesson and unchanged first-F2 prerequisites. Match the
+  Registry check's closed T1 chapter profile to the actual gas addition while
+  retaining the wet counterexample and adding an independent gas rejection.
+  Guidance already iterates the current catalogue and needs no count/set edit.
+  Source-only follow-up: no check execution, producer, canonical, native API,
+  paid-state or player-instance change is claimed (ADR-0190).
 - **Compose the optional gas branch with its real fuel boundary.**
   Normally preserve all15 content/check/tool blobs from5c34ea38 and the
   four reviewed fuel blobs fromc742. Exact52 lineage, old51 IDs/rewards,

@@ -11,7 +11,10 @@
   "active_t1_gas_increment": {
     "policy": "ADR-0190",
     "baseline": "8a1a3365dee930d312616c9f9023ecbd513ccb8b",
-    "status": "G15_CLOSED_Adapters1044_2fail_compile7checks0_133custody_returned_amendment_notadmitted_NOwriters_A11_orPClease",
+    "status": "G15_closed7mains0_Adapters2fail_981b_oracle_reviewed_normallycomposed_G16_pending_NO_PClease",
+    "oracle_repair_source": "981b5fd904d195fff0de08946fcabc4999c35052",
+    "G16_inventory_sha256": "8da0f5501fc1598ac8bc61f3a89ccd263edcaef0cc84b0247c0adf41aae25677",
+    "G16_preparation_sha256": "a5e473a20d4dd25e9a9cd62dbb42ab70fd15795ee506ac38affa0691025ff6f7",
     "fuel_source": "c74273858966c4ed9f8930a18a4bd348881dc74d",
     "content_source": "5c34ea3887d587ca0e585f295079a5695fce1a6f",
     "provenance": "direct_fuel_sources_and_images_plus3actual_gas_family_images_added_to_existingpins_NO_old43_98_relabel",

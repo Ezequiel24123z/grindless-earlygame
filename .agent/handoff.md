@@ -4,6 +4,21 @@ Updated: 2026-10-23. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**Oracle repair981b5fd9/exacte1ed is directly reviewed and normally composed.**
+Only Adapters/Registry and its changelog changed (33+/6-); both checker blobs
+remain exact. Adapters now requires old50+wet+gas, no reward/supply and the
+unchanged F2 prerequisite set. Registry's exact chapter profile follows the
+real source and retains independent wet/gas counterexamples; no comparator,
+native API, runtime or producer is weakened or changed. Guidance already
+iterates the catalogue and needs no count patch.
+
+Seven G15 successful mains and their application inputs are byte-identical
+under this checker-only delta. Reuse them at originale1ed, not as a new run;
+compile/check the repaired helpers and then the previously unexecuted
+stages/models in G16. Private inventory8da0f550/preparationa5e473a2 is local
+only, with no source/grant/lease yet. G15 custody reviewd393 is in progress;
+closed failures and nonadmitted amendment remain immutable.
+
 **G15 is CLOSED and explicitly RETURNED; the conditional amendment was NOT
 admitted.** Its guard was hash-removed at06:17:20Z before receipt of the
 amendment. The executor correctly ran no remaining Registry/Guidance/

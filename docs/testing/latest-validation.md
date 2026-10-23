@@ -4,6 +4,21 @@
 
 ### ADR-0190 optional T1 gas utilities
 
+**Checker-only correction981b5fd9, no revised pass yet.** Exactparente1ed,
+tree03da084393368e58bd74f731cdaea1048bd47cfd, three files33+/6-.
+Parent directly reviews the complete delta and verifies handoffSHA
+e27df20bc533f8c2831f4463f062e3783d04046e2fc0ad756d17f4a0dc9fefe2.
+Both Adapters/Registry blobs are normally preserved. Exact52/objective/
+reward/firstF2 assertions are strengthened, not relaxed. Registry's formerly
+unexecuted closed chapter profile and obsolete wet mutation anchor now
+match actual source, retaining wet and adding a gas-specific negative.
+That extra Registry mismatch is source-observed, not an executed old red.
+
+All application/producer code and seven successful G15 mains remain exact.
+Their original e1ed evidence is reusable after custody verification; the
+changed helpers, Registry/Guidance/FTB/Prism and normal models need their
+new/unexecuted proof, not another Energy/Fluid/Recipe/Quest pass. G16
+preparation is local-only and no prior source result is relabelled.
 **G15 explicit return; amendment not admitted.** The own guard
 019c933e1176c4f5afbbb6ebdff1eb55ccf0ab8dce1cf28f3ac0454076285555 was
 removed at06:17:20Z before the executor admitted the amendment. Therefore
