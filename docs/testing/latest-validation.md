@@ -4,6 +4,22 @@
 
 ### ADR-0190 optional T1 gas utilities
 
+**G16 assignment with original G15 successes reused.** Exact source
+fb846b1d40216b2a01137ef78c9c53b86899bdce/treef2f20705210ad803bc9d02264017646c8e6d56ac
+normally composes both reviewed981b checker blobs. New inventory8da0f550/
+preparationa5e473a2 require fresh guards/Sync; no retired G15 root is reused.
+Needed current compilation, repaired Adapters/Registry, previously unrun
+Guidance/FTB/Prism and normal writer/check/canonical/provenance stages remain
+mandatory. Seven successful Energy/Fluid/Recipe/Atlas/Quest/Claims/Teaching
+mains retain original e1ed coordinates, with byte-equivalent production
+and test inputs; do not rerun or relabel them. Independent G15 custody
+review proceeds in parallel and is required before final acceptance.
+
+No new execution result is claimed here. Optional A11 has exactparentfb846
+and only normal4 outputs after passes/frozen inputs/Java0/locksfalse/
+trailers/clean bundle. No native/CI/legacy backend/enclave/publication/
+real target/world action; any failure preserves original partial data and
+ends its dependents without restore or successful-producer replay.
 **Checker-only correction981b5fd9, no revised pass yet.** Exactparente1ed,
 tree03da084393368e58bd74f731cdaea1048bd47cfd, three files33+/6-.
 Parent directly reviews the complete delta and verifies handoffSHA

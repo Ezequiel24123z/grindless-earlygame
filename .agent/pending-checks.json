@@ -11,7 +11,7 @@
   "active_t1_gas_increment": {
     "policy": "ADR-0190",
     "baseline": "8a1a3365dee930d312616c9f9023ecbd513ccb8b",
-    "status": "G15_closed7mains0_Adapters2fail_981b_oracle_reviewed_normallycomposed_G16_pending_NO_PClease",
+    "status": "oracle981b_composedfb846_G16_remaining_checks_models_GRANTED_reuse7mainse1ed_NO_result",
     "oracle_repair_source": "981b5fd904d195fff0de08946fcabc4999c35052",
     "G16_inventory_sha256": "8da0f5501fc1598ac8bc61f3a89ccd263edcaef0cc84b0247c0adf41aae25677",
     "G16_preparation_sha256": "a5e473a20d4dd25e9a9cd62dbb42ab70fd15795ee506ac38affa0691025ff6f7",
@@ -25,7 +25,7 @@
     "boundaries": "no_full_upgrade_energy_contract_wholeT1_or_world_acceptance_NO_player_update",
     "prepared_inventory_sha256": "dee779f420a7804f8b0c4c3dbf5e88696bda3afca1cfc3bb9f2ce80d7b737bee",
     "prepared_plan_sha256": "4b73a040a98d9bf702388223cc795cd13a54446109f014b1ac45545364a989da",
-    "PC_grant": null,
+    "PC_grant": "gas-content-closure-g16-20261023_exactfb846b1d40216b2a01137ef78c9c53b86899bdce_sole604",
     "last_PC_scope": "G15_closed_returned_e1ed_compile7mains0_Adapters2fail_no_remainingstages",
     "qualified_source": null
   },
@@ -152,6 +152,29 @@
     "not_proved": "finiteT1_establishment_renewability_autonomy_gameplay_client_or_acceptance"
   },
   "current_PC_execution": {
+    "assignment": "gas-content-closure-g16-20261023",
+    "active": true,
+    "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
+    "source": "fb846b1d40216b2a01137ef78c9c53b86899bdce",
+    "writer_invocation_source": "fb846b1d40216b2a01137ef78c9c53b86899bdce",
+    "normal_data_checkpoint": null,
+    "inventory_sha256": "8da0f5501fc1598ac8bc61f3a89ccd263edcaef0cc84b0247c0adf41aae25677",
+    "local_preparation_sha256": "a5e473a20d4dd25e9a9cd62dbb42ab70fd15795ee506ac38affa0691025ff6f7",
+    "scope": "NEWroot_freshSyncfb846_currentcompile_AdaptersRegistry_Guidance_FTB_Prismfixtures_normalwriters_checks_postcanonicals_actualpins_A11_ifpassed",
+    "reused_original_source": "e1edcfe5804475bead2d92f407b1ad09a589ce4c",
+    "reused_checks": ["Energy", "Fluid", "Recipes", "Atlas", "Quest", "QuestClaims", "T1Teaching"],
+    "source_frozen_until_active_stages_and_locks_close": true,
+    "other_workers_parent_PC_or_T0_access_authorized": false,
+    "real_PrismRoot_player_world_writes_authorized": false,
+    "prohibited": "NO_reusedmainreplays_CI_native_legacybackend_enclave_publication_package_actualPrism_world_deps_provider",
+    "failure_policy": "preserve_actualpartial_DIRTYsubset_NO_restore_waiver_hotfix_or_successfulproducerreplay",
+    "result": "GRANTED_NOT_OBSERVED",
+    "returned": false,
+    "returned_utc": null,
+    "return_state": "NOT_OBSERVED_G16",
+    "new_explicit_guarded_window_required": false
+  },
+  "closed_G15_execution": {
     "assignment": "gas-utilities-qualification-g15-20261023",
     "active": false,
     "owner_session": null,

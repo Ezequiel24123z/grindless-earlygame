@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Resume only the unproved gas boundaries in a new G16 window.**
+  Sole604/exactfb846 gets a fresh root, current repaired helpers and the
+  previously unexecuted backend/host/model stages. Reuse seven original
+  e1ed successes under unchanged inputs; never reopen G15 or retarget its
+  failures. A11 needs actual passes and exactfb846 parent; no new native,
+  publication or player action is granted.
 - **Integrate exact gas-quest oracle corrections and retain valid G15 proofs.**
   Normally preserve both981b5fd9 checker blobs after direct review. The
   exact52 set and closed chapter profile retain old IDs/reward guarantees

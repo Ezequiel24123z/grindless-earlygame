@@ -4,6 +4,23 @@ Updated: 2026-10-23. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**G16 exact-source GO, no observed result yet.** Sole604/source
+fb846b1d40216b2a01137ef78c9c53b86899bdce, private inventory8da0f550 and
+preparationa5e473a2, NEW gas-content-closure root after fresh admission/Sync.
+Do not reopen G15. Its seven successful mains remain originale1ed evidence;
+their inputs are unchanged by the two-checker repair and are not replayed.
+
+Compile the required current closure and execute repaired Adapters/Registry,
+then never-executed Guidance/FTB backend/isolated Prism QuestDefinitions and
+normal writers, independent checks, canonical binding/rechecks and actual
+expanded provenance. G15 custody review remains parallel and required for
+final acceptance, not a new producer. No copied G15 model exists to reuse.
+A11 can contain only normal4 outputs with exactparentfb846 after genuine
+passes/frozen inputs/Java0/locksfalse/trailers/clean bundle; no push/runtime
+after data. Retain any real failure/partial data DIRTY without restore.
+No native, legacy backend, compiler enclave, CI, publication, real Prism,
+player/world/provider action is authorized. Final guarded leaseback is required.
+
 **Oracle repair981b5fd9/exacte1ed is directly reviewed and normally composed.**
 Only Adapters/Registry and its changelog changed (33+/6-); both checker blobs
 remain exact. Adapters now requires old50+wet+gas, no reward/supply and the
