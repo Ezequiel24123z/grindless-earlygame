@@ -8,6 +8,7 @@ import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceContext;
 import io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt;
 import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
 import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
+import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
 import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
 import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
@@ -72,8 +73,8 @@ public final class VerifySustainabilityAdapters {
 
     private static void questAccessPrerequisites() throws IOException {
         Snapshot snapshot = AuthorityAdapters.live(Path.of(""));
-        eq("all old50 objectives and the reward-free wet objective remain inventoried",
-                51, snapshot.objectives().size());
+        eq("all old51 objectives and the reward-free gas objective remain inventoried",
+                52, snapshot.objectives().size());
         Set<String> old50 = Set.of(
                 "starter_supplies", "quest_book_help", "superflat", "construction", "multitool", "manual_work",
                 "crank", "extractor", "quern", "water", "clay_mixer", "grog", "firing", "ceramics",
@@ -85,6 +86,7 @@ public final class VerifySustainabilityAdapters {
                 "kiln", "factory_world", "flux_cell", "industrial_matrix");
         Set<String> expected = new TreeSet<>(old50);
         expected.add("wet_beneficiation");
+        expected.add("gas_utilities");
         eq("the exact old50 objective identities are retained", 50, old50.size());
         eq("no old objective is replaced or unknown objective invented", expected, snapshot.objectives().keySet());
         Objective wet = snapshot.objectives().get("wet_beneficiation");
@@ -93,10 +95,22 @@ public final class VerifySustainabilityAdapters {
         eq("optional wet acquisition retains assembly and Relay prerequisites", Set.of("assembler", "relay"), wet.requires());
         eq("wet acquisition invents no material reward route", null, wet.rewardRoute());
         eq("wet acquisition has no corresponding reward supply", false, snapshot.routes().containsKey("quest/wet_beneficiation"));
+        Objective gas = snapshot.objectives().get("gas_utilities");
+        eq("gas acquisition uses the existing Cell as evidence", "item:grindless:electrolysis_cell", gas.subject().key());
+        eq("gas acquisition requires one existing Cell", 1L, gas.count());
+        eq("optional gas acquisition retains assembly and Relay prerequisites", Set.of("assembler", "relay"), gas.requires());
+        eq("gas acquisition invents no material reward route", null, gas.rewardRoute());
+        eq("gas acquisition has no corresponding reward supply", false, snapshot.routes().containsKey("quest/gas_utilities"));
+        QuestCatalogue.Task gasTask = QuestCatalogue.byId("gas_utilities");
+        eq("gas acquisition remains an explicit lesson", QuestCatalogue.Type.LESSON, gasTask.type());
+        eq("gas acquisition observes possession, not processing", QuestCatalogue.Evidence.ITEM, gasTask.evidence());
+        eq("gas acquisition contains no material reward", List.of(), gasTask.rewards());
+        eq("the first F2 prerequisite set is unchanged by gas acquisition",
+                Set.of("matrix_line", "glass", "relay"), snapshot.objectives().get("industrial_matrix").requires());
         eq("only the original material-reward quests create reward routes", 26L,
                 snapshot.routes().values().stream().filter(route -> route.authority() == Authority.QUEST_REWARD).count());
-        for (var task : io.github.ezequiel24123z.grindless.quest.QuestCatalogue.tasks()) {
-            if (task.type() == io.github.ezequiel24123z.grindless.quest.QuestCatalogue.Type.LESSON) {
+        for (var task : QuestCatalogue.tasks()) {
+            if (task.type() == QuestCatalogue.Type.LESSON) {
                 eq("a reading/checklist objective does not invent supply " + task.id(), null,
                         snapshot.objectives().get(task.id()).rewardRoute());
                 eq("a reading/checklist has no material reward route " + task.id(), false,

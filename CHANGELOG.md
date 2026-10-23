@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Repair the gas-lesson sustainability oracles without changing runtime.**
+  Preserve G15's exacte1ed adapter failure (1044 passes, two stale expectations).
+  Require the exact old50-plus-wet-plus-gas objective set, explicit reward-free
+  Cell-acquisition lesson and unchanged first-F2 prerequisites. Match the
+  Registry check's closed T1 chapter profile to the actual gas addition while
+  retaining the wet counterexample and adding an independent gas rejection.
+  Guidance already iterates the current catalogue and needs no count/set edit.
+  Source-only follow-up: no check execution, producer, canonical, native API,
+  paid-state or player-instance change is claimed (ADR-0190).
 - **Compose the optional gas branch with its real fuel boundary.**
   Normally preserve all15 content/check/tool blobs from5c34ea38 and the
   four reviewed fuel blobs fromc742. Exact52 lineage, old51 IDs/rewards,
