@@ -2455,6 +2455,7 @@ is preserved and integration/release gates still control acceptance.
 | 79 | **Finite first-factory continuation** | ADR-0187 — G13 on489 executes564 funded batches through actual Press/F1/F2; manual actions remain178 under the inherited665 budget. Actual43/98 write/check provenance and343-file custody verified; G14 closes the corrected conservation/canonical checks. Conditional engineering proof, not autonomy/whole-tier/world acceptance |
 | 80 | **Manual normal-machine manufacture** | ADR-0188 — bounded implementation/qualification complete: G11 native, G13 finite/writer/check/43-98 and G14 R36/T0/T1/115-file custody verified. Normal A10d668/exact317 integrated ata792 with original489 bytes intact. No owner update or whole-T1 acceptance |
 | 81 | **Retired paid Bench ownership** | ADR-0189 — exactf1b9 UI1128/Persistence and native1273/19/JAR/custody verified, with no ledger/schema/refund. Native carriers do not prove actual client-wire/GUI/owner-save compatibility |
+| 82 | **Optional T1 gas utilities** | ADR-0190 — source development: existing manual Cell/Intake/Reactor and optional gas routes, one reward-free native lesson, future H2 ignition at50 ticks/bucket for50-percent nominal baseline recovery. Old51 IDs/rewards, firstF2, biomass/CO and paid burns remain; not yet qualified or deployed |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than

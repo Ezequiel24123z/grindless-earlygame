@@ -8,6 +8,11 @@ history, not the active queue. Reviewed sourcef1b9 now binds manual controls,
 fixtures, teaching and finite-capital semantics; G11 qualifies that exact
 composition. The former common-model-only preparation remains historical.
 Do not force automation or duplicate every infrastructure recipe.
+The manual-policy increment now closes through G11 native, G13 actual finite/
+writer/43-98 proof and G14 corrected-check closure; A10 is normally integrated
+ata792f02b with all custody verified. The new source baseline8a1a3365 starts
+ADR-0190's optional gas-utilities branch and future-ignition loss correction,
+not another run of the closed manual-policy programme.
 Current G7 engineering is closed with339 custody plus recovered original CI5,
 actual writer41df/data26e/29-38 provenance and managed51 file idempotence.
 The fictitious26e/51 target stays stopped. G10 subsequently closes the
@@ -181,16 +186,18 @@ was explicitly released and serialized through the integrated selector base.
 G10 supplies actual combined compilation/representative native and normal
 projections/A9, not a replay per family, owner acquisition or G8 retarget.
 
-1. Complete G11 on the reviewed manual-sourcef1b9, including the new
-   manual-control/retained-Bench boundary and the existing finite witness.
-   No result is inferred from the grant. G4/G5/G7/G8/G10 are closed within
-   scope, not reasons for replay. Preserve player state.
-2. Broaden real baseline families and interdependent processing beyond the first
-   factory. Existing Motor/Wire Mill/chemistry code is prior art, not work to
-   duplicate or proof of accepted revised-tier gameplay. Reuse the shared
-   engine/chassis; do not narrow legacy envelopes or silently change paid work.
-3. Preserve G8's proved default-F1 correction while resolving finite T1
-   custody and the separate net-supply/autonomy properties.
+1. Implement and qualify ADR-0190's optional gas-utilities branch through the
+   existing manual Cell/Intake/Reactor, Motor and gas routes, a reward-free
+   native lesson and honest baseline hydrogen recovery. Preserve old51 IDs,
+   first-F2, biomass/CO and paid burns. G11-G14 are closed source-bound proof,
+   not a queue to replay or permission to update the player's instance.
+2. Continue the broader basic-family and real capability contract beyond this
+   gas increment. Existing Motor/Wire Mill/chemistry code is prior art, not
+   work to duplicate. Reuse the shared engine/chassis; do not narrow legacy
+   full envelopes or silently change paid work. Actual upgrade installation
+   must settle its energy trade before borrowing a gas-loop safety claim.
+3. Preserve G8's default-F1 and G13/G14's finite-custody proofs while resolving
+   the separate net-supply/autonomy properties.
    Do not collapse F2/higher/cross-architecture identity or turn a model alias
    into an unlimited-supply/complete-tier certificate. Sifter still needs real
    content, not reinterpretation of a fixture.
@@ -212,7 +219,13 @@ energy-storage contract. This is a source-level positive-energy concern,
 not an executed closed-loop or full routing proof. Select no gas lesson,
 canonical fuel route or new number from this inventory alone; resolve the
 actual balance/route scope explicitly before accepting that expansion.
-Current mandatory biomass power and frozen G9 are unchanged.
+ADR-0190 now selects50 ticks per hydrogen bucket, preservingCO400 and
+electrolysis6400FU: two buckets recover3200FU at the unmodified F1 baseline.
+That is the new authored decision, not yet an executed source result.
+Stored already-paid burns remain intact; future ignition changes value.
+Actual machine-upgrade energy behavior remains a separately unqualified
+boundary, not a hidden claim that every serialized loadout is balanced.
+Mandatory biomass power, physical gas quantities and old worlds are unchanged.
 
 ## Progression and construction boundaries
 

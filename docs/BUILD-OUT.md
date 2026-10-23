@@ -45,12 +45,13 @@ paid work rather than restarting those completed windows.
 
 **Current next (2026-10-23):** the bounded first-factory/manual-policy plan
 is complete through A10 integration ata792f02b and independent G14 custody.
-Continue the separately authorized broader T1 family/content and real
-in-place-upgrade contract from the [tier map](tiers/t1-development-map.md).
-The first five-machine increment is not the whole T1 contract. No active
-PC lease or deployment grant remains; select a new coherent source scope
-before any further execution, and do not repeat the closed model/native
-proofs or update the player's game merely because this increment closed.
+The owner's renewed instruction now selects ADR-0190: optional T1 gas
+utilities using existing Cell/Intake/Reactor families and a lossy hydrogen
+baseline, with one reward-free native lesson. Source content and fuel lanes
+run separately; existing models/native proofs are not reset. The wider
+family and genuine in-place-upgrade contract remains in the
+[tier map](tiers/t1-development-map.md), not silently implemented by a fuel
+number or a higher control ingredient. No PC or deployment grant is active.
 
 **Latest actual boundary:** G11 native-only on f1b9 is closed through1273
 assertions/19 markers and independent46-file custody, with the fresh lease

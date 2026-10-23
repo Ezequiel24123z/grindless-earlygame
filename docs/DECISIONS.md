@@ -201,6 +201,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0187](#adr-0187--continue-the-finite-first-factory-witness-with-conserved-t0-custody) | Continue the finite first-factory witness with conserved T0 custody | Generic source review clear; T1 authority revision under ADR-0188 and actual Java/replay pending |
 | [0188](#adr-0188--assemble-normal-machines-manually-and-author-manufacturing-modes-per-product) | Assemble normal machines manually and author manufacturing modes per product | Complete A/B/C source normally composed; actual integrated qualification pending |
 | [0189](#adr-0189--hold-orphaned-paid-bench-work-before-ordinary-recipe-fallback) | Hold orphaned paid Bench work before ordinary recipe fallback | Guard f1b9 CI/Persistence/native1273 and46-file custody verified; owner-world compatibility unproved |
+| [0190](#adr-0190--add-optional-t1-gas-utilities-with-lossy-hydrogen-recovery) | Add optional T1 gas utilities with lossy hydrogen recovery | Accepted bounded development scope; source and qualification in progress |
 
 ---
 
@@ -9280,3 +9281,76 @@ longitudinal save. Copy-based pre-deployment inspection must still identify
 affected real jobs and any necessary recovery decision. Do not silently
 delete the paid state merely to keep a machine productive. Historical source/
 native proofs remain bound to their original code and are not relabeled.
+
+---
+
+## ADR-0190 — Add optional T1 gas utilities with lossy hydrogen recovery
+
+**Status.** Accepted bounded coordinator decision under the owner's renewed
+development instruction and ADR-0174/0178/0188, 2026-10-23. Source baseline
+8a1a3365 closes the preceding manual-machine increment. This decision opens
+two isolated source lanes, not another PC lease or a player update.
+
+**Context and existing solution.** The first factory is not all T1. Existing
+manual Electrolysis Cell, Atmospheric Intake and Chemical Reactor constructors,
+the ordinary process executor, gas buffers, adjacent tanks and real
+electrolysis/oxygen/recombination recipes can form a useful optional branch.
+They do not require another machine, fluid, network or processing framework.
+
+The baseline water-electrolysis authority spends 200 ticks at32 FU/t and
+retains2000 mB hydrogen. Current FluidLogic treats hydrogen like400-tick
+CO fuel; two1000 mB batches at32 FU/t nominally return25600 FU after spending
+6400. This is a source-derived baseline energy gain, not an observed
+closed factory. It must not be promoted as a free energy loop.
+
+**Decision.** Add one optional gas-utilities line after assembly, selecting
+the existing manual constructors, Motor precursor, water electrolysis,
+atmospheric oxygen, powered water recombination and actual hydrogen fuel
+authority. Keep mandatory first-F2 selection, biomass power, all material
+quantities and the normal-machine manufacturing policy unchanged.
+
+Decouple future hydrogen ignition from CO: one1000 mB hydrogen batch burns
+50 ticks at existing32 FU/t, returning1600 FU; the two batches from normal
+electrolysis recover3200 of6400 FU. This50-percent baseline trade is a bounded
+Grindless choice, not a figure attributed to GregTech or a thermodynamic
+simulation. Keep CO400, item/biomass fuel, fluid volumes and electrolysis
+cost/time unchanged. Recombination remains a powered water-recovery route,
+not generation. Reuse the authoritative fuel projection rather than add
+another price table.
+
+Saved already-ignited Burn/Duration is paid work and remains intact. Future
+ignitions use the new value; stored gas, partial buckets and return escrow
+retain their physical identities and quantities. No automatic world rewrite,
+revaluation of paid ticks, refund ledger or destructive migration follows.
+
+Append one concise reward-free T1 lesson through native FTB and existing
+catalogue/teaching/Atlas selection. Preserve all51 old logical/native IDs,
+starter, rewards and claim state. The lesson's item objective proves
+acquisition, not fluid processing. Extend exact known lineage to52 while
+retaining46/50/51 and fail-closed managed/startup rules. Recipes belong in
+JEI/Atlas; explain only gas capture, adjacent supply and the recovery loss.
+
+**Proof scope and limits.** Test the real electrolysis/fuel authorities,
+actual generator ignition, single-bucket conservation and binary saved-burn/
+gas preservation. Qualify optional selector/quest lineage and affected
+normal projections using existing entrypoints. Reuse unchanged native
+transport, settlement and FTB mechanisms; a new data row or lesson alone is
+not a reason for another native smoke. A distinct changed runtime binding
+would require its own representative proof before acceptance.
+
+The recovery comparison is for supported unmodified T1 machines. Machine
+upgrade installation is not implemented; the existing ProcessMachine
+timeMultiplier path does not yet implement UpgradeSet's full energy trade.
+Future speed/efficiency/chassis work must qualify its own processing-energy
+contract before inheriting any all-loadout recovery claim. Do not silently
+rewrite that engine, narrow legacy full envelopes or advertise an in-place
+upgrade under this bounded fuel/content change.
+
+**Reuse and alternatives.** Existing catalogues/stores/ignition/persistence
+already solve the required infrastructure. Independent pinned GT/Mekanism
+source comparison informs the energy-storage pattern; no code, assets or
+dependency are imported, and no external ratio is asserted before reading
+its actual source. Keeping the positive baseline loop, removing hydrogen
+inventory, resetting paid burns, creating a new generator or making gas
+processing mandatory for F2 are rejected. Whole-T1 sustainability, client
+quality, save-copy qualification and human acceptance remain separate.

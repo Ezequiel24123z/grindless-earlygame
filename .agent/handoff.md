@@ -4,6 +4,22 @@ Updated: 2026-10-23. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**New owner continuation: optional T1 gas utilities (ADR-0190).**
+Baseline8a1a3365 remains the closed manual-policy increment. Two new isolated
+Sol6.1 Max source lanes implement existing gas-family content and the
+hydrogen fuel correction: a6d4adca owns optional selectors/one reward-free
+native lesson/exact52 lineage;7042c976 owns50-tick future H2 ignition and
+actual-energy/saved-burn/gas contracts. Existing CO400, biomass, manual
+construction, old51 IDs/rewards and mandatory first-F2 remain unchanged.
+Research68d2 checks pinned mature-mod energy/persistence precedent read-only.
+
+No source outcome is qualified yet. Executor604 prepares G15 locally only;
+no PC lease, root admission, CI query, JVM, generation or deployment is
+granted. Shared documentation, product decisions and integration remain here.
+The exact baseline recovery is3200/6400FU, not a promise for unimplemented
+speed/efficiency/chassis installation. Real upgrades must preserve old full
+envelopes and paid state and need their own later capability/energy contract.
+
 **The bounded manual-normal-machine change is complete and qualified.**
 Normal final assembly is manual; operating processes remain automatable.
 Other products retain authored manual-only/machine-only/dual methods.

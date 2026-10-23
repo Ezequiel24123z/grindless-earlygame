@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Continue T1 with existing gas families and a bounded recovery contract.**
+  ADR-0190 selects an optional Cell/Intake/Reactor branch and one reward-free
+  native lesson while preserving manual final machines and first-F2.
+  Isolated source lanes decouple future hydrogen50-tick ignition fromCO400
+  and retain paid burn/gas custody; independent mature-mod research runs
+  alongside them. The50-percent comparison is baseline-only, not a future
+  module/chassis energy claim. No source result, PC grant or player update.
 - **Close the bounded manual-machine engineering increment.**
   Independent QA verifies115/115 G14 artifacts, new S1 identities, actual
   R36/T0/T1 outcomes, unchanged copied payloads and recorded safe return.

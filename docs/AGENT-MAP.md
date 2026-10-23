@@ -49,6 +49,25 @@ physical sound/visual work. It does not authorize a generic engine rewrite or
 unrestricted T1. Old no-port/shop proposal holds are historical for this new scope.
 Every handback uses the eight AGENTS reporting categories in chat and durable state.
 
+**Active T1 gas-utilities increment (ADR-0190):** reuse existing
+`FluidLogic.burnTicks`, `ThermalGeneratorBlockEntity.GasFuel` and
+`AuthorityAdapters` gas-fuel projection. Hydrogen future ignition is50 ticks
+per bucket, CO remains400, and paid `Burn`/`Duration` plus stored/refund gas
+must survive unchanged. Test actual electrolysis-versus-fuel quantities and
+binary legacy/new ignition through existing Energy/Fluid/Recipe checks.
+This is baseline T1 recovery, not a new power engine or all-upgrade proof.
+
+`T1Progression`, `QuestCatalogue`/`QuestTeaching` and existing native FTB
+definition/lineage code select one optional gas branch and a reward-free
+lesson. Preserve all51 old IDs/rewards and mandatory first-F2 routes.
+Known content52 must be exact in FTB publisher, Prism selector and their
+current contract tests; retain46/50/51 and unknown-content refusal.
+Legacy Heracles lesson assertions may follow the shared catalogue but are
+not permission to restore that player UI or replay its backend. Root docs
+belong to the coordinator; fuel and content authors own separate source
+lanes. A new lesson or fuel constant alone does not invalidate unchanged
+native transport/transaction proofs or authorize deployment.
+
 **Owner-reported questbook fix (ADR-0171):** native FTB Quests replaces the rejected
 custom/Heracles presentation. Backend/build/pin/native-definition/migration
 implementation is owned by ac50334e; copy190a024 is separate and preserves data.

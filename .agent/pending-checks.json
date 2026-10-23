@@ -8,6 +8,19 @@
   "pr_management_and_merge_authorized_when_ready": true,
   "authorization": "ADR0170 explicitly authorizes intended longitudinalT0 play and parallelT1 research/development; reported blockers take priority and finalT0feedback drivespolish. Client/save/campaign results, acceptance and release are not inferred.",
   "work_plan": ".agent/work-plan.json",
+  "active_t1_gas_increment": {
+    "policy": "ADR-0190",
+    "baseline": "8a1a3365dee930d312616c9f9023ecbd513ccb8b",
+    "status": "SOURCE_IN_PROGRESS_NO_QUALIFICATION_OR_PC_GRANT",
+    "content_owner": "a6d4adca-c6b0-40b5-85a9-9ba83326329b",
+    "fuel_owner": "7042c976-722d-4974-92f5-e614e95bd506",
+    "required": "actualbaseline_energy_recovery_saved_paidburn_gasconservation_optionalroutes52lineage_old51preservation_normalprojections",
+    "no_repeat": "closed_manual_machine_qualification_native_transport_FTBmechanism_and_other_unchanged_proofs",
+    "boundaries": "no_full_upgrade_energy_contract_wholeT1_or_world_acceptance_NO_player_update",
+    "prepared_inventory_sha256": "dee779f420a7804f8b0c4c3dbf5e88696bda3afca1cfc3bb9f2ce80d7b737bee",
+    "prepared_plan_sha256": "4b73a040a98d9bf702388223cc795cd13a54446109f014b1ac45545364a989da",
+    "PC_grant": null
+  },
   "autonomous_tier_delivery": {
     "policy": "ADR-0178",
     "continue_after_routine_checkpoints": true,
