@@ -4,6 +4,21 @@ Updated: 2026-10-23. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**Final G16 review verifies the application/model result but requests one
+local recovery-invocation link.** QA411b confirms402/402, sixteen actual
+stages/exits,45/103 per writer/check, outputs/invariance and recorded safe
+return. It needs the ORIGINAL command/output binding recovered helper
+4e1db884 to attempt2/PRESERVED_SUCCESS08/09/10; current request JSON names
+the core rather than that helper. Executor604 may recover only existing
+local console/history evidence into a separate addendum. NO PC, replay,
+recapture or rewrite of the original402 artifacts is authorized.
+
+Correction to the initial recovery description: its actual diff also
+preserves existing images and the original baseline, not merely a variable
+rename. These are custody changes, not application edits. Original writers0
+precede the observer failure and CheckOnly follows recovery; do not fabricate
+the missing invocation receipt. A11 integration43fbb remains byte-verified.
+
 **G16 new stages/models pass and A11 is normally composed;402-file review
 is still pending.** Exactfb846 compiles and passes corrected Adapters1055,
 Registry1376, Guidance29255; backend52 reports managed251, parser1159 and

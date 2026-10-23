@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Keep the remaining G16 observer provenance gap explicit.**
+  Independent QA verifies402 artifacts, all application stages, expanded
+  provenance, output invariance and closure, but requests the original local
+  invocation/output linking the recovered helper. Correct the recovery
+  description to include preservation of prior images/baseline, not just
+  a variable rename. Recover existing evidence only; no PC or producer replay.
 - **Integrate normal gas projections after the G16 pending contracts pass.**
   Exactfb846 passes repaired data checks, FTB52 synthetic/backend and owned
   Prism fixtures, three writers/checks and canonical rechecks with actual

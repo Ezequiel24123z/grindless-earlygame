@@ -4,6 +4,22 @@
 
 ### ADR-0190 optional T1 gas utilities
 
+**G16 review: substantive results verified, one local invocation link open.**
+QA411b verifies402/402, all sixteen new stage receipts/exits, model outputs,
+45/103 per action and206 images,52 distinct source pins with explicit EOL,
+input invariance and final closure. It does not find an application-pass
+contradiction, but the current capsule lacks the original invocation/stdout
+binding helper4e1db884 to the recovered attempt2/PRESERVED_SUCCESS08/09/10.
+The request JSON identifies the core rather than that helper. Only existing
+local tool/history evidence is requested; no producer or PC is reexecuted.
+
+The initially reported "only variable rename" is incomplete: the actual
+observer delta also preserves existing images and the original baseline.
+These are custody changes, not application changes. Preserve the actual
+diff, original wrapper failure and writer0 receipts rather than rewriting
+them or inventing an execution receipt. A11 is already normally integrated
+at43fbb3ac with all blobs independently byte-verified; final QA remains
+open solely for this recovery link.
 **G16 result and normal A11 intake, independent402-file custody pending.**
 Exactfb846 reports common/Forge/tools0, Adapters1055/0, Registry1376/0 and
 Guidance29255/0. FTB52's managed251, parser1159 and synthetic-native/data2972
