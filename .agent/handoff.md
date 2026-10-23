@@ -1,24 +1,29 @@
 # Active orchestration handoff
 
-Updated: 2026-10-23. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0 ACCEPTANCE OPEN**.
+Updated: 2026-10-23. Product gate: **FTB STARTUP HOTFIX e50 DEPLOYED; HUMAN CLIENT CREATE/LOAD OPEN**.
 
 ## Active continuation — managed definitions and physical control
 
-**PLAYER BLOCKER: installed T0 crashes when creating/loading worlds.**
-Reviewed hotfixe50ab4632f2c322b1c7122fe904e9ddb2fa08fbc is published on its
-own branch, direct parentdd0, with no T1 code. Executor db3f9dcd now owns the
-single new `t0-ftb-startup-hotfix-20261023` window: fresh guarded new root,
-targeted compilation/backend/AST/native-order proof and exact package.
-Protected delivery is conditional on those passes, stopped owned target,
-fresh verified backups and compatibility on a copy of the current save.
-Never kill/restart the player or return the booted copy to the original.
-No executed result or delivery exists yet. Historical604 remains inactive.
-Development separately integrates the same fix with its dynamic count;
-it is NOT the artifact to deploy. ADR-0191 records the mechanism and limits.
+**Installed T0 startup hotfix is qualified and deployed. The PC lease is returned.**
+Exact source `e50ab4632f2c322b1c7122fe904e9ddb2fa08fbc`, direct parent `dd0b4bc9`,
+is the installed runtime in owned `Grindless-T0-FTB-Dev`. The same JAR was
+remapped, native-tested, packaged and installed. JAR SHA-256
+`81cd751cf4f6456fa010c00be406d37046f7e892f679987ab178abed8603dbe7`.
+Playable ZIP SHA-256
+`9b1958629f66cd1a51fba7201845065767942b26d165a999e18832907a60011b`.
+Deploy=`Deployed`, Inspect=`VerifiedStopped`. Lease
+`t0-ftb-startup-hotfix-20261023` returned at `2026-10-23T17:59:31.0266491Z`
+with Java 0 and root/cache/deploy locks 0. The profile remains
+`restricted-playable-profile-not-rc`. No client GUI, campaign, T0 acceptance,
+main merge or T1 deployment is claimed. Development `6d19925a` is not the
+deployed artifact. Do not start another Build/Deploy for this source.
+ADR-0191 records the mechanism. Private receipts stay outside Git.
+
+The diagnosis below is preserved, not an open grant.
 
 Two actual2026-10-23 server crash reports stop in FtbQuestNative.verify:
 chapter7A7EC224FEFEF423 is missing from the native in-memory graph at
-FtbQuestIntegration.started. The installed jar is still originaldd0/
+FtbQuestIntegration.started. At the crash, the installed jar was original dd0/
 29bcce43 (46 quests), not the recent T1 development source. Both chapter
 files exist with the expected IDs; no world corruption is established.
 Private originals and installation hashes are retained outside Git.
@@ -30,14 +35,14 @@ This identifies event ordering as the repair lead; absent data.snbt/group
 files are not a required precondition in the inspected native loader.
 Do not fabricate those files or delete progress as a workaround.
 
-Hotfix author895ce5ed works in isolation from EXACT installeddd0; preserve
-46 IDs/rewards and all player content. Executor db3f9dcd uses the NEW
-isolated PC root only within the guarded grant above. Historical
-executor604 cannot reload its conversation (two failed deliveries); it has
-received no new work. No active prior G16 lease is reused.
-Qualify the event-order regression and the supported native boot before a
-stopped-owned-instance update with verified backups. Never stop the player's
-game or inject later T1 development into this urgent T0 fix.
+Hotfix author 895ce5ed worked from exact installed dd0. Runtime owner
+db3f9dcd completed the guarded window and returned it. 46 IDs/rewards and
+player content were preserved. Historical executor 604 was not reused.
+Observed proof: quest-binding 276/0, native-quests 1134 with seed 56 and
+reopen 58, both copy boots and reopens exit 0, and canonical Prepare,
+Deploy and Inspect. The first native, package and backup observer reds
+remain preserved, not relabeled. No integrated client or GUI pass is claimed.
+Never stop the player's game or inject later T1 development into this instance.
 
 **ADR-0190's optional T1 gas increment is complete and technically qualified.**
 The line exposes existing manual Cell/Intake/Reactor construction and eight

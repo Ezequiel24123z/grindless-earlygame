@@ -15,12 +15,20 @@ entries below reference those records by id.
 
 ### Added
 
+- **Record the deployed T0 FTB startup hotfix and the returned PC lease.**
+  Exact e50ab463 is installed in Grindless-T0-FTB-Dev. Tested JAR `81cd751c`
+  and playable ZIP `9b195862` match Deployed/VerifiedStopped. Quest-binding
+  276/0, native-quests 1134 with seed 56/reopen 58, and both save-copy boots
+  passed. The lease returned at 2026-10-23T17:59:31Z with Java 0 and no locks.
+  Client GUI, campaign and T0 acceptance remain open. Development 6d19925a is
+  not the deployed artifact. ADR-0191.
 - **Carry the installed-source FTB startup hotfix into development.**
   Preserve the HIGH-to-LOWEST event boundary and verified singleton/server
   admission while retaining development's current catalogue count/publisher.
   Resolve only the dynamic log/ready assignment and its matching strict AST
   expectation; the deployment candidate remains separate exact e50/dd0.
-  Neither branch has an executed hotfix pass or player update yet.
+  At that checkpoint neither branch had an executed hotfix pass. The delivery
+  record above supersedes that pending state; do not deploy 6d19925a.
 - **Prioritize the installed T0 world-entry crash over further tier work.**
   Preserve two real native FTB chapter-verification failures and confirm
   the installed dd0 jar rather than blame undeployed T1. Chapter files

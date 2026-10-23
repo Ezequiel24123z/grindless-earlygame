@@ -1,5 +1,18 @@
 # Current T0/T1 validation
 
+## Deployed FTB startup hotfix e50
+
+Exact `e50ab4632f2c322b1c7122fe904e9ddb2fa08fbc` is installed in
+`Grindless-T0-FTB-Dev`. JAR SHA-256
+`81cd751cf4f6456fa010c00be406d37046f7e892f679987ab178abed8603dbe7`
+equals the remapped, native-tested and packaged artifact. Playable ZIP
+SHA-256 `9b1958629f66cd1a51fba7201845065767942b26d165a999e18832907a60011b`.
+Deploy=`Deployed`, Inspect=`VerifiedStopped`. Lease returned
+`2026-10-23T17:59:31.0266491Z`, Java 0, locks 0. Observed: quest-binding
+276/0, native-quests 1134, seed 56/reopen 58, and four copy boot/reopen
+exits 0. The first native, package and backup observer reds stay preserved.
+No client GUI or campaign pass. Private receipts remain outside Git.
+
 ## Active continuation — source before integrated qualification
 
 ### Installed T0 world-entry crash
@@ -12,7 +25,9 @@ the original failure and both-order/fail-closed cases. Common/catalogues/
 dependencies/save formats are unchanged. Current development auto-merges
 the carrier and resolves only readiness assignment plus dynamic logging/
 matching AST; deployment still targets exact hotfixe50, not development.
-Actual compilation/native/copy-compatibility and delivery remain pending.
+Actual compilation, native proof, copy compatibility and delivery were pending
+at this diagnosis. The deployed result is the section above; these crash logs
+are not rewritten into a pass.
 
 Owner reports both new and existing worlds crash on2026-10-23. Read-only
 SSH diagnosis preserves two originals (18:29:07/18:30:01 local PC time):

@@ -155,13 +155,18 @@
   },
   "current_PC_execution": {
     "assignment": "t0-ftb-startup-hotfix-20261023",
-    "active": true,
+    "active": false,
     "owner_agent": "db3f9dcd-e939-482e-b546-8b4571f474c8",
     "source": "e50ab4632f2c322b1c7122fe904e9ddb2fa08fbc",
     "source_parent": "dd0b4bc93187fe172fd336bfa330987220bd7be4",
     "scope": "targeted_order_fix_qualification_and_conditional_stopped_owned_backup_copycompatible_delivery_NO_T1_or_saveoverwrite",
-    "result": "GRANTED_NOT_OBSERVED",
-    "returned": false
+    "result": "CLOSED_DEPLOYED_e50_JAR81cd751c_ZIP9b195862_Deployed_VerifiedStopped_Java0_locks0",
+    "installed_instance": "Grindless-T0-FTB-Dev",
+    "jar_sha256": "81cd751cf4f6456fa010c00be406d37046f7e892f679987ab178abed8603dbe7",
+    "zip_sha256": "9b1958629f66cd1a51fba7201845065767942b26d165a999e18832907a60011b",
+    "returned": true,
+    "returned_utc": "2026-10-23T17:59:31.0266491Z",
+    "new_explicit_guarded_window_required": true
   },
   "closed_G16_execution": {
     "assignment": "gas-content-closure-g16-20261023",
