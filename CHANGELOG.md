@@ -13,6 +13,15 @@ entries below reference those records by id.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Align the native FTB smoke with the current 52-objective catalogue.**
+  CI on 96cd03fe started the server, then failed `native-quests` because the
+  live check still required 18 Relay-gated T1 objectives after
+  `wet_beneficiation` and `gas_utilities` (expected 18, got 20). The check
+  now requires those 20, and the smoke marker expects `quests=52`. Historical
+  50/51 import fences stay unchanged. This does not redeploy installed e50.
+
 ### Added
 
 - **Record the deployed T0 FTB startup hotfix and the returned PC lease.**

@@ -17,6 +17,9 @@ with Java 0 and root/cache/deploy locks 0. The profile remains
 `restricted-playable-profile-not-rc`. No client GUI, campaign, T0 acceptance,
 main merge or T1 deployment is claimed. Development `6d19925a` is not the
 deployed artifact. Do not start another Build/Deploy for this source.
+Consolidation PR #57 fast-forwards this branch to main only after its CI is
+green. The 96cd03fe native-quests red is a stale 18/51 pin, corrected here;
+do not merge that red run.
 ADR-0191 records the mechanism. Private receipts stay outside Git.
 
 The diagnosis below is preserved, not an open grant.

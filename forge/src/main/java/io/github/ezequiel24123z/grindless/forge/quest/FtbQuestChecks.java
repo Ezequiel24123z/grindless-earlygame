@@ -565,7 +565,7 @@ public final class FtbQuestChecks {
         check("old T1 receipts alone do not unlock compatibility", !QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1, legacy.claimed(player)));
         List<QuestCatalogue.Task> t1 = QuestCatalogue.tasks().stream()
                 .filter(task -> QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T1).toList();
-        equal("eighteen actual gated objectives", 18, t1.size());
+        equal("twenty Relay-gated T1 objectives, including wet_beneficiation and gas_utilities", 20, t1.size());
         for (QuestCatalogue.Task declared : t1) {
             for (String dependency : QuestCatalogue.requirements(declared)) {
                 if (!dependency.equals(QuestCatalogue.T0_COMPLETION)) {
